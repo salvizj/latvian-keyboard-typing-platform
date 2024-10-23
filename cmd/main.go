@@ -1,7 +1,7 @@
 package main
 
 import (
-	"latvian-typing-tutor/internal/server"
+	"latvian-typing-tutor/server"
 	"log"
 )
 

@@ -1,4 +1,6 @@
-{{define "title"}} Index | {{index . "name"}} {{end}} {{define "body"}}
+{{define "title"}}Index | {{index . "name"}}{{end}} {{define "body"}}
 <h1>{{index . "msg"}}</h1>
 <h2>This is the Index page.</h2>
+<div id="root"></div>
+<script type="module" src="app.js"></script>
 {{end}}

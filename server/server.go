@@ -8,22 +8,10 @@ import (
 )
 
 func StartServer() {
-	e := echo.New()
+	e := echo.New() // Create a new Echo instance.
 
-	// Initialize the template registry
-	templates, err := utils.NewTemplateRegistry(
-		"view/base.html",
-		"view/index.html",
-	)
-	if err != nil {
-		e.Logger.Fatal("Failed to initialize templates:", err)
-		return
-	}
+	e.Renderer = utils.InitialRenderer() // Set the custom template renderer
 
-	// Assign the custom renderer to the Echo instance
-	e.Renderer = templates
-
-	// Initialize routes
 	if err := routes.InitialRoutes(e); err != nil {
 		e.Logger.Fatal("Failed to initialize routes:", err)
 	}

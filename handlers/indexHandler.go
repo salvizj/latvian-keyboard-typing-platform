@@ -7,8 +7,9 @@ import (
 )
 
 func IndexHandler(c echo.Context) error {
-	return c.Render(http.StatusOK, "index.html", map[string]interface{}{
+
+	return c.Render(http.StatusOK, "layout", map[string]interface{}{
 		"name": "Index",
-		"msg":  "All about Boatswain!",
+		"msg":  "Latvian typing learning platform",
 	})
 }

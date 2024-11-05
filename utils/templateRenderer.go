@@ -25,7 +25,7 @@ func (t *TemplateRenderer) Render(w io.Writer, name string, data interface{}, c 
 func InitialRenderer() *TemplateRenderer {
 	// Parse HTML files in the "view" directory.
 	renderer := &TemplateRenderer{
-		templates: template.Must(template.ParseGlob("view/*.html")), // Panic on parse error.
+		templates: template.Must(template.ParseGlob("web/templates/*.html")), // Panic on parse error.
 	}
 	return renderer
 }

@@ -8,8 +8,5 @@ import (
 
 func IndexHandler(c echo.Context) error {
 
-	return c.Render(http.StatusOK, "layout", map[string]interface{}{
-		"name": "Index",
-		"msg":  "Latvian typing learning platform",
-	})
+	return c.Render(http.StatusOK, "layout", map[string]interface{}{})
 }

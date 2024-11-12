@@ -3,7 +3,6 @@ package server
 import (
 	"fmt"
 	"latvian-typing-tutor/routes"
-	"latvian-typing-tutor/utils"
 	"os"
 
 	"github.com/joho/godotenv"
@@ -24,9 +23,8 @@ func StartServer() {
 		os.Exit(1)
 	}
 
-	e := echo.New() // Create a new Echo instance.
-
-	e.Renderer = utils.InitialRenderer() // Set the custom template renderer
+	// Create a new Echo instance.
+	e := echo.New()
 
 	if err := routes.InitialRoutes(e); err != nil {
 		e.Logger.Fatal("Failed to initialize routes:", err)

@@ -17,6 +17,7 @@ const LanguageTogleButton = () => {
 		localStorage.setItem("language", newLanguage)
 		document.documentElement.lang = newLanguage
 	}
+
 	return (
 		<button onClick={toggleLanguage}>
 			{language === "lv" ? "Latviešu" : "English"}

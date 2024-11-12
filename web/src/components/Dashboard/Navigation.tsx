@@ -4,8 +4,8 @@ import Links from "./Links"
 const Navigation = () => {
 	return (
 		<nav>
-			{Object.entries(Links).map(([label, path]) => (
-				<Link to={path}>{label}</Link>
+			{Object.entries(Links).map(([key, path]) => (
+				<Link to={path}>{key}</Link>
 			))}
 		</nav>
 	)

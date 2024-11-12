@@ -1,13 +1,29 @@
 package server
 
 import (
+	"fmt"
 	"latvian-typing-tutor/routes"
 	"latvian-typing-tutor/utils"
+	"os"
 
+	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 )
 
 func StartServer() {
+	// Load environment variables from .env
+	if err := godotenv.Load(".env"); err != nil {
+		fmt.Fprintf(os.Stderr, "Warning: Could not load .env file\n")
+		os.Exit(1)
+	}
+
+	port := os.Getenv("PORT")
+
+	if port == "" {
+		fmt.Fprintf(os.Stderr, "Error: Required environment variable PORT is not set\n")
+		os.Exit(1)
+	}
+
 	e := echo.New() // Create a new Echo instance.
 
 	e.Renderer = utils.InitialRenderer() // Set the custom template renderer
@@ -17,5 +33,5 @@ func StartServer() {
 	}
 
 	// Start the server
-	e.Logger.Fatal(e.Start(":8080"))
+	e.Logger.Fatal(e.Start(fmt.Sprintf(":%s", port)))
 }

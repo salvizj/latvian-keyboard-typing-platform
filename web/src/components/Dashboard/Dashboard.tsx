@@ -5,11 +5,9 @@ import Navigation from "./Navigation"
 const Dashboard = () => {
 	return (
 		<>
-			<header>
-				<Navigation />
-				<LanguageTogleButton />
-				<ThemeTogleButton />
-			</header>
+			<Navigation />
+			<LanguageTogleButton />
+			<ThemeTogleButton />
 		</>
 	)
 }

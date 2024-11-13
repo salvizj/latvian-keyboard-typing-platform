@@ -1,5 +1,4 @@
 const Links = {
-	Home: "/",
-	About: "/about",
+	home: "/",
 }
 export default Links

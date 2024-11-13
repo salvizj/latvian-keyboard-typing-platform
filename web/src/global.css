@@ -1,0 +1,57 @@
+:root {
+	--primary: #242634;
+	--secondary: #1f1f28;
+	--bg-color: #ffffff;
+	--aside-bg-color: #c6d0f5;
+
+	--font-size-base: 1rem; /* 16px */
+	--font-size-lg: 1.25rem; /* 20px */
+	--font-size-md: 1rem; /* 16px */
+	--font-size-sm: 0.875rem; /* 14px */
+	--font-size-xs: 0.75rem; /* 12px */
+	--font-size-2xl: 1.5rem; /* 24px */
+	--font-size-3xl: 1.875rem; /* 30px */
+	--font-size-4xl: 2.25rem; /* 36px */
+	--font-size-5xl: 3rem; /* 48px */
+	--font-size-6xl: 4rem; /* 64px */
+	--font-size-7xl: 5rem; /* 80px */
+	--font-size-8xl: 6rem; /* 96px */
+}
+
+.dark {
+	--primary: #c6d0f5;
+	--secondary: #a8b9e9;
+	--bg-color: #303446;
+	--aside-bg-color: #242634;
+}
+body {
+	background-color: var(--bg-color);
+	color: var(--primary);
+}
+.aside-bg {
+	background-color: var(--aside-bg-color);
+}
+.primary-bg {
+	background-color: var(--primary);
+}
+.primary-color {
+	color: var(--primary);
+}
+.secondary-bg {
+	background-color: var(--secondary);
+}
+.secondary-color {
+	color: var(--secondary);
+}
+a {
+	color: var(--primary);
+	font-size: var(--font-size-2xl);
+}
+a:hover {
+	text-decoration: underline;
+	color: var(--secondary);
+}
+p {
+	color: var(--primary);
+	font-size: var(--font-size-xl);
+}

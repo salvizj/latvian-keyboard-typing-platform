@@ -3,7 +3,6 @@ import {
 	createRoutesFromElements,
 	Route,
 } from "react-router-dom"
-import AboutPage from "../pages/AboutPage"
 import IndexPage from "../pages/IndexPage"
 import Layout from "../pages/Layout/Layout"
 
@@ -12,7 +11,6 @@ const Router = () => {
 		createRoutesFromElements(
 			<Route path="/" element={<Layout />}>
 				<Route index element={<IndexPage />} />
-				<Route path="about" element={<AboutPage />} />
 			</Route>
 		)
 	)

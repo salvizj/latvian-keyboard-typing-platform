@@ -1,27 +1,16 @@
-import { useEffect, useState } from "react"
+import { useLanguage } from "../context/LanguageContext"
+import Button from "./utils/Button"
+import translate from "../utils/translate"
 
 const LanguageTogleButton = () => {
-	const defaultLanguage = "lv"
-
-	const [language, setLanguage] = useState(
-		localStorage.getItem("language") || defaultLanguage
-	)
-
-	useEffect(() => {
-		document.documentElement.lang = language
-	}, [language])
+	const { language, setLanguage } = useLanguage()
 
 	const toggleLanguage = () => {
 		const newLanguage = language === "lv" ? "en" : "lv"
 		setLanguage(newLanguage)
-		localStorage.setItem("language", newLanguage)
-		document.documentElement.lang = newLanguage
 	}
 
-	return (
-		<button onClick={toggleLanguage}>
-			{language === "lv" ? "Latviešu" : "English"}
-		</button>
-	)
+	return <Button onClick={toggleLanguage}>{translate("language")}</Button>
 }
+
 export default LanguageTogleButton

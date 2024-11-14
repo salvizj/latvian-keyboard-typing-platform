@@ -29,7 +29,6 @@ package-lock.json
 
 # Caches
 .npm/
-.yarn/
 
 # ESLint cache
 .eslintcache

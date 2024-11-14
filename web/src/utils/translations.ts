@@ -13,6 +13,10 @@ const translations: Translations = {
 		logout: "logout",
 		theme_dark: "dark",
 		theme_light: "light",
+		keyboard_input_label: "Type the text above",
+		lessons: "lessons",
+		statistics: "statistics",
+		appearance_settings: "appearance settings",
 	},
 	lv: {
 		login: "pieslēgties",
@@ -22,6 +26,10 @@ const translations: Translations = {
 		language: "LV",
 		theme_dark: "tumšs",
 		theme_light: "gaišs",
+		keyboard_input_label: "Raksties tekstu, kas atrodas augstāk ",
+		lessons: "nodarbības",
+		statistics: "statistika",
+		appearance_settings: "izskata iestatījumi",
 	},
 }
 

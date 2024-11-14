@@ -1,9 +1,11 @@
 :root {
-	--primary: #242634;
-	--secondary: #1f1f28;
-	--bg-color: #ffffff;
-	--aside-bg-color: #c6d0f5;
-
+	--text-display-box-text-color: #34395d;
+	--correct-text-color: 
+	--primary: #5a5f90; 
+	--secondary: #7981aa;   
+	--bg-color:  #f3f4fb;
+	--aside-bg-color: #e6e8f2;  
+	--next-key-bg-color: #4d945f;
 	--font-size-base: 1rem; /* 16px */
 	--font-size-lg: 1.25rem; /* 20px */
 	--font-size-md: 1rem; /* 16px */
@@ -19,6 +21,8 @@
 }
 
 .dark {
+	--correct-text-color:#dbe1ff;
+	--text-display-box-text-color:#8c9cd9; 
 	--primary: #c6d0f5;
 	--secondary: #a8b9e9;
 	--bg-color: #303446;
@@ -43,6 +47,9 @@ body {
 .secondary-color {
 	color: var(--secondary);
 }
+.next-key-bg-color {
+	background-color: var(--next-key-bg-color);
+}
 a {
 	color: var(--primary);
 	font-size: var(--font-size-2xl);
@@ -54,4 +61,10 @@ a:hover {
 p {
 	color: var(--primary);
 	font-size: var(--font-size-xl);
+}
+.correct-text-color {
+	color: var(--correct-text-color);
+}
+.text-display-box-text-color {
+	color: var(--text-display-box-text-color);
 }

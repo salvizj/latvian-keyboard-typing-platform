@@ -18,7 +18,7 @@ const Button: React.FC<ButtonProps> = ({
 	return (
 		<button
 			onClick={onClick}
-			className={`text-2xl primary ${className}`}
+			className={`text-2xl ${className}`}
 			type={type}
 			disabled={disabled}
 		>

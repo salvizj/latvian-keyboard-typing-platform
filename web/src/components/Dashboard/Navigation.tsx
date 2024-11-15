@@ -4,9 +4,12 @@ import translate from "../../utils/translate"
 
 const Navigation = () => {
 	return (
-		<nav className="flex flex-col justify-center items-center">
+		<nav className="flex flex-col justify-center items-center text-2xl primary-text">
 			{Object.entries(Links).map(([key, path]) => (
-				<Link to={path}> {translate(key)}</Link>
+				<Link key={key} to={path}>
+					{" "}
+					{translate(key)}
+				</Link>
 			))}
 		</nav>
 	)

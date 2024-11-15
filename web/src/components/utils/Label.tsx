@@ -8,7 +8,7 @@ type LabelProps = {
 
 const Label: React.FC<LabelProps> = ({ text, htmlFor }) => {
 	return (
-		<label htmlFor={htmlFor} className="text-primary font-md">
+		<label htmlFor={htmlFor} className="secondary-text font-md">
 			{translate(text)}
 		</label>
 	)

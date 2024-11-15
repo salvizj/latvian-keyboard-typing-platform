@@ -1,70 +1,195 @@
 :root {
-	--text-display-box-text-color: #34395d;
-	--correct-text-color: 
-	--primary: #5a5f90; 
-	--secondary: #7981aa;   
-	--bg-color:  #f3f4fb;
-	--aside-bg-color: #e6e8f2;  
-	--next-key-bg-color: #4d945f;
-	--font-size-base: 1rem; /* 16px */
-	--font-size-lg: 1.25rem; /* 20px */
-	--font-size-md: 1rem; /* 16px */
-	--font-size-sm: 0.875rem; /* 14px */
-	--font-size-xs: 0.75rem; /* 12px */
-	--font-size-2xl: 1.5rem; /* 24px */
-	--font-size-3xl: 1.875rem; /* 30px */
-	--font-size-4xl: 2.25rem; /* 36px */
-	--font-size-5xl: 3rem; /* 48px */
-	--font-size-6xl: 4rem; /* 64px */
-	--font-size-7xl: 5rem; /* 80px */
-	--font-size-8xl: 6rem; /* 96px */
+	--typing-text-color: #6b7280;
+	--typing-text-correct-color: #0066ff;
+	--typing-text-box-bg: #ffffff;
+
+	--next-key-bg-color: #c1c4d9;
+	--next-key-text-color: #2a2f50;
+	--primary: #d4d6e5;
+	--secondary: #2a2f50;
+	--bg: #c1c4d9;
+	--aside: #5f6588;
+	--keyboard-border: #b8b6b6;
+
+	--font-size-base: 1rem;
+	--font-size-lg: 1.25rem;
+	--font-size-md: 1rem;
+	--font-size-sm: 0.875rem;
+	--font-size-xs: 0.75rem;
+	--font-size-2xl: 1.5rem;
+	--font-size-3xl: 1.875rem;
+	--font-size-4xl: 2.25rem;
+	--font-size-5xl: 3rem;
+	--font-size-6xl: 4rem;
+	--font-size-7xl: 5rem;
+	--font-size-8xl: 6rem;
+
+	--hand-thumb-bg: #f87171;
+	--hand-index-bg: #6ee7b7;
+	--hand-middle-bg: #60a5fa;
+	--hand-ring-bg: #a855f7;
+	--hand-pinky-bg: #fbbf24;
 }
 
 .dark {
-	--correct-text-color:#dbe1ff;
-	--text-display-box-text-color:#8c9cd9; 
-	--primary: #c6d0f5;
-	--secondary: #a8b9e9;
-	--bg-color: #303446;
-	--aside-bg-color: #242634;
+	--typing-text-color: #b43939;
+	--typing-text-correct-color: #aeaec6;
+	--typing-text-box-bg: #242634;
+
+	--next-key-bg-color: #5f6588;
+	--next-key-text-color: #b8b6b6;
+	--primary: #c1c4d9;
+	--secondary: #dbdbdb;
+	--bg: #5f6588;
+	--aside: #242634;
+	--keyboard-border: #b8b6b6;
+
+	--hand-thumb-bg: #f87171;
+	--hand-index-bg: #6ee7b7;
+	--hand-middle-bg: #60a5fa;
+	--hand-ring-bg: #a855f7;
+	--hand-pinky-bg: #fbbf24;
 }
+
 body {
-	background-color: var(--bg-color);
-	color: var(--primary);
+	background-color: var(--bg);
+}
+.keyboard-border {
+	border-color: var(--keyboard-border);
 }
 .aside-bg {
-	background-color: var(--aside-bg-color);
+	background-color: var(--aside);
 }
+
 .primary-bg {
 	background-color: var(--primary);
 }
-.primary-color {
+
+.primary-text {
 	color: var(--primary);
+}
+.secondary-text {
+	color: var(--secondary);
 }
 .secondary-bg {
 	background-color: var(--secondary);
 }
-.secondary-color {
+.secondary-text {
 	color: var(--secondary);
 }
-.next-key-bg-color {
+
+.next-key {
 	background-color: var(--next-key-bg-color);
+	color: var(--next-key-text-color);
 }
-a {
-	color: var(--primary);
-	font-size: var(--font-size-2xl);
+
+.typing-correct-text {
+	color: var(--typing-text-correct-color);
 }
-a:hover {
-	text-decoration: underline;
-	color: var(--secondary);
+.typing-color {
+	color: var(--typing-text-color);
 }
-p {
-	color: var(--primary);
-	font-size: var(--font-size-xl);
+.typing-text-box-bg {
+	background-color: var(--typing-text-box-bg);
 }
-.correct-text-color {
-	color: var(--correct-text-color);
+/* Right Hand */
+.right-hand-thumb {
+	position: absolute;
+	top: 44%;
+	left: 17%;
+	width: 1.6rem;
+	height: 1.6rem;
+	background-color: var(--hand-thumb-bg);
+	border-radius: 9999px;
 }
-.text-display-box-text-color {
-	color: var(--text-display-box-text-color);
+
+.right-hand-index {
+	position: absolute;
+	top: 14%;
+	left: 34%;
+	width: 1.6rem;
+	height: 1.6rem;
+	background-color: var(--hand-index-bg);
+	border-radius: 9999px;
+}
+
+.right-hand-middle {
+	position: absolute;
+	top: 5%;
+	left: 47%;
+	width: 1.6rem;
+	height: 1.6rem;
+	background-color: var(--hand-middle-bg);
+	border-radius: 9999px;
+}
+
+.right-hand-ring {
+	position: absolute;
+	top: 12%;
+	left: 60%;
+	width: 1.6rem;
+	height: 1.6rem;
+	background-color: var(--hand-ring-bg);
+	border-radius: 9999px;
+}
+
+.right-hand-pinky {
+	position: absolute;
+	top: 24%;
+	left: 72%;
+	width: 1.6rem;
+	height: 1.6rem;
+	background-color: var(--hand-pinky-bg);
+	border-radius: 9999px;
+}
+
+/* Left Hand */
+.left-hand-thumb {
+	position: absolute;
+	top: 44%;
+	left: 70%;
+	width: 1.6rem;
+	height: 1.6rem;
+	background-color: var(--hand-thumb-bg);
+	border-radius: 9999px;
+}
+
+.left-hand-index {
+	position: absolute;
+	top: 14%;
+	left: 53%;
+	width: 1.6rem;
+	height: 1.6rem;
+	background-color: var(--hand-index-bg);
+	border-radius: 9999px;
+}
+
+.left-hand-middle {
+	position: absolute;
+	top: 5%;
+	left: 40%;
+	width: 1.6rem;
+	height: 1.6rem;
+	background-color: var(--hand-middle-bg);
+	border-radius: 9999px;
+}
+
+.left-hand-ring {
+	position: absolute;
+	top: 12%;
+	left: 27%;
+	width: 1.6rem;
+	height: 1.6rem;
+	background-color: var(--hand-ring-bg);
+	border-radius: 9999px;
+}
+
+.left-hand-pinky {
+	position: absolute;
+	top: 24%;
+	left: 14%;
+	width: 1.6rem;
+	height: 1.6rem;
+	background-color: var(--hand-pinky-bg);
+	border-radius: 9999px;
 }

@@ -10,7 +10,11 @@ const LanguageTogleButton = () => {
 		setLanguage(newLanguage)
 	}
 
-	return <Button onClick={toggleLanguage}>{translate("language")}</Button>
+	return (
+		<Button onClick={toggleLanguage} className="primary-text ">
+			{translate("language")}
+		</Button>
+	)
 }
 
 export default LanguageTogleButton

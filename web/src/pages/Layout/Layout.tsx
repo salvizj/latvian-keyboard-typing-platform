@@ -4,11 +4,11 @@ import Dashboard from "../../components/Dashboard/Dashboard"
 const Layout = () => {
 	return (
 		<div className="flex h-screen">
-			<div className="flex-1 flex flex-col">
-				<main className="flex-grow  p-4">
+			<div className="w-10/12 flex flex-col">
+				<main className="flex-grow">
 					<Outlet />
 				</main>
-				<footer className=" ">
+				<footer>
 					<p>Footer</p>
 				</footer>
 			</div>

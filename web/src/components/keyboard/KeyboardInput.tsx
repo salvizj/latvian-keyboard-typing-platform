@@ -3,13 +3,14 @@ import Input from "../utils/Input"
 import Label from "../utils/Label"
 
 type KeyboardInputProps = {
-	handleKeyPress: (key: string) => void
+	handleKeyPress: (lastKeyPress: string) => void
 }
 
 const KeyboardInput: React.FC<KeyboardInputProps> = ({ handleKeyPress }) => {
 	const [lastKey, setLastKey] = useState<string>("")
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		// Get the last character typed
 		const keyPressed = e.target.value.slice(-1)
 		setLastKey(keyPressed)
 		handleKeyPress(keyPressed)

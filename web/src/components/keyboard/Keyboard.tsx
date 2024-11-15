@@ -1,64 +1,48 @@
-import { useCurrentPressedKey } from "../../hooks/useCurrentPressedKey"
 import KeyboardInput from "./KeyboardInput"
 import TextDisplayBox from "./TextDisplayBox"
 import VirtualKeyboard from "./VirtualKeyboard"
-import { useNextKey } from "../../hooks/useNextKey"
-import { useEffect, useState } from "react"
+import LeftHand from "./Hands/LeftHand"
+import RightHand from "./Hands/RightHand"
+import { useKeyPressManagement } from "../../hooks/useCharacterManagement"
 
 type KeyboardProps = {
-	text: string
+	text: string // The text the user is typing
 }
+
 const Keyboard: React.FC<KeyboardProps> = ({ text }) => {
-	// State to track current Pressed character
-	const { setCurrentPressedKey } = useCurrentPressedKey()
-
-	// State to track next key which should be pressed
-	const { nextKey, setNextKey } = useNextKey()
-
-	// State to track the index of the current correctly typed character in the text
-	const [
-		currentCorrectTextCharacterIndex,
-		setCurrentCorrectTextCharacterIndex,
-	] = useState(0)
-
-	// State to keep track of the next key to press
-	const [expectedCharacter, setExpectedCharacter] = useState(text[0])
-
-	const handleKeyPress = (key: string) => {
-		setCurrentPressedKey(key)
-
-		// Check if the key pressed matches the expected character
-		if (key === expectedCharacter) {
-			setCurrentCorrectTextCharacterIndex((prevIndex) => {
-				// Move to the next character if the match is correct
-				const nextIndex = prevIndex + 1
-
-				if (nextIndex < text.length) {
-					setExpectedCharacter(text[nextIndex])
-				} else {
-					setExpectedCharacter("")
-				}
-				return nextIndex
-			})
-		}
-	}
-
-	useEffect(() => {
-		setNextKey(expectedCharacter)
-		console.log(expectedCharacter)
-	}, [expectedCharacter, setNextKey])
-
+	const {
+		handleKeyPress: manageKeyPress,
+		expectedCharacter,
+		currentCharacterIndex,
+		handFingerInfo,
+	} = useKeyPressManagement(text)
+	// console.log("Triggered rerender in Kayboard component")
+	// console.log("Expected caharcter", expectedCharacter)
+	// console.log("Current Character index", currentCharacterIndex)
 	return (
 		<>
 			<TextDisplayBox
 				text={text}
-				currentCorrectTextCharacterIndex={
-					currentCorrectTextCharacterIndex
-				}
+				currentCorrectTextCharacterIndex={currentCharacterIndex}
 			/>
-			<KeyboardInput handleKeyPress={handleKeyPress} />
-			<VirtualKeyboard nextKey={nextKey} />
+
+			<KeyboardInput handleKeyPress={manageKeyPress} />
+
+			<div className="flex items-center justify-between">
+				<div className="flex-shrink-0">
+					<LeftHand handFingerInfo={handFingerInfo} />
+				</div>
+
+				<div className="flex-grow mx-4">
+					<VirtualKeyboard expectedCharacter={expectedCharacter} />
+				</div>
+
+				<div className="flex-shrink-0">
+					<RightHand handFingerInfo={handFingerInfo} />
+				</div>
+			</div>
 		</>
 	)
 }
+
 export default Keyboard

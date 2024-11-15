@@ -25,7 +25,7 @@ const Input: React.FC<InputProps> = ({
 			onChange={onChange}
 			placeholder={placeholder}
 			required={required}
-			className="bg-transparent border border-primary rounded-sm p-2 w-full text-xl text-primary focus:outline-none focus:ring-2 focus:ring-secondary"
+			className="bg-secondary border border-primary rounded-sm p-2 w-full text-xl text-primary focus:outline-none focus:ring-2 focus:ring-secondary"
 		/>
 	)
 }

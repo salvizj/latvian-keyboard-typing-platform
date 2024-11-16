@@ -1,5 +1,5 @@
 const LessonsPage = () => {
-	return <></>
+	return <>Lessons Pagew</>
 }
 
 export default LessonsPage

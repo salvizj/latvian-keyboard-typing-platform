@@ -11,6 +11,7 @@ func main() {
 	db.Initialize()
 	defer db.DB.Close()
 
-	db.CreateTables()
+	db.CreatesLessonsTable()
+	db.SeedLessons()
 	server.StartServer()
 }

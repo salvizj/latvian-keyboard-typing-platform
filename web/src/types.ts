@@ -19,3 +19,8 @@ export type KeyObj = {
 	altKey?: string
 	altLabel?: string
 }
+export type Lesson = {
+	id: number
+	lessonType: string
+	lessonText: string
+}

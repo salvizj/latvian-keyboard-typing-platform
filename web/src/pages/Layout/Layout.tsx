@@ -4,8 +4,8 @@ import Dashboard from "../../components/Dashboard/Dashboard"
 const Layout = () => {
 	return (
 		<div className="flex h-screen">
-			<div className="w-10/12 flex flex-col">
-				<main className="flex-grow">
+			<div className="flex-1 flex flex-col">
+				<main className="flex flex-col justify-center items-center w-full min-h-screen">
 					<Outlet />
 				</main>
 				<footer>
@@ -13,7 +13,7 @@ const Layout = () => {
 				</footer>
 			</div>
 
-			<aside className="absolute right-0 top-0 h-full w-2/12 aside-bg">
+			<aside className=" h-full w-2/12 aside-bg">
 				<Dashboard />
 			</aside>
 		</div>

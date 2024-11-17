@@ -1,10 +1,14 @@
 :root {
-	--typing-text-color: #6b7280;
-	--typing-text-correct-color: #0066ff;
-	--typing-text-box-bg: #ffffff;
+	--typing-text-color: #b76c6c;
+	--typing-text-correct-color: #d4d6e5;
+	--typing-text-box-bg: #5f6588;
 
 	--next-key-bg-color: #c1c4d9;
 	--next-key-text-color: #2a2f50;
+
+	--modifier-bg-color: #c1c4d9;
+	--modifier-text-color: #2a2f50;
+
 	--primary: #d4d6e5;
 	--secondary: #2a2f50;
 	--bg: #c1c4d9;
@@ -38,6 +42,10 @@
 
 	--next-key-bg-color: #5f6588;
 	--next-key-text-color: #b8b6b6;
+
+	--modifier-bg-color: #5f6588;
+	--modifier-text-color: #b8b6b6;
+
 	--primary: #c1c4d9;
 	--secondary: #dbdbdb;
 	--bg: #5f6588;
@@ -82,7 +90,11 @@ body {
 	background-color: var(--next-key-bg-color);
 	color: var(--next-key-text-color);
 }
-
+.shift-key,
+.alt-key {
+	background-color: var(--modifier-bg-color);
+	color: var(--modifier-text-color);
+}
 .typing-correct-text {
 	color: var(--typing-text-correct-color);
 }

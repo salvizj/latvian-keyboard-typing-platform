@@ -1,5 +1,5 @@
 const AppearanceSettingsPage = () => {
-	return <></>
-}
+    return <></>;
+};
 
-export default AppearanceSettingsPage
+export default AppearanceSettingsPage;

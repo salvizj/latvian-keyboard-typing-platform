@@ -1,20 +1,20 @@
-import { useLanguage } from "../context/LanguageContext"
-import Button from "./utils/Button"
-import translate from "../utils/translate"
+import { useLanguage } from '../context/LanguageContext';
+import Button from './utils/Button';
+import translate from '../utils/translate';
 
 const LanguageTogleButton = () => {
-	const { language, setLanguage } = useLanguage()
+    const { language, setLanguage } = useLanguage();
 
-	const toggleLanguage = () => {
-		const newLanguage = language === "lv" ? "en" : "lv"
-		setLanguage(newLanguage)
-	}
+    const toggleLanguage = () => {
+        const newLanguage = language === 'lv' ? 'en' : 'lv';
+        setLanguage(newLanguage);
+    };
 
-	return (
-		<Button onClick={toggleLanguage} className="primary-text ">
-			{translate("language")}
-		</Button>
-	)
-}
+    return (
+        <Button onClick={toggleLanguage} className="primary-text ">
+            {translate('language')}
+        </Button>
+    );
+};
 
-export default LanguageTogleButton
+export default LanguageTogleButton;

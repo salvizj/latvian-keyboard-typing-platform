@@ -1,49 +1,49 @@
 import React, {
-	createContext,
-	useContext,
-	useState,
-	useEffect,
-	ReactNode,
-} from "react"
+    createContext,
+    useContext,
+    useState,
+    useEffect,
+    ReactNode,
+} from 'react';
 
-type Language = "en" | "lv"
+type Language = 'en' | 'lv';
 
-const LOCAL_STORAGE_KEY = "language"
+const LOCAL_STORAGE_KEY = 'language';
 
 type LanguageContextType = {
-	language: string
-	setLanguage: (language: string) => void
-}
+    language: string;
+    setLanguage: (language: string) => void;
+};
 
 const LanguageContext = createContext<LanguageContextType | undefined>(
-	undefined
-)
+    undefined
+);
 
 export const LanguageProvider: React.FC<{ children: ReactNode }> = ({
-	children,
+    children,
 }) => {
-	const defaultLanguage: Language = "lv"
+    const defaultLanguage: Language = 'lv';
 
-	const [language, setLanguage] = useState<string>(
-		localStorage.getItem(LOCAL_STORAGE_KEY) || defaultLanguage
-	)
+    const [language, setLanguage] = useState<string>(
+        localStorage.getItem(LOCAL_STORAGE_KEY) || defaultLanguage
+    );
 
-	useEffect(() => {
-		document.documentElement.lang = language
-		localStorage.setItem(LOCAL_STORAGE_KEY, language)
-	}, [language])
+    useEffect(() => {
+        document.documentElement.lang = language;
+        localStorage.setItem(LOCAL_STORAGE_KEY, language);
+    }, [language]);
 
-	return (
-		<LanguageContext.Provider value={{ language, setLanguage }}>
-			{children}
-		</LanguageContext.Provider>
-	)
-}
+    return (
+        <LanguageContext.Provider value={{ language, setLanguage }}>
+            {children}
+        </LanguageContext.Provider>
+    );
+};
 
 export const useLanguage = () => {
-	const context = useContext(LanguageContext)
-	if (!context) {
-		throw new Error("useLanguage must be used within a LanguageProvider")
-	}
-	return context
-}
+    const context = useContext(LanguageContext);
+    if (!context) {
+        throw new Error('useLanguage must be used within a LanguageProvider');
+    }
+    return context;
+};

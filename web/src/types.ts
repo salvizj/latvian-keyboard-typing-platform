@@ -1,26 +1,33 @@
 export enum Finger {
-	Pinky = "pinky",
-	Ring = "ring",
-	Middle = "middle",
-	Index = "index",
-	Thumb = "thumb",
+    Pinky = 'pinky',
+    Ring = 'ring',
+    Middle = 'middle',
+    Index = 'index',
+    Thumb = 'thumb',
 }
 
 export enum Hand {
-	Left = "left",
-	Right = "right",
+    Left = 'left',
+    Right = 'right',
 }
 export type KeyObj = {
-	key: string
-	label: string
-	size: string
-	hand?: Hand
-	finger?: Finger
-	altKey?: string
-	altLabel?: string
-}
+    key: string;
+    label: string;
+    size: string;
+    hand?: Hand;
+    finger?: Finger;
+    altKey?: string;
+    altLabel?: string;
+};
+
 export type Lesson = {
-	id: number
-	lessonType: string
-	lessonText: string
-}
+    id: number;
+    lessonType: string;
+    lessonText: string;
+};
+export type HandFingerInfo = {
+    hand: Hand;
+    finger: Finger;
+    isShift: boolean;
+    isAlt: boolean;
+};

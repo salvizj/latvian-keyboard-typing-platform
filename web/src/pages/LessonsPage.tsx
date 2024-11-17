@@ -1,5 +1,11 @@
-const LessonsPage = () => {
-	return <>Lessons Pagew</>
-}
+import LessonLinks from '../components/LesonLinks';
 
-export default LessonsPage
+const LessonsPage = () => {
+    return (
+        <>
+            <LessonLinks />
+        </>
+    );
+};
+
+export default LessonsPage;

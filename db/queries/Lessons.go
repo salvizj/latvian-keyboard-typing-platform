@@ -19,6 +19,5 @@ func GetLesson(id int) (*types.Lessons, error) {
 		}
 		return nil, fmt.Errorf("error fetching lesson: %v", err)
 	}
-
 	return &lesson, nil
 }

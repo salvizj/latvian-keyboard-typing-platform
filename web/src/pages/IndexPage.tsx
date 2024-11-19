@@ -1,7 +1,7 @@
 import Keyboard from '../components/keyboard/Keyboard';
 
 const IndexPage = () => {
-    const text = 'JFKFJSKF1341 fdsfKFJFKSf'; //demo
+    const text = 'Ā A L Ļ 1 2 '; //demo
     return (
         <>
             <div className="flex flex-col justify-center items-center w-full min-h-screen">

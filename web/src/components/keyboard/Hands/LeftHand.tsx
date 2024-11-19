@@ -1,5 +1,6 @@
 import { IoHandLeftOutline } from 'react-icons/io5';
 import { Finger, Hand, HandFingerInfo } from '../../../types';
+import { shouldHighlight } from '../../../utils/shouldHiglight';
 
 type LeftHandProps = {
     handFingerInfo: HandFingerInfo;
@@ -11,27 +12,22 @@ function LeftHand({ handFingerInfo }: LeftHandProps) {
             {/* Hand Icon */}
             <IoHandLeftOutline className="w-full h-full" />
 
-            {/* Conditionally show finger's color tip */}
-            {handFingerInfo?.finger === Finger.Thumb && (
+            {/* Conditionally highlight each finger based on conditions */}
+            {shouldHighlight(handFingerInfo, Hand.Left, Finger.Thumb) && (
                 <div className="left-hand-thumb"></div>
             )}
-            {handFingerInfo?.finger === Finger.Index &&
-                handFingerInfo.hand === Hand.Left && (
-                    <div className="left-hand-index"></div>
-                )}
-            {handFingerInfo?.finger === Finger.Middle &&
-                handFingerInfo.hand === Hand.Left && (
-                    <div className="left-hand-middle"></div>
-                )}
-            {handFingerInfo?.finger === Finger.Ring &&
-                handFingerInfo.hand === Hand.Left && (
-                    <div className="left-hand-ring"></div>
-                )}
-            {(handFingerInfo?.finger === Finger.Pinky &&
-                handFingerInfo.hand === Hand.Left) ||
-                (handFingerInfo.isShift && handFingerInfo.hand === 'right' && (
-                    <div className="left-hand-pinky"></div>
-                ))}
+            {shouldHighlight(handFingerInfo, Hand.Left, Finger.Index) && (
+                <div className="left-hand-index"></div>
+            )}
+            {shouldHighlight(handFingerInfo, Hand.Left, Finger.Middle) && (
+                <div className="left-hand-middle"></div>
+            )}
+            {shouldHighlight(handFingerInfo, Hand.Left, Finger.Ring) && (
+                <div className="left-hand-ring"></div>
+            )}
+            {shouldHighlight(handFingerInfo, Hand.Left, Finger.Pinky) && (
+                <div className="left-hand-pinky"></div>
+            )}
         </div>
     );
 }

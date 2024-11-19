@@ -2,11 +2,9 @@ import { useCallback, useEffect, useState } from 'react';
 import { HandFingerInfo, KeyObj } from '../types';
 import { getKeyObjByKey } from '../utils/getKeyObjByKey';
 import {
-    isLongVowelLatvian,
+    isLatvianSpecial,
     isUpperCaseLatvian,
 } from '../utils/testCharacterToLatvian';
-
-// we need to get info here bacause we need to pass it to LeftHand and RitghHand Obj
 
 export const useKeyPressManagement = (text: string) => {
     const [currentCharacterIndex, setCurrentCharacterIndex] = useState(0);
@@ -29,7 +27,7 @@ export const useKeyPressManagement = (text: string) => {
                 hand: initialKeyObj.hand,
                 finger: initialKeyObj.finger,
                 isShift: isUpperCaseLatvian(text[0]),
-                isAlt: isLongVowelLatvian(text[0]),
+                isAlt: isLatvianSpecial(text[0]),
             });
         }
     }, [text]);
@@ -58,7 +56,7 @@ export const useKeyPressManagement = (text: string) => {
                                 finger: expectedCharacterKeyObj.finger,
                                 isShift:
                                     isUpperCaseLatvian(newExpectedCharacter),
-                                isAlt: isLongVowelLatvian(newExpectedCharacter),
+                                isAlt: isLatvianSpecial(newExpectedCharacter),
                             });
                         } else {
                             setHandFingerInfo(null);

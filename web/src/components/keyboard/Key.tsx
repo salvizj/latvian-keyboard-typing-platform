@@ -1,6 +1,6 @@
 import { Hand, KeyObj } from '../../types';
 import {
-    isLongVowelLatvian,
+    isLatvianSpecial,
     isUpperCaseLatvian,
 } from '../../utils/testCharacterToLatvian';
 
@@ -18,17 +18,30 @@ const Key: React.FC<KeyProps> = ({
     const isNextKey = keyObj === expecteCharacterKeyObj;
     const isNextKeyLeftHand = expecteCharacterKeyObj.hand === Hand.Left;
     const isNextKeyUpperCase = isUpperCaseLatvian(expectedCharacter);
-    const isNextKeyLongVowel = isLongVowelLatvian(expectedCharacter);
+    const isNextKeyLatvianSpecial = isLatvianSpecial(expectedCharacter);
 
     // here we need to find shift and Alt keys
     const isCurrentKeyShift = keyObj.key === 'Shift';
     const isCurrentKeyAlt = keyObj.key === 'Alt';
     const isCurrentKeyLeft = keyObj.hand === ('left' as Hand | undefined);
 
+    // Function to get the classes
+    const getKeyClasses = () => {
+        const classes = [
+            keyObj.size || '',
+            isNextKey ? 'next-key' : '',
+            shouldHighlightShift() ? 'shift-key' : '',
+            shouldHighlightAlt() ? 'alt-key' : '',
+        ];
+
+        return classes.filter(Boolean).join(' ');
+    };
+
+    // Function to check if the Shift key should be highlighted
     const shouldHighlightShift = (): boolean => {
         if (!isCurrentKeyShift) return false;
 
-        // For uppercase characters, highlight the opposite hand's Shift key
+        // for uppercase characters, highlight the opposite hand's Shift key
         if (isNextKeyUpperCase) {
             return isNextKeyLeftHand ? !isCurrentKeyLeft : isCurrentKeyLeft;
         }
@@ -36,11 +49,12 @@ const Key: React.FC<KeyProps> = ({
         return false;
     };
 
+    // Function to check if the Alt key should be highlighted
     const shouldHighlightAlt = (): boolean => {
         if (!isCurrentKeyAlt) return false;
 
-        // For long vowels, only highlight the right Alt key
-        if (isNextKeyLongVowel) {
+        // for Latvian special characters, only highlight the right Alt key
+        if (isNextKeyLatvianSpecial) {
             return !isCurrentKeyLeft;
         }
 
@@ -49,14 +63,10 @@ const Key: React.FC<KeyProps> = ({
 
     return (
         <div
-            className={`flex items-center justify-center rounded-sm border keyboard-border primary-text tracking-wide min-h-[40px] max-h-[100px] 
-                ${keyObj.size || ''}
-                ${isNextKey ? 'next-key' : ''}
-                ${shouldHighlightShift() ? 'shift-key' : ''}
-                ${shouldHighlightAlt() ? 'alt-key' : ''}
-            `
-                .trim()
-                .replace(/\s+/g, ' ')}
+            className={
+                getKeyClasses() +
+                ' flex items-center justify-center rounded-sm border keyboard-border primary-text tracking-wide min-h-[40px] max-h-[100px]'
+            }
         >
             <div className="flex flex-col items-center">
                 <span>{keyObj.label}</span>
@@ -69,4 +79,5 @@ const Key: React.FC<KeyProps> = ({
         </div>
     );
 };
+
 export default Key;

@@ -3,7 +3,7 @@ import { Lesson } from '../types';
 
 const getLesson = async (id: number): Promise<Lesson> => {
     try {
-        const response = await axios.get<Lesson>(`/api/lessons/${id}`);
+        const response = await axios.get<Lesson>(`/api/lesson/${id}`);
         return response.data;
     } catch (error) {
         console.error('Error fetching lesson:', error);

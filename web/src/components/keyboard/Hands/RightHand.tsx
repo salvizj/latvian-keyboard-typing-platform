@@ -1,5 +1,6 @@
 import { IoHandRightOutline } from 'react-icons/io5';
 import { Finger, Hand, HandFingerInfo } from '../../../types';
+import { shouldHighlight } from '../../../utils/shouldHiglight';
 
 type RightHandProps = {
     handFingerInfo: HandFingerInfo;
@@ -11,28 +12,22 @@ function RightHand({ handFingerInfo }: RightHandProps) {
             {/* Hand Icon */}
             <IoHandRightOutline className="w-full h-full" />
 
-            {/* Conditionally show finger's color tip */}
-            {handFingerInfo?.finger === Finger.Thumb ||
-                (handFingerInfo.isAlt && (
-                    <div className="right-hand-thumb"></div>
-                ))}
-            {handFingerInfo?.finger === Finger.Index &&
-                handFingerInfo.hand === Hand.Right && (
-                    <div className="right-hand-index"></div>
-                )}
-            {handFingerInfo?.finger === Finger.Middle &&
-                handFingerInfo.hand === Hand.Right && (
-                    <div className="right-hand-middle"></div>
-                )}
-            {handFingerInfo?.finger === Finger.Ring &&
-                handFingerInfo.hand === Hand.Right && (
-                    <div className="right-hand-ring"></div>
-                )}
-            {(handFingerInfo?.finger === Finger.Pinky &&
-                handFingerInfo.hand === Hand.Right) ||
-                (handFingerInfo.isShift && handFingerInfo.hand === 'right' && (
-                    <div className="right-hand-pinky"></div>
-                ))}
+            {/* Highlight fingers based on conditions */}
+            {shouldHighlight(handFingerInfo, Hand.Right, Finger.Thumb) && (
+                <div className="right-hand-thumb"></div>
+            )}
+            {shouldHighlight(handFingerInfo, Hand.Right, Finger.Index) && (
+                <div className="right-hand-index"></div>
+            )}
+            {shouldHighlight(handFingerInfo, Hand.Right, Finger.Middle) && (
+                <div className="right-hand-middle"></div>
+            )}
+            {shouldHighlight(handFingerInfo, Hand.Right, Finger.Ring) && (
+                <div className="right-hand-ring"></div>
+            )}
+            {shouldHighlight(handFingerInfo, Hand.Right, Finger.Pinky) && (
+                <div className="right-hand-pinky"></div>
+            )}
         </div>
     );
 }

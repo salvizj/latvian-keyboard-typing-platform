@@ -5,8 +5,8 @@ import Navigation from './Navigation';
 
 const Dashboard = () => {
     return (
-        <div>
-            <div className="flex justify-center sticky gap-4 pt-10">
+        <div className="flex flex-col gap-10">
+            <div className="flex justify-center sticky gap-4 pt-10 ">
                 <LanguageTogleButton />
                 <ThemeTogleButton />
             </div>

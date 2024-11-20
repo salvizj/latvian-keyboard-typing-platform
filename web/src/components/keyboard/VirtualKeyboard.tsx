@@ -13,7 +13,7 @@ const VirtualKeyboard: React.FC<VirtualKeyboardProps> = ({
     expectedCharacterKeyObj,
 }) => {
     return (
-        <div className=" flex flex-col items-center gap-2 p-6 aside-bg rounded-md max-w-full min-w-[800px] mx-auto max-h-full">
+        <div className=" flex flex-col items-center gap-2 p-6 third-bg rounded-md max-w-full min-w-[46rem] mx-auto max-h-full">
             {keyObjRows.map((keyObjRow, rowIndex) => (
                 <div
                     key={`row-${rowIndex}`}
@@ -21,7 +21,7 @@ const VirtualKeyboard: React.FC<VirtualKeyboardProps> = ({
                 >
                     {keyObjRow.map((keyObj: KeyObj) => (
                         <Key
-                            key={`${rowIndex}-${keyObj.key}`}
+                            key={`${keyObj.key}-${keyObj.hand}`}
                             keyObj={keyObj}
                             expectedCharacter={expectedCharacter}
                             expecteCharacterKeyObj={expectedCharacterKeyObj}

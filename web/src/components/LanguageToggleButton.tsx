@@ -1,6 +1,6 @@
 import { useLanguage } from '../context/LanguageContext';
 import Button from './utils/Button';
-import translate from '../utils/translate';
+import translate from '../utils/transalte';
 
 const LanguageTogleButton = () => {
     const { language, setLanguage } = useLanguage();
@@ -11,8 +11,8 @@ const LanguageTogleButton = () => {
     };
 
     return (
-        <Button onClick={toggleLanguage} className="primary-text ">
-            {translate('language')}
+        <Button onClick={toggleLanguage} className="primary-text text-xl">
+            {translate('language', language)}
         </Button>
     );
 };

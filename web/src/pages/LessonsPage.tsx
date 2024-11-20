@@ -1,13 +1,20 @@
-import LessonLinks from '../components/LesonLinks';
 import { capitalize } from '../utils/capitalize';
-import translate from '../utils/translate';
+import { useLanguage } from '../context/LanguageContext';
+import LessonLinks from '../components/Lesson/LesonLinks';
+import translate from '../utils/transalte';
+
 const LessonsPage = () => {
+    const { language } = useLanguage();
+    const translatedLessons = translate('lessons', language);
+
     return (
         <>
-            <h1 className="text-4xl primary-text">
-                {capitalize(translate('lessons'))}
-            </h1>
-            <LessonLinks />
+            <div className="flex justify-center flex-col items-center min-h-screen gap-6">
+                <h1 className="text-4xl secondary-text">
+                    {capitalize(translatedLessons)}
+                </h1>
+                <LessonLinks />
+            </div>
         </>
     );
 };

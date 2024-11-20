@@ -1,207 +1,223 @@
 :root {
-	--typing-text-color: #b76c6c;
-	--typing-text-correct-color: #d4d6e5;
-	--typing-text-box-bg: #5f6588;
+    --typing-text-color: #b76c6c;
+    --typing-text-correct-color: #d4d6e5;
+    --typing-text-box-bg: #5f6588;
 
-	--next-key-bg-color: #c1c4d9;
-	--next-key-text-color: #2a2f50;
+    --next-key-bg-color: #c1c4d9;
+    --next-key-text-color: #2a2f50;
 
-	--modifier-bg-color: #c1c4d9;
-	--modifier-text-color: #2a2f50;
+    --modifier-bg-color: #c1c4d9;
+    --modifier-text-color: #2a2f50;
 
-	--primary: #d4d6e5;
-	--secondary: #2a2f50;
-	--bg: #c1c4d9;
-	--aside: #5f6588;
-	--keyboard-border: #b8b6b6;
+    --primary: #d4d6e5;
+    --primary-hover: #8a8eaf;
+    --third-hover: #7981af;
+    --secondary: #000000;
 
-	--font-size-base: 1rem;
-	--font-size-lg: 1.25rem;
-	--font-size-md: 1rem;
-	--font-size-sm: 0.875rem;
-	--font-size-xs: 0.75rem;
-	--font-size-2xl: 1.5rem;
-	--font-size-3xl: 1.875rem;
-	--font-size-4xl: 2.25rem;
-	--font-size-5xl: 3rem;
-	--font-size-6xl: 4rem;
-	--font-size-7xl: 5rem;
-	--font-size-8xl: 6rem;
+    --bg: #c1c4d9;
+    --third: #5f6588;
 
-	--hand-thumb-bg: #f87171;
-	--hand-index-bg: #6ee7b7;
-	--hand-middle-bg: #60a5fa;
-	--hand-ring-bg: #a855f7;
-	--hand-pinky-bg: #fbbf24;
+    --keyboard-border: #b8b6b6;
+    --lesson-complete: #5f6588;
+
+    --font-size-lg: 1.25rem;
+    --font-size-md: 1rem;
+    --font-size-sm: 0.875rem;
+    --font-size-xs: 0.75rem;
+    --font-size-2xl: 1.5rem;
+    --font-size-3xl: 1.875rem;
+    --font-size-4xl: 2.25rem;
+    --font-size-5xl: 3rem;
+    --font-size-6xl: 4rem;
+    --font-size-7xl: 5rem;
+    --font-size-8xl: 6rem;
+
+    --hand-thumb-bg: #f87171;
+    --hand-index-bg: #6ee7b7;
+    --hand-middle-bg: #60a5fa;
+    --hand-ring-bg: #a855f7;
+    --hand-pinky-bg: #fbbf24;
 }
 
 .dark {
-	--typing-text-color: #b43939;
-	--typing-text-correct-color: #aeaec6;
-	--typing-text-box-bg: #242634;
+    --typing-text-color: #b43939;
+    --typing-text-correct-color: #aeaec6;
+    --typing-text-box-bg: #242634;
 
-	--next-key-bg-color: #5f6588;
-	--next-key-text-color: #b8b6b6;
+    --next-key-bg-color: #5f6588;
+    --next-key-text-color: #b8b6b6;
 
-	--modifier-bg-color: #5f6588;
-	--modifier-text-color: #b8b6b6;
+    --modifier-bg-color: #5f6588;
+    --modifier-text-color: #b8b6b6;
 
-	--primary: #c1c4d9;
-	--secondary: #dbdbdb;
-	--bg: #5f6588;
-	--aside: #242634;
-	--keyboard-border: #b8b6b6;
+    --primary: #c1c4d9;
+    --primary-hover: #9499c0;
+    --third-hover: #424560;
+    --secondary: #dbdbdb;
 
-	--hand-thumb-bg: #f87171;
-	--hand-index-bg: #6ee7b7;
-	--hand-middle-bg: #60a5fa;
-	--hand-ring-bg: #a855f7;
-	--hand-pinky-bg: #fbbf24;
+    --bg: #5f6588;
+    --third: #242634;
+
+    --keyboard-border: #b8b6b6;
+    --lesson-complete: #242634;
+
+    --hand-thumb-bg: #f87171;
+    --hand-index-bg: #6ee7b7;
+    --hand-middle-bg: #60a5fa;
+    --hand-ring-bg: #a855f7;
+    --hand-pinky-bg: #fbbf24;
 }
 
 body {
-	background-color: var(--bg);
+    background-color: var(--bg);
 }
 .keyboard-border {
-	border-color: var(--keyboard-border);
+    border-color: var(--keyboard-border);
 }
-.aside-bg {
-	background-color: var(--aside);
+.third-bg {
+    background-color: var(--third);
 }
-
 .primary-bg {
-	background-color: var(--primary);
+    background-color: var(--primary);
 }
-
+.hover\:third-hover:hover {
+    background-color: var(--third-hover);
+}
+.hover\:primary-hover:hover {
+    background-color: var(--primary-hover);
+}
+.lesson-complete {
+    background-color: var(--lesson-complete);
+    color: var(--primary);
+}
 .primary-text {
-	color: var(--primary);
+    color: var(--primary);
 }
 .secondary-text {
-	color: var(--secondary);
+    color: var(--secondary);
 }
 .secondary-bg {
-	background-color: var(--secondary);
+    background-color: var(--secondary);
 }
 .secondary-text {
-	color: var(--secondary);
+    color: var(--secondary);
 }
-
 .next-key {
-	background-color: var(--next-key-bg-color);
-	color: var(--next-key-text-color);
+    background-color: var(--next-key-bg-color);
+    color: var(--next-key-text-color);
 }
 .shift-key,
 .alt-key {
-	background-color: var(--modifier-bg-color);
-	color: var(--modifier-text-color);
+    background-color: var(--modifier-bg-color);
+    color: var(--modifier-text-color);
 }
 .typing-correct-text {
-	color: var(--typing-text-correct-color);
+    color: var(--typing-text-correct-color);
 }
 .typing-color {
-	color: var(--typing-text-color);
+    color: var(--typing-text-color);
 }
 .typing-text-box-bg {
-	background-color: var(--typing-text-box-bg);
+    background-color: var(--typing-text-box-bg);
 }
 /* Right Hand */
 .right-hand-thumb {
-	position: absolute;
-	top: 44%;
-	left: 17%;
-	width: 1.6rem;
-	height: 1.6rem;
-	background-color: var(--hand-thumb-bg);
-	border-radius: 9999px;
+    position: absolute;
+    top: 44%;
+    left: 17%;
+    width: 1.6rem;
+    height: 1.6rem;
+    background-color: var(--hand-thumb-bg);
+    border-radius: 9999px;
 }
 
 .right-hand-index {
-	position: absolute;
-	top: 14%;
-	left: 34%;
-	width: 1.6rem;
-	height: 1.6rem;
-	background-color: var(--hand-index-bg);
-	border-radius: 9999px;
+    position: absolute;
+    top: 14%;
+    left: 34%;
+    width: 1.6rem;
+    height: 1.6rem;
+    background-color: var(--hand-index-bg);
+    border-radius: 9999px;
 }
 
 .right-hand-middle {
-	position: absolute;
-	top: 5%;
-	left: 47%;
-	width: 1.6rem;
-	height: 1.6rem;
-	background-color: var(--hand-middle-bg);
-	border-radius: 9999px;
+    position: absolute;
+    top: 5%;
+    left: 47%;
+    width: 1.6rem;
+    height: 1.6rem;
+    background-color: var(--hand-middle-bg);
+    border-radius: 9999px;
 }
 
 .right-hand-ring {
-	position: absolute;
-	top: 12%;
-	left: 60%;
-	width: 1.6rem;
-	height: 1.6rem;
-	background-color: var(--hand-ring-bg);
-	border-radius: 9999px;
+    position: absolute;
+    top: 12%;
+    left: 60%;
+    width: 1.6rem;
+    height: 1.6rem;
+    background-color: var(--hand-ring-bg);
+    border-radius: 9999px;
 }
 
 .right-hand-pinky {
-	position: absolute;
-	top: 24%;
-	left: 72%;
-	width: 1.6rem;
-	height: 1.6rem;
-	background-color: var(--hand-pinky-bg);
-	border-radius: 9999px;
+    position: absolute;
+    top: 24%;
+    left: 72%;
+    width: 1.6rem;
+    height: 1.6rem;
+    background-color: var(--hand-pinky-bg);
+    border-radius: 9999px;
 }
 
 /* Left Hand */
 .left-hand-thumb {
-	position: absolute;
-	top: 44%;
-	left: 70%;
-	width: 1.6rem;
-	height: 1.6rem;
-	background-color: var(--hand-thumb-bg);
-	border-radius: 9999px;
+    position: absolute;
+    top: 44%;
+    left: 70%;
+    width: 1.6rem;
+    height: 1.6rem;
+    background-color: var(--hand-thumb-bg);
+    border-radius: 9999px;
 }
 
 .left-hand-index {
-	position: absolute;
-	top: 14%;
-	left: 53%;
-	width: 1.6rem;
-	height: 1.6rem;
-	background-color: var(--hand-index-bg);
-	border-radius: 9999px;
+    position: absolute;
+    top: 14%;
+    left: 53%;
+    width: 1.6rem;
+    height: 1.6rem;
+    background-color: var(--hand-index-bg);
+    border-radius: 9999px;
 }
 
 .left-hand-middle {
-	position: absolute;
-	top: 5%;
-	left: 40%;
-	width: 1.6rem;
-	height: 1.6rem;
-	background-color: var(--hand-middle-bg);
-	border-radius: 9999px;
+    position: absolute;
+    top: 5%;
+    left: 40%;
+    width: 1.6rem;
+    height: 1.6rem;
+    background-color: var(--hand-middle-bg);
+    border-radius: 9999px;
 }
 
 .left-hand-ring {
-	position: absolute;
-	top: 12%;
-	left: 27%;
-	width: 1.6rem;
-	height: 1.6rem;
-	background-color: var(--hand-ring-bg);
-	border-radius: 9999px;
+    position: absolute;
+    top: 12%;
+    left: 27%;
+    width: 1.6rem;
+    height: 1.6rem;
+    background-color: var(--hand-ring-bg);
+    border-radius: 9999px;
 }
 
 .left-hand-pinky {
-	position: absolute;
-	top: 24%;
-	left: 14%;
-	width: 1.6rem;
-	height: 1.6rem;
-	background-color: var(--hand-pinky-bg);
-	border-radius: 9999px;
+    position: absolute;
+    top: 24%;
+    left: 14%;
+    width: 1.6rem;
+    height: 1.6rem;
+    background-color: var(--hand-pinky-bg);
+    border-radius: 9999px;
 }

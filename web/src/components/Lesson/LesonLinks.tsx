@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { isLessonComplete } from '../../utils/lessonCompletion';
 
 const LessonLinks = () => {
     const LessonCount = 54;
@@ -6,10 +7,11 @@ const LessonLinks = () => {
     const links = [];
 
     for (let lessonNumber = 1; lessonNumber <= LessonCount; lessonNumber++) {
+        const completedAlready = isLessonComplete(lessonNumber);
         links.push(
             <Link
                 key={lessonNumber}
-                className="border secondary primary-text bg-transparent w-16 h-16 flex justify-center items-center"
+                className={`border secondary secondary-text w-16 h-16 flex justify-center items-center hover:primary-hover ${completedAlready ? 'lesson-complete' : ''}`}
                 to={`${BaseUrl}${lessonNumber}`}
             >
                 {lessonNumber}

@@ -9,6 +9,11 @@ import LessonsPage from '../pages/LessonsPage';
 import StatisticsPage from '../pages/Statistics';
 import AppearanceSettingsPage from '../pages/AppearanceSettingsPage';
 import LessonPage from '../pages/LessonPage';
+import TypingRacePage from '../pages/TypingRace';
+import TypingTestPage from '../pages/TypingTestPage';
+import StatisticsTypingRacePage from '../pages/StatisticsTypingRacePage';
+import StatisticsLessonsPage from '../pages/StatisticsLessonsPage';
+import StatisticsTypingTestPage from '../pages/StatisticsTypingTestPage';
 
 const Router = () => {
     const router = createBrowserRouter(
@@ -18,6 +23,20 @@ const Router = () => {
                 <Route path="/lesson/:id" element={<LessonPage />} />
                 <Route path="/lessons" element={<LessonsPage />} />
                 <Route path="/statistics" element={<StatisticsPage />} />
+                <Route
+                    path="/statistics/typing-test"
+                    element={<StatisticsTypingTestPage />}
+                />
+                <Route
+                    path="/statistics/lessons"
+                    element={<StatisticsLessonsPage />}
+                />
+                <Route
+                    path="/statistics/typing-race"
+                    element={<StatisticsTypingRacePage />}
+                />
+                <Route path="/typing-race" element={<TypingRacePage />} />
+                <Route path="/typing-test" element={<TypingTestPage />} />
                 <Route
                     path="/appearance-settings"
                     element={<AppearanceSettingsPage />}

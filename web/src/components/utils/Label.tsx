@@ -1,5 +1,6 @@
 import React from 'react';
-import translate from '../../utils/translate';
+import translate from '../../utils/transalte';
+import { useLanguage } from '../../context/LanguageContext';
 
 type LabelProps = {
     text: string;
@@ -7,9 +8,10 @@ type LabelProps = {
 };
 
 const Label: React.FC<LabelProps> = ({ text, htmlFor }) => {
+    const { language } = useLanguage();
     return (
         <label htmlFor={htmlFor} className="secondary-text font-md">
-            {translate(text)}
+            {translate(text, language)}
         </label>
     );
 };

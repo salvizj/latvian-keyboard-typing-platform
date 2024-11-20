@@ -6,7 +6,11 @@ import {
     isUpperCaseLatvian,
 } from '../utils/testCharacterToLatvian';
 
-export const useKeyPressManagement = (text: string) => {
+export const useKeyPressManagement = (
+    text: string,
+    setFinished: (finished: boolean) => void,
+    finished: boolean
+) => {
     const [currentCharacterIndex, setCurrentCharacterIndex] = useState(0);
     const [expectedCharacter, setExpectedCharacter] = useState(text[0]);
     const [expectedCharacterKeyObj, setExpectedCharacterKeyObj] =
@@ -17,6 +21,15 @@ export const useKeyPressManagement = (text: string) => {
     const [handFingerInfo, setHandFingerInfo] = useState<HandFingerInfo | null>(
         null
     );
+
+    // reset all states because lessons or race or test has ended
+    useEffect(() => {
+        setCurrentCharacterIndex(0);
+        setExpectedCharacter(text[0]);
+        setCurrentPressedKey('');
+        setHandFingerInfo(null);
+        setExpectedCharacterKeyObj(null);
+    }, [finished, text]);
 
     // this is for first character because we need to get keyObj and we usually get keyOby after key press
     useEffect(() => {
@@ -30,7 +43,7 @@ export const useKeyPressManagement = (text: string) => {
                 isAlt: isLatvianSpecial(text[0]),
             });
         }
-    }, [text]);
+    }, [text, finished]);
 
     const handleKeyPress = useCallback(
         (lastKeyPressed: string) => {
@@ -42,11 +55,11 @@ export const useKeyPressManagement = (text: string) => {
 
                     if (nextIndex < text.length) {
                         const newExpectedCharacter = text[nextIndex];
-                        setExpectedCharacter(newExpectedCharacter);
-
                         const expectedCharacterKeyObj =
                             getKeyObjByKey(newExpectedCharacter);
+                        setExpectedCharacter(newExpectedCharacter);
                         setExpectedCharacterKeyObj(expectedCharacterKeyObj);
+
                         if (
                             expectedCharacterKeyObj?.hand &&
                             expectedCharacterKeyObj?.finger
@@ -61,13 +74,13 @@ export const useKeyPressManagement = (text: string) => {
                         } else {
                             setHandFingerInfo(null);
                         }
-                    }
+                    } else setFinished(true);
 
                     return nextIndex;
                 });
             }
         },
-        [text, expectedCharacter]
+        [text, expectedCharacter, setFinished]
     );
 
     return {

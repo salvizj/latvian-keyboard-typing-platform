@@ -1,6 +1,6 @@
 import StatisticsDashboard from '../components/statistics/StatisticsDashboard';
 
-const StatisticsPage = () => {
+const StatisticsTypingRacePage = () => {
     return (
         <>
             <StatisticsDashboard />
@@ -8,4 +8,4 @@ const StatisticsPage = () => {
     );
 };
 
-export default StatisticsPage;
+export default StatisticsTypingRacePage;

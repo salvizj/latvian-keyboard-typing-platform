@@ -1,12 +1,16 @@
+import { useState } from 'react';
 import Keyboard from '../components/keyboard/Keyboard';
 
 const IndexPage = () => {
-    const text = 'Ā A L Ļ 1 2 '; //demo
+    const [finished, setFinished] = useState(false);
+
     return (
         <>
-            <div className="flex flex-col justify-center items-center w-full min-h-screen">
-                <Keyboard text={text} />
-            </div>
+            <Keyboard
+                text="fsdfsdf sdf asdf dsaf dsa fsdf dsa fasdf sdaf asdf sdaf sdaf asdf adsf asdf asdf"
+                finished={finished}
+                setFinished={setFinished}
+            />
         </>
     );
 };

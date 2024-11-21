@@ -1,18 +1,34 @@
 import KeyboardInput from './KeyboardInput';
 import TextDisplayBox from './TextDisplayBox';
 import VirtualKeyboard from './VirtualKeyboard';
-import LeftHand from './Hands/LeftHand';
-import RightHand from './Hands/RightHand';
+import LeftHand from './hands/LeftHand';
+import RightHand from './hands/RightHand';
 import { useKeyPressManagement } from '../../hooks/useCharacterManagement';
-import LessonFinishedScreen from '../Lesson/LessonFinishedScreen';
+import LessonFinishedScreen from '../lesson/LessonFinishedScreen';
+import { useEffect, useState } from 'react';
+import { isLessonComplete, markLessonComplete } from '../../utils/lessonCompletion';
+import Countdown from '../utils/Countdown';
+import TypingTestFinishedScreen from '../typingTest/TypingTestFinishedScreen';
 
 type KeyboardProps = {
     text: string;
-    setFinished: (finished: boolean) => void;
-    finished: boolean;
+    lessonId?: number;
+    lessonMode?: boolean;
+    raceMode?: boolean;
+    testMode?: boolean;
+    time?: number;
 };
 
-const Keyboard: React.FC<KeyboardProps> = ({ text, setFinished, finished }) => {
+const Keyboard: React.FC<KeyboardProps> = ({ text, lessonMode, lessonId, testMode, raceMode, time }) => {
+    const [finished, setFinished] = useState(false);
+
+    useEffect(() => {
+        if (lessonId && lessonMode && finished) {
+            const completedAlready = isLessonComplete(lessonId);
+            if (!completedAlready) markLessonComplete(lessonId);
+        }
+    }, [finished, lessonId, lessonMode]);
+
     const {
         handleKeyPress: manageKeyPress,
         expectedCharacter,
@@ -21,27 +37,19 @@ const Keyboard: React.FC<KeyboardProps> = ({ text, setFinished, finished }) => {
         expectedCharacterKeyObj,
     } = useKeyPressManagement(text, setFinished, finished);
 
-    const restartLesson = () => {
+    const restart = () => {
         window.location.reload();
     };
-
+    console.log(raceMode);
     return (
         <>
             <div className="flex justify-center flex-col items-center min-h-screen">
                 {expectedCharacterKeyObj && handFingerInfo && (
                     <>
-                        <TextDisplayBox
-                            text={text}
-                            currentCorrectTextCharacterIndex={
-                                currentCharacterIndex
-                            }
-                        />
+                        {time && <Countdown time={time} setFinished={setFinished} finished={finished} />}
 
-                        <KeyboardInput
-                            handleKeyPress={manageKeyPress}
-                            finished={finished}
-                        />
-
+                        <TextDisplayBox text={text} currentCorrectTextCharacterIndex={currentCharacterIndex} />
+                        <KeyboardInput handleKeyPress={manageKeyPress} finished={finished} />
                         <div className="flex items-center justify-between">
                             <div className="flex-shrink-0">
                                 <LeftHand handFingerInfo={handFingerInfo} />
@@ -50,9 +58,7 @@ const Keyboard: React.FC<KeyboardProps> = ({ text, setFinished, finished }) => {
                             <div className="flex-grow mx-4">
                                 <VirtualKeyboard
                                     expectedCharacter={expectedCharacter}
-                                    expectedCharacterKeyObj={
-                                        expectedCharacterKeyObj
-                                    }
+                                    expectedCharacterKeyObj={expectedCharacterKeyObj}
                                 />
                             </div>
 
@@ -60,17 +66,17 @@ const Keyboard: React.FC<KeyboardProps> = ({ text, setFinished, finished }) => {
                                 <RightHand handFingerInfo={handFingerInfo} />
                             </div>
                         </div>
-
-                        {finished && (
-                            <div className="fixed inset-0 z-50">
-                                <LessonFinishedScreen
-                                    finished={finished}
-                                    setFinished={setFinished}
-                                    restartLesson={restartLesson}
-                                />
-                            </div>
-                        )}
                     </>
+                )}
+                {finished && lessonMode && (
+                    <div className="fixed inset-0 z-50">
+                        <LessonFinishedScreen setFinished={setFinished} restart={restart} />
+                    </div>
+                )}
+                {finished && testMode && (
+                    <div className="fixed inset-0 z-50">
+                        <TypingTestFinishedScreen setFinished={setFinished} restart={restart} />
+                    </div>
                 )}
             </div>
         </>

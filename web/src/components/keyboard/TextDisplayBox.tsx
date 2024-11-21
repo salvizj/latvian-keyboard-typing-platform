@@ -5,27 +5,24 @@ type TextDisplayProps = {
     currentCorrectTextCharacterIndex: number;
 };
 
-const TextDisplayBox: React.FC<TextDisplayProps> = ({
-    text,
-    currentCorrectTextCharacterIndex,
-}) => {
+const TextDisplayBox: React.FC<TextDisplayProps> = ({ text, currentCorrectTextCharacterIndex }) => {
     let globalIndex = 0;
 
-    // Split the text into words and process each word
+    // split the text into words and process each word
     const processedText = text.split(' ').map((word, wordIndex, wordsArray) => {
-        // Process the letters in the word
+        // process the letters in the word
         const wordLetters = word.split('').map((letter) => {
             const letterObject = {
                 letter,
                 globalIndex: globalIndex++,
 
-                // Determine if the letter has been typed
+                // determine if the letter has been typed
                 hasBeenTyped: globalIndex <= currentCorrectTextCharacterIndex,
             };
             return letterObject;
         });
 
-        // add a middle dot (·) at the end of the word, except for the last word
+        // add a (·) at the end of the word, except for the last word
         if (wordIndex < wordsArray.length - 1) {
             wordLetters.push({
                 letter: '·',
@@ -49,24 +46,17 @@ const TextDisplayBox: React.FC<TextDisplayProps> = ({
                 (wordObj, wordIndex) =>
                     // Display word if show is true
                     wordObj.show && (
-                        <span
-                            key={wordIndex}
-                            className="flex flex-row justify-center items-center gap-1"
-                        >
-                            {wordObj.wordLetters.map(
-                                (letterObj, letterIndex) => (
-                                    <span
-                                        key={letterIndex}
-                                        className={`${
-                                            letterObj.hasBeenTyped
-                                                ? 'typing-correct-text'
-                                                : 'typing-color'
-                                        } tracking-wide text-2xl `}
-                                    >
-                                        {letterObj.letter}
-                                    </span>
-                                )
-                            )}
+                        <span key={wordIndex} className="flex flex-row justify-center items-center gap-1">
+                            {wordObj.wordLetters.map((letterObj, letterIndex) => (
+                                <span
+                                    key={letterIndex}
+                                    className={`${
+                                        letterObj.hasBeenTyped ? 'typing-correct-text' : 'typing-color'
+                                    } tracking-wide text-2xl `}
+                                >
+                                    {letterObj.letter}
+                                </span>
+                            ))}
                         </span>
                     )
             )}

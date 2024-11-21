@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
-import translate from '../../utils/transalte';
+import translate from '../../utils/translate';
 import { capitalize } from '../../utils/capitalize';
 
 const StatisticsDashboard = () => {

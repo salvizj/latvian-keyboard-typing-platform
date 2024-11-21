@@ -12,7 +12,7 @@
     --primary: #d4d6e5;
     --primary-hover: #8a8eaf;
     --third-hover: #7981af;
-    --secondary: #000000;
+    --secondary: #ffffff;
 
     --bg: #c1c4d9;
     --third: #5f6588;
@@ -51,12 +51,13 @@
     --modifier-text-color: #b8b6b6;
 
     --primary: #c1c4d9;
+    --secondary: #ffffff;
+    --third: #242634;
+
     --primary-hover: #9499c0;
     --third-hover: #424560;
-    --secondary: #dbdbdb;
 
     --bg: #5f6588;
-    --third: #242634;
 
     --keyboard-border: #b8b6b6;
     --lesson-complete: #242634;
@@ -67,7 +68,15 @@
     --hand-ring-bg: #a855f7;
     --hand-pinky-bg: #fbbf24;
 }
-
+.placeholder-primary-text::placeholder {
+    color: var(--primary);
+}
+.placeholder-third-text::placeholder {
+    color: var(--third);
+}
+.placeholder-secondary-text::placeholder {
+    color: var(--secondary);
+}
 body {
     background-color: var(--bg);
 }
@@ -77,6 +86,9 @@ body {
 .third-bg {
     background-color: var(--third);
 }
+.third-text {
+    color: var(--third);
+}
 .primary-bg {
     background-color: var(--primary);
 }
@@ -85,6 +97,12 @@ body {
 }
 .hover\:primary-hover:hover {
     background-color: var(--primary-hover);
+}
+.hover\:third-hover-text:hover {
+    color: var(--third-hover);
+}
+.hover\:primary-hover-text:hover {
+    color: var(--primary-hover);
 }
 .lesson-complete {
     background-color: var(--lesson-complete);
@@ -98,9 +116,6 @@ body {
 }
 .secondary-bg {
     background-color: var(--secondary);
-}
-.secondary-text {
-    color: var(--secondary);
 }
 .next-key {
     background-color: var(--next-key-bg-color);

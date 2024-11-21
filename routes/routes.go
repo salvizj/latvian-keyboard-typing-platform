@@ -9,6 +9,7 @@ import (
 func InitialRoutes(e *echo.Echo) error {
 
 	e.GET("/api/lesson/:id", handlers.GetLessonHandler)
+	e.GET("/api/poet-texts", handlers.GetPoetTextsHandler)
 
 	// Serve static files from "web/dist/assets"
 	e.Static("/assets", "web/dist/assets")

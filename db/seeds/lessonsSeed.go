@@ -1,13 +1,14 @@
-package db
+package seed
 
 import (
 	"database/sql"
 	"fmt"
+	"latvian-typing-tutor/db"
 	"latvian-typing-tutor/types"
 	"os"
 )
 
-var lessons = []types.Lessons{
+var lessons = []types.Lesson{
 
 	// Group 1: a ā A Ā
 	{Id: 1, LessonType: "Letter Introduction", LessonText: "a ā A Ā"},
@@ -99,7 +100,7 @@ func SeedLessons() {
 		// Step 1: Check if the lesson already exists in the database by its ID
 		var count int
 		query := `SELECT COUNT(*) FROM Lessons WHERE id = ?`
-		err := DB.QueryRow(query, lesson.Id).Scan(&count)
+		err := db.DB.QueryRow(query, lesson.Id).Scan(&count)
 		if err != nil {
 			if err != sql.ErrNoRows {
 				fmt.Fprintf(os.Stderr, "Error checking if lesson with ID %d exists: %v\n", lesson.Id, err)
@@ -110,7 +111,7 @@ func SeedLessons() {
 		// Step 2: If the lesson doesn't exist, insert it into the database
 		if count == 0 {
 			insertQuery := `INSERT INTO Lessons (id, lessonType, lessonText) VALUES (?, ?, ?)`
-			_, err := DB.Exec(insertQuery, lesson.Id, lesson.LessonType, lesson.LessonText)
+			_, err := db.DB.Exec(insertQuery, lesson.Id, lesson.LessonType, lesson.LessonText)
 			if err != nil {
 				fmt.Fprintf(os.Stderr, "Error inserting lesson with ID %d: %v\n", lesson.Id, err)
 			} else {

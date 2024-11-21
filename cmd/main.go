@@ -2,6 +2,7 @@ package main
 
 import (
 	"latvian-typing-tutor/db"
+	seed "latvian-typing-tutor/db/seeds"
 	"latvian-typing-tutor/server"
 )
 
@@ -11,7 +12,10 @@ func main() {
 	db.Initialize()
 	defer db.DB.Close()
 
-	db.CreatesLessonsTable()
-	db.SeedLessons()
+	db.CreateTables()
+
+	seed.SeedLessons()
+	seed.SeedPoetTexts()
+
 	server.StartServer()
 }

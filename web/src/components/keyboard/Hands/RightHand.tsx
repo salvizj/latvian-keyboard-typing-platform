@@ -13,21 +13,11 @@ function RightHand({ handFingerInfo }: RightHandProps) {
             <IoHandRightOutline className="w-full h-full" />
 
             {/* Highlight fingers based on conditions */}
-            {shouldHighlight(handFingerInfo, Hand.Right, Finger.Thumb) && (
-                <div className="right-hand-thumb"></div>
-            )}
-            {shouldHighlight(handFingerInfo, Hand.Right, Finger.Index) && (
-                <div className="right-hand-index"></div>
-            )}
-            {shouldHighlight(handFingerInfo, Hand.Right, Finger.Middle) && (
-                <div className="right-hand-middle"></div>
-            )}
-            {shouldHighlight(handFingerInfo, Hand.Right, Finger.Ring) && (
-                <div className="right-hand-ring"></div>
-            )}
-            {shouldHighlight(handFingerInfo, Hand.Right, Finger.Pinky) && (
-                <div className="right-hand-pinky"></div>
-            )}
+            {shouldHighlight(handFingerInfo, Hand.Right, Finger.Thumb) && <div className="right-hand-thumb"></div>}
+            {shouldHighlight(handFingerInfo, Hand.Right, Finger.Index) && <div className="right-hand-index"></div>}
+            {shouldHighlight(handFingerInfo, Hand.Right, Finger.Middle) && <div className="right-hand-middle"></div>}
+            {shouldHighlight(handFingerInfo, Hand.Right, Finger.Ring) && <div className="right-hand-ring"></div>}
+            {shouldHighlight(handFingerInfo, Hand.Right, Finger.Pinky) && <div className="right-hand-pinky"></div>}
         </div>
     );
 }

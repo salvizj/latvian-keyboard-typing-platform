@@ -21,6 +21,17 @@ var tables = []Table{
 			);
 		`,
 	},
+	{
+		name: "PoetTexts",
+		query: `
+			CREATE TABLE PoetTexts (
+				id INTEGER PRIMARY KEY,
+				poetAuthor TEXT NOT NULL,
+				poetfragmentName TEXT NOT NULL,
+				poetTextContent TEXT NOT NULL
+				);
+		`,
+	},
 }
 
 func tableExists(tableName string) bool {
@@ -34,23 +45,27 @@ func tableExists(tableName string) bool {
 	return exists
 }
 
-func CreatesLessonsTable() {
+func createTable(tableName, tableQuery string) {
+	// check if the table exists
+	if tableExists(tableName) {
+		fmt.Printf("Table %s already exists. Skipping creation.\n", tableName)
+		return
+	}
+
+	// create the table if it doesn't exist
+	if result, err := DB.Exec(tableQuery); err != nil {
+		fmt.Fprintf(os.Stderr, "Error creating %s table: %v\n", tableName, err)
+	} else {
+		rowsAffected, _ := result.RowsAffected()
+		lastInsertID, _ := result.LastInsertId()
+
+		fmt.Printf("Table %s created successfully. Rows affected: %d, Last Insert ID: %d\n",
+			tableName, rowsAffected, lastInsertID)
+	}
+}
+
+func CreateTables() {
 	for _, table := range tables {
-		// Check if the table exists
-		if tableExists(table.name) {
-			fmt.Printf("Table %s already exists. Skipping creation.\n", table.name)
-			continue
-		}
-
-		// Create the table if it doesn't exist
-		if result, err := DB.Exec(table.query); err != nil {
-			fmt.Fprintf(os.Stderr, "Error creating %s table: %v\n", table.name, err)
-		} else {
-			rowsAffected, _ := result.RowsAffected()
-			lastInsertID, _ := result.LastInsertId()
-
-			fmt.Printf("Table %s created successfully. Rows affected: %d, Last Insert ID: %d\n",
-				table.name, rowsAffected, lastInsertID)
-		}
+		createTable(table.name, table.query)
 	}
 }

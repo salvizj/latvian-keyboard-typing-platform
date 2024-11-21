@@ -1,10 +1,4 @@
-import React, {
-    createContext,
-    useContext,
-    useState,
-    ReactNode,
-    useEffect,
-} from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
 type Theme = '' | 'dark';
 
@@ -17,9 +11,7 @@ type ThemeContextType = {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export const ThemeProvider: React.FC<{ children: ReactNode }> = ({
-    children,
-}) => {
+export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [theme, setTheme] = useState<Theme>(() => {
         const savedTheme = localStorage.getItem(LOCAL_STORAGE_KEY);
         return (savedTheme as Theme) || '';
@@ -35,11 +27,7 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({
         localStorage.setItem(LOCAL_STORAGE_KEY, theme);
     }, [theme]);
 
-    return (
-        <ThemeContext.Provider value={{ theme, setTheme }}>
-            {children}
-        </ThemeContext.Provider>
-    );
+    return <ThemeContext.Provider value={{ theme, setTheme }}>{children}</ThemeContext.Provider>;
 };
 export const useTheme = () => {
     const context = useContext(ThemeContext);

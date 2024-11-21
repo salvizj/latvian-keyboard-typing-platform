@@ -9,14 +9,7 @@ type InputProps = {
     required?: boolean;
 };
 
-const Input: React.FC<InputProps> = ({
-    id,
-    type,
-    value = '',
-    onChange,
-    placeholder,
-    required,
-}) => {
+const Input: React.FC<InputProps> = ({ id, type, value = '', onChange, placeholder, required }) => {
     const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
             e.preventDefault();

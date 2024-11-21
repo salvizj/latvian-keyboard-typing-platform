@@ -7,10 +7,10 @@ import (
 	"latvian-typing-tutor/types"
 )
 
-func GetLesson(id int) (*types.Lessons, error) {
+func GetLesson(id int) (*types.Lesson, error) {
 	query := `SELECT id, lessonType, lessonText FROM Lessons WHERE id = ?`
 
-	var lesson types.Lessons
+	var lesson types.Lesson
 
 	err := db.DB.QueryRow(query, id).Scan(&lesson.Id, &lesson.LessonType, &lesson.LessonText)
 	if err != nil {

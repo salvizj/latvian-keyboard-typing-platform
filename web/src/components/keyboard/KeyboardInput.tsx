@@ -7,10 +7,7 @@ type KeyboardInputProps = {
     finished: boolean;
 };
 
-const KeyboardInput: React.FC<KeyboardInputProps> = ({
-    handleKeyPress,
-    finished,
-}) => {
+const KeyboardInput: React.FC<KeyboardInputProps> = ({ handleKeyPress, finished }) => {
     const [lastWord, setLastWord] = useState<string>('');
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,12 +29,7 @@ const KeyboardInput: React.FC<KeyboardInputProps> = ({
             <form>
                 <div className="mb-6">
                     <Label text="keyboard_input_label" htmlFor="inputField" />
-                    <Input
-                        id="inputField"
-                        type="text"
-                        value={lastWord}
-                        onChange={handleInputChange}
-                    />
+                    <Input id="inputField" type="text" value={lastWord} onChange={handleInputChange} />
                 </div>
             </form>
         </div>

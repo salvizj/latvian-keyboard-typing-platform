@@ -1,5 +1,5 @@
 import React from 'react';
-import translate from '../../utils/transalte';
+import translate from '../../utils/translate';
 import { useLanguage } from '../../context/LanguageContext';
 
 type LabelProps = {

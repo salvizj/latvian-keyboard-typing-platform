@@ -31,3 +31,17 @@ export type HandFingerInfo = {
     isShift: boolean;
     isAlt: boolean;
 };
+export type LessonCompletionObj = {
+    lessonId: number;
+    completed: boolean;
+    completedDate: string;
+};
+
+export type LessonCompletionData = Record<number, LessonCompletionObj>;
+
+export type PoetText = {
+    id: number;
+    poetAuthor: string;
+    poetFragmentName: string;
+    poetText: string;
+};

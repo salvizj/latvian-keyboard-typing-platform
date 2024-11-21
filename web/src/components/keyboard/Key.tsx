@@ -1,8 +1,5 @@
 import { Hand, KeyObj } from '../../types';
-import {
-    isLatvianSpecial,
-    isUpperCaseLatvian,
-} from '../../utils/testCharacterToLatvian';
+import { isLatvianSpecial, isUpperCaseLatvian } from '../../utils/testCharacterToLatvian';
 
 type KeyProps = {
     keyObj: KeyObj;
@@ -10,11 +7,7 @@ type KeyProps = {
     expecteCharacterKeyObj: KeyObj;
 };
 
-const Key: React.FC<KeyProps> = ({
-    keyObj,
-    expectedCharacter,
-    expecteCharacterKeyObj,
-}) => {
+const Key: React.FC<KeyProps> = ({ keyObj, expectedCharacter, expecteCharacterKeyObj }) => {
     // to find nextKey properties
     const isNextKey = keyObj === expecteCharacterKeyObj;
     const isNextKeyLeftHand = expecteCharacterKeyObj.hand === Hand.Left;
@@ -71,11 +64,7 @@ const Key: React.FC<KeyProps> = ({
         >
             <div className="flex flex-col items-center">
                 <span>{keyObj.label}</span>
-                {keyObj.altLabel && (
-                    <span className="text-xs text-gray-500">
-                        {keyObj.altLabel}
-                    </span>
-                )}
+                {keyObj.altLabel && <span className="text-xs text-gray-500">{keyObj.altLabel}</span>}
             </div>
         </div>
     );

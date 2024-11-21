@@ -1,10 +1,4 @@
-import React, {
-    createContext,
-    useContext,
-    useState,
-    useEffect,
-    ReactNode,
-} from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 type Language = 'en' | 'lv';
 
@@ -15,29 +9,19 @@ type LanguageContextType = {
     setLanguage: (language: string) => void;
 };
 
-const LanguageContext = createContext<LanguageContextType | undefined>(
-    undefined
-);
+const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
-export const LanguageProvider: React.FC<{ children: ReactNode }> = ({
-    children,
-}) => {
+export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const defaultLanguage: Language = 'lv';
 
-    const [language, setLanguage] = useState<string>(
-        localStorage.getItem(LOCAL_STORAGE_KEY) || defaultLanguage
-    );
+    const [language, setLanguage] = useState<string>(localStorage.getItem(LOCAL_STORAGE_KEY) || defaultLanguage);
 
     useEffect(() => {
         document.documentElement.lang = language;
         localStorage.setItem(LOCAL_STORAGE_KEY, language);
     }, [language]);
 
-    return (
-        <LanguageContext.Provider value={{ language, setLanguage }}>
-            {children}
-        </LanguageContext.Provider>
-    );
+    return <LanguageContext.Provider value={{ language, setLanguage }}>{children}</LanguageContext.Provider>;
 };
 
 export const useLanguage = () => {

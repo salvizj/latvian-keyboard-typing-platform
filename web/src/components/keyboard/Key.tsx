@@ -1,13 +1,13 @@
 import { Hand, KeyObj } from '../../types';
 import { isLatvianSpecial, isUpperCaseLatvian } from '../../utils/testCharacterToLatvian';
 
-type KeyProps = {
+type KeyboardKeyProps = {
     keyObj: KeyObj;
     expectedCharacter: string;
     expecteCharacterKeyObj: KeyObj;
 };
 
-const Key: React.FC<KeyProps> = ({ keyObj, expectedCharacter, expecteCharacterKeyObj }) => {
+const KeyboardKey: React.FC<KeyboardKeyProps> = ({ keyObj, expectedCharacter, expecteCharacterKeyObj }) => {
     // to find nextKey properties
     const isNextKey = keyObj === expecteCharacterKeyObj;
     const isNextKeyLeftHand = expecteCharacterKeyObj.hand === Hand.Left;
@@ -21,7 +21,7 @@ const Key: React.FC<KeyProps> = ({ keyObj, expectedCharacter, expecteCharacterKe
 
     // add higliht clases
     // function to check if the Shift key should be highlighted
-    const shouldHighlightShift = (): boolean => {
+    const shouldHighlightShiftKey = (): boolean => {
         if (!isCurrentKeyShift) return false;
 
         // for uppercase characters, highlight the opposite hand's Shift key
@@ -33,7 +33,7 @@ const Key: React.FC<KeyProps> = ({ keyObj, expectedCharacter, expecteCharacterKe
     };
 
     // function to check if the Alt key should be highlighted
-    const shouldHighlightAlt = (): boolean => {
+    const shouldHighlightAltKey = (): boolean => {
         if (!isCurrentKeyAlt) return false;
 
         // for Latvian special characters, only highlight the right Alt key
@@ -48,8 +48,8 @@ const Key: React.FC<KeyProps> = ({ keyObj, expectedCharacter, expecteCharacterKe
         const classes = [
             keyObj.size || '',
             isNextKey ? 'next-key' : '',
-            shouldHighlightShift() ? 'shift-key' : '',
-            shouldHighlightAlt() ? 'alt-key' : '',
+            shouldHighlightShiftKey() ? 'shift-key' : '',
+            shouldHighlightAltKey() ? 'alt-key' : '',
         ];
 
         return classes.filter(Boolean).join(' ');
@@ -70,4 +70,4 @@ const Key: React.FC<KeyProps> = ({ keyObj, expectedCharacter, expecteCharacterKe
     );
 };
 
-export default Key;
+export default KeyboardKey;

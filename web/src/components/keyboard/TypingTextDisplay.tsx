@@ -4,31 +4,33 @@ type TextDisplayProps = {
     text: string;
     currentCorrectTextCharacterIndex: number;
 };
+type LetterObject = {
+    letter: string;
+    hasBeenTyped: boolean;
+};
 
-const TextDisplayBox: React.FC<TextDisplayProps> = ({ text, currentCorrectTextCharacterIndex }) => {
+const TypingTextDisplay: React.FC<TextDisplayProps> = ({ text, currentCorrectTextCharacterIndex }) => {
     let globalIndex = 0;
 
     // split the text into words and process each word
     const processedText = text.split(' ').map((word, wordIndex, wordsArray) => {
         // process the letters in the word
-        const wordLetters = word.split('').map((letter) => {
+        const wordLetters: LetterObject[] = word.split('').map((letter) => {
+            // determine if the letter has been typed
+            const hasBeenTyped = globalIndex < currentCorrectTextCharacterIndex;
+
             const letterObject = {
                 letter,
                 globalIndex: globalIndex++,
-
-                // determine if the letter has been typed
-                hasBeenTyped: globalIndex <= currentCorrectTextCharacterIndex,
+                hasBeenTyped: hasBeenTyped,
             };
             return letterObject;
         });
 
         // add a (·) at the end of the word, except for the last word
         if (wordIndex < wordsArray.length - 1) {
-            wordLetters.push({
-                letter: '·',
-                globalIndex: globalIndex++,
-                hasBeenTyped: globalIndex <= currentCorrectTextCharacterIndex,
-            });
+            const hasBeenTyped = globalIndex < currentCorrectTextCharacterIndex;
+            wordLetters.push({ letter: '·', hasBeenTyped });
         }
 
         // determine if the word is fully typed (based on all its letters)
@@ -64,4 +66,4 @@ const TextDisplayBox: React.FC<TextDisplayProps> = ({ text, currentCorrectTextCh
     );
 };
 
-export default TextDisplayBox;
+export default TypingTextDisplay;

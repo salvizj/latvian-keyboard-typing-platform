@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 
 type CountdownProps = {
     time: number; // in seconds
-    setFinished: (finished: boolean) => void;
-    finished: boolean;
+    setFinished: (isTypingFinished: boolean) => void;
+    isTypingFinished: boolean;
 };
 
-const Countdown: React.FC<CountdownProps> = ({ time, setFinished, finished }) => {
+const Countdown: React.FC<CountdownProps> = ({ time, setFinished, isTypingFinished }) => {
     const [timeLeft, setTimeLeft] = useState<number>(time);
 
     const [targetTime] = useState<number>(new Date().getTime() + time * 1000);
@@ -18,7 +18,7 @@ const Countdown: React.FC<CountdownProps> = ({ time, setFinished, finished }) =>
             setTimeLeft(remainingTime);
 
             // Stop the interval when countdown reaches zero
-            if (remainingTime <= 0 || finished) {
+            if (remainingTime <= 0 || isTypingFinished) {
                 setFinished(true);
                 clearInterval(interval);
             }
@@ -26,7 +26,7 @@ const Countdown: React.FC<CountdownProps> = ({ time, setFinished, finished }) =>
 
         // Cleanup interval on unmount
         return () => clearInterval(interval);
-    }, [time, setFinished, finished, targetTime]);
+    }, [time, setFinished, isTypingFinished, targetTime]);
 
     return <div className="flex justify-center items-center primary-text text-3xl ">{timeLeft}s</div>;
 };

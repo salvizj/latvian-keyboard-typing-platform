@@ -1,5 +1,4 @@
 import { FaArrowRight } from 'react-icons/fa';
-import Button from '../utils/Button';
 import { Link, useParams } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import translate from '../../utils/translate';
@@ -32,7 +31,7 @@ const LessonFinishedScreen: React.FC<LessonFinishedProps> = ({ setFinished, rest
                         {translate('back_to_lessons', language)}
                     </Link>
 
-                    <Button
+                    <button
                         onClick={() => {
                             restart();
                             setFinished(false);
@@ -40,7 +39,7 @@ const LessonFinishedScreen: React.FC<LessonFinishedProps> = ({ setFinished, rest
                         className="bg-transparent text-primary py-2 px-6 rounded-md text-center hover:opacity-90 transition-opacity text-xl hover:third-hover border secondary mt-6"
                     >
                         {translate('restart', language)}
-                    </Button>
+                    </button>
 
                     <Link
                         to={`/lesson/${lessonId + 1}`}

@@ -1,8 +1,7 @@
 import { useLanguage } from '../../context/LanguageContext';
 import translate from '../../utils/translate';
-import Button from './Button';
 
-const LanguageTogleButton = () => {
+const LanguageToglebutton = () => {
     const { language, setLanguage } = useLanguage();
 
     const toggleLanguage = () => {
@@ -11,10 +10,10 @@ const LanguageTogleButton = () => {
     };
 
     return (
-        <Button onClick={toggleLanguage} className="primary-text text-xl hover:primary-hover-text">
+        <button onClick={toggleLanguage} className="primary-text text-xl hover:primary-hover-text">
             {translate('language', language)}
-        </Button>
+        </button>
     );
 };
 
-export default LanguageTogleButton;
+export default LanguageToglebutton;

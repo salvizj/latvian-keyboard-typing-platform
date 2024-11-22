@@ -10,7 +10,7 @@ import (
 )
 
 func StartServer() {
-	// Load environment variables from .env
+	// load environment variables from .env
 	if err := godotenv.Load(".env"); err != nil {
 		fmt.Fprintf(os.Stderr, "Warning: Could not load .env file\n")
 		os.Exit(1)
@@ -23,7 +23,7 @@ func StartServer() {
 		os.Exit(1)
 	}
 
-	// Create a new Echo instance.
+	// reate a new Echo instance.
 	e := echo.New()
 
 	if err := routes.InitialRoutes(e); err != nil {

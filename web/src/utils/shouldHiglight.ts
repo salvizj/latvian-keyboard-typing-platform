@@ -1,6 +1,10 @@
 import { Finger, Hand, HandFingerInfo } from '../types';
 
-export const shouldHighlight = (handFingerInfo: HandFingerInfo, targetHand: Hand, targetFinger: Finger): boolean => {
+export const shouldHighlightFinger = (
+    handFingerInfo: HandFingerInfo,
+    targetHand: Hand,
+    targetFinger: Finger
+): boolean => {
     const { hand, finger, isShift, isAlt } = handFingerInfo;
 
     if (hand === targetHand && finger === targetFinger) {

@@ -34,10 +34,10 @@ export type HandFingerInfo = {
 export type LessonCompletionObj = {
     lessonId: number;
     completed: boolean;
-    completedDate: string;
+    completedDate: Date;
 };
 
-export type LessonCompletionData = Record<number, LessonCompletionObj>;
+export type LessonCompletionData = Record<string, LessonCompletionObj>;
 
 export type PoetText = {
     id: number;
@@ -45,3 +45,61 @@ export type PoetText = {
     poetFragmentName: string;
     poetText: string;
 };
+export type TestCompletionObj = {
+    wpm: number;
+    mistakeCount: number;
+    text: string;
+    time: number;
+    completedDate: Date;
+};
+
+export type TestCompletionData = Record<string, TestCompletionObj>;
+
+export type Lobby = {
+    lobbyId: string;
+    lobbySettings: LobbySettings;
+    players: Player[];
+    status: LobbyStatus;
+};
+
+export type LobbySettings = {
+    text: string;
+    time: number;
+    maxPlayerCount: number;
+};
+
+export type Player = {
+    playerId: string;
+    userId?: string | null;
+    role: PlayerRole;
+    place: number;
+    mistakes: number;
+    wpm: number;
+};
+
+export enum PlayerRole {
+    Default = 'default',
+    Owner = 'owner',
+}
+
+export enum LobbyStatus {
+    Waiting = 'waiting',
+    InProgress = 'in-progress',
+    Finished = 'finished',
+}
+
+export type WebSocketMessage = {
+    type: WebSocketMessageType;
+    lobbyId: string;
+    data?: unknown;
+};
+
+export enum WebSocketMessageType {
+    CreateLobby = 'createLobby',
+    JoinLobby = 'joinLobby',
+    UpdateLobbySettings = 'updateLobbySettings',
+    PlayerUpdate = 'playerUpdate',
+    StartGame = 'startGame',
+    EndGame = 'endGame',
+    Error = 'error',
+}

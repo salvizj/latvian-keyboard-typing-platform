@@ -2,15 +2,17 @@ import { useCallback, useEffect, useState } from 'react';
 import { HandFingerInfo, KeyObj } from '../types';
 import { getKeyObjByKey } from '../utils/getKeyObjByKey';
 import { isLatvianSpecial, isUpperCaseLatvian } from '../utils/testCharacterToLatvian';
+import { updateWpm } from '../utils/updateWpmCount';
 
-export type KeyPressError = 'EMPTY_TEXT' | 'INVALID_TEXT_TYPE' | 'INITIALIZATION_FAILED' | 'KEY_PROCESSING_ERROR';
-
-export const useKeyPressManagement = (text: string, setFinished: (finished: boolean) => void, finished: boolean) => {
+export const useTypingSession = (text: string, setFinished: (finished: boolean) => void, finished: boolean) => {
     const [currentCharacterIndex, setCurrentCharacterIndex] = useState(0);
     const [expectedCharacter, setExpectedCharacter] = useState(text[0]);
     const [expectedCharacterKeyObj, setExpectedCharacterKeyObj] = useState<KeyObj | null>(null);
     const [currentPressedKey, setCurrentPressedKey] = useState<string | null>(null);
     const [handFingerInfo, setHandFingerInfo] = useState<HandFingerInfo | null>(null);
+    const [startTimestamp, setStartTimestamp] = useState<number | null>(null);
+    const [mistakeCount, setMistakeCount] = useState(0);
+    const [wpm, setWpm] = useState(0);
 
     // validation function to check input text
     const validateText = useCallback((inputText: string): boolean => {
@@ -24,6 +26,12 @@ export const useKeyPressManagement = (text: string, setFinished: (finished: bool
 
         return true;
     }, []);
+
+    useEffect(() => {
+        if (currentCharacterIndex === 0 && startTimestamp === null) {
+            setStartTimestamp(Date.now());
+        }
+    }, [currentCharacterIndex, startTimestamp]);
 
     // this is for first character because we need to get keyObj and we usually get keyObj after key press
     useEffect(() => {
@@ -60,11 +68,12 @@ export const useKeyPressManagement = (text: string, setFinished: (finished: bool
             setExpectedCharacter(text[0] || '');
             setCurrentPressedKey('');
             setHandFingerInfo(null);
+            setMistakeCount(0);
             setExpectedCharacterKeyObj(null);
         }
     }, [finished, text]);
 
-    const handleKeyPress = useCallback(
+    const onKeyPress = useCallback(
         (lastKeyPressed: string) => {
             if (!lastKeyPressed || finished) return;
 
@@ -74,61 +83,63 @@ export const useKeyPressManagement = (text: string, setFinished: (finished: bool
                 return;
             }
 
-            try {
-                setCurrentPressedKey(lastKeyPressed);
+            setCurrentPressedKey(lastKeyPressed);
 
-                if (lastKeyPressed === expectedCharacter) {
-                    setCurrentCharacterIndex((prevIndex) => {
-                        const nextIndex = prevIndex + 1;
+            if (lastKeyPressed === expectedCharacter) {
+                setCurrentCharacterIndex((prevIndex) => {
+                    const nextIndex = prevIndex + 1;
 
-                        if (nextIndex < text.length) {
-                            const newExpectedCharacter = text[nextIndex];
+                    if (nextIndex < text.length) {
+                        const newExpectedCharacter = text[nextIndex];
 
-                            if (!newExpectedCharacter) {
-                                setFinished(true);
-                                return prevIndex;
-                            }
-
-                            const newExpectedCharacterKeyObj = getKeyObjByKey(newExpectedCharacter);
-
-                            if (!newExpectedCharacterKeyObj) {
-                                return prevIndex;
-                            }
-
-                            setExpectedCharacter(newExpectedCharacter);
-                            setExpectedCharacterKeyObj(newExpectedCharacterKeyObj);
-
-                            if (newExpectedCharacterKeyObj?.hand && newExpectedCharacterKeyObj?.finger) {
-                                setHandFingerInfo({
-                                    hand: newExpectedCharacterKeyObj.hand,
-                                    finger: newExpectedCharacterKeyObj.finger,
-                                    isShift: isUpperCaseLatvian(newExpectedCharacter),
-                                    isAlt: isLatvianSpecial(newExpectedCharacter),
-                                });
-                            } else {
-                                setHandFingerInfo(null);
-                            }
-                        } else {
+                        if (!newExpectedCharacter) {
                             setFinished(true);
+                            return prevIndex;
                         }
 
-                        return nextIndex;
-                    });
-                }
-            } catch (err) {
-                console.error('Key processing error:', err);
+                        const newExpectedCharacterKeyObj = getKeyObjByKey(newExpectedCharacter);
+
+                        if (!newExpectedCharacterKeyObj) {
+                            return prevIndex;
+                        }
+
+                        setExpectedCharacter(newExpectedCharacter);
+                        setExpectedCharacterKeyObj(newExpectedCharacterKeyObj);
+
+                        if (newExpectedCharacterKeyObj?.hand && newExpectedCharacterKeyObj?.finger) {
+                            setHandFingerInfo({
+                                hand: newExpectedCharacterKeyObj.hand,
+                                finger: newExpectedCharacterKeyObj.finger,
+                                isShift: isUpperCaseLatvian(newExpectedCharacter),
+                                isAlt: isLatvianSpecial(newExpectedCharacter),
+                            });
+                        } else {
+                            setHandFingerInfo(null);
+                        }
+                    } else {
+                        setFinished(true);
+                    }
+
+                    return nextIndex;
+                });
+            } else {
+                setMistakeCount(mistakeCount + 1);
             }
+            const calculatedWpm = updateWpm(currentCharacterIndex, startTimestamp);
+            setWpm(calculatedWpm);
         },
-        [text, expectedCharacter, finished, currentCharacterIndex, setFinished]
+        [text, expectedCharacter, finished, currentCharacterIndex, setFinished, startTimestamp, mistakeCount]
     );
 
     return {
-        handleKeyPress,
+        onKeyPress,
         currentCharacterIndex,
         expectedCharacter,
         currentPressedKey,
         handFingerInfo,
         expectedCharacterKeyObj,
+        wpm,
+        mistakeCount,
         isCompleted: currentCharacterIndex >= text.length,
     };
 };

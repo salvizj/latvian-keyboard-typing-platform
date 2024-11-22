@@ -1,7 +1,7 @@
-import LanguageTogleButton from '../utils/LanguageToggleButton';
-import LoginButton from '../utils/LoginButton';
-import ThemeTogleButton from '../utils/ThemeToggleButton';
-import Navigation from './Navigation';
+import LanguageTogleButton from '../language/LanguageToggleButton';
+import ThemeTogleButton from '../theme/ThemeToggleButton';
+import LoginButton from '../user/LoginButton';
+import DashboardNavigation from './DashboardNavigation';
 
 const Dashboard = () => {
     return (
@@ -12,7 +12,7 @@ const Dashboard = () => {
             </div>
             <div className="flex flex-col">
                 <LoginButton />
-                <Navigation />
+                <DashboardNavigation />
             </div>
         </div>
     );

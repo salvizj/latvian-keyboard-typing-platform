@@ -4,7 +4,7 @@ import { PoetText } from '../types';
 
 export const useGetPoetTexts = () => {
     const [poetTexts, setPoetTexts] = useState<PoetText[]>([]);
-    const [poetTexstsError, setPoetTexstsError] = useState<string | null>(null);
+    const [poetTextsError, setPoetTextsError] = useState<string | null>(null);
 
     useEffect(() => {
         getPoetTexts()
@@ -13,8 +13,9 @@ export const useGetPoetTexts = () => {
                 console.log(data);
             })
             .catch(() => {
-                setPoetTexstsError('Error fetching lesson text');
+                setPoetTextsError('Error fetching lesson text');
             });
     }, []);
-    return { poetTexts, poetTexstsError };
+
+    return { poetTexts, poetTextsError };
 };

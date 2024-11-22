@@ -2,10 +2,10 @@ import { createBrowserRouter, createRoutesFromElements, Route } from 'react-rout
 import IndexPage from '../pages/IndexPage';
 import Layout from '../pages/Layout/Layout';
 import LessonsPage from '../pages/LessonsPage';
-import StatisticsPage from '../pages/Statistics';
+import StatisticsPage from '../pages/StatisticsPage';
 import AppearanceSettingsPage from '../pages/AppearanceSettingsPage';
 import LessonPage from '../pages/LessonPage';
-import TypingRacePage from '../pages/TypingRace';
+import TypingRacePage from '../pages/TypingRacePage';
 import TypingTestPage from '../pages/TypingTestPage';
 import StatisticsTypingRacePage from '../pages/StatisticsTypingRacePage';
 import StatisticsLessonsPage from '../pages/StatisticsLessonsPage';

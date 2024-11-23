@@ -5,12 +5,13 @@ import LessonFinishedScreen from '../lesson/LessonFinishedScreen';
 import { useEffect, useState } from 'react';
 import { isLessonComplete, markLessonComplete } from '../../utils/lessonCompletion';
 import Countdown from '../utils/Countdown';
-import TypingTestFinishedScreen from '../utils/TypingFinishedScreen';
 import RightHandVisualization from './hands/RightHandVisualization';
 import LeftHandVisualization from './hands/LeftHandVisualization';
 import RealTimeTypingPerformance from './RealTimeTypingPerformance';
 import { useTypingSession } from '../../hooks/useCharacterManagement';
 import { markTestComplete } from '../../utils/testCompletion';
+import CompletionScreen from '../utils/CompletionScreen';
+import { useLanguage } from '../../context/LanguageContext';
 
 type KeyboardProps = {
     text: string;
@@ -22,6 +23,8 @@ type KeyboardProps = {
 };
 
 const Keyboard: React.FC<KeyboardProps> = ({ text, lessonMode, lessonId, testMode, raceMode, time }) => {
+    const { language } = useLanguage();
+
     const [isTypingFinished, setFinished] = useState(false);
 
     useEffect(() => {
@@ -67,32 +70,31 @@ const Keyboard: React.FC<KeyboardProps> = ({ text, lessonMode, lessonId, testMod
                         <TypingTextDisplay text={text} currentCorrectTextCharacterIndex={currentCharacterIndex} />
                         <TypingInputField onKeyPress={manageKeyPress} isTypingFinished={isTypingFinished} />
                         <div className="flex items-center justify-between">
-                            <div className="flex-shrink-0">
-                                <LeftHandVisualization handFingerInfo={handFingerInfo} />
-                            </div>
+                            <LeftHandVisualization handFingerInfo={handFingerInfo} />
 
-                            <div className="flex-grow mx-4">
-                                <KeyboardLayout
-                                    expectedCharacter={expectedCharacter}
-                                    expectedCharacterKeyObj={expectedCharacterKeyObj}
-                                />
-                            </div>
+                            <KeyboardLayout
+                                expectedCharacter={expectedCharacter}
+                                expectedCharacterKeyObj={expectedCharacterKeyObj}
+                            />
 
-                            <div className="flex-shrink-0">
-                                <RightHandVisualization handFingerInfo={handFingerInfo} />
-                            </div>
+                            <RightHandVisualization handFingerInfo={handFingerInfo} />
                         </div>
                     </>
                 )}
                 {isTypingFinished && lessonMode && (
-                    <div className="fixed inset-0 z-50">
-                        <LessonFinishedScreen setFinished={setFinished} restart={restart} />
-                    </div>
+                    <LessonFinishedScreen setFinished={setFinished} restart={restart} language={language} />
                 )}
                 {isTypingFinished && testMode && (
-                    <div className="fixed inset-0 z-50">
-                        <TypingTestFinishedScreen setFinished={setFinished} restart={restart} />
-                    </div>
+                    <CompletionScreen
+                        buttons={[
+                            {
+                                text: 'Restart',
+                                onClick: restart,
+                            },
+                        ]}
+                        language={language}
+                        title="typing_test"
+                    />
                 )}
             </div>
         </>

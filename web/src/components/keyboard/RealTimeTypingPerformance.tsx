@@ -11,7 +11,7 @@ const RealTimeTypingPerformance: React.FC<RealTimeTypingPerformanceProps> = ({ w
     const { language } = useLanguage();
 
     return (
-        <div className="flex justify-between items-center text-xl primary-text bg-transparent p-2 gap-4 ">
+        <div className="flex justify-between items-center text-xl text-color-primary bg-transparent p-2 gap-4 ">
             <div>
                 <p className="mb-1">
                     {translate('wpm', language)}: {wpm}

@@ -53,7 +53,7 @@ const TypingTextDisplay: React.FC<TextDisplayProps> = ({ text, currentCorrectTex
                                 <span
                                     key={letterIndex}
                                     className={`${
-                                        letterObj.hasBeenTyped ? 'typing-correct-text' : 'typing-color'
+                                        letterObj.hasBeenTyped ? 'text-color-typing-correct' : 'text-color-typing '
                                     } tracking-wide text-2xl `}
                                 >
                                     {letterObj.letter}

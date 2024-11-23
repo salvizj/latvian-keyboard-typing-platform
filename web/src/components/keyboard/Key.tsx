@@ -59,7 +59,7 @@ const KeyboardKey: React.FC<KeyboardKeyProps> = ({ keyObj, expectedCharacter, ex
         <div
             className={
                 getKeyClasses() +
-                ' flex items-center justify-center rounded-sm border keyboard-border primary-text tracking-wide min-h-[2rem] max-h-[4rem]'
+                ' flex items-center justify-center rounded-sm border keyboard-border text-color-primary tracking-wide min-h-[2rem] max-h-[4rem]'
             }
         >
             <div className="flex flex-col items-center">

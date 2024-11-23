@@ -10,7 +10,7 @@ const ThemeToglebutton = () => {
     };
 
     return (
-        <button onClick={toggleTheme} className="primary-text text-xl hover:primary-hover-text">
+        <button onClick={toggleTheme} className="text-color-primary text-xl hover:text-color-primary-hover-text">
             <div className="w-16 h-8 flex items-center justify-between rounded-full border-2 border-secondary relative transition-all duration-300 ease-in-out">
                 <FaMoon
                     className={`absolute right-1 transition-all duration-300 ease-in-out ${

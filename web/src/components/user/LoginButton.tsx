@@ -6,7 +6,10 @@ const Loginbutton = () => {
     const { loginWithRedirect } = useAuth0();
     const { language } = useLanguage();
     return (
-        <button onClick={() => loginWithRedirect()} className="primary-text text-lg hover:primary-hover-text">
+        <button
+            onClick={() => loginWithRedirect()}
+            className="text-color-primary text-lg hover:text-color-primary-hover-text"
+        >
             {translate('login', language)}
         </button>
     );

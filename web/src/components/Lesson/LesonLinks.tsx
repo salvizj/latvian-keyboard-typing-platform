@@ -11,7 +11,7 @@ const LessonLinks = () => {
         links.push(
             <Link
                 key={lessonNumber}
-                className={`border secondary secondary-text w-16 h-16 flex justify-center items-center hover:primary-hover ${completedAlready ? 'lesson-complete' : ''}`}
+                className={`border secondary text-color-secondary w-16 h-16 flex justify-center items-center hover:text-color-primary-hover-text ${completedAlready ? 'lesson-complete' : ''}`}
                 to={`${BaseUrl}${lessonNumber}`}
             >
                 {lessonNumber}

@@ -46,6 +46,9 @@ const translations: Translations = {
         create_lobby: 'create lobby',
         select_max_player_count: 'select maximum player count',
         max_player_count: 'maximum player count',
+        must_enter_costum_text: 'error: enter costum text',
+        must_enter_lobby_id: 'error: enter lobby Id',
+        typing_race_lobby: 'typing race lobby',
     },
     lv: {
         login: 'pieslēgties',
@@ -87,6 +90,9 @@ const translations: Translations = {
         create_lobby: 'izveidot istabu',
         select_max_player_count: 'izvēlities maksimalo spēlētāju skaitu',
         max_player_count: 'maksimālais spēlētāju skaits',
+        must_enter_costum_text: 'kļūda: ievadiet personalizētu tekstu',
+        must_enter_lobby_id: 'kļūda: ievadiet istabas Id',
+        typing_race_lobby: 'rakstīšanas sacīkšu istaba',
     },
 };
 

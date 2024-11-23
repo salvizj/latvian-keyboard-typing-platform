@@ -1,24 +1,24 @@
 :root {
-    --typing-text-color: #b76c6c;
-    --typing-text-correct-color: #d4d6e5;
-    --typing-text-box-bg: #5f6588;
+    --text-color-typing: #b76c6c;
+    --text-color-typing-correct: #d4d6e5;
+    --bg-typing-box: #5f6588;
 
-    --next-key-bg-color: #c1c4d9;
-    --next-key-text-color: #2a2f50;
+    --bg-next-key: #c1c4d9;
+    --text-color-next-key: #2a2f50;
 
-    --modifier-bg-color: #c1c4d9;
-    --modifier-text-color: #2a2f50;
+    --bg-modifier: #c1c4d9;
+    --text-color-modifier: #2a2f50;
 
-    --primary: #d4d6e5;
-    --primary-hover: #8a8eaf;
-    --third-hover: #7981af;
-    --secondary: #ffffff;
+    --color-primary: #d4d6e5;
+    --color-primary-hover: #8a8eaf;
+    --color-third-hover: #7981af;
+    --color-secondary: #ffffff;
 
-    --bg: #c1c4d9;
-    --third: #5f6588;
+    --bg-general: #d6d4ec;
+    --color-third: #5f6588;
 
-    --keyboard-border: #b8b6b6;
-    --lesson-complete: #5f6588;
+    --border-keyboard: #b8b6b6;
+    --bg-lesson-complete: #5f6588;
 
     --font-size-lg: 1.25rem;
     --font-size-md: 1rem;
@@ -32,109 +32,139 @@
     --font-size-7xl: 5rem;
     --font-size-8xl: 6rem;
 
-    --hand-thumb-bg: #f87171;
-    --hand-index-bg: #6ee7b7;
-    --hand-middle-bg: #60a5fa;
-    --hand-ring-bg: #a855f7;
-    --hand-pinky-bg: #fbbf24;
+    --bg-hand-thumb: #f87171;
+    --bg-hand-index: #6ee7b7;
+    --bg-hand-middle: #60a5fa;
+    --bg-hand-ring: #a855f7;
+    --bg-hand-pinky: #fbbf24;
 }
 
 .dark {
-    --typing-text-color: #b43939;
-    --typing-text-correct-color: #aeaec6;
-    --typing-text-box-bg: #242634;
+    --text-color-typing: #b43939;
+    --text-color-typing-correct: #aeaec6;
+    --bg-typing-box: #242634;
 
-    --next-key-bg-color: #5f6588;
-    --next-key-text-color: #b8b6b6;
+    --bg-next-key: #5f6588;
+    --text-color-next-key: #b8b6b6;
 
-    --modifier-bg-color: #5f6588;
-    --modifier-text-color: #b8b6b6;
+    --bg-modifier: #5f6588;
+    --text-color-modifier: #b8b6b6;
 
-    --primary: #c1c4d9;
-    --secondary: #ffffff;
-    --third: #242634;
+    --color-primary: #c1c4d9;
+    --color-secondary: #ffffff;
+    --color-third: #242634;
 
-    --primary-hover: #9499c0;
-    --third-hover: #424560;
+    --color-primary-hover: #9499c0;
+    --color-third-hover: #424560;
 
-    --bg: #5f6588;
+    --bg-general: #5c6293;
 
-    --keyboard-border: #b8b6b6;
-    --lesson-complete: #242634;
+    --border-keyboard: #b8b6b6;
+    --bg-lesson-complete: #242634;
 
-    --hand-thumb-bg: #f87171;
-    --hand-index-bg: #6ee7b7;
-    --hand-middle-bg: #60a5fa;
-    --hand-ring-bg: #a855f7;
-    --hand-pinky-bg: #fbbf24;
-}
-.placeholder-primary-text::placeholder {
-    color: var(--primary);
-}
-.placeholder-third-text::placeholder {
-    color: var(--third);
-}
-.placeholder-secondary-text::placeholder {
-    color: var(--secondary);
+    --bg-hand-thumb: #f87171;
+    --bg-hand-index: #6ee7b7;
+    --bg-hand-middle: #60a5fa;
+    --bg-hand-ring: #a855f7;
+    --bg-hand-pinky: #fbbf24;
 }
 body {
-    background-color: var(--bg);
+    background-color: var(--bg-general);
 }
+/* Text Color Classes */
+.text-color-primary {
+    color: var(--color-primary);
+}
+.text-color-secondary {
+    color: var(--color-secondary);
+}
+.text-color-third {
+    color: var(--color-third);
+}
+.text-color-typing {
+    color: var(--text-color-typing);
+}
+.text-color-typing-correct {
+    color: var(--text-color-typing-correct);
+}
+
+/* Background Color Classes */
+.bg-color-primary {
+    background-color: var(--color-primary);
+}
+.bg-color-secondary {
+    background-color: var(--color-secondary);
+}
+.bg-color-third {
+    background-color: var(--color-third);
+}
+.bg-typing-box {
+    background-color: var(--bg-typing-box);
+}
+.bg-lesson-complete {
+    background-color: var(--bg-lesson-complete);
+}
+
+/* Hover Effect Classes */
+.hover\:text-color-primary:hover {
+    color: var(--color-primary-hover);
+}
+.hover\:text-color-third:hover {
+    color: var(--color-third-hover);
+}
+.hover\:bg-color-primary:hover {
+    background-color: var(--color-primary-hover);
+}
+.hover\:bg-color-third:hover {
+    background-color: var(--color-third-hover);
+}
+.hover\:text-color-third-hover-text:hover {
+    color: var(--color-third-hover);
+}
+.hover\:text-color-primary-hover-text:hover {
+    color: var(--color-primary-hover);
+}
+
+/* Modifier Classes */
+.bg-color-modifier {
+    background-color: var(--bg-modifier);
+}
+.text-color-modifier {
+    color: var(--text-color-modifier);
+}
+
+/* Other Utility Classes */
 .keyboard-border {
-    border-color: var(--keyboard-border);
-}
-.third-bg {
-    background-color: var(--third);
-}
-.third-text {
-    color: var(--third);
-}
-.primary-bg {
-    background-color: var(--primary);
-}
-.hover\:third-hover:hover {
-    background-color: var(--third-hover);
-}
-.hover\:primary-hover:hover {
-    background-color: var(--primary-hover);
-}
-.hover\:third-hover-text:hover {
-    color: var(--third-hover);
-}
-.hover\:primary-hover-text:hover {
-    color: var(--primary-hover);
+    border-color: var(--border-keyboard);
 }
 .lesson-complete {
-    background-color: var(--lesson-complete);
-    color: var(--primary);
-}
-.primary-text {
-    color: var(--primary);
-}
-.secondary-text {
-    color: var(--secondary);
-}
-.secondary-bg {
-    background-color: var(--secondary);
+    background-color: var(--bg-lesson-complete);
+    color: var(--color-primary);
 }
 .next-key {
-    background-color: var(--next-key-bg-color);
-    color: var(--next-key-text-color);
+    background-color: var(--bg-next-key);
+    color: var(--text-color-next-key);
 }
 .shift-key,
 .alt-key {
-    background-color: var(--modifier-bg-color);
-    color: var(--modifier-text-color);
+    background-color: var(--bg-modifier);
+    color: var(--text-color-modifier);
 }
-.typing-correct-text {
-    color: var(--typing-text-correct-color);
+.bg-typing-box-bg {
+    background-color: var(--bg-typing-box);
 }
-.typing-color {
-    color: var(--typing-text-color);
+
+/* Placeholder Classes */
+.placeholder-color-primary::placeholder {
+    color: var(--color-primary);
 }
-.typing-text-box-bg {
-    background-color: var(--typing-text-box-bg);
+.placeholder-color-third::placeholder {
+    color: var(--color-third);
 }
+.placeholder-color-secondary::placeholder {
+    color: var(--color-secondary);
+}
+
 /* Right Hand */
 .right-hand-thumb {
     position: absolute;
@@ -142,7 +172,7 @@ body {
     left: 17%;
     width: 1.6rem;
     height: 1.6rem;
-    background-color: var(--hand-thumb-bg);
+    background-color: var(--bg-hand-thumb);
     border-radius: 9999px;
 }
 
@@ -152,7 +182,7 @@ body {
     left: 34%;
     width: 1.6rem;
     height: 1.6rem;
-    background-color: var(--hand-index-bg);
+    background-color: var(--bg-hand-index);
     border-radius: 9999px;
 }
 
@@ -162,7 +192,7 @@ body {
     left: 47%;
     width: 1.6rem;
     height: 1.6rem;
-    background-color: var(--hand-middle-bg);
+    background-color: var(--bg-hand-middle);
     border-radius: 9999px;
 }
 
@@ -172,7 +202,7 @@ body {
     left: 60%;
     width: 1.6rem;
     height: 1.6rem;
-    background-color: var(--hand-ring-bg);
+    background-color: var(--bg-hand-ring);
     border-radius: 9999px;
 }
 
@@ -182,7 +212,7 @@ body {
     left: 72%;
     width: 1.6rem;
     height: 1.6rem;
-    background-color: var(--hand-pinky-bg);
+    background-color: var(--bg-hand-pinky);
     border-radius: 9999px;
 }
 
@@ -193,7 +223,7 @@ body {
     left: 70%;
     width: 1.6rem;
     height: 1.6rem;
-    background-color: var(--hand-thumb-bg);
+    background-color: var(--bg-hand-thumb);
     border-radius: 9999px;
 }
 
@@ -203,7 +233,7 @@ body {
     left: 53%;
     width: 1.6rem;
     height: 1.6rem;
-    background-color: var(--hand-index-bg);
+    background-color: var(--bg-hand-index);
     border-radius: 9999px;
 }
 
@@ -213,7 +243,7 @@ body {
     left: 40%;
     width: 1.6rem;
     height: 1.6rem;
-    background-color: var(--hand-middle-bg);
+    background-color: var(--bg-hand-middle);
     border-radius: 9999px;
 }
 
@@ -223,7 +253,7 @@ body {
     left: 27%;
     width: 1.6rem;
     height: 1.6rem;
-    background-color: var(--hand-ring-bg);
+    background-color: var(--bg-hand-ring);
     border-radius: 9999px;
 }
 
@@ -233,6 +263,6 @@ body {
     left: 14%;
     width: 1.6rem;
     height: 1.6rem;
-    background-color: var(--hand-pinky-bg);
+    background-color: var(--bg-hand-pinky);
     border-radius: 9999px;
 }

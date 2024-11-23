@@ -10,6 +10,7 @@ export enum Hand {
     Left = 'left',
     Right = 'right',
 }
+
 export type KeyObj = {
     key: string;
     label: string;
@@ -45,6 +46,7 @@ export type PoetText = {
     poetFragmentName: string;
     poetText: string;
 };
+
 export type TestCompletionObj = {
     wpm: number;
     mistakeCount: number;
@@ -88,16 +90,38 @@ export enum LobbyStatus {
     Finished = 'finished',
 }
 
-export type WebSocketMessage = {
+export type WebSocketMessage<WebSocketMessageData> = {
     type: WebSocketMessageType;
     lobbyId: string;
-    data?: unknown;
+    data: WebSocketMessageData;
 };
 
+export type WebSocketMessageData = CreateLobbyData | JoinLobbyData | StartGameData | EndGameData | ErrorData;
+
+export type CreateLobbyData = {
+    lobbySettings: LobbySettings;
+    players: Player[];
+    status: LobbyStatus;
+};
+
+export type JoinLobbyData = {
+    players: Player[];
+};
+
+export type StartGameData = {
+    startGame: boolean;
+};
+
+export type EndGameData = {
+    endGame: boolean;
+};
+
+export type ErrorData = {
+    message: string;
+};
 export enum WebSocketMessageType {
     CreateLobby = 'createLobby',
     JoinLobby = 'joinLobby',
-    UpdateLobbySettings = 'updateLobbySettings',
     PlayerUpdate = 'playerUpdate',
     StartGame = 'startGame',
     EndGame = 'endGame',

@@ -1,11 +1,5 @@
-import Keyboard from '../components/keyboard/Keyboard';
-
 const IndexPage = () => {
-    return (
-        <>
-            <Keyboard text="fsdfsdf" />
-        </>
-    );
+    return <></>;
 };
 
 export default IndexPage;

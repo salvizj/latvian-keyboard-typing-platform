@@ -3,6 +3,9 @@ import translate from '../../utils/translate';
 import { capitalize } from '../../utils/capitalize';
 import { PoetText } from '../../types';
 import LobbyOptions from '../typingRace/LobbyOptions';
+import TextSelectionSection from './TextSelectionSection';
+import RangeInput from './RangeInput';
+import InfoBox from './InfoBox';
 
 type OptionBoxProps = {
     title: string;
@@ -12,6 +15,7 @@ type OptionBoxProps = {
     setLobbyMode?: (lobbyMode: 'create' | 'join') => void;
     lobbyMode?: 'create' | 'join';
     startText: string;
+    lobbyId?: string;
     maxPlayerCount?: number;
     setMaxPlayerCount?: (maxPlayerCount: number) => void;
     time: number;
@@ -25,11 +29,13 @@ type OptionBoxProps = {
     poetTexts: PoetText[];
     poetTextsError?: string | null;
     isRace: boolean;
+    start: boolean;
 };
 
 const OptionBox: React.FC<OptionBoxProps> = ({
     title,
     setText,
+    lobbyId,
     setStart,
     setLobbyId,
     setLobbyMode,
@@ -48,113 +54,79 @@ const OptionBox: React.FC<OptionBoxProps> = ({
     maxPlayerCount,
     poetTextsError,
     isRace,
+    start,
 }) => {
     const { language } = useLanguage();
+
     const handleStartTest = () => {
         setTime(time);
         setText(isCustomText ? customText : selectedText);
         setStart(true);
     };
-
     return (
-        <div className="fixed inset-0 bg-black/50 flex justify-center items-center">
-            <div className="third-bg primary-text p-8 rounded-xl shadow-xl w-full max-w-2xl animate-in fade-in zoom-in duration-300">
-                <h2 className="text-3xl font-bold mb-8 text-center">{capitalize(translate(title, language))}</h2>
+        <InfoBox>
+            <h2 className="text-3xl font-bold mb-8 text-center">{capitalize(translate(title, language))}</h2>
 
-                {setLobbyId && lobbyMode && setLobbyMode && (
-                    <LobbyOptions setLobbyId={setLobbyId} lobbyMode={lobbyMode} setLobbyMode={setLobbyMode} />
+            <>
+                {/*Create or input lobbyId  */}
+                {isRace && setLobbyMode && lobbyMode && setLobbyId && (
+                    <LobbyOptions
+                        lobbyId={lobbyId ?? ''}
+                        setLobbyId={setLobbyId}
+                        lobbyMode={lobbyMode}
+                        setLobbyMode={setLobbyMode}
+                        language={language}
+                    />
                 )}
-                {(lobbyMode === 'create' || !isRace) && (
-                    <>
-                        {isRace && (
-                            <div className="mb-6">
-                                <label className="block mb-2">{translate('select_max_player_count', language)}:</label>
-                                <input
-                                    type="range"
-                                    min="2"
-                                    max="10"
-                                    step="1"
-                                    value={maxPlayerCount}
-                                    onChange={(e) => setMaxPlayerCount?.(Number(e.target.value))}
-                                    className="w-full"
-                                />
-                                <p className="text-center">
-                                    {maxPlayerCount} {translate('max_player_count', language)}
-                                </p>
-                            </div>
-                        )}
 
-                        <div className="mb-6">
-                            <label className="block mb-2">{translate('select_time', language)}:</label>
-                            <input
-                                type="range"
-                                min="10"
-                                max="120"
-                                step="10"
-                                value={time}
-                                onChange={(e) => setTime(Number(e.target.value))}
-                                className="w-full"
-                            />
-                            <p className="text-center">
-                                {time} {translate('seconds', language)}
-                            </p>
-                        </div>
-                        <div className="mb-6">
-                            <label className="block mb-2">{translate('select_text_option', language)}:</label>
-                            <div className="flex gap-4">
-                                <button
-                                    className="bg-transparent text-primary py-2 px-6 rounded-md text-center hover:opacity-90 transition-opacity text-lg hover:third-hover border secondary"
-                                    onClick={() => setIsCustomText(false)}
-                                >
-                                    {capitalize(translate('pick_text', language))}
-                                </button>
-                                <button
-                                    className="bg-transparent text-primary py-2 px-6 rounded-md text-center hover:opacity-90 transition-opacity text-lg hover:third-hover border secondary"
-                                    onClick={() => setIsCustomText(true)}
-                                >
-                                    {capitalize(translate('custom_text', language))}
-                                </button>
-                            </div>
-                        </div>
-                        {isCustomText ? (
-                            <textarea
-                                className="w-full p-4 border rounded-lg resize-none  third-text primary-bg placeholder-third-text"
-                                maxLength={1000}
-                                rows={4}
-                                placeholder={capitalize(translate('enter_custom_text', language))}
-                                value={customText}
-                                onChange={(e) => setCustomText(e.target.value)}
-                            />
-                        ) : (
-                            <select
-                                className="w-full p-4 border rounded-lg third-text primary-bg"
-                                value={selectedText}
-                                onChange={(e) => setSelectedText(e.target.value)}
-                            >
-                                <option value="" disabled>
-                                    {translate('choose_predefined_text', language)}
-                                </option>
-                                {Array.isArray(poetTexts) &&
-                                    poetTexts.map((text: PoetText) => (
-                                        <option key={text.id} value={text.id}>
-                                            {text.poetAuthor} - {text.poetFragmentName}
-                                        </option>
-                                    ))}
-                            </select>
-                        )}
-                    </>
+                {/*Max player range input */}
+                {isRace && maxPlayerCount && setMaxPlayerCount && (
+                    <RangeInput
+                        label="select_max_player_count"
+                        value={maxPlayerCount}
+                        onChange={setMaxPlayerCount}
+                        language={language}
+                        min={2}
+                        max={10}
+                        step={1}
+                        labelSuffix="max_player_count"
+                    />
                 )}
-                <button
-                    onClick={handleStartTest}
-                    className="bg-transparent text-primary py-2 px-6 rounded-md text-center hover:opacity-90 transition-opacity text-lg hover:third-hover border secondary mt-6"
-                >
-                    {capitalize(translate(startText, language))}
-                </button>
-                {poetTextsError && (
-                    <div className="tex-primary text-center text-lg bg-transparent">{poetTextsError}</div>
-                )}
-            </div>
-        </div>
+                {/*Time range input */}
+                <RangeInput
+                    label="select_time"
+                    value={time}
+                    onChange={setTime}
+                    language={language}
+                    min={10}
+                    max={120}
+                    step={5}
+                    labelSuffix="seconds"
+                />
+                {/*Text select or input*/}
+                <TextSelectionSection
+                    isCustomText={isCustomText}
+                    setCustomText={setCustomText}
+                    customText={customText}
+                    selectedText={selectedText}
+                    setSelectedText={setSelectedText}
+                    poetTexts={poetTexts}
+                    language={language}
+                    setIsCustomText={setIsCustomText}
+                />
+            </>
+            {isCustomText && customText && <p>{capitalize(translate('must_enter_custom_text', language))}</p>}
+            {isRace && lobbyId === '' && lobbyMode === 'join' && start && (
+                <p>{capitalize(translate('must_enter_lobby_id', language))}</p>
+            )}
+            <button
+                onClick={handleStartTest}
+                className="bg-transparent text-primary py-2 px-6 rounded-md text-center hover:opacity-90 transition-opacity text-lg hover:text-color-primary-hover-text border secondary mt-6"
+            >
+                {capitalize(translate(startText, language))}
+            </button>
+            {poetTextsError && <div className="tex-primary text-center text-lg bg-transparent">{poetTextsError}</div>}
+        </InfoBox>
     );
 };
 

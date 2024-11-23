@@ -28,7 +28,7 @@ const Countdown: React.FC<CountdownProps> = ({ time, setFinished, isTypingFinish
         return () => clearInterval(interval);
     }, [time, setFinished, isTypingFinished, targetTime]);
 
-    return <div className="flex justify-center items-center primary-text text-3xl ">{timeLeft}s</div>;
+    return <div className="flex justify-center items-center text-color-primary text-3xl ">{timeLeft}s</div>;
 };
 
 export default Countdown;

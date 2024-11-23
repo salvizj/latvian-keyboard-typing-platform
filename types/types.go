@@ -13,7 +13,7 @@ type PoetText struct {
 }
 
 type Lobby struct {
-	LobbyID       string        `json:"lobbyId"`
+	LobbyId       string        `json:"lobbyId"`
 	LobbySettings LobbySettings `json:"lobbySettings"`
 	Players       []Player      `json:"players"`
 	Status        LobbyStatus   `json:"status"`
@@ -26,7 +26,7 @@ type LobbySettings struct {
 }
 
 type Player struct {
-	PlayerID string     `json:"playerId"`
+	PlayerId string     `json:"playerId"`
 	UserId   string     `json:"userId,omitempty"`
 	Role     PlayerRole `json:"role"`
 	Place    int        `json:"place"`
@@ -49,20 +49,40 @@ const (
 	LobbyStatusFinished   LobbyStatus = "finished"
 )
 
-type WebSocketMessage struct {
-	Type    WebSocketMessageTypes  `json:"type"`
-	LobbyID string                 `json:"lobbyId"`
-	Data    map[string]interface{} `json:"data,omitempty"`
-}
-
 type WebSocketMessageTypes string
 
 const (
-	CreateLobby         WebSocketMessageTypes = "createLobby"
-	JoinLobby           WebSocketMessageTypes = "joinLobby"
-	UpdateLobbySettings WebSocketMessageTypes = "updateLobbySettings"
-	PlayerUpdate        WebSocketMessageTypes = "playerUpdate"
-	StartGame           WebSocketMessageTypes = "startGame"
-	EndGame             WebSocketMessageTypes = "endGame"
-	Error               WebSocketMessageTypes = "error"
+	CreateLobby WebSocketMessageTypes = "createLobby"
+	JoinLobby   WebSocketMessageTypes = "joinLobby"
+	StartGame   WebSocketMessageTypes = "startGame"
+	EndGame     WebSocketMessageTypes = "endGame"
+	Error       WebSocketMessageTypes = "error"
 )
+
+type WebSocketMessage struct {
+	Type    WebSocketMessageTypes `json:"type"`
+	LobbyId string                `json:"lobbyId"`
+	Data    interface{}           `json:"data,omitempty"`
+}
+
+type CreateLobbyData struct {
+	LobbySettings LobbySettings `json:"lobbySettings"`
+	Players       []Player      `json:"players"`
+	Status        LobbyStatus   `json:"status"`
+}
+
+type JoinLobbyData struct {
+	Players []Player `json:"players"`
+}
+
+type StartGameData struct {
+	StartGame bool `json:"startGame"`
+}
+
+type EndGameData struct {
+	EndGame bool `json:"endGame"`
+}
+
+type ErrorData struct {
+	Message string `json:"message"`
+}

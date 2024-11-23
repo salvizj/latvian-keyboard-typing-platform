@@ -10,7 +10,6 @@ export const useGetPoetTexts = () => {
         getPoetTexts()
             .then((data) => {
                 setPoetTexts(data);
-                console.log(data);
             })
             .catch(() => {
                 setPoetTextsError('Error fetching lesson text');

@@ -10,7 +10,7 @@ const LanguageToglebutton = () => {
     };
 
     return (
-        <button onClick={toggleLanguage} className="primary-text text-xl hover:primary-hover-text">
+        <button onClick={toggleLanguage} className="text-color-primary text-xl hover:text-color-primary-hover-text">
             {translate('language', language)}
         </button>
     );

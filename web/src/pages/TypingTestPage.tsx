@@ -15,11 +15,11 @@ const TypingTestPage = () => {
 
     const { poetTexts, poetTextsError } = useGetPoetTexts();
 
-    console.log(text, testStart);
     return (
         <>
             {!testStart && (
                 <OptionBox
+                    start={testStart}
                     setStart={setTestStart}
                     setText={setText}
                     setTime={setTime}

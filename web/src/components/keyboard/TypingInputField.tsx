@@ -28,7 +28,7 @@ const TypinginputField: React.FC<TypinginputFieldProps> = ({ onKeyPress, isTypin
         <div className="min-w-[46rem] mx-auto p-4">
             <form>
                 <div className="mb-6">
-                    <label htmlFor="inputField" className="secondary-text font-md">
+                    <label htmlFor="inputField" className="text-color-secondary font-md">
                         {translate('keyboard_input_label', language)}
                     </label>
 

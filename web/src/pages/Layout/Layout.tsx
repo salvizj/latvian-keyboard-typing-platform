@@ -7,7 +7,7 @@ const Layout = () => {
             <main className="flex-1 h-full min-h-screen">
                 <Outlet />
             </main>
-            <aside className="h-full min-h-screen w-2/12 third-bg">
+            <aside className="h-full min-h-screen w-2/12 bg-color-third">
                 <Dashboard />
             </aside>
         </div>

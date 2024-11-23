@@ -5,6 +5,7 @@ import (
 	"latvian-typing-tutor/types"
 	"sync"
 
+	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 )
 
@@ -21,43 +22,52 @@ func NewLobbyManager() *LobbyManager {
 	}
 }
 
-func (lm *LobbyManager) HandleCreateLobby(lobbyID string, data map[string]interface{}, conn *websocket.Conn) (*types.WebSocketMessage, error) {
+func (lm *LobbyManager) HandleCreateLobby(message types.WebSocketMessage, conn *websocket.Conn) (*types.WebSocketMessage, error) {
 	lm.mu.Lock()
 	defer lm.mu.Unlock()
 
-	if _, exists := lm.Lobbies[lobbyID]; exists {
-		return nil, fmt.Errorf("lobby with ID %s already exists", lobbyID)
+	lobbyId := message.LobbyId
+	if _, exists := lm.Lobbies[lobbyId]; exists {
+		return nil, fmt.Errorf("lobby with ID %s already exists", lobbyId)
 	}
 
-	playerID, ok := data["playerId"].(string)
+	data, ok := message.Data.(map[string]interface{})
 	if !ok {
-		return nil, fmt.Errorf("playerId is required")
-	}
-
-	userID, ok := data["userId"].(string)
-	if !ok {
-		return nil, fmt.Errorf("userId is required")
+		return nil, fmt.Errorf("invalid data format")
 	}
 
 	lobbySettingsRaw, ok := data["lobbySettings"].(map[string]interface{})
 	if !ok {
 		return nil, fmt.Errorf("lobbySettings is required and should be an object")
 	}
+
 	text, ok := lobbySettingsRaw["text"].(string)
 	if !ok {
 		return nil, fmt.Errorf("text is required and should be a string")
 	}
-	time, ok := lobbySettingsRaw["time"].(int)
+
+	timeFloat, ok := lobbySettingsRaw["time"].(float64)
 	if !ok {
-		return nil, fmt.Errorf("time is required and should be a string")
+		return nil, fmt.Errorf("time is required and should be a number")
 	}
-	maxPlayerCount, ok := lobbySettingsRaw["maxPlayerCount"].(int)
+	time := int(timeFloat)
+
+	maxPlayerCountFloat, ok := lobbySettingsRaw["maxPlayerCount"].(float64)
 	if !ok {
-		return nil, fmt.Errorf("maxPlayerCount is required and should be a string")
+		return nil, fmt.Errorf("maxPlayerCount is required and should be a number")
 	}
+	maxPlayerCount := int(maxPlayerCountFloat)
+
+	playerId := uuid.New().String()
+
+	userId, ok := data["userId"].(string)
+	if !ok {
+		userId = ""
+	}
+
 	owner := types.Player{
-		PlayerID: playerID,
-		UserId:   userID,
+		PlayerId: playerId,
+		UserId:   userId,
 		Role:     types.PlayerRoleOwner,
 		Place:    0,
 		Mistakes: 0,
@@ -65,7 +75,7 @@ func (lm *LobbyManager) HandleCreateLobby(lobbyID string, data map[string]interf
 	}
 
 	lobby := &types.Lobby{
-		LobbyID: lobbyID,
+		LobbyId: lobbyId,
 		Players: []types.Player{owner},
 		Status:  types.LobbyStatusWaiting,
 		LobbySettings: types.LobbySettings{
@@ -75,133 +85,78 @@ func (lm *LobbyManager) HandleCreateLobby(lobbyID string, data map[string]interf
 		},
 	}
 
-	lm.Lobbies[lobbyID] = lobby
-	lm.Connections[lobbyID] = []*websocket.Conn{conn}
+	lm.Lobbies[lobbyId] = lobby
+	lm.Connections[lobbyId] = []*websocket.Conn{conn}
 
 	return &types.WebSocketMessage{
 		Type:    types.CreateLobby,
-		LobbyID: lobbyID,
-		Data: map[string]interface{}{
-			"lobby": lobby,
+		LobbyId: lobbyId,
+		Data: types.CreateLobbyData{
+			LobbySettings: lobby.LobbySettings,
+			Players:       lobby.Players,
+			Status:        lobby.Status,
 		},
 	}, nil
 }
 
-func (lm *LobbyManager) HandleJoinLobby(lobbyID string, data map[string]interface{}, conn *websocket.Conn) (*types.WebSocketMessage, error) {
+func (lm *LobbyManager) HandleJoinLobby(message types.WebSocketMessage, conn *websocket.Conn) (*types.WebSocketMessage, error) {
 	lm.mu.Lock()
 	defer lm.mu.Unlock()
 
-	lobby, exists := lm.Lobbies[lobbyID]
+	lobbyId := message.LobbyId
+	lobby, exists := lm.Lobbies[lobbyId]
 	if !exists {
-		return nil, fmt.Errorf("lobby with ID %s does not exist", lobbyID)
+		return nil, fmt.Errorf("lobby with ID %s does not exist", lobbyId)
 	}
 
 	if len(lobby.Players) >= lobby.LobbySettings.MaxPlayerCount {
-		return nil, fmt.Errorf("lobby %s is full", lobbyID)
+		return nil, fmt.Errorf("lobby %s is full", lobbyId)
 	}
 
-	playerID, ok := data["playerId"].(string)
+	data, ok := message.Data.(map[string]interface{})
 	if !ok {
-		return nil, fmt.Errorf("playerId is required")
+		return nil, fmt.Errorf("invalid data format")
 	}
 
-	userID, ok := data["userId"].(string)
+	playerId := uuid.New().String()
+
+	role := types.PlayerRoleOwner
+
+	userId, ok := data["userId"].(string)
 	if !ok {
-		return nil, fmt.Errorf("userId is required")
+		userId = ""
 	}
 
 	player := types.Player{
-		PlayerID: playerID,
-		UserId:   userID,
-		Role:     types.PlayerRoleDefault,
+		PlayerId: playerId,
+		UserId:   userId,
+		Role:     role,
 		Place:    0,
 		Mistakes: 0,
 		Wpm:      0,
 	}
 
 	lobby.Players = append(lobby.Players, player)
-	lm.Connections[lobbyID] = append(lm.Connections[lobbyID], conn)
+	lm.Connections[lobbyId] = append(lm.Connections[lobbyId], conn)
 
 	return &types.WebSocketMessage{
 		Type:    types.JoinLobby,
-		LobbyID: lobbyID,
-		Data: map[string]interface{}{
-			"lobby": lobby,
+		LobbyId: lobbyId,
+		Data: types.CreateLobbyData{
+			LobbySettings: lobby.LobbySettings,
+			Players:       lobby.Players,
+			Status:        lobby.Status,
 		},
 	}, nil
 }
 
-func (lm *LobbyManager) HandleUpdateSettings(lobbyID string, data map[string]interface{}) (*types.WebSocketMessage, error) {
+func (lm *LobbyManager) HandleStartGame(message types.WebSocketMessage, conn *websocket.Conn) (*types.WebSocketMessage, error) {
 	lm.mu.Lock()
 	defer lm.mu.Unlock()
 
-	lobby, exists := lm.Lobbies[lobbyID]
-	if !exists {
-		return nil, fmt.Errorf("lobby does not exist")
-	}
+	lobbyId := message.LobbyId
 
-	if text, ok := data["text"].(string); ok {
-		lobby.LobbySettings.Text = text
-	}
-	if time, ok := data["time"].(float64); ok {
-		lobby.LobbySettings.Time = int(time)
-	}
-	if maxPeople, ok := data["maxPeopleCount"].(float64); ok {
-		lobby.LobbySettings.MaxPlayerCount = int(maxPeople)
-	}
-
-	return &types.WebSocketMessage{
-		Type:    types.UpdateLobbySettings,
-		LobbyID: lobbyID,
-		Data: map[string]interface{}{
-			"lobby": lobby,
-		},
-	}, nil
-}
-
-func (lm *LobbyManager) HandlePlayerUpdate(lobbyID string, data map[string]interface{}) (*types.WebSocketMessage, error) {
-	lm.mu.Lock()
-	defer lm.mu.Unlock()
-
-	lobby, exists := lm.Lobbies[lobbyID]
-	if !exists {
-		return nil, fmt.Errorf("lobby does not exist")
-	}
-
-	playerID, ok := data["playerId"].(string)
-	if !ok {
-		return nil, fmt.Errorf("playerId is required")
-	}
-
-	for i, player := range lobby.Players {
-		if player.PlayerID == playerID {
-			if wpm, ok := data["wpm"].(float64); ok {
-				lobby.Players[i].Wpm = int(wpm)
-			}
-			if mistakes, ok := data["mistakes"].(float64); ok {
-				lobby.Players[i].Mistakes = int(mistakes)
-			}
-			if place, ok := data["place"].(float64); ok {
-				lobby.Players[i].Place = int(place)
-			}
-			break
-		}
-	}
-
-	return &types.WebSocketMessage{
-		Type:    types.PlayerUpdate,
-		LobbyID: lobbyID,
-		Data: map[string]interface{}{
-			"lobby": lobby,
-		},
-	}, nil
-}
-
-func (lm *LobbyManager) HandleStartGame(lobbyID string, data map[string]interface{}) (*types.WebSocketMessage, error) {
-	lm.mu.Lock()
-	defer lm.mu.Unlock()
-
-	lobby, exists := lm.Lobbies[lobbyID]
+	lobby, exists := lm.Lobbies[lobbyId]
 	if !exists {
 		return nil, fmt.Errorf("lobby does not exist")
 	}
@@ -210,18 +165,20 @@ func (lm *LobbyManager) HandleStartGame(lobbyID string, data map[string]interfac
 
 	return &types.WebSocketMessage{
 		Type:    types.StartGame,
-		LobbyID: lobbyID,
+		LobbyId: lobbyId,
 		Data: map[string]interface{}{
 			"lobby": lobby,
 		},
 	}, nil
 }
 
-func (lm *LobbyManager) HandleEndGame(lobbyID string, data map[string]interface{}) (*types.WebSocketMessage, error) {
+func (lm *LobbyManager) HandleEndGame(message types.WebSocketMessage, conn *websocket.Conn) (*types.WebSocketMessage, error) {
 	lm.mu.Lock()
 	defer lm.mu.Unlock()
 
-	lobby, exists := lm.Lobbies[lobbyID]
+	lobbyId := message.LobbyId
+
+	lobby, exists := lm.Lobbies[lobbyId]
 	if !exists {
 		return nil, fmt.Errorf("lobby does not exist")
 	}
@@ -230,7 +187,7 @@ func (lm *LobbyManager) HandleEndGame(lobbyID string, data map[string]interface{
 
 	return &types.WebSocketMessage{
 		Type:    types.EndGame,
-		LobbyID: lobbyID,
+		LobbyId: lobbyId,
 		Data: map[string]interface{}{
 			"lobby": lobby,
 		},

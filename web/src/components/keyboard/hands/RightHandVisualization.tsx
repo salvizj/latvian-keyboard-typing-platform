@@ -8,7 +8,7 @@ type RightHandVisualizationProps = {
 
 function RightHandVisualization({ handFingerInfo }: RightHandVisualizationProps) {
     return (
-        <div className="relative w-48 h-48">
+        <div className="relative w-48 h-48 flex-shrink-0">
             {/* Hand Icon */}
             <IoHandRightOutline className="w-full h-full" />
 

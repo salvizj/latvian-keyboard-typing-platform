@@ -4,15 +4,21 @@ import { getKeyObjByKey } from '../utils/getKeyObjByKey';
 import { isLatvianSpecial, isUpperCaseLatvian } from '../utils/testCharacterToLatvian';
 import { updateWpm } from '../utils/updateWpmCount';
 
-export const useTypingSession = (text: string, setFinished: (finished: boolean) => void, finished: boolean) => {
+export const useTypingSession = (
+    text: string,
+    setFinished: (finished: boolean) => void,
+    finished: boolean,
+    mistakeCount: number,
+    setMistakeCount: (mistakeCount: number) => void,
+    setWpm: (wpm: number) => void,
+    setProcentsOfTextTyped?: (procentsOfTextTyped: number) => void
+) => {
     const [currentCharacterIndex, setCurrentCharacterIndex] = useState(0);
     const [expectedCharacter, setExpectedCharacter] = useState(text[0]);
     const [expectedCharacterKeyObj, setExpectedCharacterKeyObj] = useState<KeyObj | null>(null);
     const [currentPressedKey, setCurrentPressedKey] = useState<string | null>(null);
     const [handFingerInfo, setHandFingerInfo] = useState<HandFingerInfo | null>(null);
     const [startTimestamp, setStartTimestamp] = useState<number | null>(null);
-    const [mistakeCount, setMistakeCount] = useState(0);
-    const [wpm, setWpm] = useState(0);
 
     // validation function to check input text
     const validateText = useCallback((inputText: string): boolean => {
@@ -71,7 +77,7 @@ export const useTypingSession = (text: string, setFinished: (finished: boolean) 
             setMistakeCount(0);
             setExpectedCharacterKeyObj(null);
         }
-    }, [finished, text]);
+    }, [finished, setMistakeCount, text]);
 
     const onKeyPress = useCallback(
         (lastKeyPressed: string) => {
@@ -88,6 +94,11 @@ export const useTypingSession = (text: string, setFinished: (finished: boolean) 
             if (lastKeyPressed === expectedCharacter) {
                 setCurrentCharacterIndex((prevIndex) => {
                     const nextIndex = prevIndex + 1;
+
+                    // we calculate here % of typed text
+                    if (setProcentsOfTextTyped) {
+                        setProcentsOfTextTyped((nextIndex / text.length) * 100);
+                    }
 
                     if (nextIndex < text.length) {
                         const newExpectedCharacter = text[nextIndex];
@@ -128,7 +139,18 @@ export const useTypingSession = (text: string, setFinished: (finished: boolean) 
             const calculatedWpm = updateWpm(currentCharacterIndex, startTimestamp);
             setWpm(calculatedWpm);
         },
-        [text, expectedCharacter, finished, currentCharacterIndex, setFinished, startTimestamp, mistakeCount]
+        [
+            finished,
+            currentCharacterIndex,
+            text,
+            expectedCharacter,
+            startTimestamp,
+            setWpm,
+            setFinished,
+            setProcentsOfTextTyped,
+            setMistakeCount,
+            mistakeCount,
+        ]
     );
 
     return {
@@ -138,8 +160,6 @@ export const useTypingSession = (text: string, setFinished: (finished: boolean) 
         currentPressedKey,
         handFingerInfo,
         expectedCharacterKeyObj,
-        wpm,
-        mistakeCount,
         isCompleted: currentCharacterIndex >= text.length,
     };
 };

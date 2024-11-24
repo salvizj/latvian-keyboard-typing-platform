@@ -3,8 +3,8 @@ package seed
 import (
 	"database/sql"
 	"fmt"
-	"latvian-typing-tutor/db"
-	"latvian-typing-tutor/types"
+	"latvianKeyboardTypingPlatform/db"
+	"latvianKeyboardTypingPlatform/types"
 	"os"
 )
 

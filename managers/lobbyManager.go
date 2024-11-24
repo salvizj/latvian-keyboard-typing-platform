@@ -2,7 +2,7 @@ package managers
 
 import (
 	"fmt"
-	"latvian-typing-tutor/types"
+	"latvianKeyboardTypingPlatform/types"
 	"sync"
 
 	"github.com/google/uuid"
@@ -21,14 +21,21 @@ func NewLobbyManager() *LobbyManager {
 		Connections: make(map[string][]*websocket.Conn),
 	}
 }
-
 func (lm *LobbyManager) HandleCreateLobby(message types.WebSocketMessage, conn *websocket.Conn) (*types.WebSocketMessage, error) {
 	lm.mu.Lock()
 	defer lm.mu.Unlock()
 
-	lobbyId := message.LobbyId
-	if _, exists := lm.Lobbies[lobbyId]; exists {
-		return nil, fmt.Errorf("lobby with ID %s already exists", lobbyId)
+	var lobbyId string
+	// Ensure unique lobby ID
+	for {
+		lobbyId = uuid.New().String()
+		if _, exists := lm.Lobbies[lobbyId]; !exists {
+			break
+		}
+	}
+
+	if message.Data == nil {
+		return nil, fmt.Errorf("message.Data is nil")
 	}
 
 	data, ok := message.Data.(map[string]interface{})
@@ -58,22 +65,38 @@ func (lm *LobbyManager) HandleCreateLobby(message types.WebSocketMessage, conn *
 	}
 	maxPlayerCount := int(maxPlayerCountFloat)
 
-	playerId := uuid.New().String()
+	playerRaw, ok := data["players"].([]interface{})
+	if !ok || len(playerRaw) != 1 {
+		return nil, fmt.Errorf("players must be an array with one player object")
+	}
 
-	userId, ok := data["userId"].(string)
+	playerData, ok := playerRaw[0].(map[string]interface{})
+	if !ok {
+		return nil, fmt.Errorf("each player should be an object")
+	}
+
+	username, ok := playerData["username"].(string)
+	if !ok {
+		return nil, fmt.Errorf("username is required and should be a string")
+	}
+
+	userId, ok := playerData["userId"].(string)
 	if !ok {
 		userId = ""
 	}
 
+	// initialize the owner player
 	owner := types.Player{
-		PlayerId: playerId,
-		UserId:   userId,
-		Role:     types.PlayerRoleOwner,
-		Place:    0,
-		Mistakes: 0,
-		Wpm:      0,
+		Username:     username,
+		PlayerId:     uuid.New().String(),
+		UserId:       userId,
+		Role:         types.PlayerRoleLeader,
+		Place:        0,
+		MistakeCount: 0,
+		Wpm:          0,
 	}
 
+	// initialize the lobby
 	lobby := &types.Lobby{
 		LobbyId: lobbyId,
 		Players: []types.Player{owner},
@@ -85,16 +108,25 @@ func (lm *LobbyManager) HandleCreateLobby(message types.WebSocketMessage, conn *
 		},
 	}
 
+	// save the lobby and connection
+	if lm.Lobbies == nil {
+		lm.Lobbies = make(map[string]*types.Lobby)
+	}
 	lm.Lobbies[lobbyId] = lobby
+
+	if lm.Connections == nil {
+		lm.Connections = make(map[string][]*websocket.Conn)
+	}
+
 	lm.Connections[lobbyId] = []*websocket.Conn{conn}
 
 	return &types.WebSocketMessage{
 		Type:    types.CreateLobby,
-		LobbyId: lobbyId,
+		LobbyId: lobby.LobbyId,
+		Status:  lobby.Status,
 		Data: types.CreateLobbyData{
 			LobbySettings: lobby.LobbySettings,
 			Players:       lobby.Players,
-			Status:        lobby.Status,
 		},
 	}, nil
 }
@@ -103,7 +135,12 @@ func (lm *LobbyManager) HandleJoinLobby(message types.WebSocketMessage, conn *we
 	lm.mu.Lock()
 	defer lm.mu.Unlock()
 
+	if message.LobbyId == "" {
+		return nil, fmt.Errorf("lobby ID is required")
+	}
+
 	lobbyId := message.LobbyId
+
 	lobby, exists := lm.Lobbies[lobbyId]
 	if !exists {
 		return nil, fmt.Errorf("lobby with ID %s does not exist", lobbyId)
@@ -113,14 +150,29 @@ func (lm *LobbyManager) HandleJoinLobby(message types.WebSocketMessage, conn *we
 		return nil, fmt.Errorf("lobby %s is full", lobbyId)
 	}
 
+	if message.Data == nil {
+		return nil, fmt.Errorf("message.Data is nil")
+	}
+
 	data, ok := message.Data.(map[string]interface{})
 	if !ok {
 		return nil, fmt.Errorf("invalid data format")
 	}
 
-	playerId := uuid.New().String()
+	playersRaw, ok := data["players"].([]interface{})
+	if !ok || len(playersRaw) != 1 {
+		return nil, fmt.Errorf("players must be an array with one player object")
+	}
 
-	role := types.PlayerRoleOwner
+	playerData, ok := playersRaw[0].(map[string]interface{})
+	if !ok {
+		return nil, fmt.Errorf("player data should be an object")
+	}
+
+	username, ok := playerData["username"].(string)
+	if !ok {
+		return nil, fmt.Errorf("username is required and should be a string")
+	}
 
 	userId, ok := data["userId"].(string)
 	if !ok {
@@ -128,31 +180,43 @@ func (lm *LobbyManager) HandleJoinLobby(message types.WebSocketMessage, conn *we
 	}
 
 	player := types.Player{
-		PlayerId: playerId,
-		UserId:   userId,
-		Role:     role,
-		Place:    0,
-		Mistakes: 0,
-		Wpm:      0,
+		Username:     username,
+		PlayerId:     uuid.New().String(),
+		UserId:       userId,
+		Role:         types.PlayerRolePlayer,
+		Place:        0,
+		MistakeCount: 0,
+		Wpm:          0,
 	}
 
 	lobby.Players = append(lobby.Players, player)
+
+	if lm.Connections[lobbyId] == nil {
+		lm.Connections[lobbyId] = make([]*websocket.Conn, 0)
+	}
+
 	lm.Connections[lobbyId] = append(lm.Connections[lobbyId], conn)
+
+	lm.Lobbies[message.LobbyId] = lobby
 
 	return &types.WebSocketMessage{
 		Type:    types.JoinLobby,
 		LobbyId: lobbyId,
+		Status:  lobby.Status,
 		Data: types.CreateLobbyData{
 			LobbySettings: lobby.LobbySettings,
 			Players:       lobby.Players,
-			Status:        lobby.Status,
 		},
 	}, nil
 }
 
-func (lm *LobbyManager) HandleStartGame(message types.WebSocketMessage, conn *websocket.Conn) (*types.WebSocketMessage, error) {
+func (lm *LobbyManager) HandleStartRace(message types.WebSocketMessage, conn *websocket.Conn) (*types.WebSocketMessage, error) {
 	lm.mu.Lock()
 	defer lm.mu.Unlock()
+
+	if message.LobbyId == "" {
+		return nil, fmt.Errorf("lobby ID is required")
+	}
 
 	lobbyId := message.LobbyId
 
@@ -161,35 +225,133 @@ func (lm *LobbyManager) HandleStartGame(message types.WebSocketMessage, conn *we
 		return nil, fmt.Errorf("lobby does not exist")
 	}
 
-	lobby.Status = types.LobbyStatusInProgress
+	if len(lobby.Players) >= lobby.LobbySettings.MaxPlayerCount {
+		return nil, fmt.Errorf("lobby %s is full", lobbyId)
+	}
+
+	lm.Lobbies[message.LobbyId] = lobby
 
 	return &types.WebSocketMessage{
-		Type:    types.StartGame,
+		Type:    types.StartRace,
 		LobbyId: lobbyId,
-		Data: map[string]interface{}{
-			"lobby": lobby,
-		},
+		Status:  types.LobbyStatusInProgress,
 	}, nil
 }
 
-func (lm *LobbyManager) HandleEndGame(message types.WebSocketMessage, conn *websocket.Conn) (*types.WebSocketMessage, error) {
+func (lm *LobbyManager) HandleEndRace(message types.WebSocketMessage, conn *websocket.Conn) (*types.WebSocketMessage, error) {
 	lm.mu.Lock()
 	defer lm.mu.Unlock()
+
+	if message.LobbyId == "" {
+		return nil, fmt.Errorf("lobby ID is required")
+	}
 
 	lobbyId := message.LobbyId
 
 	lobby, exists := lm.Lobbies[lobbyId]
 	if !exists {
 		return nil, fmt.Errorf("lobby does not exist")
+	}
+
+	if message.Status == "" {
+		return nil, fmt.Errorf("status is required")
 	}
 
 	lobby.Status = types.LobbyStatusFinished
 
+	lm.Lobbies[message.LobbyId] = lobby
+
 	return &types.WebSocketMessage{
-		Type:    types.EndGame,
+		Type:    types.EndRace,
 		LobbyId: lobbyId,
-		Data: map[string]interface{}{
-			"lobby": lobby,
+		Status:  lobby.Status,
+	}, nil
+}
+func (lm *LobbyManager) HandleProgress(message types.WebSocketMessage, conn *websocket.Conn) (*types.WebSocketMessage, error) {
+	lm.mu.Lock()
+	defer lm.mu.Unlock()
+
+	// Validate LobbyId
+	if message.LobbyId == "" {
+		return nil, fmt.Errorf("lobby ID is required")
+	}
+
+	lobbyId := message.LobbyId
+
+	// Check if lobby exists
+	lobby, exists := lm.Lobbies[lobbyId]
+	if !exists {
+		return nil, fmt.Errorf("lobby does not exist")
+	}
+
+	// Validate Status
+	if message.Status == "" {
+		return nil, fmt.Errorf("status is required")
+	}
+
+	// Parse the data field into a map
+	data, ok := message.Data.(map[string]interface{})
+	if !ok {
+		return nil, fmt.Errorf("invalid data format")
+	}
+
+	// Extract players array
+	playersRaw, ok := data["players"].([]interface{})
+	if !ok || len(playersRaw) != 1 {
+		return nil, fmt.Errorf("players must be an array with one player object")
+	}
+
+	// Extract player data
+	playerData, ok := playersRaw[0].(map[string]interface{})
+	if !ok {
+		return nil, fmt.Errorf("player data should be an object")
+	}
+
+	// Extract playerId
+	playerId, ok := playerData["playerId"].(string)
+	if !ok {
+		return nil, fmt.Errorf("playerId is required and should be a string")
+	}
+
+	// Extract WPM
+	wpmFloat, ok := playerData["wpm"].(float64)
+	if !ok {
+		return nil, fmt.Errorf("wpm is required and should be a number")
+	}
+	wpm := int(wpmFloat)
+
+	// Extract mistake count
+	mistakeCountFloat, ok := playerData["mistakeCount"].(float64) // Fixed the field name
+	if !ok {
+		return nil, fmt.Errorf("mistakes is required and should be a number")
+	}
+	mistakeCount := int(mistakeCountFloat)
+
+	// Extract percentage of text typed
+	procentsOfTextTypedFloat, ok := playerData["procentsOfTextTyped"].(float64)
+	if !ok {
+		return nil, fmt.Errorf("procentsOfTextTyped is required and should be a number")
+	}
+	procentsOfTextTyped := int(procentsOfTextTypedFloat)
+
+	// find and update player data
+	for i, player := range lobby.Players {
+		if player.PlayerId == playerId {
+			// update player data
+			lobby.Players[i].Wpm = wpm
+			lobby.Players[i].MistakeCount = mistakeCount
+			lobby.Players[i].ProcentsOfTextTyped = procentsOfTextTyped
+			break
+		}
+	}
+
+	lm.Lobbies[message.LobbyId] = lobby
+
+	return &types.WebSocketMessage{
+		LobbyId: lobbyId,
+		Status:  lobby.Status,
+		Data: types.ProgressData{
+			Players: lobby.Players,
 		},
 	}, nil
 }

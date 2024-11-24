@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"latvian-typing-tutor/db/queries"
+	"latvianKeyboardTypingPlatform/db/queries"
 	"net/http"
 
 	"github.com/labstack/echo/v4"

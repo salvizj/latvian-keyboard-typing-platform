@@ -71,17 +71,19 @@ export type LobbySettings = {
 };
 
 export type Player = {
+    username: string;
     playerId: string;
-    userId?: string | null;
-    role: PlayerRole;
-    place: number;
-    mistakes: number;
-    wpm: number;
+    userId?: string;
+    role?: PlayerRole;
+    place?: number;
+    mistakeCount?: number;
+    wpm?: number;
+    ProcentsOfTextTyped?: number;
 };
 
 export enum PlayerRole {
-    Default = 'default',
-    Owner = 'owner',
+    Player = 'player',
+    Leader = 'leader',
 }
 
 export enum LobbyStatus {
@@ -93,28 +95,33 @@ export enum LobbyStatus {
 export type WebSocketMessage<WebSocketMessageData> = {
     type: WebSocketMessageType;
     lobbyId: string;
+    status?: LobbyStatus;
     data: WebSocketMessageData;
 };
 
-export type WebSocketMessageData = CreateLobbyData | JoinLobbyData | StartGameData | EndGameData | ErrorData;
+export type WebSocketMessageData =
+    | CreateLobbyData
+    | JoinLobbyData
+    | StartRaceData
+    | EndRaceData
+    | ErrorData
+    | ProgressData;
 
 export type CreateLobbyData = {
     lobbySettings: LobbySettings;
     players: Player[];
-    status: LobbyStatus;
 };
 
 export type JoinLobbyData = {
     players: Player[];
 };
-
-export type StartGameData = {
-    startGame: boolean;
+export type ProgressData = {
+    players: Player[];
 };
 
-export type EndGameData = {
-    endGame: boolean;
-};
+export type StartRaceData = object;
+
+export type EndRaceData = object;
 
 export type ErrorData = {
     message: string;
@@ -122,8 +129,8 @@ export type ErrorData = {
 export enum WebSocketMessageType {
     CreateLobby = 'createLobby',
     JoinLobby = 'joinLobby',
-    PlayerUpdate = 'playerUpdate',
-    StartGame = 'startGame',
-    EndGame = 'endGame',
+    Progress = 'progress',
+    StartRace = 'startRace',
+    EndRace = 'endRace',
     Error = 'error',
 }

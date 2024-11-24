@@ -4,11 +4,11 @@ type CountdownProps = {
     time: number; // in seconds
     setFinished: (isTypingFinished: boolean) => void;
     isTypingFinished: boolean;
+    timeLeft: number;
+    setTimeLeft: (time: number) => void;
 };
 
-const Countdown: React.FC<CountdownProps> = ({ time, setFinished, isTypingFinished }) => {
-    const [timeLeft, setTimeLeft] = useState<number>(time);
-
+const Countdown: React.FC<CountdownProps> = ({ time, setFinished, isTypingFinished, timeLeft, setTimeLeft }) => {
     const [targetTime] = useState<number>(new Date().getTime() + time * 1000);
 
     useEffect(() => {
@@ -26,7 +26,7 @@ const Countdown: React.FC<CountdownProps> = ({ time, setFinished, isTypingFinish
 
         // Cleanup interval on unmount
         return () => clearInterval(interval);
-    }, [time, setFinished, isTypingFinished, targetTime]);
+    }, [time, setFinished, isTypingFinished, targetTime, setTimeLeft]);
 
     return <div className="flex justify-center items-center text-color-primary text-3xl ">{timeLeft}s</div>;
 };

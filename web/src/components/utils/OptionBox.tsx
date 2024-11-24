@@ -6,11 +6,12 @@ import LobbyOptions from '../typingRace/LobbyOptions';
 import TextSelectionSection from './TextSelectionSection';
 import RangeInput from './RangeInput';
 import InfoBox from './InfoBox';
+import { useCallback, useState } from 'react';
 
 type OptionBoxProps = {
     title: string;
     setText: (text: string) => void;
-    setStart: (startTest: boolean) => void;
+    setIsOptionsSet: (isOptionsSet: boolean) => void;
     setLobbyId?: (lobbyId: string) => void;
     setLobbyMode?: (lobbyMode: 'create' | 'join') => void;
     lobbyMode?: 'create' | 'join';
@@ -29,14 +30,24 @@ type OptionBoxProps = {
     poetTexts: PoetText[];
     poetTextsError?: string | null;
     isRace: boolean;
-    start: boolean;
+    setUsername?: (username: string) => void;
+    username?: string;
+};
+
+type ValidationErrors = {
+    customText?: string;
+    lobbyId?: string;
+    username?: string;
+    selectedText?: string;
+    time?: string;
+    maxPlayerCount?: string;
 };
 
 const OptionBox: React.FC<OptionBoxProps> = ({
     title,
     setText,
     lobbyId,
-    setStart,
+    setIsOptionsSet,
     setLobbyId,
     setLobbyMode,
     lobbyMode,
@@ -54,23 +65,68 @@ const OptionBox: React.FC<OptionBoxProps> = ({
     maxPlayerCount,
     poetTextsError,
     isRace,
-    start,
+    setUsername,
+    username,
 }) => {
     const { language } = useLanguage();
+    const [validationErrors, setValidationErrors] = useState<ValidationErrors>({});
+    const [showErrors, setShowErrors] = useState(false);
+
+    const validateInputs = useCallback((): boolean => {
+        const errors: ValidationErrors = {};
+        if (lobbyMode === 'create') {
+            if (isCustomText) {
+                if (!customText.trim()) {
+                    errors.customText = translate('must_enter_custom_text', language);
+                } else if (customText.length < 10) {
+                    errors.customText = translate('custom_text_too_short', language);
+                } else if (customText.length > 1000) {
+                    errors.customText = translate('custom_text_too_long', language);
+                }
+            } else if (!selectedText) {
+                errors.selectedText = translate('must_select_text', language);
+            }
+            if (time < 10 || time > 120) {
+                errors.time = translate('invalid_time_range', language);
+            }
+        }
+        if (isRace) {
+            if (!username?.trim()) {
+                errors.username = translate('must_enter_username', language);
+            }
+
+            if (lobbyMode === 'join' && !lobbyId?.trim()) {
+                errors.lobbyId = translate('must_enter_lobby_id', language);
+            }
+
+            if (maxPlayerCount !== undefined && (maxPlayerCount < 2 || maxPlayerCount > 10)) {
+                errors.maxPlayerCount = translate('invalid_player_count', language);
+            }
+        }
+
+        setValidationErrors(errors);
+        setShowErrors(true);
+        return Object.keys(errors).length === 0;
+    }, [lobbyMode, isRace, isCustomText, selectedText, time, customText, language, username, lobbyId, maxPlayerCount]);
 
     const handleStartTest = () => {
-        setTime(time);
-        setText(isCustomText ? customText : selectedText);
-        setStart(true);
+        if (validateInputs()) {
+            console.log('validated input');
+            setTime(time);
+            setText(isCustomText ? customText : selectedText);
+            setIsOptionsSet(true);
+        }
     };
     return (
         <InfoBox>
             <h2 className="text-3xl font-bold mb-8 text-center">{capitalize(translate(title, language))}</h2>
 
             <>
-                {/*Create or input lobbyId  */}
-                {isRace && setLobbyMode && lobbyMode && setLobbyId && (
+                {/*Create or input lobbyId and username */}
+                {isRace && setLobbyMode && lobbyMode && setLobbyId && setUsername && (
                     <LobbyOptions
+                        username={username ?? ''}
+                        setUsername={setUsername}
                         lobbyId={lobbyId ?? ''}
                         setLobbyId={setLobbyId}
                         lobbyMode={lobbyMode}
@@ -78,54 +134,73 @@ const OptionBox: React.FC<OptionBoxProps> = ({
                         language={language}
                     />
                 )}
-
-                {/*Max player range input */}
-                {isRace && maxPlayerCount && setMaxPlayerCount && (
-                    <RangeInput
-                        label="select_max_player_count"
-                        value={maxPlayerCount}
-                        onChange={setMaxPlayerCount}
-                        language={language}
-                        min={2}
-                        max={10}
-                        step={1}
-                        labelSuffix="max_player_count"
-                    />
+                {showErrors && validationErrors.username && (
+                    <p className="text-red-500 text-sm">{validationErrors.username}</p>
                 )}
-                {/*Time range input */}
-                <RangeInput
-                    label="select_time"
-                    value={time}
-                    onChange={setTime}
-                    language={language}
-                    min={10}
-                    max={120}
-                    step={5}
-                    labelSuffix="seconds"
-                />
-                {/*Text select or input*/}
-                <TextSelectionSection
-                    isCustomText={isCustomText}
-                    setCustomText={setCustomText}
-                    customText={customText}
-                    selectedText={selectedText}
-                    setSelectedText={setSelectedText}
-                    poetTexts={poetTexts}
-                    language={language}
-                    setIsCustomText={setIsCustomText}
-                />
+                {showErrors && validationErrors.lobbyId && (
+                    <p className="text-red-500 text-sm">{validationErrors.lobbyId}</p>
+                )}
+
+                {/*Time, max player count, text, settings*/}
+                {lobbyMode === 'create' && (
+                    <>
+                        {/*Max player range input */}
+                        {isRace && maxPlayerCount && setMaxPlayerCount && (
+                            <RangeInput
+                                label="select_max_player_count"
+                                value={maxPlayerCount}
+                                onChange={setMaxPlayerCount}
+                                language={language}
+                                min={2}
+                                max={10}
+                                step={1}
+                                labelSuffix="max_player_count"
+                            />
+                        )}
+                        {showErrors && validationErrors.maxPlayerCount && (
+                            <p className="text-red-500 text-sm">{validationErrors.maxPlayerCount}</p>
+                        )}
+                        {/*Time range input */}
+                        <RangeInput
+                            label="select_time"
+                            value={time}
+                            onChange={setTime}
+                            language={language}
+                            min={10}
+                            max={120}
+                            step={5}
+                            labelSuffix="seconds"
+                        />
+                        {showErrors && validationErrors.time && (
+                            <p className="text-red-500 text-sm">{validationErrors.time}</p>
+                        )}
+                        {/*Text select or input*/}
+                        <TextSelectionSection
+                            isCustomText={isCustomText}
+                            setCustomText={setCustomText}
+                            customText={customText}
+                            selectedText={selectedText}
+                            setSelectedText={setSelectedText}
+                            poetTexts={poetTexts}
+                            language={language}
+                            setIsCustomText={setIsCustomText}
+                        />
+                        {showErrors && validationErrors.customText && (
+                            <p className="text-red-500 text-sm mb-4">{validationErrors.customText}</p>
+                        )}
+                        {showErrors && validationErrors.selectedText && (
+                            <p className="text-red-500 text-sm mb-4">{validationErrors.selectedText}</p>
+                        )}
+                    </>
+                )}
             </>
-            {isCustomText && customText && <p>{capitalize(translate('must_enter_custom_text', language))}</p>}
-            {isRace && lobbyId === '' && lobbyMode === 'join' && start && (
-                <p>{capitalize(translate('must_enter_lobby_id', language))}</p>
-            )}
             <button
                 onClick={handleStartTest}
-                className="bg-transparent text-primary py-2 px-6 rounded-md text-center hover:opacity-90 transition-opacity text-lg hover:text-color-primary-hover-text border secondary mt-6"
+                className="bg-transparent text-primary py-2 px-4 rounded-md text-center hover:opacity-90 transition-opacity text-base hover:text-color-primary-hover-text border secondary "
             >
                 {capitalize(translate(startText, language))}
             </button>
-            {poetTextsError && <div className="tex-primary text-center text-lg bg-transparent">{poetTextsError}</div>}
+            {poetTextsError && <p className="text-red-500 mt-1 mb-1 text-sm">{poetTextsError}</p>}
         </InfoBox>
     );
 };

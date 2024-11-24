@@ -2,8 +2,9 @@ package handlers
 
 import (
 	"fmt"
-	"latvian-typing-tutor/managers"
-	"latvian-typing-tutor/types"
+	"latvianKeyboardTypingPlatform/managers"
+	"latvianKeyboardTypingPlatform/types"
+	"log"
 	"net/http"
 
 	"github.com/gorilla/websocket"
@@ -19,6 +20,7 @@ var upgrader = websocket.Upgrader{
 func WsHandler(c echo.Context, manager *managers.LobbyManager) error {
 	ws, err := upgrader.Upgrade(c.Response(), c.Request(), nil)
 	if err != nil {
+		log.Println("Failed to upgrade connection:", err)
 		return err
 	}
 	defer ws.Close()
@@ -26,77 +28,98 @@ func WsHandler(c echo.Context, manager *managers.LobbyManager) error {
 	// main message handling loop
 	for {
 		var msg types.WebSocketMessage
-
 		// read ws message and stores in msg and assign err if find any
 		err := ws.ReadJSON(&msg)
-
 		// if we find err and it is from unexpected close we remove conn and possibly entire lobby
 		if err != nil {
-
 			if websocket.IsUnexpectedCloseError(err) {
-				for lobbyId, conns := range manager.Connections {
-					for i, conn := range conns {
-						if conn == ws {
-
-							// slice all connections before and after faulty conn
-							manager.Connections[lobbyId] = append(conns[:i], conns[i+1:]...)
-
-							// ff the lobby has no remaining connections after the removal
-							if len(manager.Connections[lobbyId]) == 0 {
-
-								delete(manager.Connections, lobbyId)
-								delete(manager.Lobbies, lobbyId)
-							}
-
-							break
-						}
-					}
-				}
+				handleConnectionClose(manager, ws)
 			}
-
 			return nil
 		}
 
 		var response *types.WebSocketMessage
 		var handlerErr error
 
+		// handle the message based on its type
 		switch msg.Type {
 		case types.CreateLobby:
 			response, handlerErr = manager.HandleCreateLobby(msg, ws)
 		case types.JoinLobby:
 			response, handlerErr = manager.HandleJoinLobby(msg, ws)
-		case types.StartGame:
-			response, handlerErr = manager.HandleStartGame(msg, ws)
-		case types.EndGame:
-			response, handlerErr = manager.HandleEndGame(msg, ws)
+		case types.StartRace:
+			response, handlerErr = manager.HandleStartRace(msg, ws)
+		case types.Progess:
+			response, handlerErr = manager.HandleProgress(msg, ws)
+		case types.EndRace:
+			response, handlerErr = manager.HandleEndRace(msg, ws)
 		default:
 			handlerErr = fmt.Errorf("unknown message type: %s", msg.Type)
 		}
 
-		// respond to client with error
+		// handle any errors that occurred during message processing
 		if handlerErr != nil {
+			lobbyID := ""
+			if response != nil {
+				lobbyID = response.LobbyId
+			}
+
 			errorMsg := types.WebSocketMessage{
 				Type:    types.Error,
-				LobbyId: msg.LobbyId,
+				LobbyId: lobbyID,
 				Data: map[string]interface{}{
 					"error": handlerErr.Error(),
 				},
 			}
+
 			if err := ws.WriteJSON(errorMsg); err != nil {
+				log.Printf("Error sending error response: %v\n", err)
 				return err
 			}
 			continue
 		}
 
-		if response != nil {
-			// broadcast the response to all connections in the lobby
-			if conns, exists := manager.Connections[msg.LobbyId]; exists {
-				for _, conn := range conns {
-					if err := conn.WriteJSON(response); err != nil {
-						return fmt.Errorf("error broadcasting to connection: %w", err)
-					}
-				}
+		// broadcast the response if it exists
+		if response != nil && response.LobbyId != "" {
+			if err := broadcastToLobby(manager, response); err != nil {
+				log.Printf("Error broadcasting message: %v\n", err)
+				return err
 			}
 		}
 	}
+}
+
+// handleConnectionClose handles cleanup when a connection is closed
+func handleConnectionClose(manager *managers.LobbyManager, ws *websocket.Conn) {
+	for lobbyID, conns := range manager.Connections {
+		for i, conn := range conns {
+			if conn == ws {
+				// Remove the connection from the lobby
+				manager.Connections[lobbyID] = append(conns[:i], conns[i+1:]...)
+
+				// If lobby is empty, clean it up
+				if len(manager.Connections[lobbyID]) == 0 {
+					delete(manager.Connections, lobbyID)
+					delete(manager.Lobbies, lobbyID)
+				}
+				return
+			}
+		}
+	}
+}
+
+// broadcastToLobby broadcasts a message to all connections in a lobby
+func broadcastToLobby(manager *managers.LobbyManager, msg *types.WebSocketMessage) error {
+	conns, exists := manager.Connections[msg.LobbyId]
+	if !exists {
+		log.Printf("No connections found for lobbyId: %s\n", msg.LobbyId)
+		return nil
+	}
+
+	for _, conn := range conns {
+		if err := conn.WriteJSON(msg); err != nil {
+			return fmt.Errorf("error broadcasting to connection: %w", err)
+		}
+	}
+	return nil
 }

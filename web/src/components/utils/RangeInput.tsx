@@ -25,7 +25,7 @@ const RangeInput: React.FC<RangeInputProps> = ({
 }) => {
     return (
         <div className={className}>
-            <label className="block mb-2">{translate(label, language)}:</label>
+            <label className="block mt-6 mb-2">{translate(label, language)}:</label>
             <input
                 type="range"
                 min={min}
@@ -35,7 +35,7 @@ const RangeInput: React.FC<RangeInputProps> = ({
                 onChange={(e) => onChange(Number(e.target.value))}
                 className="w-full"
             />
-            <p className="text-center">
+            <p className="text-center mt-1">
                 {value} {labelSuffix ? translate(labelSuffix, language) : ''}
             </p>
         </div>

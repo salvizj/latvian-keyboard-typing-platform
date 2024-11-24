@@ -7,20 +7,19 @@ const TypingTestPage = () => {
     const isRace = false;
     const [text, setText] = useState<string>('');
     const [time, setTime] = useState<number>(60);
-    const [testStart, setTestStart] = useState(false);
-
+    const [isOptionsSet, setIsOptionsSet] = useState(false);
     const [isCustomText, setIsCustomText] = useState(false);
     const [customText, setCustomText] = useState('');
     const [selectedText, setSelectedText] = useState('');
-
+    const [wpm, setWpm] = useState(0);
+    const [mistakeCount, setMistakeCount] = useState(0);
     const { poetTexts, poetTextsError } = useGetPoetTexts();
 
     return (
         <>
-            {!testStart && (
+            {!isOptionsSet && (
                 <OptionBox
-                    start={testStart}
-                    setStart={setTestStart}
+                    setIsOptionsSet={setIsOptionsSet}
                     setText={setText}
                     setTime={setTime}
                     time={time}
@@ -37,7 +36,17 @@ const TypingTestPage = () => {
                     isRace={isRace}
                 />
             )}
-            {testStart && <Keyboard text={text} testMode={true} time={time} />}
+            {isOptionsSet && (
+                <Keyboard
+                    text={text}
+                    testMode={true}
+                    time={time}
+                    wpm={wpm}
+                    setWpm={setWpm}
+                    mistakeCount={mistakeCount}
+                    setMistakeCount={setMistakeCount}
+                />
+            )}
         </>
     );
 };

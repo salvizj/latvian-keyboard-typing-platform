@@ -1,8 +1,8 @@
 package queries
 
 import (
-	"latvian-typing-tutor/db"
-	"latvian-typing-tutor/types"
+	"latvianKeyboardTypingPlatform/db"
+	"latvianKeyboardTypingPlatform/types"
 	"log"
 )
 

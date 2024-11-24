@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 import translate from '../../utils/translate';
 import { capitalize } from '../../utils/capitalize';
 
@@ -9,49 +7,63 @@ type LobbyOptionsProps = {
     lobbyMode: 'create' | 'join';
     lobbyId: string;
     language: string;
+    setUsername: (username: string) => void;
+    username: string;
 };
 
-const LobbyOptions: React.FC<LobbyOptionsProps> = ({ setLobbyId, setLobbyMode, lobbyMode, lobbyId, language }) => {
-    useEffect(() => {
-        if (lobbyMode === 'create') {
-            setLobbyId(uuidv4());
-        }
-    }, [lobbyMode, setLobbyId]);
-
+const LobbyOptions: React.FC<LobbyOptionsProps> = ({
+    setLobbyId,
+    setLobbyMode,
+    lobbyMode,
+    lobbyId,
+    language,
+    setUsername,
+    username,
+}) => {
     const handleModeChange = (newMode: 'create' | 'join') => {
         setLobbyMode(newMode);
-        if (newMode === 'create') {
-            setLobbyId(uuidv4());
-        } else {
-            setLobbyId('');
-        }
     };
 
     return (
-        <div className="mb-6">
-            <div className="flex items-center">
-                <input
-                    type="checkbox"
-                    id="joinMode"
-                    checked={lobbyMode === 'join'}
-                    onChange={() => handleModeChange(lobbyMode === 'create' ? 'join' : 'create')}
-                    className="mr-2"
-                />
-                <label htmlFor="joinMode" className="text-primary">
-                    {capitalize(translate('join_lobby', language))}
-                </label>
+        <div className="mb-4 flex flex-col justify-center">
+            <div className="mb-4">
+                <div className="mb-2">
+                    <input
+                        type="checkbox"
+                        id="joinMode"
+                        checked={lobbyMode === 'join'}
+                        onChange={() => handleModeChange(lobbyMode === 'create' ? 'join' : 'create')}
+                        className="mr-2"
+                    />
+                    <label htmlFor="joinMode" className="text-primary">
+                        {capitalize(translate('join_lobby', language))}
+                    </label>
+                </div>
+                <div className="mt-2">
+                    <input
+                        type="checkbox"
+                        id="createMode"
+                        checked={lobbyMode === 'create'}
+                        onChange={() => handleModeChange(lobbyMode === 'join' ? 'create' : 'join')}
+                        className="mr-2"
+                    />
+                    <label htmlFor="createMode" className="text-primary">
+                        {capitalize(translate('create_lobby', language))}
+                    </label>
+                </div>
             </div>
-            <div className="flex items-center mt-2">
-                <input
-                    type="checkbox"
-                    id="createMode"
-                    checked={lobbyMode === 'create'}
-                    onChange={() => handleModeChange(lobbyMode === 'join' ? 'create' : 'join')}
-                    className="mr-2"
-                />
-                <label htmlFor="createMode" className="text-primary">
-                    {capitalize(translate('create_lobby', language))}
+            <div className="mt-2">
+                <label htmlFor="username" className="text-primary">
+                    {capitalize(translate('enter_username', language))}
                 </label>
+                <input
+                    type="text"
+                    id="username"
+                    value={username || ''}
+                    onChange={(e) => setUsername(e.target.value)}
+                    className="border p-2 mt-2 w-full rounded-md bg-color-primary text-color-third placeholder-color-third text-md"
+                    placeholder={capitalize(translate('enter_username', language))}
+                />
             </div>
             {lobbyMode === 'join' && (
                 <div>

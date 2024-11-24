@@ -1,9 +1,9 @@
 package main
 
 import (
-	"latvian-typing-tutor/db"
-	seed "latvian-typing-tutor/db/seeds"
-	"latvian-typing-tutor/server"
+	"latvianKeyboardTypingPlatform/db"
+	seed "latvianKeyboardTypingPlatform/db/seeds"
+	"latvianKeyboardTypingPlatform/server"
 )
 
 // entry point

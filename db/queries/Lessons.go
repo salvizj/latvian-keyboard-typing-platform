@@ -3,8 +3,8 @@ package queries
 import (
 	"database/sql"
 	"fmt"
-	"latvian-typing-tutor/db"
-	"latvian-typing-tutor/types"
+	"latvianKeyboardTypingPlatform/db"
+	"latvianKeyboardTypingPlatform/types"
 )
 
 func GetLesson(id int) (*types.Lesson, error) {

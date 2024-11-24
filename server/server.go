@@ -2,7 +2,7 @@ package server
 
 import (
 	"fmt"
-	"latvian-typing-tutor/routes"
+	"latvianKeyboardTypingPlatform/routes"
 	"os"
 
 	"github.com/joho/godotenv"

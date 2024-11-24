@@ -1,7 +1,6 @@
 import TypingInputField from './TypingInputField';
 import TypingTextDisplay from './TypingTextDisplay';
 import KeyboardLayout from './KeyboardLayout';
-import LessonFinishedScreen from '../lesson/LessonFinishedScreen';
 import { useEffect, useState } from 'react';
 import { isLessonComplete, markLessonComplete } from '../../utils/lessonCompletion';
 import Countdown from '../utils/Countdown';
@@ -10,23 +9,47 @@ import LeftHandVisualization from './hands/LeftHandVisualization';
 import RealTimeTypingPerformance from './RealTimeTypingPerformance';
 import { useTypingSession } from '../../hooks/useCharacterManagement';
 import { markTestComplete } from '../../utils/testCompletion';
-import CompletionScreen from '../utils/CompletionScreen';
 import { useLanguage } from '../../context/LanguageContext';
+import CompletionScreen from '../utils/CompletionScreen';
+import LessonCompletedScreen from '../lesson/LessonCompletedScreen';
+import { EndRaceData, LobbyStatus, WebSocketMessage, WebSocketMessageData, WebSocketMessageType } from '../../types';
 
 type KeyboardProps = {
     text: string;
+    wpm: number;
+    setWpm: (wpm: number) => void;
+    mistakeCount: number;
+    setMistakeCount: (mistakeCount: number) => void;
     lessonId?: number;
     lessonMode?: boolean;
     raceMode?: boolean;
     testMode?: boolean;
     time?: number;
+    timeLeft?: number;
+    setTimeLeft?: (time: number) => void;
+    sendMessage?: (message: WebSocketMessage<WebSocketMessageData>) => void;
+    setProcentsOfTextTyped?: (procentsOfTextTyped: number) => void;
 };
 
-const Keyboard: React.FC<KeyboardProps> = ({ text, lessonMode, lessonId, testMode, raceMode, time }) => {
+const Keyboard: React.FC<KeyboardProps> = ({
+    text,
+    wpm,
+    setWpm,
+    mistakeCount,
+    setMistakeCount,
+    lessonId,
+    lessonMode,
+    raceMode,
+    testMode,
+    time,
+    timeLeft,
+    setTimeLeft,
+    sendMessage,
+    setProcentsOfTextTyped,
+}) => {
     const { language } = useLanguage();
 
     const [isTypingFinished, setFinished] = useState(false);
-
     useEffect(() => {
         if (lessonId && lessonMode && isTypingFinished) {
             const completedAlready = isLessonComplete(lessonId);
@@ -41,28 +64,51 @@ const Keyboard: React.FC<KeyboardProps> = ({ text, lessonMode, lessonId, testMod
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isTypingFinished, testMode, lessonMode]);
 
+    useEffect(() => {
+        if (raceMode && timeLeft === 0 && sendMessage) {
+            const endRaceMessage: WebSocketMessage<EndRaceData> = {
+                type: WebSocketMessageType.EndRace,
+                lobbyId: '',
+                status: LobbyStatus.Finished,
+                data: {},
+            };
+            sendMessage(endRaceMessage);
+        }
+    }, [raceMode, sendMessage, timeLeft]);
+
     const {
         onKeyPress: manageKeyPress,
         expectedCharacter,
         currentCharacterIndex,
         handFingerInfo,
         expectedCharacterKeyObj,
-        wpm,
+    } = useTypingSession(
+        text,
+        setFinished,
+        isTypingFinished,
         mistakeCount,
-    } = useTypingSession(text, setFinished, isTypingFinished);
+        setMistakeCount,
+        setWpm,
+        setProcentsOfTextTyped
+    );
 
     const restart = () => {
         window.location.reload();
     };
-    console.log(raceMode);
     return (
         <>
             <div className="flex justify-center flex-col items-center min-h-screen">
                 {expectedCharacterKeyObj && handFingerInfo && (
                     <>
                         <div className="flex flex-col justify-center items-center">
-                            {time && (
-                                <Countdown time={time} setFinished={setFinished} isTypingFinished={isTypingFinished} />
+                            {time && timeLeft && setTimeLeft && (
+                                <Countdown
+                                    time={time}
+                                    setFinished={setFinished}
+                                    isTypingFinished={isTypingFinished}
+                                    timeLeft={timeLeft}
+                                    setTimeLeft={setTimeLeft}
+                                />
                             )}
                             <RealTimeTypingPerformance wpm={wpm} mistakesCount={mistakeCount} />{' '}
                         </div>
@@ -82,18 +128,20 @@ const Keyboard: React.FC<KeyboardProps> = ({ text, lessonMode, lessonId, testMod
                     </>
                 )}
                 {isTypingFinished && lessonMode && (
-                    <LessonFinishedScreen setFinished={setFinished} restart={restart} language={language} />
+                    <LessonCompletedScreen setFinished={setFinished} restart={restart} language={language} />
                 )}
                 {isTypingFinished && testMode && (
                     <CompletionScreen
                         buttons={[
                             {
-                                text: 'Restart',
+                                text: 'restart',
                                 onClick: restart,
                             },
                         ]}
+                        wpm={wpm}
+                        mistakeCount={mistakeCount}
                         language={language}
-                        title="typing_test"
+                        title="typing_test_completed"
                     />
                 )}
             </div>

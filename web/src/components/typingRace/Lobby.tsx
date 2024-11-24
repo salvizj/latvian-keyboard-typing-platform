@@ -1,37 +1,46 @@
+import { useEffect, useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import {
     WebSocketMessage,
     Player,
     WebSocketMessageType,
-    StartGameData,
-    CreateLobbyData,
-    JoinLobbyData,
     WebSocketMessageData,
+    PlayerRole,
+    LobbyStatus,
+    StartRaceData,
 } from '../../types';
 import { capitalize } from '../../utils/capitalize';
 import translate from '../../utils/translate';
+import CopyToClipboard from '../utils/CopyToClipboar';
 
 type LobbyProps = {
     title: string;
-    lobbyData?: WebSocketMessage<WebSocketMessageData> | null;
+    playerData?: Player[] | null;
     sendMessage: (message: WebSocketMessage<WebSocketMessageData>) => void;
     lobbyId: string;
+    username: string;
+    lobbyRaceStatus: LobbyStatus;
 };
 
-const Lobby: React.FC<LobbyProps> = ({ sendMessage, title, lobbyData, lobbyId }) => {
+const Lobby: React.FC<LobbyProps> = ({ sendMessage, title, playerData, lobbyId, username, lobbyRaceStatus }) => {
     const { language } = useLanguage();
+    const [isOwner, setIsOwner] = useState(false);
 
-    const players: Player[] =
-        lobbyData?.type === WebSocketMessageType.CreateLobby || lobbyData?.type === WebSocketMessageType.JoinLobby
-            ? 'players' in lobbyData.data
-                ? (lobbyData.data as CreateLobbyData | JoinLobbyData).players
-                : []
-            : [];
+    useEffect(() => {
+        // to check if you are the owner of lobby
+        if (playerData) {
+            const yourDetails = playerData.find((player) => player.username === username);
+
+            setIsOwner(yourDetails?.role === PlayerRole.Leader);
+        }
+    }, [playerData, username]);
+
     const handleStartRace = () => {
-        const startMessage: WebSocketMessage<StartGameData> = {
-            type: WebSocketMessageType.StartGame,
+        const startMessage: WebSocketMessage<StartRaceData> = {
+            type: WebSocketMessageType.StartRace,
             lobbyId: lobbyId,
-            data: { startGame: true },
+            status: lobbyRaceStatus,
+            data: {},
         };
 
         sendMessage(startMessage);
@@ -41,31 +50,42 @@ const Lobby: React.FC<LobbyProps> = ({ sendMessage, title, lobbyData, lobbyId })
         <div className="fixed inset-0 bg-black/50 flex justify-center items-center">
             <div className="bg-color-third text-color-primary p-8 rounded-xl shadow-xl w-full max-w-2xl animate-in fade-in zoom-in duration-300">
                 <h2 className="text-3xl font-bold mb-8 text-center">{capitalize(translate(title, language))}</h2>
+                <div className="flex flex-col mb-4">
+                    <h3 className="text-lg font-semibold mb-2">
+                        {capitalize(translate('current_lobby_id', language))}: {lobbyId}
+                    </h3>
+                    <CopyToClipboard text={lobbyId} language={language} />
+                </div>
 
-                {players.length > 0 ? (
-                    <div className="mb-4">
-                        <h3 className="text-lg font-semibold mb-2">{capitalize(translate('players', language))}:</h3>
-                        <ul>
-                            {players.map((player) => (
+                <div className="mb-4">
+                    <h3 className="text-lg font-semibold mb-2">{capitalize(translate('players', language))}:</h3>
+                    <ul>
+                        {playerData &&
+                            playerData.map((player) => (
                                 <li key={player.playerId} className="mb-1">
-                                    <span className="font-bold">{capitalize(translate('id', language))}:</span>{' '}
-                                    {player.playerId},
+                                    <span className="font-bold">{capitalize(translate('username', language))}:</span>{' '}
+                                    {player.username},
                                     <span className="font-bold ml-2">{capitalize(translate('role', language))}:</span>{' '}
-                                    {player.role}
+                                    {player.role && translate(player.role, language)}
                                 </li>
                             ))}
-                        </ul>
-                    </div>
-                ) : (
-                    <p className="text-sm italic text-center">{capitalize(translate('no_players', language))}</p>
-                )}
+                    </ul>
+                </div>
 
-                <button
-                    className="bg-transparent text-primary py-2 px-6 rounded-md text-center hover:opacity-90 transition-opacity text-lg hover:text-color-third-hover-text border secondary"
-                    onClick={() => handleStartRace()}
-                >
-                    {capitalize(translate('start_typing_race', language))}
-                </button>
+                <div className="mt-4">
+                    {isOwner ? (
+                        <button
+                            onClick={handleStartRace}
+                            className="w-full text-text-color-primary hover:text-color-primary border-text-color-primary"
+                        >
+                            {capitalize(translate('start_typing_race', language))}
+                        </button>
+                    ) : (
+                        <div className="text-center text-gray-600">
+                            {capitalize(translate('wait_for_owner_to_start_the_race', language))}
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     );

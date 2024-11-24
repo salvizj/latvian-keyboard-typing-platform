@@ -1,4 +1,4 @@
-module latvian-typing-tutor
+module latvianKeyboardTypingPlatform
 
 go 1.23.1
 

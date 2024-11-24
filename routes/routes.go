@@ -1,8 +1,8 @@
 package routes
 
 import (
-	"latvian-typing-tutor/handlers"
-	"latvian-typing-tutor/managers"
+	"latvianKeyboardTypingPlatform/handlers"
+	"latvianKeyboardTypingPlatform/managers"
 
 	"github.com/labstack/echo/v4"
 )

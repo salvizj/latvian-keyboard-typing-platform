@@ -6,6 +6,10 @@ export enum Finger {
     Thumb = 'thumb',
 }
 
+export type KeyboardLayouts = 'qwerty' | 'dvorak';
+
+export const KeyboardLayoutValues = ['qwerty', 'dvorak'] as const;
+
 export enum Hand {
     Left = 'left',
     Right = 'right',
@@ -61,7 +65,7 @@ export type Lobby = {
     lobbyId: string;
     lobbySettings: LobbySettings;
     players: Player[];
-    status: LobbyStatus;
+    lobbyStatus: LobbyStatus;
 };
 
 export type LobbySettings = {
@@ -95,7 +99,7 @@ export enum LobbyStatus {
 export type WebSocketMessage<WebSocketMessageData> = {
     type: WebSocketMessageType;
     lobbyId: string;
-    status?: LobbyStatus;
+    lobbyStatus?: LobbyStatus;
     data: WebSocketMessageData;
 };
 
@@ -134,3 +138,12 @@ export enum WebSocketMessageType {
     EndRace = 'endRace',
     Error = 'error',
 }
+
+export type ValidationErrors = {
+    customText?: string;
+    lobbyId?: string;
+    username?: string;
+    selectedText?: string;
+    time?: string;
+    maxPlayerCount?: string;
+};

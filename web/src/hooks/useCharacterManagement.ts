@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
 import { HandFingerInfo, KeyObj } from '../types';
-import { getKeyObjByKey } from '../utils/getKeyObjByKey';
+import { getKeyObjByLayout } from '../utils/getKeyObjByLayout';
 import { isLatvianSpecial, isUpperCaseLatvian } from '../utils/testCharacterToLatvian';
 import { updateWpm } from '../utils/updateWpmCount';
+import { getLayout } from '../utils/layout';
+import { useKeyboardSettings } from '../context/KeyboardSettingsContext';
 
 export const useTypingSession = (
     text: string,
@@ -19,6 +21,9 @@ export const useTypingSession = (
     const [currentPressedKey, setCurrentPressedKey] = useState<string | null>(null);
     const [handFingerInfo, setHandFingerInfo] = useState<HandFingerInfo | null>(null);
     const [startTimestamp, setStartTimestamp] = useState<number | null>(null);
+    const { keyboardLayout } = useKeyboardSettings();
+
+    const layout = getLayout(keyboardLayout);
 
     // validation function to check input text
     const validateText = useCallback((inputText: string): boolean => {
@@ -45,7 +50,7 @@ export const useTypingSession = (
         if (!validateText(text)) return;
 
         try {
-            const initialKeyObj = getKeyObjByKey(text[0]);
+            const initialKeyObj = getKeyObjByLayout(text[0], layout);
 
             if (!initialKeyObj) {
                 return;
@@ -65,7 +70,7 @@ export const useTypingSession = (
         } catch (err) {
             console.error('Initialization error:', err);
         }
-    }, [text, validateText]);
+    }, [layout, text, validateText]);
 
     // reset all states because lessons or race or test has ended
     useEffect(() => {
@@ -108,7 +113,7 @@ export const useTypingSession = (
                             return prevIndex;
                         }
 
-                        const newExpectedCharacterKeyObj = getKeyObjByKey(newExpectedCharacter);
+                        const newExpectedCharacterKeyObj = getKeyObjByLayout(newExpectedCharacter, layout);
 
                         if (!newExpectedCharacterKeyObj) {
                             return prevIndex;
@@ -148,6 +153,7 @@ export const useTypingSession = (
             setWpm,
             setFinished,
             setProcentsOfTextTyped,
+            layout,
             setMistakeCount,
             mistakeCount,
         ]

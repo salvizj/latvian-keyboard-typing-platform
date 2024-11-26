@@ -1,26 +1,29 @@
 import Router from './router/Router';
-import { Auth0Provider } from '@auth0/auth0-react';
 import { RouterProvider } from 'react-router-dom';
 import './global.css';
 import { LanguageProvider } from './context/LanguageContext';
 import { ThemeProvider } from './context/ThemeContext';
+import { ClerkProvider } from '@clerk/clerk-react';
+import { KeyboardSettingsProvider } from './context/KeyboardSettingsContext';
+
+const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+
+if (!PUBLISHABLE_KEY) {
+    throw new Error('Missing Publishable Key');
+}
 
 const App = () => {
     return (
         <>
-            <Auth0Provider
-                domain="latvian-typing-tutor.eu.auth0.com"
-                clientId="zKpnXNSPOKHwYZyWZ43uTaGdkBKWWqhT"
-                authorizationParams={{
-                    redirect_uri: window.location.origin,
-                }}
-            >
-                <LanguageProvider>
+            <LanguageProvider>
+                <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
                     <ThemeProvider>
-                        <RouterProvider router={Router()} />
+                        <KeyboardSettingsProvider>
+                            <RouterProvider router={Router()} />
+                        </KeyboardSettingsProvider>
                     </ThemeProvider>
-                </LanguageProvider>
-            </Auth0Provider>
+                </ClerkProvider>
+            </LanguageProvider>
         </>
     );
 };

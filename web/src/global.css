@@ -70,6 +70,7 @@
 }
 body {
     background-color: var(--bg-general);
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 /* Text Color Classes */
 .text-color-primary {

@@ -16,7 +16,7 @@ type Lobby struct {
 	LobbyId       string        `json:"lobbyId"`
 	LobbySettings LobbySettings `json:"lobbySettings"`
 	Players       []Player      `json:"players"`
-	Status        LobbyStatus   `json:"status"`
+	LobbyStatus   LobbyStatus   `json:"lobbyStatus"`
 }
 
 type LobbySettings struct {
@@ -57,16 +57,16 @@ const (
 	CreateLobby WebSocketMessageTypes = "createLobby"
 	JoinLobby   WebSocketMessageTypes = "joinLobby"
 	Progess     WebSocketMessageTypes = "progress"
-	StartRace   WebSocketMessageTypes = "startRacee"
+	StartRace   WebSocketMessageTypes = "startRace"
 	EndRace     WebSocketMessageTypes = "endRace"
 	Error       WebSocketMessageTypes = "error"
 )
 
 type WebSocketMessage struct {
-	Type    WebSocketMessageTypes `json:"type"`
-	LobbyId string                `json:"lobbyId"`
-	Status  LobbyStatus           `json:"status"`
-	Data    interface{}           `json:"data"`
+	Type        WebSocketMessageTypes `json:"type"`
+	LobbyId     string                `json:"lobbyId"`
+	LobbyStatus LobbyStatus           `json:"lobbyStatus,omitempty"`
+	Data        interface{}           `json:"data"`
 }
 
 type CreateLobbyData struct {

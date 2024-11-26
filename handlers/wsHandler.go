@@ -30,6 +30,7 @@ func WsHandler(c echo.Context, manager *managers.LobbyManager) error {
 		var msg types.WebSocketMessage
 		// read ws message and stores in msg and assign err if find any
 		err := ws.ReadJSON(&msg)
+
 		// if we find err and it is from unexpected close we remove conn and possibly entire lobby
 		if err != nil {
 			if websocket.IsUnexpectedCloseError(err) {

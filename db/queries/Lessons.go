@@ -8,11 +8,11 @@ import (
 )
 
 func GetLesson(id int) (*types.Lesson, error) {
-	query := `SELECT id, lessonType, lessonText FROM Lessons WHERE id = ?`
+	query := `SELECT id, lessonText FROM Lessons WHERE id = ?`
 
 	var lesson types.Lesson
 
-	err := db.DB.QueryRow(query, id).Scan(&lesson.Id, &lesson.LessonType, &lesson.LessonText)
+	err := db.DB.QueryRow(query, id).Scan(&lesson.Id, &lesson.LessonText)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, fmt.Errorf("no lesson found with id %d", id)

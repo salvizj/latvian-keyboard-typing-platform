@@ -3,6 +3,7 @@ package managers
 import (
 	"fmt"
 	"latvianKeyboardTypingPlatform/types"
+	"log"
 	"sync"
 
 	"github.com/google/uuid"
@@ -24,7 +25,7 @@ func NewLobbyManager() *LobbyManager {
 func (lm *LobbyManager) HandleCreateLobby(message types.WebSocketMessage, conn *websocket.Conn) (*types.WebSocketMessage, error) {
 	lm.mu.Lock()
 	defer lm.mu.Unlock()
-
+	log.Printf("Received create lobby request: %+v", message)
 	var lobbyId string
 	// Ensure unique lobby ID
 	for {
@@ -98,9 +99,9 @@ func (lm *LobbyManager) HandleCreateLobby(message types.WebSocketMessage, conn *
 
 	// initialize the lobby
 	lobby := &types.Lobby{
-		LobbyId: lobbyId,
-		Players: []types.Player{owner},
-		Status:  types.LobbyStatusWaiting,
+		LobbyId:     lobbyId,
+		Players:     []types.Player{owner},
+		LobbyStatus: types.LobbyStatusWaiting,
 		LobbySettings: types.LobbySettings{
 			Text:           text,
 			Time:           time,
@@ -112,6 +113,7 @@ func (lm *LobbyManager) HandleCreateLobby(message types.WebSocketMessage, conn *
 	if lm.Lobbies == nil {
 		lm.Lobbies = make(map[string]*types.Lobby)
 	}
+
 	lm.Lobbies[lobbyId] = lobby
 
 	if lm.Connections == nil {
@@ -121,9 +123,9 @@ func (lm *LobbyManager) HandleCreateLobby(message types.WebSocketMessage, conn *
 	lm.Connections[lobbyId] = []*websocket.Conn{conn}
 
 	return &types.WebSocketMessage{
-		Type:    types.CreateLobby,
-		LobbyId: lobby.LobbyId,
-		Status:  lobby.Status,
+		Type:        types.CreateLobby,
+		LobbyId:     lobby.LobbyId,
+		LobbyStatus: lobby.LobbyStatus,
 		Data: types.CreateLobbyData{
 			LobbySettings: lobby.LobbySettings,
 			Players:       lobby.Players,
@@ -134,6 +136,8 @@ func (lm *LobbyManager) HandleCreateLobby(message types.WebSocketMessage, conn *
 func (lm *LobbyManager) HandleJoinLobby(message types.WebSocketMessage, conn *websocket.Conn) (*types.WebSocketMessage, error) {
 	lm.mu.Lock()
 	defer lm.mu.Unlock()
+
+	log.Printf("Received join lobby request: %+v", message)
 
 	if message.LobbyId == "" {
 		return nil, fmt.Errorf("lobby ID is required")
@@ -200,9 +204,9 @@ func (lm *LobbyManager) HandleJoinLobby(message types.WebSocketMessage, conn *we
 	lm.Lobbies[message.LobbyId] = lobby
 
 	return &types.WebSocketMessage{
-		Type:    types.JoinLobby,
-		LobbyId: lobbyId,
-		Status:  lobby.Status,
+		Type:        types.JoinLobby,
+		LobbyId:     lobbyId,
+		LobbyStatus: lobby.LobbyStatus,
 		Data: types.CreateLobbyData{
 			LobbySettings: lobby.LobbySettings,
 			Players:       lobby.Players,
@@ -232,9 +236,9 @@ func (lm *LobbyManager) HandleStartRace(message types.WebSocketMessage, conn *we
 	lm.Lobbies[message.LobbyId] = lobby
 
 	return &types.WebSocketMessage{
-		Type:    types.StartRace,
-		LobbyId: lobbyId,
-		Status:  types.LobbyStatusInProgress,
+		Type:        types.StartRace,
+		LobbyId:     lobbyId,
+		LobbyStatus: types.LobbyStatusInProgress,
 	}, nil
 }
 
@@ -253,18 +257,18 @@ func (lm *LobbyManager) HandleEndRace(message types.WebSocketMessage, conn *webs
 		return nil, fmt.Errorf("lobby does not exist")
 	}
 
-	if message.Status == "" {
-		return nil, fmt.Errorf("status is required")
+	if message.LobbyStatus == "" {
+		return nil, fmt.Errorf("lobby status is required")
 	}
 
-	lobby.Status = types.LobbyStatusFinished
+	lobby.LobbyStatus = types.LobbyStatusFinished
 
 	lm.Lobbies[message.LobbyId] = lobby
 
 	return &types.WebSocketMessage{
-		Type:    types.EndRace,
-		LobbyId: lobbyId,
-		Status:  lobby.Status,
+		Type:        types.EndRace,
+		LobbyId:     lobbyId,
+		LobbyStatus: lobby.LobbyStatus,
 	}, nil
 }
 func (lm *LobbyManager) HandleProgress(message types.WebSocketMessage, conn *websocket.Conn) (*types.WebSocketMessage, error) {
@@ -284,9 +288,9 @@ func (lm *LobbyManager) HandleProgress(message types.WebSocketMessage, conn *web
 		return nil, fmt.Errorf("lobby does not exist")
 	}
 
-	// Validate Status
-	if message.Status == "" {
-		return nil, fmt.Errorf("status is required")
+	// Validate lobby status
+	if message.LobbyStatus == "" {
+		return nil, fmt.Errorf("lobby status is required")
 	}
 
 	// Parse the data field into a map
@@ -348,8 +352,8 @@ func (lm *LobbyManager) HandleProgress(message types.WebSocketMessage, conn *web
 	lm.Lobbies[message.LobbyId] = lobby
 
 	return &types.WebSocketMessage{
-		LobbyId: lobbyId,
-		Status:  lobby.Status,
+		LobbyId:     lobbyId,
+		LobbyStatus: lobby.LobbyStatus,
 		Data: types.ProgressData{
 			Players: lobby.Players,
 		},

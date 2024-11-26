@@ -2,13 +2,14 @@ import React from 'react';
 import { Player } from '../../types';
 import { capitalize } from '../../utils/capitalize';
 import translate from '../../utils/translate';
+import { useLanguage } from '../../context/LanguageContext';
 
 type PlayerProgressBoxProps = {
     playerData: Player[];
-    language: string;
 };
 
-const PlayerProgressBox: React.FC<PlayerProgressBoxProps> = ({ playerData, language }) => {
+const PlayerProgressBox: React.FC<PlayerProgressBoxProps> = ({ playerData }) => {
+    const { language } = useLanguage();
     return (
         <div>
             <h2>{capitalize(translate('progress', language))}</h2>

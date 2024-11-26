@@ -15,9 +15,20 @@ var tables = []Table{
 		name: "Lessons",
 		query: `
 			CREATE TABLE Lessons (
-				id INTEGER PRIMARY KEY,
-				lessonType TEXT NOT NULL,
+				lessonId INTEGER PRIMARY KEY,
 				lessonText TEXT NOT NULL
+			);
+		`,
+	},
+	{
+		name: "LessonProgress",
+		query: `
+			CREATE TABLE LessonProgress (
+				lessonProgressId INTEGER PRIMARY KEY,
+				userId TEXT NOT NULL,
+				lessonId INTEGER NOT NULL,
+				isCompleted BOOLEAN NOT NULL DEFAULT FALSE,
+				FOREIGN KEY (lessonId) REFERENCES Lessons(lessonId)
 			);
 		`,
 	},
@@ -25,11 +36,80 @@ var tables = []Table{
 		name: "PoetTexts",
 		query: `
 			CREATE TABLE PoetTexts (
-				id INTEGER PRIMARY KEY,
+				poetTextid INTEGER PRIMARY KEY,
 				poetAuthor TEXT NOT NULL,
-				poetfragmentName TEXT NOT NULL,
+				poetFragmentName TEXT NOT NULL,
 				poetTextContent TEXT NOT NULL
-				);
+			);
+		`,
+	},
+	{
+		name: "TypingTest",
+		query: `
+			CREATE TABLE TypingTest (
+				typingTestId INTEGER PRIMARY KEY,          
+				userId TEXT NOT NULL,                           
+				typingTestSettingsId INTEGER NOT NULL,         
+				wpm INTEGER NOT NULL,   
+				mistakeCount INTEGER NOT NULL,      
+				timestamp INTEGER NOT NULL,                  
+				FOREIGN KEY (typingTestSettingsId) REFERENCES TypingTestSettings(typingTestSettingsId)
+			);
+		`,
+	},
+	{
+		name: "TypingRace",
+		query: `
+			CREATE TABLE TypingRace (
+				typingRaceId TEXT NOT NULL,   
+				typingRaceSettingsId INTEGER NOT NULL,      
+				timestamp INTEGER NOT NULL,                
+				FOREIGN KEY (typingRaceSettingsId) REFERENCES TypingRaceSettings(typingRaceSettingsId)
+			);
+		`,
+	},
+	{
+		name: "TypingTestSettings",
+		query: `
+			CREATE TABLE TypingTestSettings (
+				typingTestSettingsId INTEGER PRIMARY KEY,
+				textType TEXT NOT NULL CHECK (textType IN ('poet', 'custom')),
+				textId INTEGER,
+				customText TEXT,
+				time INTEGER NOT NULL,
+				FOREIGN KEY (textId) REFERENCES PoetTexts(poetTextId)
+);
+		`,
+	},
+	{
+		name: "TypingRaceSettings",
+		query: `
+			CREATE TABLE TypingRaceSettings (
+				typingRaceSettingsId INTEGER PRIMARY KEY,
+				textType TEXT NOT NULL CHECK (textType IN ('poet', 'custom')),
+				textId INTEGER,
+				customText TEXT,
+				maxPlayerCount INTEGER NOT NULL,
+				time INTEGER NOT NULL,
+				FOREIGN KEY (textId) REFERENCES PoetTexts(poetTextId)
+			);
+		`,
+	},
+	{
+		name: "TypingRacePlayer",
+		query: `
+			CREATE TABLE TypingRacePlayer (
+				typingRacePlayerid TEXT PRIMARY KEY,
+				typingRaceId TEXT NOT NULL,
+				username TEXT NOT NULL,
+				userId TEXT NOT NULL,
+				role TEXT NOT NULL,
+				place INTEGER NOT NULL,
+				mistakeCount INTEGER NOT NULL,
+				wpm INTEGER NOT NULL,
+				typingRaceSettingsId INTEGER NOT NULL,
+				FOREIGN KEY (typingRaceId) REFERENCES TypingRace(typingRaceId)
+			);
 		`,
 	},
 }

@@ -1,14 +1,14 @@
 import translate from '../../utils/translate';
 import { capitalize } from '../../utils/capitalize';
+import { useLanguage } from '../../context/LanguageContext';
 
 type LobbyOptionsProps = {
-    setLobbyId: (lobbyId: string) => void;
-    setLobbyMode: (lobbyMode: 'create' | 'join') => void;
-    lobbyMode: 'create' | 'join';
-    lobbyId: string;
-    language: string;
-    setUsername: (username: string) => void;
-    username: string;
+    setLobbyId?: (lobbyId: string) => void;
+    setLobbyMode?: (lobbyMode: 'create' | 'join') => void;
+    lobbyMode?: 'create' | 'join';
+    lobbyId?: string;
+    setUsername?: (username: string) => void;
+    username?: string;
 };
 
 const LobbyOptions: React.FC<LobbyOptionsProps> = ({
@@ -16,14 +16,15 @@ const LobbyOptions: React.FC<LobbyOptionsProps> = ({
     setLobbyMode,
     lobbyMode,
     lobbyId,
-    language,
     setUsername,
     username,
 }) => {
     const handleModeChange = (newMode: 'create' | 'join') => {
-        setLobbyMode(newMode);
+        if (setLobbyMode) {
+            setLobbyMode(newMode);
+        }
     };
-
+    const { language } = useLanguage();
     return (
         <div className="mb-4 flex flex-col justify-center">
             <div className="mb-4">
@@ -60,7 +61,11 @@ const LobbyOptions: React.FC<LobbyOptionsProps> = ({
                     type="text"
                     id="username"
                     value={username || ''}
-                    onChange={(e) => setUsername(e.target.value)}
+                    onChange={(e) => {
+                        if (setUsername) {
+                            setUsername(e.target.value);
+                        }
+                    }}
                     className="border p-2 mt-2 w-full rounded-md bg-color-primary text-color-third placeholder-color-third text-md"
                     placeholder={capitalize(translate('enter_username', language))}
                 />
@@ -75,7 +80,11 @@ const LobbyOptions: React.FC<LobbyOptionsProps> = ({
                             type="text"
                             id="lobbyId"
                             value={lobbyId || ''}
-                            onChange={(e) => setLobbyId(e.target.value)}
+                            onChange={(e) => {
+                                if (setLobbyId) {
+                                    setLobbyId(e.target.value);
+                                }
+                            }}
                             className="border p-2 mt-2 w-full rounded-md bg-color-primary text-color-third placeholder-color-third text-md"
                             placeholder={capitalize(translate('enter_lobby_id', language))}
                         />

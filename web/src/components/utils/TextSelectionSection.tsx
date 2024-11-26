@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+import { useLanguage } from '../../context/LanguageContext';
 import { PoetText } from '../../types';
 import { capitalize } from '../../utils/capitalize';
 import translate from '../../utils/translate';
@@ -10,7 +12,7 @@ const TextSelectionSection: React.FC<{
     selectedText: string;
     setSelectedText: (text: string) => void;
     poetTexts: PoetText[];
-    language: string;
+    setText: (text: string) => void;
 }> = ({
     isCustomText,
     setIsCustomText,
@@ -19,8 +21,18 @@ const TextSelectionSection: React.FC<{
     selectedText,
     setSelectedText,
     poetTexts,
-    language,
+    setText,
 }) => {
+    const { language } = useLanguage();
+
+    useEffect(() => {
+        if (isCustomText) {
+            setText(customText);
+        } else {
+            setText(selectedText);
+        }
+    }, [isCustomText, customText, selectedText, setText]);
+
     return (
         <div className="flex flex-col gap-4 mb-2">
             <label className="text-left">{translate('select_text_option', language)}:</label>

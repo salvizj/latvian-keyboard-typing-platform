@@ -1,15 +1,14 @@
 import { KeyObj } from '../types';
-import { keyObjRows } from './keyObjRows';
 
-// given KeyObj.key returns KeyObj from keyObjRows
-export const getKeyObjByKey = (targetKey: string): KeyObj | null => {
+// given KeyObj.key returns KeyObj from layout
+export const getKeyObjByLayout = (targetKey: string, layout: KeyObj[][]): KeyObj | null => {
     const normalizedTargetKey = targetKey.toLowerCase();
 
     if (typeof targetKey !== 'string' || targetKey === undefined) {
         return null;
     }
 
-    for (const row of keyObjRows) {
+    for (const row of layout) {
         const keyObj = row.find(
             (key) =>
                 key.key.toLowerCase() === normalizedTargetKey ||

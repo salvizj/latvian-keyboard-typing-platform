@@ -1,3 +1,4 @@
+import { useLanguage } from '../../context/LanguageContext';
 import translate from '../../utils/translate';
 
 type RangeInputProps = {
@@ -9,7 +10,6 @@ type RangeInputProps = {
     step: number;
     labelSuffix?: string;
     className?: string;
-    language: string;
 };
 
 const RangeInput: React.FC<RangeInputProps> = ({
@@ -20,9 +20,9 @@ const RangeInput: React.FC<RangeInputProps> = ({
     max,
     step,
     labelSuffix,
-    language,
     className = 'mb-6',
 }) => {
+    const { language } = useLanguage();
     return (
         <div className={className}>
             <label className="block mt-6 mb-2">{translate(label, language)}:</label>

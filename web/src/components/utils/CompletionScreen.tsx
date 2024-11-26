@@ -1,3 +1,4 @@
+import { useLanguage } from '../../context/LanguageContext';
 import { capitalize } from '../../utils/capitalize';
 import translate from '../../utils/translate';
 import InfoBox from './InfoBox';
@@ -11,13 +12,13 @@ type ButtonProps = {
 
 type CompletionScreenProps = {
     title: string;
-    language: string;
     buttons: ButtonProps[];
     wpm?: number;
     mistakeCount?: number;
 };
 
-const CompletionScreen: React.FC<CompletionScreenProps> = ({ title, buttons, language, wpm, mistakeCount }) => {
+const CompletionScreen: React.FC<CompletionScreenProps> = ({ title, buttons, wpm, mistakeCount }) => {
+    const { language } = useLanguage();
     return (
         <InfoBox>
             <h2 className="text-3xl font-bold mb-8 text-center">{capitalize(translate(title, language))}</h2>

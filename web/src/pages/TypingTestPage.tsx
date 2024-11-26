@@ -37,15 +37,17 @@ const TypingTestPage = () => {
                 />
             )}
             {isOptionsSet && (
-                <Keyboard
-                    text={text}
-                    testMode={true}
-                    time={time}
-                    wpm={wpm}
-                    setWpm={setWpm}
-                    mistakeCount={mistakeCount}
-                    setMistakeCount={setMistakeCount}
-                />
+                <>
+                    <Keyboard
+                        isRace={isRace}
+                        text={text}
+                        time={time}
+                        wpm={wpm}
+                        setWpm={setWpm}
+                        mistakeCount={mistakeCount}
+                        setMistakeCount={setMistakeCount}
+                    />
+                </>
             )}
         </>
     );

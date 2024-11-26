@@ -2,14 +2,15 @@ import React, { useState } from 'react';
 import { FiCopy, FiCheck } from 'react-icons/fi';
 import translate from '../../utils/translate';
 import { capitalize } from '../../utils/capitalize';
+import { useLanguage } from '../../context/LanguageContext';
 
 type CopyToClipboardProps = {
     text: string;
-    language: string;
 };
 
-const CopyToClipboard: React.FC<CopyToClipboardProps> = ({ text, language }) => {
+const CopyToClipboard: React.FC<CopyToClipboardProps> = ({ text }) => {
     const [isCopied, setIsCopied] = useState(false);
+    const { language } = useLanguage();
 
     const handleCopy = () => {
         navigator.clipboard.writeText(text).then(() => {

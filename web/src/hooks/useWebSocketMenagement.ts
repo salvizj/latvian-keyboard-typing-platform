@@ -1,87 +1,27 @@
 import { useState, useEffect, useCallback } from 'react';
-import {
-    WebSocketMessage,
-    WebSocketMessageData,
-    CreateLobbyData,
-    WebSocketMessageType,
-    LobbyStatus,
-    JoinLobbyData,
-} from '../types';
+import { WebSocketMessage, WebSocketMessageData } from '../types';
 
 type UseWebSocketManagementParams = {
     url: string | null;
-    text: string;
-    time: number;
-    userId: string;
-    maxPlayerCount: number;
-    lobbyId: string;
-    username: string;
-    lobbyMode: 'create' | 'join';
 };
-export const useWebSocketMenagement = ({
-    url,
-    text,
-    time,
-    userId,
-    maxPlayerCount,
-    lobbyId,
-    lobbyMode,
-    username,
-}: UseWebSocketManagementParams) => {
+export const useWebSocketMenagement = ({ url }: UseWebSocketManagementParams) => {
     const [socket, setSocket] = useState<WebSocket | null>(null);
     const [messages, setMessages] = useState<WebSocketMessage<WebSocketMessageData>[]>([]);
     const [lastMessage, setLastMessage] = useState<WebSocketMessage<WebSocketMessageData> | null>(null);
+    const [isSocketOpen, setIsSocketOpen] = useState(false);
 
     useEffect(() => {
         if (url && !socket) {
             const ws = new WebSocket(url);
 
             ws.onopen = () => {
-                console.log('WebSocket connected');
-                if (lobbyMode === 'create') {
-                    const initialMessage: WebSocketMessage<CreateLobbyData> = {
-                        type: WebSocketMessageType.CreateLobby,
-                        lobbyId: '',
-                        status: LobbyStatus.Waiting,
-                        data: {
-                            lobbySettings: {
-                                text,
-                                time,
-                                maxPlayerCount,
-                            },
-                            players: [
-                                {
-                                    username: username,
-                                    playerId: '',
-                                    userId: userId || '',
-                                },
-                            ],
-                        },
-                    };
-
-                    ws.send(JSON.stringify(initialMessage));
-                } else if (lobbyMode === 'join') {
-                    const initialMessage: WebSocketMessage<JoinLobbyData> = {
-                        type: WebSocketMessageType.JoinLobby,
-                        lobbyId: lobbyId,
-                        data: {
-                            players: [
-                                {
-                                    username: username,
-                                    playerId: '',
-                                    userId: userId || '',
-                                },
-                            ],
-                        },
-                    };
-
-                    ws.send(JSON.stringify(initialMessage));
-                }
+                setIsSocketOpen(true);
             };
 
             ws.onmessage = (event) => {
                 const parsedMessage: WebSocketMessage<WebSocketMessageData> = JSON.parse(event.data);
                 setLastMessage(parsedMessage);
+                console.log('receives msg', parsedMessage);
 
                 // only append to messages if it's not the same message
                 if (parsedMessage !== lastMessage) {
@@ -102,11 +42,12 @@ export const useWebSocketMenagement = ({
                 }
             };
         }
-    }, [lastMessage, lobbyId, lobbyMode, maxPlayerCount, socket, text, time, url, userId, username]);
+    }, [lastMessage, socket, url]);
 
     const sendMessage = useCallback(
         (message: WebSocketMessage<WebSocketMessageData>) => {
             if (socket && socket.readyState === WebSocket.OPEN) {
+                console.log('sent messages client', message);
                 socket.send(JSON.stringify(message));
             }
         },
@@ -116,6 +57,7 @@ export const useWebSocketMenagement = ({
     return {
         messages,
         lastMessage,
+        isSocketOpen,
         sendMessage,
     };
 };

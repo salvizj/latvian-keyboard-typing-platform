@@ -1,4 +1,4 @@
-import StatisticsDashboard from '../components/statistics/StatisticsDashboard';
+import StatisticsDashboard from '../components/history/HistoryDashboard';
 
 const StatisticsPage = () => {
     return (

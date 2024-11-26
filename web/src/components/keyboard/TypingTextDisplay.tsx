@@ -43,7 +43,7 @@ const TypingTextDisplay: React.FC<TextDisplayProps> = ({ text, currentCorrectTex
     });
 
     return (
-        <div className="flex justify-center items-center flex-wrap typing-text-box-bg border border-primary p-6 min-w-[46rem] max-w-[46rem] gap-1">
+        <div className="flex justify-center items-center flex-wrap bg-color-third border border-primary p-6 min-w-[46rem] max-w-[46rem] gap-1">
             {processedText.map(
                 (wordObj, wordIndex) =>
                     // Display word if show is true

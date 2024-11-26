@@ -4,13 +4,13 @@ import { useGetPoetTexts } from '../hooks/useGetPoetTexts';
 import Lobby from '../components/typingRace/Lobby';
 import { useWebSocketMenagement } from '../hooks/useWebSocketMenagement';
 import Keyboard from '../components/keyboard/Keyboard';
-import { LobbyStatus, Player, ProgressData, WebSocketMessage, WebSocketMessageType } from '../types';
+import { LobbyStatus, Player, ProgressData, WebSocketMessageType } from '../types';
 import PlayerProgressBox from '../components/typingRace/PlayerProgressBox';
-import { useLanguage } from '../context/LanguageContext';
+import { useAuth } from '@clerk/clerk-react';
+import constructWebSocketMessage from '../utils/constructWebsocketMessage';
 
 const TypingRacePage = () => {
     const isRace = true;
-    const { language } = useLanguage();
     const [wpm, setWpm] = useState(0);
     const [mistakeCount, setMistakeCount] = useState(0);
     const [procentsOfTextTyped, setProcentsOfTextTyped] = useState(0);
@@ -19,7 +19,6 @@ const TypingRacePage = () => {
     const [timeLeft, setTimeLeft] = useState<number | null>(null);
     const [isOptionsSet, setIsOptionsSet] = useState(false);
     const [lobbyId, setLobbyId] = useState<string>('');
-    // const [userId, setUserId] = useState<string>('');
     const [username, setUsername] = useState<string>('');
     const [lobbyMode, setLobbyMode] = useState<'create' | 'join'>('create');
     const [maxPlayerCount, setMaxPlayerCount] = useState(2);
@@ -30,16 +29,10 @@ const TypingRacePage = () => {
     const { poetTexts, poetTextsError } = useGetPoetTexts();
     const [lobbyRaceStatus, setLobbyRaceStatus] = useState(LobbyStatus.Waiting);
     const [playerData, setPlayerData] = useState<Player[] | null>(null);
-    const userId = '';
-    const { lastMessage, messages, sendMessage } = useWebSocketMenagement({
+    const { userId } = useAuth();
+    const userIdOrEmpty = userId ?? '';
+    const { lastMessage, messages, sendMessage, isSocketOpen } = useWebSocketMenagement({
         url: wsUrl || '',
-        text,
-        time,
-        maxPlayerCount,
-        lobbyId,
-        lobbyMode,
-        username,
-        userId,
     });
 
     useEffect(() => {
@@ -47,7 +40,41 @@ const TypingRacePage = () => {
             const url = `ws://localhost:${import.meta.env.VITE_PORT}/ws`;
             setWsUrl(url);
         }
-    }, [isOptionsSet, wsUrl]);
+        if (lobbyMode === 'create' && isSocketOpen) {
+            const createLobbyMessage = constructWebSocketMessage({
+                messageType: WebSocketMessageType.CreateLobby,
+                lobbySettings: {
+                    time: time,
+                    maxPlayerCount: maxPlayerCount,
+                    text: text,
+                },
+                players: [
+                    {
+                        username: username,
+                        playerId: '',
+                        userId: userIdOrEmpty,
+                    },
+                ],
+            });
+
+            if (createLobbyMessage) sendMessage(createLobbyMessage);
+        } else if (lobbyMode === 'join' && isSocketOpen) {
+            const joinLobbyMessage = constructWebSocketMessage({
+                messageType: WebSocketMessageType.JoinLobby,
+                lobbyId: lobbyId,
+                players: [
+                    {
+                        username: username,
+                        playerId: '',
+                        userId: userIdOrEmpty,
+                    },
+                ],
+            });
+            if (joinLobbyMessage) sendMessage(joinLobbyMessage);
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isOptionsSet, isSocketOpen, sendMessage]);
 
     useEffect(() => {
         const startGameMessage = messages.filter((msg) => msg.type === WebSocketMessageType.StartRace);
@@ -91,33 +118,42 @@ const TypingRacePage = () => {
 
     // send current wpm, mistakes to server every 2 sec
     useEffect(() => {
-        const interval = setInterval(() => {
-            // Check if time and timeLeft are different to avoid unnecessary sends
-            if (time !== timeLeft) {
-                const progressMessage: WebSocketMessage<ProgressData> = {
-                    type: WebSocketMessageType.Progress,
-                    lobbyId: lobbyId,
-                    status: lobbyRaceStatus,
-                    data: {
+        if (lobbyRaceStatus === LobbyStatus.InProgress) {
+            const interval = setInterval(() => {
+                // Check if time and timeLeft are different to avoid unnecessary sends
+                if (time !== timeLeft) {
+                    const progressMessage = constructWebSocketMessage({
+                        messageType: WebSocketMessageType.Progress,
+                        lobbyId: lobbyId,
                         players: [
                             {
                                 username: username,
                                 playerId: '',
-                                userId: userId || '',
-                                mistakeCount: mistakeCount,
-                                wpm: wpm,
-                                ProcentsOfTextTyped: procentsOfTextTyped,
+                                userId: userIdOrEmpty,
                             },
                         ],
-                    },
-                };
-                sendMessage(progressMessage);
-            }
-        }, 2000);
+                    });
 
-        // cleanup the interval on component unmount
-        return () => clearInterval(interval);
-    }, [time, timeLeft, lobbyId, lobbyRaceStatus, wpm, procentsOfTextTyped, mistakeCount, sendMessage, username]);
+                    if (progressMessage) sendMessage(progressMessage);
+                }
+            }, 2000);
+
+            // Cleanup the interval on component unmount
+            return () => clearInterval(interval);
+        }
+    }, [
+        time,
+        timeLeft,
+        lobbyId,
+        lobbyRaceStatus,
+        wpm,
+        procentsOfTextTyped,
+        mistakeCount,
+        sendMessage,
+        username,
+        userId,
+        userIdOrEmpty,
+    ]);
 
     return (
         <>
@@ -152,7 +188,6 @@ const TypingRacePage = () => {
                 <div>
                     <Lobby
                         playerData={playerData}
-                        lobbyRaceStatus={lobbyRaceStatus}
                         username={username}
                         sendMessage={sendMessage}
                         title="typing_race_lobby"
@@ -163,9 +198,10 @@ const TypingRacePage = () => {
             {lobbyRaceStatus === LobbyStatus.InProgress && (
                 <>
                     <Keyboard
+                        lobbyId={lobbyId}
                         text={text}
                         time={time}
-                        raceMode={isRace}
+                        isRace={isRace}
                         sendMessage={sendMessage}
                         setMistakeCount={setMistakeCount}
                         mistakeCount={mistakeCount}
@@ -174,7 +210,7 @@ const TypingRacePage = () => {
                         setTimeLeft={setTimeLeft}
                         setProcentsOfTextTyped={setProcentsOfTextTyped}
                     />
-                    <PlayerProgressBox playerData={playerData || []} language={language} />
+                    <PlayerProgressBox playerData={playerData || []} />
                 </>
             )}
         </>

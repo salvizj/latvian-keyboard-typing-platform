@@ -16,7 +16,7 @@ func StartServer() {
 		os.Exit(1)
 	}
 
-	port := os.Getenv("PORT")
+	port := os.Getenv("VITE_PORT")
 
 	if port == "" {
 		fmt.Fprintf(os.Stderr, "Error: Required environment variable PORT is not set\n")

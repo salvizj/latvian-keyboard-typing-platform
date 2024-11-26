@@ -2,16 +2,44 @@ import { Link } from 'react-router-dom';
 import Links from './Links';
 import translate from '../../utils/translate';
 import { useLanguage } from '../../context/LanguageContext';
+import { FaBook, FaChartLine, FaHome, FaKeyboard, FaTrophy, FaUser } from 'react-icons/fa';
+import { capitalize } from '../../utils/capitalize';
+import { useAuth } from '@clerk/clerk-react';
 
 const DasboardNavigation = () => {
     const { language } = useLanguage();
+    const { isSignedIn } = useAuth();
+    const getIcon = (key: string) => {
+        switch (key) {
+            case 'home':
+                return <FaHome />;
+            case 'profile':
+                return <FaUser />;
+            case 'statistics':
+                return <FaChartLine />;
+            case 'typing_test':
+                return <FaKeyboard />;
+            case 'typing_race':
+                return <FaTrophy />;
+            case 'lessons':
+                return <FaBook />;
+            default:
+                return null;
+        }
+    };
+
     return (
-        <nav className="flex flex-col gap-2 justify-center items-center text-lg text-color-primary pt-1">
-            {Links.map(({ key, path }) => (
-                <Link key={key} to={path} className="hover:text-color-primary-hover-text">
-                    {translate(key, language)}
-                </Link>
-            ))}
+        <nav className="flex flex-col justify-center items-left text-lg text-color-primary gap-4 ">
+            {Links.map(({ key, path, protected: isProtected }) => {
+                if (isProtected && !isSignedIn) return null;
+
+                return (
+                    <Link key={key} to={path} className="flex items-center gap-4 hover:text-color-primary-hover-text">
+                        {getIcon(key)}
+                        {capitalize(translate(key, language))}
+                    </Link>
+                );
+            })}
         </nav>
     );
 };

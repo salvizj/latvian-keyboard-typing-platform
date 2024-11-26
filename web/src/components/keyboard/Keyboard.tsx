@@ -8,11 +8,11 @@ import RightHandVisualization from './hands/RightHandVisualization';
 import LeftHandVisualization from './hands/LeftHandVisualization';
 import RealTimeTypingPerformance from './RealTimeTypingPerformance';
 import { useTypingSession } from '../../hooks/useCharacterManagement';
-import { markTestComplete } from '../../utils/testCompletion';
-import { useLanguage } from '../../context/LanguageContext';
 import CompletionScreen from '../utils/CompletionScreen';
 import LessonCompletedScreen from '../lesson/LessonCompletedScreen';
-import { EndRaceData, LobbyStatus, WebSocketMessage, WebSocketMessageData, WebSocketMessageType } from '../../types';
+import { WebSocketMessage, WebSocketMessageData, WebSocketMessageType } from '../../types';
+import { useKeyboardSettings } from '../../context/KeyboardSettingsContext';
+import constructWebSocketMessage from '../../utils/constructWebsocketMessage';
 
 type KeyboardProps = {
     text: string;
@@ -22,9 +22,9 @@ type KeyboardProps = {
     setMistakeCount: (mistakeCount: number) => void;
     lessonId?: number;
     lessonMode?: boolean;
-    raceMode?: boolean;
-    testMode?: boolean;
+    isRace?: boolean;
     time?: number;
+    lobbyId?: string;
     timeLeft?: number;
     setTimeLeft?: (time: number) => void;
     sendMessage?: (message: WebSocketMessage<WebSocketMessageData>) => void;
@@ -35,46 +35,36 @@ const Keyboard: React.FC<KeyboardProps> = ({
     text,
     wpm,
     setWpm,
+    lobbyId,
     mistakeCount,
     setMistakeCount,
     lessonId,
     lessonMode,
-    raceMode,
-    testMode,
+    isRace,
     time,
     timeLeft,
     setTimeLeft,
     sendMessage,
     setProcentsOfTextTyped,
 }) => {
-    const { language } = useLanguage();
-
+    const { showHands, showKeyboardLayout } = useKeyboardSettings();
     const [isTypingFinished, setFinished] = useState(false);
     useEffect(() => {
-        if (lessonId && lessonMode && isTypingFinished) {
+        if (lessonId && isRace === undefined && isTypingFinished) {
             const completedAlready = isLessonComplete(lessonId);
             if (!completedAlready) markLessonComplete(lessonId);
         }
-    }, [isTypingFinished, lessonId, lessonMode]);
+    }, [isRace, isTypingFinished, lessonId, lessonMode]);
 
     useEffect(() => {
-        if (testMode && isTypingFinished && time) {
-            markTestComplete(wpm, mistakeCount, text, time);
+        if (isRace && timeLeft === 0 && sendMessage) {
+            const endRaceMessage = constructWebSocketMessage({
+                messageType: WebSocketMessageType.EndRace,
+                lobbyId: lobbyId,
+            });
+            if (endRaceMessage) sendMessage(endRaceMessage);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isTypingFinished, testMode, lessonMode]);
-
-    useEffect(() => {
-        if (raceMode && timeLeft === 0 && sendMessage) {
-            const endRaceMessage: WebSocketMessage<EndRaceData> = {
-                type: WebSocketMessageType.EndRace,
-                lobbyId: '',
-                status: LobbyStatus.Finished,
-                data: {},
-            };
-            sendMessage(endRaceMessage);
-        }
-    }, [raceMode, sendMessage, timeLeft]);
+    }, [isRace, lobbyId, sendMessage, timeLeft]);
 
     const {
         onKeyPress: manageKeyPress,
@@ -116,21 +106,22 @@ const Keyboard: React.FC<KeyboardProps> = ({
                         <TypingTextDisplay text={text} currentCorrectTextCharacterIndex={currentCharacterIndex} />
                         <TypingInputField onKeyPress={manageKeyPress} isTypingFinished={isTypingFinished} />
                         <div className="flex items-center justify-between">
-                            <LeftHandVisualization handFingerInfo={handFingerInfo} />
+                            {showHands && <LeftHandVisualization handFingerInfo={handFingerInfo} />}
+                            {showKeyboardLayout && (
+                                <KeyboardLayout
+                                    expectedCharacter={expectedCharacter}
+                                    expectedCharacterKeyObj={expectedCharacterKeyObj}
+                                />
+                            )}
 
-                            <KeyboardLayout
-                                expectedCharacter={expectedCharacter}
-                                expectedCharacterKeyObj={expectedCharacterKeyObj}
-                            />
-
-                            <RightHandVisualization handFingerInfo={handFingerInfo} />
+                            {showHands && <RightHandVisualization handFingerInfo={handFingerInfo} />}
                         </div>
                     </>
                 )}
                 {isTypingFinished && lessonMode && (
-                    <LessonCompletedScreen setFinished={setFinished} restart={restart} language={language} />
+                    <LessonCompletedScreen setFinished={setFinished} restart={restart} />
                 )}
-                {isTypingFinished && testMode && (
+                {isTypingFinished && isRace === undefined && (
                     <CompletionScreen
                         buttons={[
                             {
@@ -140,7 +131,6 @@ const Keyboard: React.FC<KeyboardProps> = ({
                         ]}
                         wpm={wpm}
                         mistakeCount={mistakeCount}
-                        language={language}
                         title="typing_test_completed"
                     />
                 )}

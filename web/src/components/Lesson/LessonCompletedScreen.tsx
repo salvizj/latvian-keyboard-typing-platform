@@ -3,17 +3,17 @@ import { useParams, Link } from 'react-router-dom';
 import translate from '../../utils/translate';
 import { capitalize } from '../../utils/capitalize';
 import CompletionScreen from '../utils/CompletionScreen';
+import { useLanguage } from '../../context/LanguageContext';
 
 type LessonFinishedProps = {
     setFinished: (finished: boolean) => void;
     restart: () => void;
-    language: string;
 };
 
-const LessonFinishedScreen: React.FC<LessonFinishedProps> = ({ setFinished, restart, language }) => {
+const LessonFinishedScreen: React.FC<LessonFinishedProps> = ({ setFinished, restart }) => {
     const { id } = useParams<{ id: string }>();
     const lessonId = id ? parseInt(id, 10) : 1;
-
+    const { language } = useLanguage();
     const title = `${capitalize(translate('lesson', language))} ${capitalize(translate('completed', language))}`;
 
     const buttons = [
@@ -59,7 +59,7 @@ const LessonFinishedScreen: React.FC<LessonFinishedProps> = ({ setFinished, rest
         };
     });
 
-    return <CompletionScreen title={title} language={language} buttons={formattedButtons} />;
+    return <CompletionScreen title={title} buttons={formattedButtons} />;
 };
 
 export default LessonFinishedScreen;

@@ -1,7 +1,7 @@
 import { FaArrowRight } from 'react-icons/fa';
 import { useParams, Link } from 'react-router-dom';
 import translate from '../../utils/translate';
-import { capitalize } from '../../utils/capitalize';
+import { capitalize } from '../../utils/capitalizeString';
 import CompletionScreen from '../utils/CompletionScreen';
 import { useLanguage } from '../../context/LanguageContext';
 

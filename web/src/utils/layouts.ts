@@ -1,16 +1,6 @@
-import { Finger, Hand, KeyObj, KeyboardLayouts } from '../types';
+import { Finger, Hand, KeyObj } from '../types';
 
-export function getLayout(KeyboardLayouts: KeyboardLayouts): KeyObj[][] {
-    switch (KeyboardLayouts.toLowerCase()) {
-        case 'qwerty':
-            return QWERTY_LAYOUT;
-        case 'dvorak':
-            return DVORAK_LAYOUT;
-        default:
-            throw new Error(`Unsupported layout: ${KeyboardLayouts}`);
-    }
-}
-const DVORAK_LAYOUT: KeyObj[][] = [
+export const DVORAK_LAYOUT: KeyObj[][] = [
     [
         { label: 'Esc', size: 'w-1/12', key: 'Esc' },
         { label: 'F2', size: 'w-1/12', key: 'F2' },
@@ -477,7 +467,7 @@ const DVORAK_LAYOUT: KeyObj[][] = [
         },
     ],
 ];
-const QWERTY_LAYOUT: KeyObj[][] = [
+export const QWERTY_LAYOUT: KeyObj[][] = [
     [
         { label: 'Esc', size: 'w-1/12', key: 'Esc' },
         { label: 'F2', size: 'w-1/12', key: 'F2' },

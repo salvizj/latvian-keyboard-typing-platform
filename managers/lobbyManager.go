@@ -27,7 +27,6 @@ func (lm *LobbyManager) HandleCreateLobby(message types.WebSocketMessage, conn *
 	defer lm.mu.Unlock()
 	log.Printf("Received create lobby request: %+v", message)
 	var lobbyId string
-	// Ensure unique lobby ID
 	for {
 		lobbyId = uuid.New().String()
 		if _, exists := lm.Lobbies[lobbyId]; !exists {
@@ -229,7 +228,7 @@ func (lm *LobbyManager) HandleStartRace(message types.WebSocketMessage, conn *we
 		return nil, fmt.Errorf("lobby does not exist")
 	}
 
-	if len(lobby.Players) >= lobby.LobbySettings.MaxPlayerCount {
+	if len(lobby.Players) > lobby.LobbySettings.MaxPlayerCount {
 		return nil, fmt.Errorf("lobby %s is full", lobbyId)
 	}
 
@@ -257,10 +256,6 @@ func (lm *LobbyManager) HandleEndRace(message types.WebSocketMessage, conn *webs
 		return nil, fmt.Errorf("lobby does not exist")
 	}
 
-	if message.LobbyStatus == "" {
-		return nil, fmt.Errorf("lobby status is required")
-	}
-
 	lobby.LobbyStatus = types.LobbyStatusFinished
 
 	lm.Lobbies[message.LobbyId] = lobby
@@ -275,63 +270,49 @@ func (lm *LobbyManager) HandleProgress(message types.WebSocketMessage, conn *web
 	lm.mu.Lock()
 	defer lm.mu.Unlock()
 
-	// Validate LobbyId
 	if message.LobbyId == "" {
 		return nil, fmt.Errorf("lobby ID is required")
 	}
 
 	lobbyId := message.LobbyId
 
-	// Check if lobby exists
 	lobby, exists := lm.Lobbies[lobbyId]
 	if !exists {
 		return nil, fmt.Errorf("lobby does not exist")
 	}
 
-	// Validate lobby status
-	if message.LobbyStatus == "" {
-		return nil, fmt.Errorf("lobby status is required")
-	}
-
-	// Parse the data field into a map
 	data, ok := message.Data.(map[string]interface{})
 	if !ok {
 		return nil, fmt.Errorf("invalid data format")
 	}
 
-	// Extract players array
 	playersRaw, ok := data["players"].([]interface{})
 	if !ok || len(playersRaw) != 1 {
 		return nil, fmt.Errorf("players must be an array with one player object")
 	}
 
-	// Extract player data
 	playerData, ok := playersRaw[0].(map[string]interface{})
 	if !ok {
 		return nil, fmt.Errorf("player data should be an object")
 	}
 
-	// Extract playerId
 	playerId, ok := playerData["playerId"].(string)
 	if !ok {
 		return nil, fmt.Errorf("playerId is required and should be a string")
 	}
 
-	// Extract WPM
 	wpmFloat, ok := playerData["wpm"].(float64)
 	if !ok {
 		return nil, fmt.Errorf("wpm is required and should be a number")
 	}
 	wpm := int(wpmFloat)
 
-	// Extract mistake count
-	mistakeCountFloat, ok := playerData["mistakeCount"].(float64) // Fixed the field name
+	mistakeCountFloat, ok := playerData["mistakeCount"].(float64)
 	if !ok {
 		return nil, fmt.Errorf("mistakes is required and should be a number")
 	}
 	mistakeCount := int(mistakeCountFloat)
 
-	// Extract percentage of text typed
 	procentsOfTextTypedFloat, ok := playerData["procentsOfTextTyped"].(float64)
 	if !ok {
 		return nil, fmt.Errorf("procentsOfTextTyped is required and should be a number")

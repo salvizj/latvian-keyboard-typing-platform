@@ -1,20 +1,17 @@
 import { useCallback, useEffect, useState } from 'react';
 import { HandFingerInfo, KeyObj } from '../types';
-import { getKeyObjByLayout } from '../utils/getKeyObjByLayout';
-import { isLatvianSpecial, isUpperCaseLatvian } from '../utils/testCharacterToLatvian';
-import { updateWpm } from '../utils/updateWpmCount';
-import { getLayout } from '../utils/layout';
+import { isLatvianSpecial, isUpperCaseLatvian } from '../utils/latvian-utils';
 import { useKeyboardSettings } from '../context/KeyboardSettingsContext';
+import { findKeyObjInLayout } from '../utils/findKeyObjInLayout';
+import { calculateWpm } from '../utils/calculateWpm';
+import { getLayout } from '../utils/getLayout';
+import { useOptions } from '../context/OptionsContext';
+import { useTyping } from '../context/TypingContext';
 
-export const useTypingSession = (
-    text: string,
-    setFinished: (finished: boolean) => void,
-    finished: boolean,
-    mistakeCount: number,
-    setMistakeCount: (mistakeCount: number) => void,
-    setWpm: (wpm: number) => void,
-    setProcentsOfTextTyped?: (procentsOfTextTyped: number) => void
-) => {
+export const useTypingSession = () => {
+    const { text } = useOptions();
+    const { mistakeCount, setProcentsOfTextTyped, isTypingFinished, setIsTypingFinished, setMistakeCount, setWpm } =
+        useTyping();
     const [currentCharacterIndex, setCurrentCharacterIndex] = useState(0);
     const [expectedCharacter, setExpectedCharacter] = useState(text[0]);
     const [expectedCharacterKeyObj, setExpectedCharacterKeyObj] = useState<KeyObj | null>(null);
@@ -50,7 +47,7 @@ export const useTypingSession = (
         if (!validateText(text)) return;
 
         try {
-            const initialKeyObj = getKeyObjByLayout(text[0], layout);
+            const initialKeyObj = findKeyObjInLayout(text[0], layout);
 
             if (!initialKeyObj) {
                 return;
@@ -74,7 +71,7 @@ export const useTypingSession = (
 
     // reset all states because lessons or race or test has ended
     useEffect(() => {
-        if (finished) {
+        if (isTypingFinished) {
             setCurrentCharacterIndex(0);
             setExpectedCharacter(text[0] || '');
             setCurrentPressedKey('');
@@ -82,15 +79,15 @@ export const useTypingSession = (
             setMistakeCount(0);
             setExpectedCharacterKeyObj(null);
         }
-    }, [finished, setMistakeCount, text]);
+    }, [isTypingFinished, setMistakeCount, text]);
 
     const onKeyPress = useCallback(
         (lastKeyPressed: string) => {
-            if (!lastKeyPressed || finished) return;
+            if (!lastKeyPressed || isTypingFinished) return;
 
             // Prevent processing if we've reached the end of the text
             if (currentCharacterIndex >= text.length) {
-                setFinished(true);
+                setIsTypingFinished(true);
                 return;
             }
 
@@ -109,11 +106,11 @@ export const useTypingSession = (
                         const newExpectedCharacter = text[nextIndex];
 
                         if (!newExpectedCharacter) {
-                            setFinished(true);
+                            setIsTypingFinished(true);
                             return prevIndex;
                         }
 
-                        const newExpectedCharacterKeyObj = getKeyObjByLayout(newExpectedCharacter, layout);
+                        const newExpectedCharacterKeyObj = findKeyObjInLayout(newExpectedCharacter, layout);
 
                         if (!newExpectedCharacterKeyObj) {
                             return prevIndex;
@@ -133,7 +130,7 @@ export const useTypingSession = (
                             setHandFingerInfo(null);
                         }
                     } else {
-                        setFinished(true);
+                        setIsTypingFinished(true);
                     }
 
                     return nextIndex;
@@ -141,17 +138,17 @@ export const useTypingSession = (
             } else {
                 setMistakeCount(mistakeCount + 1);
             }
-            const calculatedWpm = updateWpm(currentCharacterIndex, startTimestamp);
+            const calculatedWpm = calculateWpm(currentCharacterIndex, startTimestamp);
             setWpm(calculatedWpm);
         },
         [
-            finished,
+            isTypingFinished,
             currentCharacterIndex,
             text,
             expectedCharacter,
             startTimestamp,
             setWpm,
-            setFinished,
+            setIsTypingFinished,
             setProcentsOfTextTyped,
             layout,
             setMistakeCount,

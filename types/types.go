@@ -75,7 +75,8 @@ type CreateLobbyData struct {
 }
 
 type JoinLobbyData struct {
-	Players []Player `json:"players"`
+	LobbySettings LobbySettings `json:"lobbySettings"`
+	Players       []Player      `json:"players"`
 }
 
 type StartRaceData struct {

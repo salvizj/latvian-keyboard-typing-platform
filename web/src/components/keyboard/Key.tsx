@@ -1,5 +1,5 @@
 import { Hand, KeyObj } from '../../types';
-import { isLatvianSpecial, isUpperCaseLatvian } from '../../utils/testCharacterToLatvian';
+import { isLatvianSpecial, isUpperCaseLatvian } from '../../utils/latvian-utils';
 
 type KeyboardKeyProps = {
     keyObj: KeyObj;

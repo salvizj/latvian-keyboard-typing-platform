@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { WebSocketMessage, Player, WebSocketMessageType, WebSocketMessageData, PlayerRole } from '../../types';
-import { capitalize } from '../../utils/capitalize';
+import { capitalize } from '../../utils/capitalizeString';
 import translate from '../../utils/translate';
 import CopyToClipboard from '../utils/CopyToClipboar';
-import constructWebSocketMessage from '../../utils/constructWebsocketMessage';
+import constructWebSocketMessage from '../../utils/constructWebsocktMessage';
 
 type LobbyProps = {
     title: string;

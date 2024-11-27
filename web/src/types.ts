@@ -82,7 +82,7 @@ export type Player = {
     place?: number;
     mistakeCount?: number;
     wpm?: number;
-    ProcentsOfTextTyped?: number;
+    procentsOfTextTyped?: number;
 };
 
 export enum PlayerRole {
@@ -117,6 +117,7 @@ export type CreateLobbyData = {
 };
 
 export type JoinLobbyData = {
+    lobbySettings: LobbySettings;
     players: Player[];
 };
 export type ProgressData = {

@@ -1,5 +1,5 @@
 import translate from '../../utils/translate';
-import { capitalize } from '../../utils/capitalize';
+import { capitalize } from '../../utils/capitalizeString';
 import { useLanguage } from '../../context/LanguageContext';
 
 type LobbyOptionsProps = {

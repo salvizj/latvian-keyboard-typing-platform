@@ -1,50 +1,44 @@
-import { SignedIn, SignedOut, UserButton } from '@clerk/clerk-react';
-import LanguageTogleButton from '../language/LanguageToggleButton';
-import ThemeTogleButton from '../theme/ThemeToggleButton';
-import LogoutButton from '../user/SignOutBtn';
-import SignInButton from '../user/SignInBtn';
-import SignUpButton from '../user/SignUpBtn';
+import LanguageTogleButton from './LanguageToggleButton';
+import ThemeTogleButton from './ThemeToggleButton';
+import LogoutButton from '../user/SignOutButton';
+import SignInButton from '../user/SignInButton';
+import SignUpButton from '../user/SignUpButton';
 import DashboardNavigation from './DashboardNavigation';
 import KeyboardSettings from '../utils/KeyboardSettings';
-import { useState } from 'react';
-import { capitalize } from '../../utils/capitalize';
 import { useLanguage } from '../../context/LanguageContext';
-import translate from '../../utils/translate';
-import { FaCog } from 'react-icons/fa';
 
-const Dashboard = () => {
-    const [close, setClose] = useState(true);
-    const { language } = useLanguage();
+type DashboardProps = {
+    isMinimized: boolean;
+};
+
+const Dashboard = ({ isMinimized }: DashboardProps) => {
+    useLanguage();
     return (
-        <div className="relative z-10 flex flex-col gap-10">
-            <div className="flex flex-row justify-center items-center sticky gap-4 pt-10 ">
-                <LanguageTogleButton />
-                <ThemeTogleButton />
-                <div className="flex flex-col gap-2">
-                    <SignedOut>
-                        <SignUpButton />
-                        <SignInButton />
-                    </SignedOut>
+        <>
+            <div className={`flex flex-col h-full z-10 relative ${isMinimized ? 'pt-20' : ''}`}>
+                {!isMinimized && (
+                    <div className="px-4 py-6 border-b border-gray-700 flex flex-row items-center justify-start gap-2">
+                        <LanguageTogleButton />
+                        <ThemeTogleButton />
+                    </div>
+                )}
+
+                <div className={`px-4 py-6 border-b border-gray-700 ${isMinimized ? 'items-center' : ''}`}>
+                    <div className={`flex ${isMinimized ? 'flex-col items-center' : 'flex-col'} gap-4`}>
+                        <SignUpButton isMinimized={isMinimized} />
+                        <SignInButton isMinimized={isMinimized} />
+                        <LogoutButton isMinimized={isMinimized} />
+                    </div>
                 </div>
 
-                <SignedIn>
-                    <LogoutButton />
-                    <UserButton />
-                </SignedIn>
+                <div className="flex-1 px-4 py-6  ">
+                    <div className={`flex flex-col ${isMinimized ? 'items-center' : ''} pt-6`}>
+                        <DashboardNavigation isMinimized={isMinimized} />
+                        <KeyboardSettings isMinimized={isMinimized} />
+                    </div>
+                </div>
             </div>
-            <div className="flex flex-col justify-center items-center">
-                <DashboardNavigation />
-                <button
-                    className="text-color-primary flex flex-row-reverse gap-4 justify-center items-center text-lg mt-4 hover:text-color-primary-hover-text"
-                    onClick={() => (close ? setClose(false) : setClose(true))}
-                >
-                    {capitalize(translate('keyboard_settings', language))}
-                    <FaCog />
-                </button>
-
-                {close === false && <KeyboardSettings setClose={setClose} />}
-            </div>
-        </div>
+        </>
     );
 };
 

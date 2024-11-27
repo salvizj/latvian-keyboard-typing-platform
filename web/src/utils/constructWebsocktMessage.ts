@@ -7,7 +7,7 @@ import {
     WebSocketMessageType,
 } from '../types';
 
-type ConstructWebSocketMessageProps = {
+type ConstructWebSocketMessageParams = {
     messageType: WebSocketMessageType;
     text?: string;
     time?: number;
@@ -25,7 +25,7 @@ const constructWebSocketMessage = ({
     players,
     lobbyStatus,
     lobbyId = '',
-}: ConstructWebSocketMessageProps): WebSocketMessage<WebSocketMessageData> | null => {
+}: ConstructWebSocketMessageParams): WebSocketMessage<WebSocketMessageData> | null => {
     const baseMessage: WebSocketMessage<WebSocketMessageData> = {
         type: messageType,
         lobbyId: lobbyId,

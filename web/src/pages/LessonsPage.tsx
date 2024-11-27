@@ -1,4 +1,4 @@
-import { capitalize } from '../utils/capitalize';
+import { capitalize } from '../utils/capitalizeString';
 import { useLanguage } from '../context/LanguageContext';
 import LessonLinks from '../components/lesson/LesonLinks';
 import translate from '../utils/translate';

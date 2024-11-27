@@ -1,7 +1,12 @@
 import { KeyObj } from '../types';
 
-// given KeyObj.key returns KeyObj from layout
-export const getKeyObjByLayout = (targetKey: string, layout: KeyObj[][]): KeyObj | null => {
+export type FindKeyObjInLayoutParams = {
+    targetKey: string;
+    layout: KeyObj[][];
+};
+
+// finds the KeyObj by key from the given layout
+export const findKeyObjInLayout = ({ targetKey, layout }: FindKeyObjInLayoutParams): KeyObj | null => {
     const normalizedTargetKey = targetKey.toLowerCase();
 
     if (typeof targetKey !== 'string' || targetKey === undefined) {

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { isLessonComplete } from '../../utils/lessonCompletion';
+import { hasLessonBeenCompleted } from '../../utils/lessonCompletion';
 
 const LessonLinks = () => {
     const LessonCount = 54;
@@ -7,7 +7,7 @@ const LessonLinks = () => {
     const links = [];
 
     for (let lessonNumber = 1; lessonNumber <= LessonCount; lessonNumber++) {
-        const completedAlready = isLessonComplete(lessonNumber);
+        const completedAlready = hasLessonBeenCompleted(lessonNumber);
         links.push(
             <Link
                 key={lessonNumber}

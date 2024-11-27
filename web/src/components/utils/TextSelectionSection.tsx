@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { PoetText } from '../../types';
-import { capitalize } from '../../utils/capitalize';
+import { capitalize } from '../../utils/capitalizeString';
 import translate from '../../utils/translate';
 
 const TextSelectionSection: React.FC<{
@@ -27,7 +27,7 @@ const TextSelectionSection: React.FC<{
 
     useEffect(() => {
         if (isCustomText) {
-            setText(customText);
+            setText(customText.trim());
         } else {
             setText(selectedText);
         }

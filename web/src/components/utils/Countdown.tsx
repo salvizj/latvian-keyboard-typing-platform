@@ -1,34 +1,34 @@
 import React, { useEffect, useState } from 'react';
+import { useOptions } from '../../context/OptionsContext';
+import { useTyping } from '../../context/TypingContext';
 
 type CountdownProps = {
-    time: number; // in seconds
-    setFinished: (isTypingFinished: boolean) => void;
-    isTypingFinished: boolean;
     timeLeft: number;
     setTimeLeft: (time: number) => void;
 };
 
-const Countdown: React.FC<CountdownProps> = ({ time, setFinished, isTypingFinished, timeLeft, setTimeLeft }) => {
+const Countdown: React.FC<CountdownProps> = ({ timeLeft, setTimeLeft }) => {
+    const { time } = useOptions();
+    const { isTypingFinished, setIsTypingFinished } = useTyping();
     const [targetTime] = useState<number>(new Date().getTime() + time * 1000);
 
     useEffect(() => {
         const interval = setInterval(() => {
-            // Calculate the remaining time by subtracting current time from target
             const remainingTime = Math.max(0, Math.floor((targetTime - new Date().getTime()) / 1000));
             setTimeLeft(remainingTime);
 
-            // Stop the interval when countdown reaches zero
             if (remainingTime <= 0 || isTypingFinished) {
-                setFinished(true);
+                setIsTypingFinished(true);
+                setTimeLeft(0);
                 clearInterval(interval);
             }
         }, 1000);
 
-        // Cleanup interval on unmount
+        // cleanup interval on unmount
         return () => clearInterval(interval);
-    }, [time, setFinished, isTypingFinished, targetTime, setTimeLeft]);
+    }, [time, isTypingFinished, targetTime, setTimeLeft, timeLeft, setIsTypingFinished]);
 
-    return <div className="flex justify-center items-center text-color-primary text-3xl ">{timeLeft}s</div>;
+    return <div className="flex justify-center items-center text-color-primary text-3xl">{timeLeft}</div>;
 };
 
 export default Countdown;

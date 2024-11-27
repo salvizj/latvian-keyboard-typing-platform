@@ -1,7 +1,7 @@
 import { useLanguage } from '../../context/LanguageContext';
-import { capitalize } from '../../utils/capitalize';
+import { capitalize } from '../../utils/capitalizeString';
 import translate from '../../utils/translate';
-import InfoBox from './InfoBox';
+import DefaultPanel from './DefaultPanel';
 
 type ButtonProps = {
     text: string;
@@ -20,7 +20,7 @@ type CompletionScreenProps = {
 const CompletionScreen: React.FC<CompletionScreenProps> = ({ title, buttons, wpm, mistakeCount }) => {
     const { language } = useLanguage();
     return (
-        <InfoBox>
+        <DefaultPanel>
             <h2 className="text-3xl font-bold mb-8 text-center">{capitalize(translate(title, language))}</h2>
 
             {/* display WPM and Mistakes if provided */}
@@ -48,7 +48,7 @@ const CompletionScreen: React.FC<CompletionScreenProps> = ({ title, buttons, wpm
                     </button>
                 ))}
             </div>
-        </InfoBox>
+        </DefaultPanel>
     );
 };
 

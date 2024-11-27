@@ -1,18 +1,20 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { WebSocketMessage, WebSocketMessageData } from '../types';
 
 type UseWebSocketManagementParams = {
-    url: string | null;
+    wsUrl: string | null;
+    isOptionsSet: boolean;
 };
-export const useWebSocketMenagement = ({ url }: UseWebSocketManagementParams) => {
+
+export const useWebSocketMenagement = ({ wsUrl, isOptionsSet }: UseWebSocketManagementParams) => {
     const [socket, setSocket] = useState<WebSocket | null>(null);
     const [messages, setMessages] = useState<WebSocketMessage<WebSocketMessageData>[]>([]);
     const [lastMessage, setLastMessage] = useState<WebSocketMessage<WebSocketMessageData> | null>(null);
     const [isSocketOpen, setIsSocketOpen] = useState(false);
 
     useEffect(() => {
-        if (url && !socket) {
-            const ws = new WebSocket(url);
+        if (wsUrl && !socket && isOptionsSet) {
+            const ws = new WebSocket(wsUrl);
 
             ws.onopen = () => {
                 setIsSocketOpen(true);
@@ -42,17 +44,14 @@ export const useWebSocketMenagement = ({ url }: UseWebSocketManagementParams) =>
                 }
             };
         }
-    }, [lastMessage, socket, url]);
+    }, [isOptionsSet, lastMessage, socket, wsUrl]);
 
-    const sendMessage = useCallback(
-        (message: WebSocketMessage<WebSocketMessageData>) => {
-            if (socket && socket.readyState === WebSocket.OPEN) {
-                console.log('sent messages client', message);
-                socket.send(JSON.stringify(message));
-            }
-        },
-        [socket]
-    );
+    const sendMessage = (message: WebSocketMessage<WebSocketMessageData>) => {
+        if (socket && socket.readyState === WebSocket.OPEN) {
+            console.log('sent messages client', message);
+            socket.send(JSON.stringify(message));
+        }
+    };
 
     return {
         messages,

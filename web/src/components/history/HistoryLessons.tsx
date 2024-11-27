@@ -1,13 +1,13 @@
 import { useLanguage } from '../../context/LanguageContext.tsx';
-import { capitalize } from '../../utils/capitalize.ts';
+import { capitalize } from '../../utils/capitalizeString.ts';
 import { LessonCompletionData } from '../../types.ts';
-import { getLessonsCompleteObj } from '../../utils/lessonCompletion.ts';
 import translate from '../../utils/translate.ts';
+import { getAllLessonCompletions } from '../../utils/lessonCompletion.ts';
 
 const StatisticsLessons = () => {
     const { language } = useLanguage();
 
-    const storedData: LessonCompletionData = getLessonsCompleteObj();
+    const storedData: LessonCompletionData = getAllLessonCompletions();
 
     const completedLessons = Object.entries(storedData)
         .filter(([, lessonData]) => lessonData.completed)

@@ -1,7 +1,7 @@
 import { ValidationErrors } from './../types';
 import translate from './translate';
 
-type ValidateOptionsProps = {
+type ValidateOptionsParams = {
     isCustomText: boolean;
     customText: string;
     isRace: boolean;
@@ -14,7 +14,7 @@ type ValidateOptionsProps = {
     language: string;
 };
 
-const validateOptions = (props: ValidateOptionsProps): ValidationErrors => {
+const validateOptions = (props: ValidateOptionsParams): ValidationErrors => {
     const {
         isCustomText,
         customText,

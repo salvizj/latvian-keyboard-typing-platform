@@ -1,216 +1,112 @@
 import { useEffect, useState } from 'react';
 import OptionBox from '../components/utils/OptionBox';
-import { useGetPoetTexts } from '../hooks/useGetPoetTexts';
 import Lobby from '../components/typingRace/Lobby';
 import { useWebSocketMenagement } from '../hooks/useWebSocketMenagement';
 import Keyboard from '../components/keyboard/Keyboard';
-import { LobbyStatus, Player, ProgressData, WebSocketMessageType } from '../types';
+import { JoinLobbyData, LobbyStatus, Player, ProgressData, WebSocketMessageType } from '../types';
 import PlayerProgressBox from '../components/typingRace/PlayerProgressBox';
 import { useAuth } from '@clerk/clerk-react';
-import constructWebSocketMessage from '../utils/constructWebsocketMessage';
+import Countdown from '../components/utils/Countdown';
+import { useOptions } from '../context/OptionsContext';
+import { useTyping } from '../context/TypingContext';
+import { useLobbyStatusMenagement } from '../hooks/useLobbyStatusMenagement';
+import { useHandleWebSocketMessages } from '../hooks/useHandleWebSocketMessages';
 
 const TypingRacePage = () => {
     const isRace = true;
-    const [wpm, setWpm] = useState(0);
-    const [mistakeCount, setMistakeCount] = useState(0);
-    const [procentsOfTextTyped, setProcentsOfTextTyped] = useState(0);
-    const [text, setText] = useState<string>('');
-    const [time, setTime] = useState<number>(60);
-    const [timeLeft, setTimeLeft] = useState<number | null>(null);
+    const wsUrl = `ws://localhost:${import.meta.env.VITE_PORT}/ws`;
+
+    const { text, setText, time, setTime, lobbyId, setLobbyId, username } = useOptions();
+    const { wpm, setProcentsOfTextTyped } = useTyping();
+
+    const [timeLeft, setTimeLeft] = useState<number>(time);
     const [isOptionsSet, setIsOptionsSet] = useState(false);
-    const [lobbyId, setLobbyId] = useState<string>('');
-    const [username, setUsername] = useState<string>('');
-    const [lobbyMode, setLobbyMode] = useState<'create' | 'join'>('create');
-    const [maxPlayerCount, setMaxPlayerCount] = useState(2);
-    const [isCustomText, setIsCustomText] = useState(false);
-    const [customText, setCustomText] = useState('');
-    const [selectedText, setSelectedText] = useState('');
-    const [wsUrl, setWsUrl] = useState<string | null>(null);
-    const { poetTexts, poetTextsError } = useGetPoetTexts();
-    const [lobbyRaceStatus, setLobbyRaceStatus] = useState(LobbyStatus.Waiting);
+    const [lobbyStatus, setLobbyStatus] = useState<LobbyStatus>(LobbyStatus.Waiting);
     const [playerData, setPlayerData] = useState<Player[] | null>(null);
     const { userId } = useAuth();
     const userIdOrEmpty = userId ?? '';
+
     const { lastMessage, messages, sendMessage, isSocketOpen } = useWebSocketMenagement({
-        url: wsUrl || '',
+        wsUrl,
+        isOptionsSet,
     });
 
+    useLobbyStatusMenagement({ messages, setLobbyStatus });
+    useHandleWebSocketMessages({
+        isSocketOpen,
+        userIdOrEmpty,
+        timeLeft,
+        lobbyStatus,
+        sendMessage,
+        isOptionsSet,
+    });
+
+    console.log(
+        'time:',
+        time,
+        'timeLeft:',
+        timeLeft,
+        'lobbyStatus:',
+        lobbyStatus,
+        'isRace:',
+        isRace,
+        'wpm:',
+        wpm,
+        'setProcentsOfTextTyped:',
+        setProcentsOfTextTyped
+    );
+
+    // handle WebSocket message updates
     useEffect(() => {
-        if (isOptionsSet && !wsUrl) {
-            const url = `ws://localhost:${import.meta.env.VITE_PORT}/ws`;
-            setWsUrl(url);
-        }
-        if (lobbyMode === 'create' && isSocketOpen) {
-            const createLobbyMessage = constructWebSocketMessage({
-                messageType: WebSocketMessageType.CreateLobby,
-                lobbySettings: {
-                    time: time,
-                    maxPlayerCount: maxPlayerCount,
-                    text: text,
-                },
-                players: [
-                    {
-                        username: username,
-                        playerId: '',
-                        userId: userIdOrEmpty,
-                    },
-                ],
-            });
+        if (!lastMessage) return;
 
-            if (createLobbyMessage) sendMessage(createLobbyMessage);
-        } else if (lobbyMode === 'join' && isSocketOpen) {
-            const joinLobbyMessage = constructWebSocketMessage({
-                messageType: WebSocketMessageType.JoinLobby,
-                lobbyId: lobbyId,
-                players: [
-                    {
-                        username: username,
-                        playerId: '',
-                        userId: userIdOrEmpty,
-                    },
-                ],
-            });
-            if (joinLobbyMessage) sendMessage(joinLobbyMessage);
-        }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isOptionsSet, isSocketOpen, sendMessage]);
-
-    useEffect(() => {
-        const startGameMessage = messages.filter((msg) => msg.type === WebSocketMessageType.StartRace);
-        const endGameMessage = messages.filter((msg) => msg.type === WebSocketMessageType.EndRace);
-
-        if (startGameMessage.length > 0) {
-            setLobbyRaceStatus(LobbyStatus.InProgress);
-        }
-
-        if (endGameMessage.length > 0) {
-            setLobbyRaceStatus(LobbyStatus.Finished);
-        }
-    }, [messages]);
-
-    useEffect(() => {
-        // initially, we send an empty lobbyId since the server generates it
-        // the client will then set the lobbyId for future use
-        if (lastMessage?.type === WebSocketMessageType.CreateLobby) {
+        if (lastMessage.type === WebSocketMessageType.CreateLobby) {
             setLobbyId(lastMessage.lobbyId);
         }
-        // getting progress data from all players
-        if (lastMessage?.type === WebSocketMessageType.Progress) {
-            // Update the player data from the message
+        if (lastMessage.type === WebSocketMessageType.JoinLobby) {
+            setLobbyId(lastMessage.lobbyId);
+            const lobbySettings = lastMessage.data as JoinLobbyData;
+            setText(lobbySettings.lobbySettings.text);
+            setTime(lobbySettings.lobbySettings.time);
+            setTimeLeft(lobbySettings.lobbySettings.time);
+            setPlayerData(lobbySettings.players);
+        }
+        if (lastMessage.type === WebSocketMessageType.Progress && lastMessage.data) {
             const progressData = lastMessage.data as ProgressData;
             setPlayerData(progressData.players);
         }
-        // players didin`t set text or time so we get them from websocket message
-        if (!time && !text) {
-            if (lastMessage?.data && 'lobbySettings' in lastMessage.data) {
-                const lobbySettings = lastMessage.data.lobbySettings;
-                setText(lobbySettings?.text);
-                setTime(lobbySettings?.time);
-            }
-        }
-        // when we get players
-        if (lastMessage?.data && 'players' in lastMessage.data) {
-            const players = lastMessage.data.players;
-            setPlayerData(players);
-        }
-    }, [lastMessage, text, time]);
-
-    // send current wpm, mistakes to server every 2 sec
-    useEffect(() => {
-        if (lobbyRaceStatus === LobbyStatus.InProgress) {
-            const interval = setInterval(() => {
-                // Check if time and timeLeft are different to avoid unnecessary sends
-                if (time !== timeLeft) {
-                    const progressMessage = constructWebSocketMessage({
-                        messageType: WebSocketMessageType.Progress,
-                        lobbyId: lobbyId,
-                        players: [
-                            {
-                                username: username,
-                                playerId: '',
-                                userId: userIdOrEmpty,
-                            },
-                        ],
-                    });
-
-                    if (progressMessage) sendMessage(progressMessage);
-                }
-            }, 2000);
-
-            // Cleanup the interval on component unmount
-            return () => clearInterval(interval);
-        }
-    }, [
-        time,
-        timeLeft,
-        lobbyId,
-        lobbyRaceStatus,
-        wpm,
-        procentsOfTextTyped,
-        mistakeCount,
-        sendMessage,
-        username,
-        userId,
-        userIdOrEmpty,
-    ]);
+    }, [lastMessage, setLobbyId, setText, setTime, text, time]);
 
     return (
         <>
-            {!isOptionsSet && lobbyRaceStatus === LobbyStatus.Waiting && (
+            {!isOptionsSet && lobbyStatus === LobbyStatus.Waiting && (
                 <OptionBox
-                    username={username}
-                    setUsername={setUsername}
-                    lobbyId={lobbyId}
                     title="typing_race"
                     setIsOptionsSet={setIsOptionsSet}
-                    setText={setText}
-                    setTime={setTime}
-                    lobbyMode={lobbyMode}
-                    setLobbyId={setLobbyId}
-                    setLobbyMode={setLobbyMode}
-                    setMaxPlayerCount={setMaxPlayerCount}
                     startText="go_to_type_racing_lobby"
-                    time={time}
-                    isCustomText={isCustomText}
-                    customText={customText}
-                    maxPlayerCount={maxPlayerCount}
-                    selectedText={selectedText}
-                    setIsCustomText={setIsCustomText}
-                    setCustomText={setCustomText}
-                    setSelectedText={setSelectedText}
-                    poetTexts={poetTexts}
-                    poetTextsError={poetTextsError}
                     isRace={isRace}
                 />
             )}
-            {lobbyRaceStatus === LobbyStatus.Waiting && isOptionsSet && (
-                <div>
-                    <Lobby
-                        playerData={playerData}
-                        username={username}
-                        sendMessage={sendMessage}
-                        title="typing_race_lobby"
-                        lobbyId={lobbyId}
-                    />
-                </div>
+            {lobbyStatus === LobbyStatus.Waiting && isOptionsSet && (
+                <Lobby
+                    playerData={playerData}
+                    username={username}
+                    sendMessage={sendMessage}
+                    title="typing_race_lobby"
+                    lobbyId={lobbyId}
+                />
             )}
-            {lobbyRaceStatus === LobbyStatus.InProgress && (
+            {lobbyStatus === LobbyStatus.InProgress && (
                 <>
+                    <Countdown timeLeft={timeLeft} setTimeLeft={setTimeLeft} />
+                    <PlayerProgressBox playerData={playerData || []} />
                     <Keyboard
-                        lobbyId={lobbyId}
-                        text={text}
-                        time={time}
+                        timeLeft={timeLeft}
                         isRace={isRace}
                         sendMessage={sendMessage}
-                        setMistakeCount={setMistakeCount}
-                        mistakeCount={mistakeCount}
-                        wpm={wpm}
-                        setWpm={setWpm}
                         setTimeLeft={setTimeLeft}
                         setProcentsOfTextTyped={setProcentsOfTextTyped}
                     />
-                    <PlayerProgressBox playerData={playerData || []} />
                 </>
             )}
         </>

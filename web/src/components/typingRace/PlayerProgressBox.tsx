@@ -1,14 +1,14 @@
 import React from 'react';
 import { Player } from '../../types';
-import { capitalize } from '../../utils/capitalize';
+import { capitalize } from '../../utils/capitalizeString';
 import translate from '../../utils/translate';
 import { useLanguage } from '../../context/LanguageContext';
 
-type PlayerProgressBoxProps = {
+type PlayerStatsListProps = {
     playerData: Player[];
 };
 
-const PlayerProgressBox: React.FC<PlayerProgressBoxProps> = ({ playerData }) => {
+const PlayerStatsList: React.FC<PlayerStatsListProps> = ({ playerData }) => {
     const { language } = useLanguage();
     return (
         <div>
@@ -28,7 +28,7 @@ const PlayerProgressBox: React.FC<PlayerProgressBoxProps> = ({ playerData }) => 
                         </div>
                         <div>
                             <strong>{capitalize(translate('progress', language))}:</strong>{' '}
-                            {player.ProcentsOfTextTyped ?? 0}%
+                            {player.procentsOfTextTyped ?? 0}%
                         </div>
                     </li>
                 ))}
@@ -37,4 +37,4 @@ const PlayerProgressBox: React.FC<PlayerProgressBoxProps> = ({ playerData }) => 
     );
 };
 
-export default PlayerProgressBox;
+export default PlayerStatsList;

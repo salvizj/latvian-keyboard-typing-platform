@@ -1,8 +1,8 @@
 import React from 'react';
 import { KeyObj } from '../../types';
 import KeyboardKey from './Key';
-import { getLayout } from '../../utils/layout';
 import { useKeyboardSettings } from '../../context/KeyboardSettingsContext';
+import { getLayout } from '../../utils/getLayout';
 
 type KeyboardLayoutProps = {
     expectedCharacter: string;

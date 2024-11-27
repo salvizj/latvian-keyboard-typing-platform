@@ -1,9 +1,14 @@
 import { SignOutButton, useAuth } from '@clerk/clerk-react';
 import translate from '../../utils/translate';
 import { useLanguage } from '../../context/LanguageContext';
-import { capitalize } from '../../utils/capitalize';
+import { capitalize } from '../../utils/capitalizeString';
+import { FaSignOutAlt } from 'react-icons/fa';
 
-export default function SignOutBtn() {
+type SignOutBtnProps = {
+    isMinimized: boolean;
+};
+
+export default function SignOutBtn({ isMinimized }: SignOutBtnProps) {
     const { signOut, isSignedIn } = useAuth();
     const { language } = useLanguage();
 
@@ -11,10 +16,11 @@ export default function SignOutBtn() {
         isSignedIn && (
             <SignOutButton>
                 <button
-                    className="text-color-primary text-lg hover:text-color-primary-hover-text"
+                    className="text-color-primary text-lg hover:text-color-primary-hover-text flex items-center gap-4"
                     onClick={() => signOut({ redirectUrl: window.location.origin })}
                 >
-                    {capitalize(translate('sign_out', language))}
+                    <FaSignOutAlt />
+                    {!isMinimized && capitalize(translate('sign_out', language))}
                 </button>
             </SignOutButton>
         )

@@ -15,6 +15,7 @@ func main() {
 	db.CreateTables()
 
 	seed.SeedLessons()
+	seed.SeedLatvianWords()
 	seed.SeedPoetTexts()
 
 	server.StartServer()

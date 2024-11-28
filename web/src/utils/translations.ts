@@ -89,6 +89,7 @@ const translations: Translations = {
         type_word_that_shows_above: 'type word that shows above',
         game_over_you_held_up: 'game over you held up',
         rounds: 'raounds',
+        we_have_no_words_left: 'we don`t have any more words to give you congratulations',
     },
     lv: {
         login: 'pieslēgties',
@@ -176,6 +177,7 @@ const translations: Translations = {
         type_word_that_shows_above: 'rakstiet vārdu, kas parādās augstāk',
         game_over_you_held_up: 'spele beigusies! Tu izturēji',
         rounds: 'raundus',
+        we_have_no_words_left: 'mums vairs nav vārdu, ko tev iedot apsveicu',
     },
 };
 

@@ -70,7 +70,7 @@ const OptionBox: React.FC<OptionBoxProps> = ({ title, startText, setIsOptionsSet
         <DefaultPanel>
             <h2 className="text-3xl font-bold mb-8 text-center">{capitalize(translate(title, language))}</h2>
 
-            {/*Create or input lobbyId and username */}
+            {/* create or input lobbyId and username */}
             {isRace && lobbyMode && (
                 <LobbyOptions
                     username={username ?? ''}
@@ -89,7 +89,7 @@ const OptionBox: React.FC<OptionBoxProps> = ({ title, startText, setIsOptionsSet
             )}
             {(lobbyMode === 'create' || !isRace) && (
                 <>
-                    {/*Max player range input */}
+                    {/* max player range input */}
                     {isRace && maxPlayerCount && setMaxPlayerCount && (
                         <RangeInput
                             label="select_max_player_count"
@@ -104,7 +104,7 @@ const OptionBox: React.FC<OptionBoxProps> = ({ title, startText, setIsOptionsSet
                     {showErrors && validationErrors.maxPlayerCount && (
                         <p className="text-red-500 text-sm">{validationErrors.maxPlayerCount}</p>
                     )}
-                    {/*Time range input */}
+                    {/* time range input */}
                     <RangeInput
                         label="select_time"
                         value={time}
@@ -117,7 +117,7 @@ const OptionBox: React.FC<OptionBoxProps> = ({ title, startText, setIsOptionsSet
                     {showErrors && validationErrors.time && (
                         <p className="text-red-500 text-sm">{validationErrors.time}</p>
                     )}
-                    {/*Text select or input*/}
+                    {/* text select or input*/}
                     <TextSelectionSection
                         setText={setText}
                         isCustomText={isCustomText}

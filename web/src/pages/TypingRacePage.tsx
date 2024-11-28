@@ -17,6 +17,7 @@ const TypingRacePage = () => {
     const wsUrl = `ws://localhost:${import.meta.env.VITE_PORT}/ws`;
 
     const { text, setText, time, setTime, lobbyId, setLobbyId, username, timeLeft, setTimeLeft } = useOptions();
+
     const { wpm, setProcentsOfTextTyped } = useTyping();
     const [isOptionsSet, setIsOptionsSet] = useState(false);
     const [lobbyStatus, setLobbyStatus] = useState<LobbyStatus>(LobbyStatus.Waiting);

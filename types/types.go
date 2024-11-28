@@ -6,10 +6,15 @@ type Lesson struct {
 	LessonText string `json:"lessonText"`
 }
 type PoetText struct {
-	Id               int    `json:"id"`
+	PoetTextId       int    `json:"poetTextId"`
 	PoetAuthor       string `json:"poetAuthor"`
 	PoetFragmentName string `json:"poetFragment"`
 	PoetTextContent  string `json:"poetText"`
+}
+
+type LatvianWord struct {
+	LatvianWordId int    `json:"latvianWordId"`
+	LatvianWord   string `json:"latvianWord"`
 }
 
 type Lobby struct {

@@ -12,6 +12,14 @@ type Table struct {
 
 var tables = []Table{
 	{
+		name: "Users",
+		query: `
+			CREATE TABLE Users (
+				userId TEXT PRIMARY KEY,
+			);
+		`,
+	},
+	{
 		name: "Lessons",
 		query: `
 			CREATE TABLE Lessons (
@@ -29,6 +37,7 @@ var tables = []Table{
 				lessonId INTEGER NOT NULL,
 				isCompleted BOOLEAN NOT NULL DEFAULT FALSE,
 				FOREIGN KEY (lessonId) REFERENCES Lessons(lessonId)
+				FOREIGN KEY (userId) REFERENCES Users(userId) 
 			);
 		`,
 	},
@@ -36,10 +45,30 @@ var tables = []Table{
 		name: "PoetTexts",
 		query: `
 			CREATE TABLE PoetTexts (
-				poetTextid INTEGER PRIMARY KEY,
+				poetTextId INTEGER PRIMARY KEY,
 				poetAuthor TEXT NOT NULL,
 				poetFragmentName TEXT NOT NULL,
 				poetTextContent TEXT NOT NULL
+			);
+		`,
+	},
+	{name: "Score",
+		query: `
+			CREATE TABLE Scores (
+			scoreId INTEGER PRIMARY KEY,
+			gameName TEXT NOT NULL,
+			score INTEGER NOT NULL,
+		 	userId TEXT NOT NULL, 
+    		FOREIGN KEY (userId) REFERENCES Users(userId)
+		);
+	`,
+	},
+	{
+		name: "LatvianWords",
+		query: `
+			CREATE TABLE LatvianWords (
+				latvianWordId INTEGER PRIMARY KEY,
+				latvianWord TEXT NOT NULL
 			);
 		`,
 	},
@@ -53,7 +82,8 @@ var tables = []Table{
 				wpm INTEGER NOT NULL,   
 				mistakeCount INTEGER NOT NULL,      
 				timestamp INTEGER NOT NULL,                  
-				FOREIGN KEY (typingTestSettingsId) REFERENCES TypingTestSettings(typingTestSettingsId)
+				FOREIGN KEY (typingTestSettingsId) REFERENCES TypingTestSettings(typingTestSettingsId),
+				FOREIGN KEY (userId) REFERENCES Users(userId) 
 			);
 		`,
 	},
@@ -108,7 +138,8 @@ var tables = []Table{
 				mistakeCount INTEGER NOT NULL,
 				wpm INTEGER NOT NULL,
 				typingRaceSettingsId INTEGER NOT NULL,
-				FOREIGN KEY (typingRaceId) REFERENCES TypingRace(typingRaceId)
+				FOREIGN KEY (typingRaceId) REFERENCES TypingRace(typingRaceId),
+				FOREIGN KEY (userId) REFERENCES Users(userId) 
 			);
 		`,
 	},

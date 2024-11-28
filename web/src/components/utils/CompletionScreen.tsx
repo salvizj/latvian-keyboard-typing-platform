@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { capitalize } from '../../utils/capitalizeString';
 import translate from '../../utils/translate';
 import DefaultPanel from './DefaultPanel';
+import { MdClose } from 'react-icons/md';
 
 type ButtonProps = {
     text: string;
@@ -19,36 +21,48 @@ type CompletionScreenProps = {
 
 const CompletionScreen: React.FC<CompletionScreenProps> = ({ title, buttons, wpm, mistakeCount }) => {
     const { language } = useLanguage();
+    const [close, setClose] = useState(false);
+
     return (
-        <DefaultPanel>
-            <h2 className="text-3xl font-bold mb-8 text-center">{capitalize(translate(title, language))}</h2>
+        <>
+            {!close && (
+                <DefaultPanel>
+                    <h2 className="text-3xl font-bold mb-8 text-center">{capitalize(translate(title, language))}</h2>
 
-            {/* display WPM and Mistakes if provided */}
-            <div className="text-center mb-6">
-                {wpm !== undefined && (
-                    <p className="text-xl mb-2">
-                        {capitalize(translate('wpm', language))} {wpm}
-                    </p>
-                )}
-                {mistakeCount !== undefined && (
-                    <p className="text-xl">
-                        {capitalize(translate('mistakes', language))} {mistakeCount}
-                    </p>
-                )}
-            </div>
+                    {/* display WPM and Mistakes if provided */}
+                    <div className="text-center mb-6">
+                        {wpm !== undefined && (
+                            <p className="text-xl mb-2">
+                                {capitalize(translate('wpm', language))} {wpm}
+                            </p>
+                        )}
+                        {mistakeCount !== undefined && (
+                            <p className="text-xl">
+                                {capitalize(translate('mistakes', language))} {mistakeCount}
+                            </p>
+                        )}
+                    </div>
 
-            <div className="flex flex-col items-center">
-                {buttons.map((button, index) => (
+                    <div className="flex flex-row gap-4 items-center justify-center">
+                        {buttons.map((button, index) => (
+                            <button
+                                key={index}
+                                onClick={button.onClick}
+                                className={`bg-transparent text-primary py-2 px-4 rounded-md text-center hover:opacity-90 transition-opacity text-base hover:text-color-primary-hover-text border secondary${button.styleClass || ''}`}
+                            >
+                                {button.customContent || capitalize(translate(button.text, language))}
+                            </button>
+                        ))}
+                    </div>
                     <button
-                        key={index}
-                        onClick={button.onClick}
-                        className={`bg-transparent text-primary py-2 px-6 rounded-md text-center hover:opacity-90 transition-opacity text-xl hover:third-hover border secondary mt-6 ${button.styleClass || ''}`}
+                        onClick={() => setClose(true)}
+                        className="absolute top-4 right-4 text-3xl hover:text-color-primary-hover-text"
                     >
-                        {button.customContent || capitalize(translate(button.text, language))}
+                        <MdClose />
                     </button>
-                ))}
-            </div>
-        </DefaultPanel>
+                </DefaultPanel>
+            )}
+        </>
     );
 };
 

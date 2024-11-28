@@ -12,6 +12,7 @@ func InitialRoutes(e *echo.Echo) error {
 
 	e.GET("/api/lesson/:id", handlers.GetLessonHandler)
 	e.GET("/api/poet-texts", handlers.GetPoetTextsHandler)
+	e.GET("/api/latvian-words", handlers.GetLatvinWordsHandler)
 
 	e.GET("/ws", func(c echo.Context) error {
 		return handlers.WsHandler(c, lm)

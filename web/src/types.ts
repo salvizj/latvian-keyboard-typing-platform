@@ -48,10 +48,15 @@ export type LessonCompletionObj = {
 export type LessonCompletionData = Record<string, LessonCompletionObj>;
 
 export type PoetText = {
-    id: number;
+    poetTextId: number;
     poetAuthor: string;
     poetFragmentName: string;
     poetText: string;
+};
+
+export type LatvianWord = {
+    latvinWordId: number;
+    latvianWord: string;
 };
 
 export type TestCompletionObj = {

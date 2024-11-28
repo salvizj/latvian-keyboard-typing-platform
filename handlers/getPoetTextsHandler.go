@@ -11,7 +11,6 @@ func GetPoetTextsHandler(c echo.Context) error {
 
 	poetTexts, err := queries.GetPoetTexts()
 	if err != nil {
-		// Log the error for debugging purposes
 		return c.JSON(http.StatusInternalServerError, map[string]string{
 			"error": "Unable to fetch poet texts. Please try again later.",
 		})

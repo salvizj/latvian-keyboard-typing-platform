@@ -11,10 +11,10 @@ type GameState = {
     isGameOver: boolean;
 };
 
-const useHideWords = () => {
+const useHideWords = (words: string[]) => {
     const TYPING_TIME = 10;
     const { language } = useLanguage();
-    const { text, setText, setTime, timeLeft, setTimeLeft } = useOptions();
+    const { setTime, timeLeft, setTimeLeft } = useOptions();
     const { isTypingFinished, setIsTypingFinished } = useTyping();
 
     const [gameState, setGameState] = useState<GameState>({
@@ -24,12 +24,25 @@ const useHideWords = () => {
         isGameOver: false,
     });
 
+    // check if we have words available
+    const hasWords = Array.isArray(words) && words.length > 0;
+    let currentWord = hasWords ? words[gameState.round] : '';
+
+    // set game over if we run out of words
+    useEffect(() => {
+        if (hasWords && gameState.round >= words.length) {
+            setGameState((prev) => ({
+                ...prev,
+                isGameOver: true,
+            }));
+        }
+    }, [gameState.round, hasWords, words]);
+
     // initial set
     useEffect(() => {
-        setText(text);
         setTime(TYPING_TIME);
         setTimeLeft(TYPING_TIME);
-    }, [setText, setTime, setTimeLeft, text]);
+    }, [setTime, setTimeLeft]);
 
     // reset time
     useEffect(() => {
@@ -39,8 +52,7 @@ const useHideWords = () => {
         }
     }, [isTypingFinished, gameState.isGameOver, setTimeLeft, setTime]);
 
-    const words = text.split(/\s+/);
-    const currentWord = words[gameState.round] || '';
+    currentWord = words[gameState.round] || '';
 
     const completionTitle = `${translate('game_over_you_held_up', language)} ${gameState.round} ${translate('rounds', language)}`;
 
@@ -109,6 +121,7 @@ const useHideWords = () => {
         setTimeLeft: setTimeLeft,
         handleKeyPress,
         completionTitle,
+        hasWords,
         currentWord,
         isTypingFinished,
     };

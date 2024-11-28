@@ -70,7 +70,7 @@ const TextSelectionSection: React.FC<{
                     </option>
                     {Array.isArray(poetTexts) &&
                         poetTexts.map((text: PoetText) => (
-                            <option key={text.id} value={text.id}>
+                            <option key={text.poetTextId} value={text.poetTextId}>
                                 {text.poetAuthor} - {text.poetFragmentName}
                             </option>
                         ))}

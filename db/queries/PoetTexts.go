@@ -7,7 +7,7 @@ import (
 )
 
 func GetPoetTexts() ([]types.PoetText, error) {
-	query := "SELECT id, poetAuthor, poetfragmentName, poetTextContent FROM PoetTexts"
+	query := "SELECT poetTextId, poetAuthor, poetfragmentName, poetTextContent FROM PoetTexts"
 
 	var poetTexts []types.PoetText
 
@@ -20,7 +20,7 @@ func GetPoetTexts() ([]types.PoetText, error) {
 
 	for rows.Next() {
 		var poetText types.PoetText
-		if err := rows.Scan(&poetText.Id, &poetText.PoetAuthor, &poetText.PoetFragmentName, &poetText.PoetTextContent); err != nil {
+		if err := rows.Scan(&poetText.PoetTextId, &poetText.PoetAuthor, &poetText.PoetFragmentName, &poetText.PoetTextContent); err != nil {
 			log.Println("Error scanning poet text:", err)
 			return nil, err
 		}

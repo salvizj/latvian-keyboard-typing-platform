@@ -6,8 +6,10 @@ import { useLocation } from 'react-router-dom';
 type OptionsContextType = {
     text: string;
     setText: React.Dispatch<React.SetStateAction<string>>;
-    time: number;
-    setTime: React.Dispatch<React.SetStateAction<number>>;
+    time: number | null;
+    setTime: React.Dispatch<React.SetStateAction<number | null>>;
+    timeLeft: number | null;
+    setTimeLeft: React.Dispatch<React.SetStateAction<number | null>>;
     lobbyId: string;
     setLobbyId: React.Dispatch<React.SetStateAction<string>>;
     username: string;
@@ -34,7 +36,8 @@ type OptionsProviderProps = {
 
 export const OptionsProvider: React.FC<OptionsProviderProps> = ({ children }) => {
     const [text, setText] = useState<string>('');
-    const [time, setTime] = useState<number>(60);
+    const [time, setTime] = useState<number | null>(null);
+    const [timeLeft, setTimeLeft] = useState<number | null>(time);
     const [lobbyId, setLobbyId] = useState<string>('');
     const [username, setUsername] = useState<string>('');
     const [maxPlayerCount, setMaxPlayerCount] = useState(2);
@@ -43,20 +46,25 @@ export const OptionsProvider: React.FC<OptionsProviderProps> = ({ children }) =>
     const [customText, setCustomText] = useState('');
     const [selectedText, setSelectedText] = useState('');
     const { poetTexts, poetTextsError } = useGetPoetTexts();
-
     const location = useLocation();
+    const [prevPathname, setPrevPathname] = useState(location.pathname);
 
     useEffect(() => {
-        setText('');
-        setTime(60);
-        setLobbyId('');
-        setUsername('');
-        setMaxPlayerCount(2);
-        setLobbyMode('create');
-        setIsCustomText(false);
-        setCustomText('');
-        setSelectedText('');
-    }, [location]);
+        if (location.pathname !== prevPathname) {
+            setText('');
+            setTime(null);
+            setTimeLeft(time);
+            setLobbyId('');
+            setUsername('');
+            setMaxPlayerCount(2);
+            setLobbyMode('create');
+            setIsCustomText(false);
+            setCustomText('');
+            setSelectedText('');
+
+            setPrevPathname(location.pathname);
+        }
+    }, [location.pathname, prevPathname, time]);
 
     return (
         <OptionsContext.Provider
@@ -65,6 +73,8 @@ export const OptionsProvider: React.FC<OptionsProviderProps> = ({ children }) =>
                 setText,
                 time,
                 setTime,
+                timeLeft,
+                setTimeLeft,
                 lobbyId,
                 setLobbyId,
                 username,

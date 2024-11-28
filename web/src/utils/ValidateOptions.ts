@@ -9,7 +9,7 @@ type ValidateOptionsParams = {
     lobbyMode?: string;
     lobbyId?: string;
     selectedText: string;
-    time: number;
+    time: number | null;
     maxPlayerCount?: number;
     language: string;
 };
@@ -42,12 +42,15 @@ const validateOptions = (props: ValidateOptionsParams): ValidationErrors => {
         } else if (!isCustomText && !selectedText) {
             errors.selectedText = translate('must_select_text', language);
         }
-        if (time > 120 || time < 10) {
-            errors.time = translate('must_select_text', language);
+        if (time != null) {
+            if (time > 120 || time < 10) {
+                errors.time = translate('must_select_text', language);
+            }
+            if (time < 10) {
+                errors.time = translate('must_select_text', language);
+            }
         }
-        if (time < 10) {
-            errors.time = translate('must_select_text', language);
-        }
+
         if (maxPlayerCount !== undefined && maxPlayerCount > 10) {
             errors.maxPlayerCount = translate('invalid_player_count_large', language);
         }

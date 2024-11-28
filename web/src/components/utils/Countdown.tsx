@@ -3,32 +3,46 @@ import { useOptions } from '../../context/OptionsContext';
 import { useTyping } from '../../context/TypingContext';
 
 type CountdownProps = {
-    timeLeft: number;
-    setTimeLeft: (time: number) => void;
+    start: boolean;
 };
 
-const Countdown: React.FC<CountdownProps> = ({ timeLeft, setTimeLeft }) => {
-    const { time } = useOptions();
+const Countdown: React.FC<CountdownProps> = ({ start }) => {
+    const { time, setTimeLeft, timeLeft } = useOptions();
     const { isTypingFinished, setIsTypingFinished } = useTyping();
-    const [targetTime] = useState<number>(new Date().getTime() + time * 1000);
+
+    // ensure time is not null before calculating targetTime
+    const [targetTime, setTargetTime] = useState<number | null>(null);
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            const remainingTime = Math.max(0, Math.floor((targetTime - new Date().getTime()) / 1000));
-            setTimeLeft(remainingTime);
+        if (time !== null) {
+            setTargetTime(new Date().getTime() + time * 1000);
+        }
+    }, [time]);
 
-            if (remainingTime <= 0 || isTypingFinished) {
-                setIsTypingFinished(true);
-                setTimeLeft(0);
-                clearInterval(interval);
-            }
-        }, 1000);
+    useEffect(() => {
+        if (start && targetTime !== null) {
+            const interval = setInterval(() => {
+                const remainingTime = Math.max(0, Math.floor((targetTime - new Date().getTime()) / 1000));
+                setTimeLeft(remainingTime);
 
-        // cleanup interval on unmount
-        return () => clearInterval(interval);
-    }, [time, isTypingFinished, targetTime, setTimeLeft, timeLeft, setIsTypingFinished]);
+                if (remainingTime <= 0 || isTypingFinished) {
+                    setIsTypingFinished(true);
+                    setTimeLeft(0);
+                    clearInterval(interval);
+                }
+            }, 1000);
 
-    return <div className="flex justify-center items-center text-color-primary text-3xl">{timeLeft}</div>;
+            return () => clearInterval(interval);
+        }
+    }, [start, targetTime, isTypingFinished, setTimeLeft, setIsTypingFinished]);
+
+    return (
+        <>
+            {timeLeft != 0 && (
+                <div className="flex justify-center items-center text-color-primary text-3xl">{timeLeft}</div>
+            )}
+        </>
+    );
 };
 
 export default Countdown;

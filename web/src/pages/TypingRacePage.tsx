@@ -16,26 +16,27 @@ const TypingRacePage = () => {
     const isRace = true;
     const wsUrl = `ws://localhost:${import.meta.env.VITE_PORT}/ws`;
 
-    const { text, setText, time, setTime, lobbyId, setLobbyId, username } = useOptions();
+    const { text, setText, time, setTime, lobbyId, setLobbyId, username, timeLeft, setTimeLeft } = useOptions();
     const { wpm, setProcentsOfTextTyped } = useTyping();
-
-    const [timeLeft, setTimeLeft] = useState<number>(time);
     const [isOptionsSet, setIsOptionsSet] = useState(false);
     const [lobbyStatus, setLobbyStatus] = useState<LobbyStatus>(LobbyStatus.Waiting);
     const [playerData, setPlayerData] = useState<Player[] | null>(null);
     const { userId } = useAuth();
     const userIdOrEmpty = userId ?? '';
 
+    // connects to ws
     const { lastMessage, messages, sendMessage, isSocketOpen } = useWebSocketMenagement({
         wsUrl,
         isOptionsSet,
     });
 
+    // changes lobby status based on recived wsmessages
     useLobbyStatusMenagement({ messages, setLobbyStatus });
+
+    // handle ws messaging
     useHandleWebSocketMessages({
         isSocketOpen,
         userIdOrEmpty,
-        timeLeft,
         lobbyStatus,
         sendMessage,
         isOptionsSet,
@@ -75,7 +76,7 @@ const TypingRacePage = () => {
             const progressData = lastMessage.data as ProgressData;
             setPlayerData(progressData.players);
         }
-    }, [lastMessage, setLobbyId, setText, setTime, text, time]);
+    }, [lastMessage, setLobbyId, setText, setTime, setTimeLeft, text, time]);
 
     return (
         <>
@@ -96,17 +97,11 @@ const TypingRacePage = () => {
                     lobbyId={lobbyId}
                 />
             )}
-            {lobbyStatus === LobbyStatus.InProgress && (
+            {lobbyStatus === LobbyStatus.InProgress && timeLeft != null && time != null && (
                 <>
-                    <Countdown timeLeft={timeLeft} setTimeLeft={setTimeLeft} />
+                    <Countdown start={isOptionsSet} />
                     <PlayerProgressBox playerData={playerData || []} />
-                    <Keyboard
-                        timeLeft={timeLeft}
-                        isRace={isRace}
-                        sendMessage={sendMessage}
-                        setTimeLeft={setTimeLeft}
-                        setProcentsOfTextTyped={setProcentsOfTextTyped}
-                    />
+                    <Keyboard />
                 </>
             )}
         </>

@@ -17,7 +17,7 @@ export const useTypingSession = () => {
     const [expectedCharacterKeyObj, setExpectedCharacterKeyObj] = useState<KeyObj | null>(null);
     const [currentPressedKey, setCurrentPressedKey] = useState<string | null>(null);
     const [handFingerInfo, setHandFingerInfo] = useState<HandFingerInfo | null>(null);
-    const [startTimestamp, setStartTimestamp] = useState<number | null>(null);
+    const [startTime, setStartTime] = useState<number | null>(null);
     const { keyboardLayout } = useKeyboardSettings();
 
     const layout = getLayout(keyboardLayout);
@@ -36,10 +36,10 @@ export const useTypingSession = () => {
     }, []);
 
     useEffect(() => {
-        if (currentCharacterIndex === 0 && startTimestamp === null) {
-            setStartTimestamp(Date.now());
+        if (currentCharacterIndex === 0 && startTime === null) {
+            setStartTime(Date.now());
         }
-    }, [currentCharacterIndex, startTimestamp]);
+    }, [currentCharacterIndex, startTime]);
 
     // this is for first character because we need to get keyObj and we usually get keyObj after key press
     useEffect(() => {
@@ -47,8 +47,7 @@ export const useTypingSession = () => {
         if (!validateText(text)) return;
 
         try {
-            const initialKeyObj = findKeyObjInLayout(text[0], layout);
-
+            const initialKeyObj = findKeyObjInLayout({ targetKey: text[0], layout });
             if (!initialKeyObj) {
                 return;
             }
@@ -110,7 +109,10 @@ export const useTypingSession = () => {
                             return prevIndex;
                         }
 
-                        const newExpectedCharacterKeyObj = findKeyObjInLayout(newExpectedCharacter, layout);
+                        const newExpectedCharacterKeyObj = findKeyObjInLayout({
+                            targetKey: newExpectedCharacter,
+                            layout,
+                        });
 
                         if (!newExpectedCharacterKeyObj) {
                             return prevIndex;
@@ -138,7 +140,7 @@ export const useTypingSession = () => {
             } else {
                 setMistakeCount(mistakeCount + 1);
             }
-            const calculatedWpm = calculateWpm(currentCharacterIndex, startTimestamp);
+            const calculatedWpm = calculateWpm({ currentCharacterIndex, startTime });
             setWpm(calculatedWpm);
         },
         [
@@ -146,7 +148,7 @@ export const useTypingSession = () => {
             currentCharacterIndex,
             text,
             expectedCharacter,
-            startTimestamp,
+            startTime,
             setWpm,
             setIsTypingFinished,
             setProcentsOfTextTyped,

@@ -11,12 +11,21 @@ import StatisticsTypingTestPage from '../pages/HistoryTypingTestPage';
 import ProtectedRoute from './ProtectiveRoute';
 import { OptionsProvider } from '../context/OptionsContext';
 import { TypingProvider } from '../context/TypingContext';
+import GamePage from '../pages/GamePage';
 
 const Router = () => {
     const router = createBrowserRouter(
         createRoutesFromElements(
             <Route path="/" element={<Layout />}>
-                <Route index element={<IndexPage />} />
+                <Route
+                    index
+                    element={
+                        <TypingProvider>
+                            {' '}
+                            <IndexPage />{' '}
+                        </TypingProvider>
+                    }
+                ></Route>
                 <Route
                     path="/lesson/:id"
                     element={
@@ -26,6 +35,16 @@ const Router = () => {
                     }
                 />
                 <Route path="/lessons" element={<LessonsPage />} />
+                <Route
+                    path="/game/:gameName"
+                    element={
+                        <TypingProvider>
+                            <OptionsProvider>
+                                <GamePage />
+                            </OptionsProvider>
+                        </TypingProvider>
+                    }
+                />
                 <Route
                     path="/typing-race"
                     element={

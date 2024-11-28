@@ -23,15 +23,17 @@ export const TypingProvider: React.FC<TypingProviderProps> = ({ children }) => {
     const [mistakeCount, setMistakeCount] = useState(0);
     const [procentsOfTextTyped, setProcentsOfTextTyped] = useState(0);
     const [isTypingFinished, setIsTypingFinished] = useState(false);
-
     const location = useLocation();
+    const [prevPathname, setPrevPathname] = useState(location.pathname);
 
     useEffect(() => {
         setWpm(0);
         setMistakeCount(0);
         setProcentsOfTextTyped(0);
         setIsTypingFinished(false);
-    }, [location]);
+
+        setPrevPathname(location.pathname);
+    }, [location.pathname, prevPathname]);
 
     return (
         <TypingContext.Provider

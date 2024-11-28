@@ -5,17 +5,23 @@ import { useLanguage } from '../../context/LanguageContext';
 type TypinginputFieldProps = {
     onKeyPress: (lastKeyPress: string) => void;
     isTypingFinished: boolean;
+    labelText?: string;
 };
 
-const TypinginputField: React.FC<TypinginputFieldProps> = ({ onKeyPress, isTypingFinished }) => {
+const TypinginputField: React.FC<TypinginputFieldProps> = ({ onKeyPress, isTypingFinished, labelText }) => {
     const [currentWord, setLastWord] = useState<string>('');
     const { language } = useLanguage();
+
+    if (!labelText) {
+        labelText = 'keyboard_input_label';
+    }
+
     const oninputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         // get the last character typed
         const keyPressed = e.target.value.slice(-1);
 
         // for input value we set currentWord, on space enter we clear it
-        if (keyPressed === ' ') setLastWord('');
+        if (keyPressed === ' ' || keyPressed === 'Enter') setLastWord('');
         setLastWord((currentWord) => currentWord + keyPressed);
         onKeyPress(keyPressed);
     };
@@ -29,7 +35,7 @@ const TypinginputField: React.FC<TypinginputFieldProps> = ({ onKeyPress, isTypin
             <form>
                 <div className="mb-6">
                     <label htmlFor="inputField" className="text-color-secondary font-md">
-                        {translate('keyboard_input_label', language)}
+                        {translate(labelText, language)}
                     </label>
 
                     <input

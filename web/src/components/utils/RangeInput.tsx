@@ -3,7 +3,7 @@ import translate from '../../utils/translate';
 
 type RangeInputProps = {
     label: string;
-    value: number;
+    value: number | null;
     onChange: (value: number) => void;
     min: number;
     max: number;
@@ -31,7 +31,7 @@ const RangeInput: React.FC<RangeInputProps> = ({
                 min={min}
                 max={max}
                 step={step}
-                value={value}
+                value={value ?? 60}
                 onChange={(e) => onChange(Number(e.target.value))}
                 className="w-full"
             />

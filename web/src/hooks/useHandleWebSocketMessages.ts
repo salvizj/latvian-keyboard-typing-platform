@@ -8,7 +8,6 @@ type UseHandleWebSocketMessagesParams = {
     isSocketOpen: boolean;
     userIdOrEmpty: string;
     isOptionsSet: boolean;
-    timeLeft: number;
     lobbyStatus: LobbyStatus;
     sendMessage: (message: WebSocketMessage<WebSocketMessageData>) => void;
 };
@@ -16,17 +15,16 @@ export const useHandleWebSocketMessages = ({
     isSocketOpen,
     userIdOrEmpty,
     isOptionsSet,
-    timeLeft,
     lobbyStatus,
     sendMessage,
 }: UseHandleWebSocketMessagesParams) => {
     const PROGRESS_UPDATE_INTERVAL = 2000;
-    const { text, time, lobbyId, username, maxPlayerCount, lobbyMode } = useOptions();
+    const { text, time, lobbyId, username, maxPlayerCount, lobbyMode, timeLeft } = useOptions();
     const { wpm, mistakeCount, procentsOfTextTyped } = useTyping();
 
     useEffect(() => {
         // handle lobby creation and joining when the WebSocket is open and options are set
-        if (!isSocketOpen || !isOptionsSet) return;
+        if (!isSocketOpen || !isOptionsSet || timeLeft === undefined) return;
 
         const basePlayerData = {
             username,
@@ -35,7 +33,7 @@ export const useHandleWebSocketMessages = ({
         };
 
         // Create or join lobby
-        if (lobbyMode === 'create') {
+        if (lobbyMode === 'create' && time != null) {
             const createLobbyMessage = constructWebSocketMessage({
                 messageType: WebSocketMessageType.CreateLobby,
                 lobbySettings: { time, maxPlayerCount, text },

@@ -6,7 +6,10 @@ export enum Finger {
     Thumb = 'thumb',
 }
 
-export type KeyboardLayouts = 'qwerty' | 'dvorak';
+export enum KeyboardLayouts {
+    Qwerty = 'qwerty',
+    Dvorak = 'dvorak',
+}
 
 export const KeyboardLayoutValues = ['qwerty', 'dvorak'] as const;
 
@@ -148,3 +151,9 @@ export type ValidationErrors = {
     time?: string;
     maxPlayerCount?: string;
 };
+
+export const GameOptionValues = ['hide_words'] as const;
+
+export enum GameOption {
+    HideWords = 'hide_words',
+}

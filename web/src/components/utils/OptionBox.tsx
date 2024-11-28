@@ -14,7 +14,6 @@ type OptionBoxProps = {
     isRace: boolean;
     title: string;
     setIsOptionsSet: (isOptionsSet: boolean) => void;
-
     startText: string;
 };
 

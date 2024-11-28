@@ -17,7 +17,7 @@ type KeyboardSettingsContextType = {
 const KeyboardSettingsContext = createContext<KeyboardSettingsContextType | undefined>(undefined);
 
 export const KeyboardSettingsProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const defaultLayout: KeyboardLayouts = 'qwerty';
+    const defaultLayout: KeyboardLayouts = KeyboardLayouts.Qwerty;
     const [keyboardLayout, setKeyboardLayout] = useState<KeyboardLayouts>(
         (localStorage.getItem(LOCAL_STORAGE_KEY_LAYOUT) as KeyboardLayouts) || defaultLayout
     );

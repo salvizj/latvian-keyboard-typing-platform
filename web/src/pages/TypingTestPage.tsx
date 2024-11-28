@@ -6,8 +6,7 @@ import { useOptions } from '../context/OptionsContext';
 
 const TypingTestPage = () => {
     const isRace = false;
-    const { time } = useOptions();
-    const [timeLeft, setTimeLeft] = useState<number>(time);
+    const { time, timeLeft } = useOptions();
     const [isOptionsSet, setIsOptionsSet] = useState(false);
 
     return (
@@ -20,12 +19,11 @@ const TypingTestPage = () => {
                     isRace={isRace}
                 />
             )}
-            {isOptionsSet && (
-                <>
-                    <Countdown timeLeft={timeLeft} setTimeLeft={setTimeLeft} />
-
-                    <Keyboard setTimeLeft={setTimeLeft} timeLeft={timeLeft} isRace={isRace} />
-                </>
+            {isOptionsSet && time != null && timeLeft != null && (
+                <div className="flex flex-col justify-center items-center min-h-screen">
+                    <Countdown start={isOptionsSet} />
+                    <Keyboard />
+                </div>
             )}
         </>
     );

@@ -6,6 +6,7 @@ import SignUpButton from '../user/SignUpButton';
 import DashboardNavigation from './DashboardNavigation';
 import KeyboardSettings from '../utils/KeyboardSettings';
 import { useLanguage } from '../../context/LanguageContext';
+import GameOptions from '../utils/GameOptions';
 
 type DashboardProps = {
     isMinimized: boolean;
@@ -34,6 +35,7 @@ const Dashboard = ({ isMinimized }: DashboardProps) => {
                 <div className="flex-1 px-4 py-6  ">
                     <div className={`flex flex-col ${isMinimized ? 'items-center' : ''} pt-6`}>
                         <DashboardNavigation isMinimized={isMinimized} />
+                        <GameOptions isMinimized={isMinimized} />
                         <KeyboardSettings isMinimized={isMinimized} />
                     </div>
                 </div>

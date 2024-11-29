@@ -9,14 +9,14 @@ import (
 )
 
 func GetLessonHandler(c echo.Context) error {
-	lessonIdStr := c.Param("id")
+	lessonIdStr := c.Param("lessonId")
 
 	// Convert the string to an integer
 	lessonId, err := strconv.Atoi(lessonIdStr)
 	if err != nil {
 		// Return a 400 Bad Request if the conversion fails
 		return c.JSON(http.StatusBadRequest, map[string]string{
-			"error": "Invalid ID, must be a number",
+			"error": "Invalid lessonId, must be a number",
 		})
 	}
 

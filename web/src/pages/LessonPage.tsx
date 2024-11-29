@@ -6,7 +6,7 @@ const LessonPage = () => {
 
     return (
         <div className="flex flex-col justify-center items-center w-full min-h-screen">
-            {lesson?.lessonText && !lessonError && <Keyboard lessonId={lesson.id} />}
+            {lesson?.lessonText && !lessonError && <Keyboard lessonId={lesson.lessonId} />}
         </div>
     );
 };

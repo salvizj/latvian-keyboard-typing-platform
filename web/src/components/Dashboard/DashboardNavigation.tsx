@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import Links from './Links';
 import translate from '../../utils/translate';
 import { useLanguage } from '../../context/LanguageContext';
-import { FaBook, FaChartLine, FaHome, FaKeyboard, FaTrophy, FaUser } from 'react-icons/fa';
+import { FaBook, FaChartLine, FaGamepad, FaHome, FaKeyboard, FaTrophy, FaUser } from 'react-icons/fa';
 import { capitalize } from '../../utils/capitalizeString';
 import { useAuth } from '@clerk/clerk-react';
 
@@ -28,6 +28,8 @@ const DashboardNavigation = ({ isMinimized }: DashboardNavigationProps) => {
                 return <FaTrophy />;
             case 'lessons':
                 return <FaBook />;
+            case 'games':
+                return <FaGamepad />;
             default:
                 return null;
         }

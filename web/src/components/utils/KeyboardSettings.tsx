@@ -1,6 +1,6 @@
 import { useKeyboardSettings } from '../../context/KeyboardSettingsContext';
 import { useLanguage } from '../../context/LanguageContext';
-import { KeyboardLayouts, KeyboardLayoutValues } from '../../types';
+import { KeyboardLayouts } from '../../types';
 import translate from '../../utils/translate';
 import { capitalize } from '../../utils/capitalizeString';
 import { MdClose } from 'react-icons/md';
@@ -37,9 +37,9 @@ const KeyboardSettings = ({ isMinimized }: KeyboardSettingsProps) => {
                             <option value="" disabled>
                                 {capitalize(translate('choose_preferable_keyboard_layout', language))}
                             </option>
-                            {KeyboardLayoutValues.map((layout) => (
-                                <option key={layout} value={layout}>
-                                    {layout}
+                            {Object.values(KeyboardLayouts).map((keyboardLayout) => (
+                                <option key={keyboardLayout} value={keyboardLayout}>
+                                    {translate(keyboardLayout, language)}
                                 </option>
                             ))}
                         </select>

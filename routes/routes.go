@@ -11,6 +11,7 @@ func InitialRoutes(e *echo.Echo) error {
 	lm := managers.NewLobbyManager()
 
 	e.GET("/api/lesson/:id", handlers.GetLessonHandler)
+	e.GET("/api/lessons", handlers.GetLessonsHandler)
 	e.GET("/api/poet-texts", handlers.GetPoetTextsHandler)
 	e.GET("/api/latvian-words", handlers.GetLatvinWordsHandler)
 

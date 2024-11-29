@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { Lesson } from '../types';
 
-const getLesson = async (id: number): Promise<Lesson> => {
+const getLesson = async (lessonId: number): Promise<Lesson> => {
     try {
-        const response = await axios.get<Lesson>(`/api/lesson/${id}`);
+        const response = await axios.get<Lesson>(`/api/lesson/${lessonId}`);
         return response.data;
     } catch (error) {
         console.error('Error fetching lesson:', error);

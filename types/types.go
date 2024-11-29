@@ -1,10 +1,20 @@
 package types
 
 type Lesson struct {
-	Id         int    `json:"id"`
-	LessonType string `json:"lessonType"`
-	LessonText string `json:"lessonText"`
+	LessonId         int              `json:"lessonId"`
+	LessonDifficulty LessonDifficulty `json:"lessonDifficulty"`
+	LessonText       string           `json:"lessonText"`
 }
+
+type LessonDifficulty string
+
+const (
+	Beginner     LessonDifficulty = "beginner"
+	Intermediate LessonDifficulty = "intermediate"
+	Advanced     LessonDifficulty = "advanced"
+	Expert       LessonDifficulty = "expert"
+)
+
 type PoetText struct {
 	PoetTextId       int    `json:"poetTextId"`
 	PoetAuthor       string `json:"poetAuthor"`

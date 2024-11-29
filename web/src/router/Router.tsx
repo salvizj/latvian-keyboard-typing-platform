@@ -12,6 +12,7 @@ import ProtectedRoute from './ProtectiveRoute';
 import { OptionsProvider } from '../context/OptionsContext';
 import { TypingProvider } from '../context/TypingContext';
 import GamePage from '../pages/GamePage';
+import GamesPage from '../pages/GamesPage';
 
 const Router = () => {
     const router = createBrowserRouter(
@@ -21,8 +22,7 @@ const Router = () => {
                     index
                     element={
                         <TypingProvider>
-                            {' '}
-                            <IndexPage />{' '}
+                            <IndexPage />
                         </TypingProvider>
                     }
                 ></Route>
@@ -35,6 +35,16 @@ const Router = () => {
                     }
                 />
                 <Route path="/lessons" element={<LessonsPage />} />
+                <Route
+                    path="/games"
+                    element={
+                        <TypingProvider>
+                            <OptionsProvider>
+                                <GamesPage />
+                            </OptionsProvider>
+                        </TypingProvider>
+                    }
+                />
                 <Route
                     path="/game/:gameName"
                     element={

@@ -15,7 +15,7 @@ var tables = []Table{
 		name: "Users",
 		query: `
 			CREATE TABLE Users (
-				userId TEXT PRIMARY KEY,
+				userId TEXT PRIMARY KEY
 			);
 		`,
 	},
@@ -24,7 +24,8 @@ var tables = []Table{
 		query: `
 			CREATE TABLE Lessons (
 				lessonId INTEGER PRIMARY KEY,
-				lessonText TEXT NOT NULL
+				lessonText TEXT NOT NULL,
+				lessonDifficulty TEXT NOT NULL
 			);
 		`,
 	},
@@ -52,12 +53,12 @@ var tables = []Table{
 			);
 		`,
 	},
-	{name: "Score",
+	{name: "Records",
 		query: `
-			CREATE TABLE Scores (
-			scoreId INTEGER PRIMARY KEY,
+			CREATE TABLE Records (
+			recordId INTEGER PRIMARY KEY,
 			gameName TEXT NOT NULL,
-			score INTEGER NOT NULL,
+			record INTEGER NOT NULL,
 		 	userId TEXT NOT NULL, 
     		FOREIGN KEY (userId) REFERENCES Users(userId)
 		);
@@ -73,7 +74,7 @@ var tables = []Table{
 		`,
 	},
 	{
-		name: "TypingTest",
+		name: "TypingTests",
 		query: `
 			CREATE TABLE TypingTest (
 				typingTestId INTEGER PRIMARY KEY,          
@@ -126,9 +127,9 @@ var tables = []Table{
 		`,
 	},
 	{
-		name: "TypingRacePlayer",
+		name: "TypingRacePlayers",
 		query: `
-			CREATE TABLE TypingRacePlayer (
+			CREATE TABLE TypingRacePlayers (
 				typingRacePlayerid TEXT PRIMARY KEY,
 				typingRaceId TEXT NOT NULL,
 				username TEXT NOT NULL,

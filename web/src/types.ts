@@ -11,8 +11,6 @@ export enum KeyboardLayouts {
     Dvorak = 'dvorak',
 }
 
-export const KeyboardLayoutValues = ['qwerty', 'dvorak'] as const;
-
 export enum Hand {
     Left = 'left',
     Right = 'right',
@@ -28,11 +26,20 @@ export type KeyObj = {
     altLabel?: string;
 };
 
+export enum LessonDifficulty {
+    Beginner = 'beginner',
+    Intermediate = 'intermediate',
+    Advanced = 'advanced',
+    Expert = 'expert',
+}
+
 export type Lesson = {
-    id: number;
+    lessonId: number;
+    lessonDifficulty: LessonDifficulty;
     lessonType: string;
     lessonText: string;
 };
+
 export type HandFingerInfo = {
     hand: Hand;
     finger: Finger;
@@ -156,8 +163,6 @@ export type ValidationErrors = {
     time?: string;
     maxPlayerCount?: string;
 };
-
-export const GameOptionValues = ['hide_words'] as const;
 
 export enum GameOption {
     HideWords = 'hide_words',

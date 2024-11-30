@@ -10,7 +10,6 @@ import (
 func main() {
 
 	db.Initialize()
-	defer db.DB.Close()
 
 	db.CreateTables()
 

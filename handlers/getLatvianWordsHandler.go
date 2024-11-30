@@ -9,7 +9,7 @@ import (
 
 func GetLatvinWordsHandler(c echo.Context) error {
 
-	latvinaWords, err := queries.GetLatvinWords()
+	latvinaWords, err := queries.GetLatvianWords()
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{
 			"error": "Unable to fetch latvian words. Please try again later.",

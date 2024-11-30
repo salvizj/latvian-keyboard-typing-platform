@@ -1,7 +1,6 @@
 package seed
 
 import (
-	"database/sql"
 	"fmt"
 	"latvianKeyboardTypingPlatform/db"
 	"latvianKeyboardTypingPlatform/types"
@@ -71,25 +70,24 @@ func SeedLessons() {
 
 		// Step 1: Check if the lesson already exists in the database by its ID
 		var count int
-		query := `SELECT COUNT(*) FROM Lessons WHERE lessonId = ?`
+		query := `SELECT COUNT(*) FROM Lessons WHERE lessonId = $1`
 		err := db.DB.QueryRow(query, lesson.LessonId).Scan(&count)
 		if err != nil {
-			if err != sql.ErrNoRows {
-				fmt.Fprintf(os.Stderr, "Error checking if lesson with ID %d exists: %v\n", lesson.LessonId, err)
-			}
+			fmt.Fprintf(os.Stderr, "Error checking if lesson with ID %d exists: %v\n", lesson.LessonId, err)
 			continue
 		}
 
 		// Step 2: If the lesson doesn't exist, insert it into the database
 		if count == 0 {
-			insertQuery := `INSERT INTO Lessons (lessonId,  lessonText, lessonDifficulty) VALUES (?, ?, ?)`
+			insertQuery := `INSERT INTO Lessons (lessonId, lessonText, lessonDifficulty) VALUES ($1, $2, $3)`
 			_, err := db.DB.Exec(insertQuery, lesson.LessonId, lesson.LessonText, lesson.LessonDifficulty)
 			if err != nil {
 				fmt.Fprintf(os.Stderr, "Error inserting lesson with lessonId %d: %v\n", lesson.LessonId, err)
 			} else {
-				fmt.Printf("Inserted lesson with ID %d and text %s and lesson difficulty: %s\n", lesson.LessonId, lesson.LessonText, lesson.LessonDifficulty)
-
+				fmt.Printf("Inserted lesson with ID %d and text: %s, difficulty: %s\n", lesson.LessonId, lesson.LessonText, lesson.LessonDifficulty)
 			}
+		} else {
+			fmt.Printf("Lesson with ID %d already exists. Skipping.\n", lesson.LessonId)
 		}
 	}
 }

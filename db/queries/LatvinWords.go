@@ -5,24 +5,23 @@ import (
 	"log"
 )
 
-func GetLatvinWords() ([]string, error) {
-	query := "SELECT latvianWordId, latvianWord FROM LatvianWords"
+func GetLatvianWords() ([]string, error) {
+	query := `SELECT latvianWord FROM LatvianWords`
 
 	var latvianWords []string
 
 	rows, err := db.DB.Query(query)
 	if err != nil {
-		log.Println("Error fetching latvian words:", err)
+		log.Println("Error fetching Latvian words:", err)
 		return nil, err
 	}
 	defer rows.Close()
 
 	for rows.Next() {
-		var latvianWordId int
 		var latvianWord string
 
-		if err := rows.Scan(&latvianWordId, &latvianWord); err != nil {
-			log.Println("Error scanning latvian word:", err)
+		if err := rows.Scan(&latvianWord); err != nil {
+			log.Println("Error scanning Latvian word:", err)
 			return nil, err
 		}
 

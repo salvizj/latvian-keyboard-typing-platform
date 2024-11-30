@@ -5,12 +5,12 @@ import { useWebSocketMenagement } from '../hooks/useWebSocketMenagement';
 import Keyboard from '../components/keyboard/Keyboard';
 import { JoinLobbyData, LobbyStatus, Player, ProgressData, WebSocketMessageType } from '../types';
 import PlayerProgressBox from '../components/typingRace/PlayerProgressBox';
-import { useAuth } from '@clerk/clerk-react';
 import Countdown from '../components/utils/Countdown';
 import { useOptions } from '../context/OptionsContext';
 import { useTyping } from '../context/TypingContext';
 import { useLobbyStatusMenagement } from '../hooks/useLobbyStatusMenagement';
 import { useHandleWebSocketMessages } from '../hooks/useHandleWebSocketMessages';
+import { useAuthStatus } from '../hooks/useAuthStatus';
 
 const TypingRacePage = () => {
     const isRace = true;
@@ -22,8 +22,8 @@ const TypingRacePage = () => {
     const [isOptionsSet, setIsOptionsSet] = useState(false);
     const [lobbyStatus, setLobbyStatus] = useState<LobbyStatus>(LobbyStatus.Waiting);
     const [playerData, setPlayerData] = useState<Player[] | null>(null);
-    const { userId } = useAuth();
-    const userIdOrEmpty = userId ?? '';
+    const { userId } = useAuthStatus();
+    const userIdOrEmpty = userId ? userId : '';
 
     // connects to ws
     const { lastMessage, messages, sendMessage, isSocketOpen } = useWebSocketMenagement({

@@ -12,9 +12,6 @@ const LessonsPage = () => {
     const { lessons, lessonsError } = useGetLessons();
     const [filteredLessons, setFilteredLessons] = useState<Lesson[]>([]);
 
-    console.log('filtered lessons', filteredLessons);
-    console.log('selected filter', selectedLessonDifficulty);
-
     useEffect(() => {
         if (lessons) {
             if (!selectedLessonDifficulty) {

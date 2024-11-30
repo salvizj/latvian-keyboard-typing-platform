@@ -1,16 +1,28 @@
-import { ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
-import { useAuth } from '@clerk/clerk-react';
+import { useAuthStatus } from '../hooks/useAuthStatus';
+import { ReactNode } from 'react';
+import translate from '../utils/translate';
+import { useLanguage } from '../context/LanguageContext';
 
-interface ProtectedRouteProps {
+type ProtectedRouteProps = {
     children: ReactNode;
-}
+};
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-    const { isSignedIn } = useAuth();
+    const { isSignedIn, loading } = useAuthStatus();
+    const { language } = useLanguage();
+
+    if (loading) {
+        return (
+            <div>
+                {translate('loading', language)}
+                {'...'}
+            </div>
+        );
+    }
 
     if (!isSignedIn) {
-        return <Navigate to="/" replace />;
+        return <Navigate to="/sign-up" replace />;
     }
 
     return <>{children}</>;

@@ -4,6 +4,7 @@ const Links = [
     { key: 'typing_race', path: '/typing-race', protected: false },
     { key: 'lessons', path: '/lessons', protected: false },
     { key: 'games', path: '/games', protected: false },
+
     { key: 'profile', path: '/profile', protected: true },
     { key: 'history', path: '/history', protected: true },
 ];

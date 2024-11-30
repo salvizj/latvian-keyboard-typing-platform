@@ -2,17 +2,19 @@ import { createBrowserRouter, createRoutesFromElements, Route } from 'react-rout
 import IndexPage from '../pages/IndexPage';
 import Layout from '../pages/Layout/Layout';
 import LessonsPage from '../pages/LessonsPage';
-import StatisticsPage from '../pages/HistoryPage';
 import LessonPage from '../pages/LessonPage';
 import TypingRacePage from '../pages/TypingRacePage';
 import TypingTestPage from '../pages/TypingTestPage';
-import StatisticsTypingRacePage from '../pages/HistoryTypingRacePage';
-import StatisticsTypingTestPage from '../pages/HistoryTypingTestPage';
 import ProtectedRoute from './ProtectiveRoute';
 import { OptionsProvider } from '../context/OptionsContext';
 import { TypingProvider } from '../context/TypingContext';
 import GamePage from '../pages/GamePage';
 import GamesPage from '../pages/GamesPage';
+import SignUpPage from '../pages/SignUpPage';
+import SignInPage from '../pages/SignInPage';
+import HistoryTypingRacePage from '../pages/HistoryTypingRacePage';
+import HistoryTypingTestPage from '../pages/HistoryTypingTestPage';
+import HistoryPage from '../pages/HistoryPage';
 
 const Router = () => {
     const router = createBrowserRouter(
@@ -76,29 +78,49 @@ const Router = () => {
                     }
                 />
 
+                <Route
+                    path="/sign-up"
+                    element={
+                        <TypingProvider>
+                            <OptionsProvider>
+                                <SignUpPage />
+                            </OptionsProvider>
+                        </TypingProvider>
+                    }
+                />
+                <Route
+                    path="/sign-in"
+                    element={
+                        <TypingProvider>
+                            <OptionsProvider>
+                                <SignInPage />
+                            </OptionsProvider>
+                        </TypingProvider>
+                    }
+                />
                 {/* Protected routes */}
 
                 <Route
-                    path="/statistics"
+                    path="/history"
                     element={
                         <ProtectedRoute>
-                            <StatisticsPage />
+                            <HistoryPage />
                         </ProtectedRoute>
                     }
                 />
                 <Route
-                    path="/statistics/typing-test"
+                    path="/history/typing-test"
                     element={
                         <ProtectedRoute>
-                            <StatisticsTypingTestPage />
+                            <HistoryTypingTestPage />
                         </ProtectedRoute>
                     }
                 />
                 <Route
-                    path="/statistics/typing-race"
+                    path="/history/typing-race"
                     element={
                         <ProtectedRoute>
-                            <StatisticsTypingRacePage />
+                            <HistoryTypingRacePage />
                         </ProtectedRoute>
                     }
                 />

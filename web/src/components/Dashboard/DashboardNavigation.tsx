@@ -2,9 +2,9 @@ import { Link } from 'react-router-dom';
 import Links from './Links';
 import translate from '../../utils/translate';
 import { useLanguage } from '../../context/LanguageContext';
-import { FaBook, FaChartLine, FaGamepad, FaHome, FaKeyboard, FaTrophy, FaUser } from 'react-icons/fa';
+import { FaBook, FaChartLine, FaGamepad, FaHistory, FaHome, FaKeyboard, FaTrophy, FaUser } from 'react-icons/fa';
 import { capitalize } from '../../utils/capitalizeString';
-import { useAuth } from '@clerk/clerk-react';
+import { useAuthStatus } from '../../hooks/useAuthStatus';
 
 type DashboardNavigationProps = {
     isMinimized: boolean;
@@ -12,7 +12,16 @@ type DashboardNavigationProps = {
 
 const DashboardNavigation = ({ isMinimized }: DashboardNavigationProps) => {
     const { language } = useLanguage();
-    const { isSignedIn } = useAuth();
+    const { isSignedIn, loading } = useAuthStatus();
+
+    if (loading) {
+        return (
+            <div>
+                {translate('loading', language)}
+                {'...'}
+            </div>
+        );
+    }
 
     const getIcon = (key: string) => {
         switch (key) {
@@ -30,6 +39,8 @@ const DashboardNavigation = ({ isMinimized }: DashboardNavigationProps) => {
                 return <FaBook />;
             case 'games':
                 return <FaGamepad />;
+            case 'history':
+                return <FaHistory />;
             default:
                 return null;
         }

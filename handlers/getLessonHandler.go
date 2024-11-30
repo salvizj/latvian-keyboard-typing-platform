@@ -11,10 +11,10 @@ import (
 func GetLessonHandler(c echo.Context) error {
 	lessonIdStr := c.Param("lessonId")
 
-	// Convert the string to an integer
+	// convert the string to an integer
 	lessonId, err := strconv.Atoi(lessonIdStr)
 	if err != nil {
-		// Return a 400 Bad Request if the conversion fails
+		// return a 400 Bad Request if the conversion fails
 		return c.JSON(http.StatusBadRequest, map[string]string{
 			"error": "Invalid lessonId, must be a number",
 		})

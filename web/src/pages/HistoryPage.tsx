@@ -1,11 +1,13 @@
-import StatisticsDashboard from '../components/history/HistoryDashboard';
+import HistoryDashboard from '../components/history/HistoryDashboard';
 
-const StatisticsPage = () => {
+const HistoryPage = () => {
     return (
         <>
-            <StatisticsDashboard />
+            <div className="flex flex-row gap-4">
+                <HistoryDashboard />
+            </div>
         </>
     );
 };
 
-export default StatisticsPage;
+export default HistoryPage;

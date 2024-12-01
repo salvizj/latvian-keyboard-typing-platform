@@ -1,4 +1,4 @@
-export const validateInput = (email: string, password: string, confirmPassword?: string) => {
+export const validateSignnOut = (email: string, password: string, confirmPassword?: string) => {
     const passwordRegex = /^(?=.*[0-9])/;
 
     if (confirmPassword != undefined) {
@@ -7,12 +7,6 @@ export const validateInput = (email: string, password: string, confirmPassword?:
         }
         if (!confirmPassword) {
             return 'errror_missing_confirm_password';
-        }
-        if (!passwordRegex.test(confirmPassword)) {
-            return 'error_confirm_password_must_contain_number';
-        }
-        if (confirmPassword.length < 6) {
-            return 'error_confirm_password_too_short';
         }
         if (password != confirmPassword) {
             return 'error_confirm_password_and_pasword_doesnt_match';

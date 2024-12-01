@@ -4,6 +4,8 @@ import { capitalize } from '../../utils/capitalizeString';
 import { FaSignOutAlt } from 'react-icons/fa';
 import { supabase } from '../../utils/supabaseClient';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useAuthStatus } from '../../hooks/useAuthStatus';
 
 type SignOutBtnProps = {
     isMinimized: boolean;
@@ -12,23 +14,39 @@ type SignOutBtnProps = {
 export default function SignOutBtn({ isMinimized }: SignOutBtnProps) {
     const { language } = useLanguage();
     const navigate = useNavigate();
+    const { isSignedIn, loading } = useAuthStatus();
+    const [error, setError] = useState<string | null>(null);
+
+    if (loading) {
+        return <p>{translate('loading', language)}</p>;
+    }
 
     const handleSignOut = async () => {
-        const { error } = await supabase.auth.signOut();
-        if (error) {
-            console.error('Sign out error:', error.message);
+        if (!isSignedIn) {
+            setError(translate('error_user_not_signed_in', language));
         } else {
-            navigate('/');
+            setError(null);
+            const { error } = await supabase.auth.signOut();
+
+            if (error) {
+                setError(translate('error_sign_out', language));
+            } else {
+                navigate('/');
+            }
         }
     };
 
     return (
-        <button
-            className="text-color-primary text-lg hover:text-color-primary-hover-text flex items-center gap-4"
-            onClick={handleSignOut}
-        >
-            <FaSignOutAlt />
-            {!isMinimized && capitalize(translate('sign_out', language))}
-        </button>
+        <div>
+            <button
+                className="text-color-primary text-lg hover:text-color-primary-hover-text flex items-center gap-4"
+                onClick={handleSignOut}
+                disabled={loading}
+            >
+                <FaSignOutAlt />
+                {!isMinimized && capitalize(translate('sign_out', language))}
+            </button>
+            {error && <p className="text-red-500 mt-2">{error}</p>}
+        </div>
     );
 }

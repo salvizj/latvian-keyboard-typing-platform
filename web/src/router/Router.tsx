@@ -15,6 +15,7 @@ import SignInPage from '../pages/SignInPage';
 import HistoryTypingRacePage from '../pages/HistoryTypingRacePage';
 import HistoryTypingTestPage from '../pages/HistoryTypingTestPage';
 import HistoryPage from '../pages/HistoryPage';
+import ProfilePage from '../pages/ProfilePage';
 
 const Router = () => {
     const router = createBrowserRouter(
@@ -99,7 +100,14 @@ const Router = () => {
                     }
                 />
                 {/* Protected routes */}
-
+                <Route
+                    path="/profile"
+                    element={
+                        <ProtectedRoute>
+                            <ProfilePage />
+                        </ProtectedRoute>
+                    }
+                />
                 <Route
                     path="/history"
                     element={

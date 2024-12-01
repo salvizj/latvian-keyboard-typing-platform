@@ -43,7 +43,7 @@ const TypinginputField: React.FC<TypinginputFieldProps> = ({ onKeyPress, isTypin
                         type="text"
                         value={currentWord}
                         onChange={oninputChange}
-                        className="bg-secondary border border-primary rounded-sm p-2 w-full text-xl text-primary focus:outline-none focus:ring-2 focus:ring-secondary"
+                        className="bg-secondary border border-primary rounded-md p-2 w-full text-xl text-primary focus:outline-none focus:ring-2 focus:ring-secondary"
                     />
                 </div>
             </form>

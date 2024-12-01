@@ -17,7 +17,7 @@ const Layout = () => {
             </main>
             <aside className={`h-full min-h-screen transition-all ${isMinimized ? 'w-20' : 'w-2/12'} bg-color-third`}>
                 <button
-                    className={`text-color-primary rounded hover:bg-primary flex justify-center items-center text-3xl z-50 absolute transition-all top-8 right-5`}
+                    className={`text-color-primary rounded hover:bg-primary flex justify-center items-center text-3xl z-50 absolute transition-all top-10 right-6`}
                     onClick={toggleAside}
                 >
                     {isMinimized ? <FiChevronLeft /> : <FiChevronRight />}

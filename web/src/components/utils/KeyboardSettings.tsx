@@ -22,62 +22,66 @@ const KeyboardSettings = ({ isMinimized }: KeyboardSettingsProps) => {
         <>
             {!close && (
                 <DefaultPanel>
-                    <h2 className="text-3xl font-bold mb-8 text-center">
-                        {capitalize(translate('keyboard_settings', language))}
-                    </h2>
-                    <div className="flex flex-col gap-4">
-                        <label htmlFor="keyboardLayout" className="text-primary">
-                            {capitalize(translate('keyboard_layout', language))}
-                        </label>
-                        <select
-                            className="w-full p-4 border rounded-lg text-color-third bg-color-primary mb-4"
-                            value={keyboardLayout}
-                            onChange={(e) => setKeyboardLayout(e.target.value as KeyboardLayouts)}
-                        >
-                            <option value="" disabled>
-                                {capitalize(translate('choose_preferable_keyboard_layout', language))}
-                            </option>
-                            {Object.values(KeyboardLayouts).map((keyboardLayout) => (
-                                <option key={keyboardLayout} value={keyboardLayout}>
-                                    {translate(keyboardLayout, language)}
+                    <div className="flex flex-col gap-6 items-center">
+                        <h2 className="text-3xl font-bold mb-6 text-center">
+                            {capitalize(translate('keyboard_settings', language))}
+                        </h2>
+
+                        <div className="flex flex-col gap-4 w-full">
+                            <label htmlFor="keyboardLayout" className="text-primary">
+                                {capitalize(translate('keyboard_layout', language))}
+                            </label>
+                            <select
+                                className="w-full p-4 border rounded-md text-color-third bg-color-primary"
+                                value={keyboardLayout}
+                                onChange={(e) => setKeyboardLayout(e.target.value as KeyboardLayouts)}
+                            >
+                                <option value="" disabled>
+                                    {capitalize(translate('choose_preferable_keyboard_layout', language))}
                                 </option>
-                            ))}
-                        </select>
-                    </div>
-
-                    <div className="flex flex-col gap-2">
-                        <div className="flex flex-row ">
-                            <input
-                                type="checkbox"
-                                id="showKeyboardLayout"
-                                checked={showKeyboardLayout}
-                                onChange={() => setShowKeyboardLayout(showKeyboardLayout === true ? false : true)}
-                                className="mr-2"
-                            />
-                            <label htmlFor="showKeyboardLayout" className="text-primary">
-                                {capitalize(translate('show_keyboard_layout', language))}
-                            </label>
+                                {Object.values(KeyboardLayouts).map((keyboardLayout) => (
+                                    <option key={keyboardLayout} value={keyboardLayout}>
+                                        {translate(keyboardLayout, language)}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
-                        <div className="flex flex-row ">
-                            <input
-                                type="checkbox"
-                                id="showHands"
-                                checked={showHands}
-                                onChange={() => setShowHands(showHands === true ? false : true)}
-                                className="mr-2"
-                            />
-                            <label htmlFor="showHands" className="text-primary">
-                                {capitalize(translate('show_hands', language))}
-                            </label>
-                        </div>
-                    </div>
 
-                    <button
-                        onClick={() => setClose(true)}
-                        className="absolute top-4 right-4 text-3xl hover:text-color-primary-hover-text"
-                    >
-                        <MdClose />
-                    </button>
+                        <div className="flex flex-col gap-4 w-full">
+                            <div className="flex items-center gap-4">
+                                <input
+                                    type="checkbox"
+                                    id="showKeyboardLayout"
+                                    checked={showKeyboardLayout}
+                                    onChange={() => setShowKeyboardLayout(!showKeyboardLayout)}
+                                    className="mr-2"
+                                />
+                                <label htmlFor="showKeyboardLayout" className="text-primary">
+                                    {capitalize(translate('show_keyboard_layout', language))}
+                                </label>
+                            </div>
+
+                            <div className="flex items-center gap-4">
+                                <input
+                                    type="checkbox"
+                                    id="showHands"
+                                    checked={showHands}
+                                    onChange={() => setShowHands(!showHands)}
+                                    className="mr-2"
+                                />
+                                <label htmlFor="showHands" className="text-primary">
+                                    {capitalize(translate('show_hands', language))}
+                                </label>
+                            </div>
+                        </div>
+
+                        <button
+                            onClick={() => setClose(true)}
+                            className="absolute top-4 right-4 text-3xl hover:text-color-primary-hover-text"
+                        >
+                            <MdClose />
+                        </button>
+                    </div>
                 </DefaultPanel>
             )}
             <button

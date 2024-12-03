@@ -3,15 +3,32 @@ import { KeyObj } from '../../types';
 import KeyboardKey from './Key';
 import { useKeyboardSettings } from '../../context/KeyboardSettingsContext';
 import { getLayout } from '../../utils/getLayout';
+import { capitalize } from '../../utils/capitalizeString';
+import { useLanguage } from '../../context/LanguageContext';
+import translate from '../../utils/translate';
 
 type KeyboardLayoutProps = {
-    expectedCharacter: string;
     expectedCharacterKeyObj: KeyObj;
 };
 
-const KeyboardLayout: React.FC<KeyboardLayoutProps> = ({ expectedCharacter, expectedCharacterKeyObj }) => {
+const KeyboardLayout: React.FC<KeyboardLayoutProps> = ({ expectedCharacterKeyObj }) => {
+    const { language } = useLanguage();
     const { keyboardLayout } = useKeyboardSettings();
     const layout = getLayout(keyboardLayout);
+    if (layout === null) {
+        return (
+            <p className="text-lg text-red-500 flex justify-center items-center h-full">
+                {capitalize(translate('error_layout_not_found', language))}
+            </p>
+        );
+    }
+    if (expectedCharacterKeyObj === null || expectedCharacterKeyObj === undefined) {
+        return (
+            <p className="text-lg text-red-500 flex justify-center items-center h-full">
+                {capitalize(translate('error_expected_character_key_obj_not_found', language))}
+            </p>
+        );
+    }
 
     return (
         <div className=" flex flex-col items-center gap-2 p-6 bg-color-third rounded-md max-w-full min-w-[46rem]  max-h-full flex-grow mx-4">
@@ -21,7 +38,6 @@ const KeyboardLayout: React.FC<KeyboardLayoutProps> = ({ expectedCharacter, expe
                         <KeyboardKey
                             key={`${keyObj.key}-${keyObj.hand}`}
                             keyObj={keyObj}
-                            expectedCharacter={expectedCharacter}
                             expecteCharacterKeyObj={expectedCharacterKeyObj}
                         />
                     ))}

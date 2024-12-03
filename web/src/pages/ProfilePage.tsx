@@ -41,10 +41,12 @@ const ProfilePage = () => {
     const handleEditSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const errorMessage = validateEditProfile(email, password, confirmPassword);
-
         setError(translate(errorMessage, language));
         if (!errorMessage && email && password) {
             const { error } = await supabase.auth.updateUser({ email, password });
+            if (error) {
+                setError(translate('error_updating_profile', language));
+            }
             setEditMode(false);
         }
     };

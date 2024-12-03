@@ -27,7 +27,7 @@ const CompletionScreen: React.FC<CompletionScreenProps> = ({ title, buttons, wpm
         <>
             {!close && (
                 <DefaultPanel>
-                    <h2 className="text-3xl font-bold mb-8 text-center">{capitalize(translate(title, language))}</h2>
+                    <h1 className="text-3xl font-bold mb-8 text-center">{capitalize(translate(title, language))}</h1>
 
                     {/* display WPM and Mistakes if provided */}
                     <div className="text-center mb-6">

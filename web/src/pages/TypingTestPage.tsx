@@ -2,13 +2,11 @@ import { useState } from 'react';
 import Keyboard from '../components/keyboard/Keyboard';
 import OptionBox from '../components/utils/OptionBox';
 import Countdown from '../components/utils/Countdown';
-import { useOptions } from '../context/OptionsContext';
+import TypingStats from '../components/keyboard/TypingStats';
 
 const TypingTestPage = () => {
     const isRace = false;
-    const { time, timeLeft } = useOptions();
     const [isOptionsSet, setIsOptionsSet] = useState(false);
-
     return (
         <>
             {!isOptionsSet && (
@@ -19,9 +17,10 @@ const TypingTestPage = () => {
                     isRace={isRace}
                 />
             )}
-            {isOptionsSet && time != null && timeLeft != null && (
+            {isOptionsSet && (
                 <div className="flex flex-col justify-center items-center min-h-screen">
                     <Countdown start={isOptionsSet} />
+                    <TypingStats start={isOptionsSet} />
                     <Keyboard />
                 </div>
             )}

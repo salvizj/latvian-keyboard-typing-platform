@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import translate from '../../utils/translate';
 
@@ -23,6 +24,7 @@ const RangeInput: React.FC<RangeInputProps> = ({
     className = 'mb-6',
 }) => {
     const { language } = useLanguage();
+
     return (
         <div className={className}>
             <label className="block mt-6 mb-2">{translate(label, language)}:</label>
@@ -31,12 +33,12 @@ const RangeInput: React.FC<RangeInputProps> = ({
                 min={min}
                 max={max}
                 step={step}
-                value={value ?? 60}
+                value={value ? value : 60}
                 onChange={(e) => onChange(Number(e.target.value))}
                 className="w-full"
             />
             <p className="text-center mt-1">
-                {value} {labelSuffix ? translate(labelSuffix, language) : ''}
+                {value ? value : 60} {labelSuffix ? translate(labelSuffix, language) : ''}
             </p>
         </div>
     );

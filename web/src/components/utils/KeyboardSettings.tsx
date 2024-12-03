@@ -23,9 +23,9 @@ const KeyboardSettings = ({ isMinimized }: KeyboardSettingsProps) => {
             {!close && (
                 <DefaultPanel>
                     <div className="flex flex-col gap-6 items-center">
-                        <h2 className="text-3xl font-bold mb-6 text-center">
+                        <h1 className="text-3xl font-bold mb-6 text-center">
                             {capitalize(translate('keyboard_settings', language))}
-                        </h2>
+                        </h1>
 
                         <div className="flex flex-col gap-4 w-full">
                             <label htmlFor="keyboardLayout" className="text-primary">

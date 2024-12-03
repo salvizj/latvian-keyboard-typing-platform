@@ -12,7 +12,7 @@ export const useGetPoetTexts = () => {
                 setPoetTexts(data);
             })
             .catch(() => {
-                setPoetTextsError('Error fetching lesson text');
+                setPoetTextsError('error_fetching_poet_text');
             });
     }, []);
 

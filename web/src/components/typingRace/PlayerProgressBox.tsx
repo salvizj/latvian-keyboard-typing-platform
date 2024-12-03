@@ -12,7 +12,7 @@ const PlayerStatsList: React.FC<PlayerStatsListProps> = ({ playerData }) => {
     const { language } = useLanguage();
     return (
         <div>
-            <h2>{capitalize(translate('progress', language))}</h2>
+            <h1>{capitalize(translate('progress', language))}</h1>
             <ul>
                 {playerData.map((player) => (
                     <li key={player.playerId}>

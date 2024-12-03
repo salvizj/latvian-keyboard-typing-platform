@@ -60,7 +60,7 @@ const OptionBox: React.FC<OptionBoxProps> = ({ title, startText, setIsOptionsSet
 
         setValidationErrors(error);
 
-        if (Object.keys(error).length === 0) {
+        if (Object.keys(error).length === 0 && time !== null) {
             setIsOptionsSet(true);
         } else {
             setShowErrors(true);
@@ -68,7 +68,7 @@ const OptionBox: React.FC<OptionBoxProps> = ({ title, startText, setIsOptionsSet
     };
     return (
         <DefaultPanel>
-            <h2 className="text-3xl font-bold mb-8 text-center">{capitalize(translate(title, language))}</h2>
+            <h1 className="text-3xl font-bold mb-8 text-center">{capitalize(translate(title, language))}</h1>
 
             {/* create or input lobbyId and username */}
             {isRace && lobbyMode && (

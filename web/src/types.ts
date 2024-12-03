@@ -46,6 +46,7 @@ export type HandFingerInfo = {
     isShift: boolean;
     isAlt: boolean;
 };
+
 export type LessonCompletionObj = {
     lessonId: number;
     completed: boolean;
@@ -166,4 +167,8 @@ export type ValidationErrors = {
 
 export enum GameOption {
     HideWords = 'hide_words',
+}
+export enum HistoryTypes {
+    TypingRace = 'typingRace',
+    TypingTest = 'typingTest',
 }

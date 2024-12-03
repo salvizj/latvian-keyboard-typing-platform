@@ -12,10 +12,10 @@ const Layout = () => {
 
     return (
         <div className="flex flex-row h-screen">
-            <main className="flex-1 h-full min-h-screen">
+            <main className="flex-1 ">
                 <Outlet />
             </main>
-            <aside className={`h-full min-h-screen transition-all ${isMinimized ? 'w-20' : 'w-2/12'} bg-color-third`}>
+            <aside className={`h-full transition-all ${isMinimized ? 'w-20' : 'w-2/12'} bg-color-third sticky top-0`}>
                 <button
                     className={`text-color-primary rounded hover:bg-primary flex justify-center items-center text-3xl z-50 absolute transition-all top-10 right-6`}
                     onClick={toggleAside}

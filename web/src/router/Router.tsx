@@ -12,8 +12,6 @@ import GamePage from '../pages/GamePage';
 import GamesPage from '../pages/GamesPage';
 import SignUpPage from '../pages/SignUpPage';
 import SignInPage from '../pages/SignInPage';
-import HistoryTypingRacePage from '../pages/HistoryTypingRacePage';
-import HistoryTypingTestPage from '../pages/HistoryTypingTestPage';
 import HistoryPage from '../pages/HistoryPage';
 import ProfilePage from '../pages/ProfilePage';
 
@@ -113,22 +111,6 @@ const Router = () => {
                     element={
                         <ProtectedRoute>
                             <HistoryPage />
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
-                    path="/history/typing-test"
-                    element={
-                        <ProtectedRoute>
-                            <HistoryTypingTestPage />
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
-                    path="/history/typing-race"
-                    element={
-                        <ProtectedRoute>
-                            <HistoryTypingRacePage />
                         </ProtectedRoute>
                     }
                 />

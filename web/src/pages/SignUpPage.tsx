@@ -42,7 +42,7 @@ const SignUpPage = () => {
     return (
         <DefaultPanel>
             <div className="flex flex-col gap-4 justify-center items-start">
-                <h2 className="text-3xl font-bold mb-8 text-center">{capitalize(translate('sign_up', language))}</h2>
+                <h1 className="text-3xl font-bold mb-8 text-center">{capitalize(translate('sign_up', language))}</h1>
                 <form onSubmit={handleSignUp} className="flex flex-col gap-4 w-full">
                     <label>{capitalize(translate('email', language))}</label>
                     <input

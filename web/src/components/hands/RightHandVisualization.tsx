@@ -1,12 +1,24 @@
 import { IoHandRightOutline } from 'react-icons/io5';
 import { shouldHighlightFinger } from '../../utils/shouldHighlightFinger';
 import { Finger, Hand, HandFingerInfo } from '../../types';
+import { useLanguage } from '../../context/LanguageContext';
+import { capitalize } from '../../utils/capitalizeString';
+import translate from '../../utils/translate';
 
 type RightHandVisualizationProps = {
     handFingerInfo: HandFingerInfo;
 };
 
 function RightHandVisualization({ handFingerInfo }: RightHandVisualizationProps) {
+    const { language } = useLanguage();
+
+    if (handFingerInfo === null || handFingerInfo === undefined) {
+        return (
+            <p className="text-lg text-red-500 flex justify-center items-center h-full">
+                {capitalize(translate('error_hand_finger_info_not_found', language))}
+            </p>
+        );
+    }
     return (
         <div className="relative w-48 h-48 flex-shrink-0">
             {/* Hand Icon */}

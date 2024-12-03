@@ -41,7 +41,7 @@ const Lobby: React.FC<LobbyProps> = ({ sendMessage, title, playerData, lobbyId, 
     return (
         <div className="fixed inset-0 bg-black/50 flex justify-center items-center">
             <div className="bg-color-third text-color-primary p-8 rounded-xl shadow-xl w-full max-w-2xl animate-in fade-in zoom-in duration-300">
-                <h2 className="text-3xl font-bold mb-8 text-center">{capitalize(translate(title, language))}</h2>
+                <h1 className="text-3xl font-bold mb-8 text-center">{capitalize(translate(title, language))}</h1>
                 <div className="flex flex-col mb-4">
                     <h3 className="text-lg font-semibold mb-2">
                         {capitalize(translate('current_lobby_id', language))}: {lobbyId}

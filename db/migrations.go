@@ -82,7 +82,7 @@ var tables = []Table{
 				typingTestSettingsId INTEGER NOT NULL,         
 				wpm INTEGER NOT NULL,   
 				mistakeCount INTEGER NOT NULL,      
-				timestamp BIGINT NOT NULL,                  
+				timestamp DATE NOT NULL,                  
 				FOREIGN KEY (typingTestSettingsId) REFERENCES TypingTestSettings(typingTestSettingsId),
 				FOREIGN KEY (userId) REFERENCES Users(userId) 
 			);
@@ -94,7 +94,7 @@ var tables = []Table{
 			CREATE TABLE IF NOT EXISTS TypingRace (
 				typingRaceId TEXT PRIMARY KEY,   
 				typingRaceSettingsId INTEGER NOT NULL,      
-				timestamp BIGINT NOT NULL,                
+				date BIGINT NOT NULL,                
 				FOREIGN KEY (typingRaceSettingsId) REFERENCES TypingRaceSettings(typingRaceSettingsId)
 			);
 		`,

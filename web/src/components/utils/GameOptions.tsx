@@ -18,7 +18,7 @@ const GameOptions = () => {
         <>
             <DefaultPanel>
                 <div className="flex flex-col gap-4 items-start justify-center">
-                    <h2 className="text-3xl font-bold mb-6 text-center">{capitalize(translate('games', language))}</h2>
+                    <h1 className="text-3xl font-bold mb-6 text-center">{capitalize(translate('games', language))}</h1>
                     <label htmlFor="games" className="text-primary mb-2">
                         {capitalize(translate('games', language))}
                     </label>

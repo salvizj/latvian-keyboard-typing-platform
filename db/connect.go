@@ -12,13 +12,13 @@ import (
 var DB *sql.DB
 
 func Initialize() {
-	// Load environment variables from .env file
+	// load environment variables from .env file
 	if err := godotenv.Load(".env"); err != nil {
 		fmt.Fprintf(os.Stderr, "Warning: Could not load .env file\n")
 		os.Exit(1)
 	}
 
-	// Fetch the necessary environment variables
+	// fetch the necessary environment variables
 	user := os.Getenv("SUPABASE_USER")
 	password := os.Getenv("SUPABASE_PASSWORD")
 	host := os.Getenv("SUPABASE_HOST")
@@ -31,10 +31,10 @@ func Initialize() {
 		os.Exit(1)
 	}
 
-	// Construct the PostgreSQL connection string for Supabase
+	// construct the PostgreSQL connection string for Supabase
 	connStr := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=require", user, password, host, port, dbname)
 
-	// Open PostgreSQL connection and assign it to the global DB variable
+	// open connection and assign it to the global DB variable
 	var err error
 	DB, err = sql.Open("postgres", connStr)
 	if err != nil {
@@ -42,12 +42,12 @@ func Initialize() {
 		os.Exit(1)
 	}
 
-	// Ping the PostgreSQL database to verify the connection
+	// ping the PostgreSQL database to verify the connection
 	if err := DB.Ping(); err != nil {
 		fmt.Fprintf(os.Stderr, "Failed to ping database: %s\n", err)
 		os.Exit(1)
 	}
 
-	// Successful connection message
+	// successful connection message
 	fmt.Println("Successfully connected to Supabase PostgreSQL database!")
 }

@@ -2,7 +2,7 @@ import TypingInputField from './TypingInputField';
 import TypingTextDisplay from './TypingTextDisplay';
 import KeyboardLayout from './KeyboardLayout';
 import { useEffect } from 'react';
-import { useTypingSession } from '../../hooks/useCharacterManagement';
+import { useTypingSession } from '../../hooks/useTypingSession';
 import { useKeyboardSettings } from '../../context/KeyboardSettingsContext';
 import LeftHandVisualization from '../hands/LeftHandVisualization';
 import RightHandVisualization from '../hands/RightHandVisualization';
@@ -20,15 +20,16 @@ const Keyboard: React.FC<KeyboardProps> = ({ lessonId }) => {
     const { isTypingFinished } = useTyping();
 
     useEffect(() => {
-        if (lessonId && lessonId === undefined && isTypingFinished) {
+        if (lessonId !== undefined && isTypingFinished) {
             const completedAlready = hasLessonBeenCompleted(lessonId);
-            if (!completedAlready) completeLesson(lessonId);
+            if (!completedAlready) {
+                completeLesson(lessonId);
+            }
         }
     }, [isTypingFinished, lessonId]);
 
     const {
         onKeyPress: manageKeyPress,
-        expectedCharacter,
         currentCharacterIndex,
         handFingerInfo,
         expectedCharacterKeyObj,
@@ -36,19 +37,14 @@ const Keyboard: React.FC<KeyboardProps> = ({ lessonId }) => {
     return (
         <>
             <div className="flex justify-center flex-col items-center max-h-screen">
-                {expectedCharacterKeyObj && handFingerInfo && (
+                {!isTypingFinished && handFingerInfo && expectedCharacterKeyObj && (
                     <>
                         <TypingTextDisplay text={text} currentCorrectTextCharacterIndex={currentCharacterIndex} />
                         <TypingInputField onKeyPress={manageKeyPress} isTypingFinished={isTypingFinished} />
 
                         <div className="flex items-center justify-between">
                             {showHands && <LeftHandVisualization handFingerInfo={handFingerInfo} />}
-                            {showKeyboardLayout && (
-                                <KeyboardLayout
-                                    expectedCharacter={expectedCharacter}
-                                    expectedCharacterKeyObj={expectedCharacterKeyObj}
-                                />
-                            )}
+                            {showKeyboardLayout && <KeyboardLayout expectedCharacterKeyObj={expectedCharacterKeyObj} />}
 
                             {showHands && <RightHandVisualization handFingerInfo={handFingerInfo} />}
                         </div>

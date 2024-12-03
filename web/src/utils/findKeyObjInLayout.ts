@@ -2,12 +2,16 @@ import { KeyObj } from '../types';
 
 export type FindKeyObjInLayoutParams = {
     targetKey: string;
-    layout: KeyObj[][];
+    layout: KeyObj[][] | null;
 };
 
 // finds the KeyObj by key from the given layout
 export const findKeyObjInLayout = ({ targetKey, layout }: FindKeyObjInLayoutParams): KeyObj | null => {
     const normalizedTargetKey = targetKey.toLowerCase();
+
+    if (layout === null) {
+        return null;
+    }
 
     if (typeof targetKey !== 'string' || targetKey === undefined) {
         return null;

@@ -5,6 +5,7 @@ import translate from '../utils/translate';
 import { LessonDifficulty, Lesson } from '../types';
 import { useEffect, useState } from 'react';
 import { useGetLessons } from '../hooks/useGetLessons';
+import DefaultPanel from '../components/utils/DefaultPanel';
 
 const LessonsPage = () => {
     const { language } = useLanguage();
@@ -48,22 +49,27 @@ const LessonsPage = () => {
     }
 
     return (
-        <div className="flex justify-center flex-col items-center min-h-screen gap-6">
-            <h1 className="text-4xl text-color-secondary">{capitalize(translate('lessons', language))}</h1>
-            <select
-                className="w-1/12 p-4 border rounded-md text-color-third bg-color-primary"
-                value={selectedLessonDifficulty}
-                onChange={(e) => setSelectedLessonDifficulty(e.target.value)}
-            >
-                <option value="">{capitalize(translate('all', language))}</option>
-                {Object.values(LessonDifficulty).map((difficulty) => (
-                    <option key={difficulty} value={difficulty}>
-                        {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
-                    </option>
-                ))}
-            </select>
-            <LessonLinks lessons={filteredLessons} />
-        </div>
+        <DefaultPanel width="max-w-6xl">
+            <div className="flex flex-col justify-center items-center min-h-screen gap-6 ">
+                <h1 className="text-4xl text-color-secondary mt-6">{capitalize(translate('lessons', language))}</h1>
+                <label htmlFor="lessonDifficulty" className="text-lg text-color-secondary">
+                    {capitalize(translate('lesson_difficulty', language))}
+                </label>
+                <select
+                    className="w-full max-w-sm p-4 border rounded-md text-color-third bg-color-primary"
+                    value={selectedLessonDifficulty}
+                    onChange={(e) => setSelectedLessonDifficulty(e.target.value)}
+                >
+                    <option value="">{capitalize(translate('all_difficulty', language))}</option>
+                    {Object.values(LessonDifficulty).map((difficulty: LessonDifficulty) => (
+                        <option key={difficulty} value={difficulty}>
+                            {capitalize(translate(difficulty, language)) + ' ' + translate('difficulty', language)}
+                        </option>
+                    ))}
+                </select>
+                <LessonLinks lessons={filteredLessons} />
+            </div>
+        </DefaultPanel>
     );
 };
 

@@ -52,7 +52,7 @@ const Dashboard = ({ isMinimized }: DashboardProps) => {
                 </div>
 
                 <div className="flex-1 px-4 py-6  ">
-                    <div className={`flex flex-col ${isMinimized ? 'items-center' : ''} pt-6`}>
+                    <div className={`flex flex-col ${isMinimized ? 'items-center' : ''} pt-6 sticky top-0`}>
                         <DashboardNavigation isMinimized={isMinimized} />
                         <KeyboardSettings isMinimized={isMinimized} />
                     </div>

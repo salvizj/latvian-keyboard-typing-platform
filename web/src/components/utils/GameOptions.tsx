@@ -8,12 +8,20 @@ import { useNavigate } from 'react-router-dom';
 
 const GameOptions = () => {
     const { language } = useLanguage();
-    const [gameOption, setGameOption] = useState<GameOption>(GameOption.HideWords);
+    const [gameOption, setGameOption] = useState<GameOption | string>('');
+    const [showError, setShowError] = useState<boolean>(false);
     const navigate = useNavigate();
 
     const startGame = () => {
+        if (!gameOption) {
+            setShowError(true);
+            return; // Prevent navigation if no game option is selected
+        }
+
+        setShowError(false); // Clear error if a game option is selected
         navigate(`/game/${gameOption}`);
     };
+
     return (
         <>
             <DefaultPanel>
@@ -38,8 +46,12 @@ const GameOptions = () => {
                         ))}
                     </select>
 
+                    {!gameOption && showError && (
+                        <p className="text-red-500 text-sm">{capitalize(translate('must_select_game', language))}</p>
+                    )}
+
                     <button
-                        onClick={() => startGame()}
+                        onClick={startGame}
                         className="bg-transparent text-primary py-2 px-6 rounded-md text-center hover:opacity-90 transition-opacity text-base hover:text-color-primary-hover-text border secondary"
                     >
                         {capitalize(translate('start_game', language))}

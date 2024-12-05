@@ -1,7 +1,7 @@
-import { Finger, Hand, HandFingerInfo } from '../types';
+import { Finger, Hand, HandFingerInfoObj } from '../types';
 
 export const shouldHighlightFinger = (
-    handFingerInfo: HandFingerInfo,
+    handFingerInfo: HandFingerInfoObj,
     targetHand: Hand,
     targetFinger: Finger
 ): boolean => {
@@ -17,7 +17,10 @@ export const shouldHighlightFinger = (
     if (isShift && hand === Hand.Right && targetHand === Hand.Left && targetFinger === Finger.Pinky) return true;
 
     // when alt is required light up only right hands thumb
-    if (isAlt && targetHand === Hand.Right && targetFinger == Finger.Thumb) {
+    if (isAlt && targetHand === Hand.Right && targetFinger === Finger.Thumb) {
+        return true;
+    }
+    if (hand === Hand.Both && targetFinger === Finger.Thumb) {
         return true;
     }
 

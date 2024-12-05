@@ -1,12 +1,12 @@
 import { IoHandLeftOutline } from 'react-icons/io5';
 import { shouldHighlightFinger } from '../../utils/shouldHighlightFinger';
-import { Finger, Hand, HandFingerInfo } from '../../types';
+import { Finger, Hand, HandFingerInfoObj } from '../../types';
 import { capitalize } from '../../utils/capitalizeString';
 import translate from '../../utils/translate';
 import { useLanguage } from '../../context/LanguageContext';
 
 type LeftHandVisualizationProps = {
-    handFingerInfo: HandFingerInfo;
+    handFingerInfo: HandFingerInfoObj;
 };
 
 function LeftHandVisualization({ handFingerInfo }: LeftHandVisualizationProps) {

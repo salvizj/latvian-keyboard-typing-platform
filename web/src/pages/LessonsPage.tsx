@@ -26,24 +26,24 @@ const LessonsPage = () => {
 
     if (!Array.isArray(lessons) || lessons.length === 0) {
         return (
-            <p className="flex justify-center items-center text-center text-red-500 text-lg h-screen">
-                {translate('error_no_lessons_found', language)}
+            <p className="text-xl text-color-secondary flex justify-center items-center h-full">
+                {capitalize(translate('error_lessons_not_available', language))}
             </p>
         );
     }
 
     if (lessonsError) {
         return (
-            <p className="flex justify-center items-center text-center text-red-500 text-lg h-screen">
-                {translate(lessonsError, language)}
+            <p className="text-xl text-color-secondary flex justify-center items-center h-full">
+                {capitalize(translate(lessonsError, language))}
             </p>
         );
     }
 
     if (Array.isArray(lessons) && !Array.isArray(filteredLessons)) {
         return (
-            <p className="flex justify-center items-center text-center text-red-500 text-lg h-screen">
-                {translate('error_no_lessons_found_with_this_difficulty', language)}
+            <p className="text-xl text-color-secondary flex justify-center items-center h-full">
+                {capitalize(translate('error_no_lessons_found_with_this_difficulty', language))}
             </p>
         );
     }

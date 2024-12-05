@@ -9,12 +9,14 @@ import translate from '../../utils/translate';
 
 type KeyboardLayoutProps = {
     expectedCharacterKeyObj: KeyObj;
+    expectedCharacter: string;
 };
 
-const KeyboardLayout: React.FC<KeyboardLayoutProps> = ({ expectedCharacterKeyObj }) => {
+const KeyboardLayout: React.FC<KeyboardLayoutProps> = ({ expectedCharacterKeyObj, expectedCharacter }) => {
     const { language } = useLanguage();
     const { keyboardLayout } = useKeyboardSettings();
     const layout = getLayout(keyboardLayout);
+
     if (layout === null) {
         return (
             <p className="text-lg text-red-500 flex justify-center items-center h-full">
@@ -22,6 +24,7 @@ const KeyboardLayout: React.FC<KeyboardLayoutProps> = ({ expectedCharacterKeyObj
             </p>
         );
     }
+
     if (expectedCharacterKeyObj === null || expectedCharacterKeyObj === undefined) {
         return (
             <p className="text-lg text-red-500 flex justify-center items-center h-full">
@@ -31,14 +34,15 @@ const KeyboardLayout: React.FC<KeyboardLayoutProps> = ({ expectedCharacterKeyObj
     }
 
     return (
-        <div className=" flex flex-col items-center gap-2 p-6 bg-color-third rounded-md max-w-full min-w-[46rem]  max-h-full flex-grow mx-4">
+        <div className=" flex flex-col items-center justify-center gap-2 p-6 bg-color-third rounded-md max-w-[46rem] min-w-[46rem] max-h-full mx-4">
             {layout.map((keyObjRow, rowIndex) => (
-                <div key={`row-${rowIndex}`} className="flex w-full gap-2 justify-center">
+                <div key={`row-${rowIndex}`} className="flex gap-2 justify-center">
                     {keyObjRow.map((keyObj: KeyObj) => (
                         <KeyboardKey
                             key={`${keyObj.key}-${keyObj.hand}`}
                             keyObj={keyObj}
                             expecteCharacterKeyObj={expectedCharacterKeyObj}
+                            expectedCharacter={expectedCharacter}
                         />
                     ))}
                 </div>

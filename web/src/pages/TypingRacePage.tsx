@@ -7,7 +7,7 @@ import { JoinLobbyData, LobbyStatus, Player, ProgressData, WebSocketMessageType 
 import PlayerProgressBox from '../components/typingRace/PlayerProgressBox';
 import Countdown from '../components/utils/Countdown';
 import { useOptions } from '../context/OptionsContext';
-import { useTyping } from '../context/TypingContext';
+// import { useTyping } from '../context/TypingContext';
 import { useLobbyStatusMenagement } from '../hooks/useLobbyStatusMenagement';
 import { useHandleWebSocketMessages } from '../hooks/useHandleWebSocketMessages';
 import { useAuthStatus } from '../hooks/useAuthStatus';
@@ -18,7 +18,7 @@ const TypingRacePage = () => {
 
     const { text, setText, time, setTime, lobbyId, setLobbyId, username, timeLeft, setTimeLeft } = useOptions();
 
-    const { wpm, setProcentsOfTextTyped } = useTyping();
+    // const { wpm, setProcentsOfTextTyped } = useTyping();
     const [isOptionsSet, setIsOptionsSet] = useState(false);
     const [lobbyStatus, setLobbyStatus] = useState<LobbyStatus>(LobbyStatus.Waiting);
     const [playerData, setPlayerData] = useState<Player[] | null>(null);
@@ -42,21 +42,6 @@ const TypingRacePage = () => {
         sendMessage,
         isOptionsSet,
     });
-
-    console.log(
-        'time:',
-        time,
-        'timeLeft:',
-        timeLeft,
-        'lobbyStatus:',
-        lobbyStatus,
-        'isRace:',
-        isRace,
-        'wpm:',
-        wpm,
-        'setProcentsOfTextTyped:',
-        setProcentsOfTextTyped
-    );
 
     // handle WebSocket message updates
     useEffect(() => {

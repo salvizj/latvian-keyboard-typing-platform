@@ -37,23 +37,27 @@ const TextSelectionSection: React.FC<{
         <div className="flex flex-col gap-4 mb-4">
             <label className="text-left">{translate('select_text_option', language)}</label>
 
-            <div className="flex gap-4 justify-start items-center">
-                <button
-                    className={`py-2 px-6 rounded-md text-center hover:opacity-90 transition-opacity text-base hover:text-color-primary-hover-text border secondary ${!isCustomText ? 'bg-color-primary text-color-third' : 'bg-transparent text-primary'}`}
-                    onClick={() => setIsCustomText(false)}
-                >
-                    {capitalize(translate('pick_text', language))}
-                </button>
-                <button
-                    className={`py-2 px-6 rounded-md text-center hover:opacity-90 transition-opacity text-base hover:text-color-primary-hover-text border secondary ${isCustomText ? 'bg-color-primary text-color-third' : 'bg-transparent text-primary'}`}
-                    onClick={() => setIsCustomText(true)}
-                >
-                    {capitalize(translate('custom_text', language))}
-                </button>
-            </div>
+            {poetTexts && (
+                <div className="flex gap-4 justify-start items-center">
+                    <button
+                        className={`py-2 px-6 rounded-md text-center hover:opacity-90 transition-opacity text-base hover:text-color-primary-hover-text border secondary ${!isCustomText ? 'bg-color-primary text-color-third' : 'bg-transparent text-primary'}`}
+                        onClick={() => setIsCustomText(false)}
+                    >
+                        {capitalize(translate('pick_text', language))}
+                    </button>
+                    <button
+                        className={`py-2 px-6 rounded-md text-center hover:opacity-90 transition-opacity text-base hover:text-color-primary-hover-text border secondary ${isCustomText ? 'bg-color-primary text-color-third' : 'bg-transparent text-primary'}`}
+                        onClick={() => setIsCustomText(true)}
+                    >
+                        {capitalize(translate('custom_text', language))}
+                    </button>
+                </div>
+            )}
+
+            {!poetTexts && <p className="text-red-500 mt-2">{translate('poet_text_not_available', language)}</p>}
 
             <div className="mt-2">
-                {isCustomText ? (
+                {isCustomText || !poetTexts ? (
                     <textarea
                         className="w-full p-4 mb-2 border rounded-md resize-none text-color-third bg-color-primary placeholder-color-third"
                         maxLength={1000}

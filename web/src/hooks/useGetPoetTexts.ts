@@ -9,7 +9,11 @@ export const useGetPoetTexts = () => {
     useEffect(() => {
         getPoetTexts()
             .then((data) => {
-                setPoetTexts(data);
+                if (data && Array.isArray(data)) {
+                    setPoetTexts(data);
+                } else {
+                    setPoetTexts([]);
+                }
             })
             .catch(() => {
                 setPoetTextsError('error_fetching_poet_text');

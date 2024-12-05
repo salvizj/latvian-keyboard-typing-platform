@@ -1,22 +1,15 @@
 import { KeyObj } from '../types';
 
-export type FindKeyObjInLayoutParams = {
-    targetKey: string;
-    layout: KeyObj[][] | null;
-};
-
 // finds the KeyObj by key from the given layout
-export const findKeyObjInLayout = ({ targetKey, layout }: FindKeyObjInLayoutParams): KeyObj | null => {
+export const findKeyObjInLayout = (targetKey: string, layout: KeyObj[][] | null): KeyObj | null => {
     const normalizedTargetKey = targetKey.toLowerCase();
 
-    if (layout === null) {
+    // Check for invalid layout or targetKey
+    if (!targetKey || layout === null) {
         return null;
     }
 
-    if (typeof targetKey !== 'string' || targetKey === undefined) {
-        return null;
-    }
-
+    // loop through each row in the layout
     for (const row of layout) {
         const keyObj = row.find(
             (key) =>

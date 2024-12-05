@@ -6,8 +6,8 @@ import { useLocation } from 'react-router-dom';
 type OptionsContextType = {
     text: string;
     setText: React.Dispatch<React.SetStateAction<string>>;
-    time: number | null;
-    setTime: React.Dispatch<React.SetStateAction<number | null>>;
+    time: number;
+    setTime: React.Dispatch<React.SetStateAction<number>>;
     timeLeft: number | null;
     setTimeLeft: React.Dispatch<React.SetStateAction<number | null>>;
     lobbyId: string;
@@ -36,7 +36,7 @@ type OptionsProviderProps = {
 
 export const OptionsProvider: React.FC<OptionsProviderProps> = ({ children }) => {
     const [text, setText] = useState<string>('');
-    const [time, setTime] = useState<number | null>(null);
+    const [time, setTime] = useState<number>(60);
     const [timeLeft, setTimeLeft] = useState<number | null>(time);
     const [lobbyId, setLobbyId] = useState<string>('');
     const [username, setUsername] = useState<string>('');
@@ -52,7 +52,7 @@ export const OptionsProvider: React.FC<OptionsProviderProps> = ({ children }) =>
     useEffect(() => {
         if (location.pathname !== prevPathname) {
             setText('');
-            setTime(null);
+            setTime(60);
             setTimeLeft(time);
             setLobbyId('');
             setUsername('');
@@ -61,7 +61,6 @@ export const OptionsProvider: React.FC<OptionsProviderProps> = ({ children }) =>
             setIsCustomText(false);
             setCustomText('');
             setSelectedText('');
-
             setPrevPathname(location.pathname);
         }
     }, [location.pathname, prevPathname, time]);
@@ -82,13 +81,13 @@ export const OptionsProvider: React.FC<OptionsProviderProps> = ({ children }) =>
                 maxPlayerCount,
                 setMaxPlayerCount,
                 lobbyMode,
+                selectedText,
+                setSelectedText,
                 setLobbyMode,
                 isCustomText,
                 setIsCustomText,
                 customText,
                 setCustomText,
-                selectedText,
-                setSelectedText,
                 poetTexts,
                 poetTextsError,
             }}

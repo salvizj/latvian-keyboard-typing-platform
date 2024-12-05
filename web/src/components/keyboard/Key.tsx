@@ -46,26 +46,22 @@ const KeyboardKey: React.FC<KeyboardKeyProps> = ({ keyObj, expectedCharacter, ex
 
     const getKeyClasses = () => {
         const classes = [
-            keyObj.size || '',
+            keyObj.width,
             isNextKey ? 'next-key' : '',
             shouldHighlightShiftKey() ? 'shift-key' : '',
             shouldHighlightAltKey() ? 'alt-key' : '',
         ];
+        console.log(keyObj.width);
 
         return classes.filter(Boolean).join(' ');
     };
 
     return (
         <div
-            className={
-                getKeyClasses() +
-                ' flex items-center justify-center rounded-md border keyboard-border text-color-primary tracking-wide min-h-[2rem] max-h-[4rem]'
-            }
+            className={`${getKeyClasses()} flex justify-center items-center rounded-md border keyboard-border text-color-primary tracking-wide h-10`}
         >
-            <div className="flex flex-col items-center">
-                <span>{keyObj.label}</span>
-                {keyObj.altLabel && <span className="text-xs text-gray-500">{keyObj.altLabel}</span>}
-            </div>
+            <span>{keyObj.label}</span>
+            {keyObj.altLabel && <span className="text-xs text-gray-500">{keyObj.altLabel}</span>}
         </div>
     );
 };

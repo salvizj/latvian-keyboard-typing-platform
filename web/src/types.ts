@@ -14,12 +14,13 @@ export enum KeyboardLayouts {
 export enum Hand {
     Left = 'left',
     Right = 'right',
+    Both = 'both',
 }
 
 export type KeyObj = {
     key: string;
     label: string;
-    size: string;
+    width: string;
     hand?: Hand;
     finger?: Finger;
     altKey?: string;
@@ -40,7 +41,7 @@ export type Lesson = {
     lessonText: string;
 };
 
-export type HandFingerInfo = {
+export type HandFingerInfoObj = {
     hand: Hand;
     finger: Finger;
     isShift: boolean;
@@ -168,6 +169,7 @@ export type ValidationErrors = {
 export enum GameOption {
     HideWords = 'hide_words',
 }
+
 export enum HistoryTypes {
     TypingRace = 'typingRace',
     TypingTest = 'typingTest',

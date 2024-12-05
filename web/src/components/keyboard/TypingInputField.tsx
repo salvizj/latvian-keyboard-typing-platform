@@ -31,23 +31,25 @@ const TypinginputField: React.FC<TypinginputFieldProps> = ({ onKeyPress, isTypin
     }, [isTypingFinished]);
 
     return (
-        <div className="min-w-[46rem] mx-auto p-4">
-            <form>
-                <div className="mb-6">
-                    <label htmlFor="inputField" className="text-color-secondary font-md">
-                        {translate(labelText, language)}
-                    </label>
+        !isTypingFinished && (
+            <div className="min-w-[46rem] mx-auto p-4">
+                <form>
+                    <div className="mb-6">
+                        <label htmlFor="inputField" className="text-color-secondary font-md">
+                            {translate(labelText, language)}
+                        </label>
 
-                    <input
-                        id="inputField"
-                        type="text"
-                        value={currentWord}
-                        onChange={oninputChange}
-                        className="bg-secondary border border-primary rounded-md p-2 w-full text-xl text-primary focus:outline-none focus:ring-2 focus:ring-secondary"
-                    />
-                </div>
-            </form>
-        </div>
+                        <input
+                            id="inputField"
+                            type="text"
+                            value={currentWord}
+                            onChange={oninputChange}
+                            className="bg-secondary border border-primary rounded-md p-2 w-full text-xl text-primary focus:outline-none focus:ring-2 focus:ring-secondary"
+                        />
+                    </div>
+                </form>
+            </div>
+        )
     );
 };
 

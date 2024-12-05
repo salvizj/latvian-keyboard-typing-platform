@@ -14,6 +14,7 @@ func InitialRoutes(e *echo.Echo) error {
 	e.GET("/api/lessons", handlers.GetLessonsHandler)
 	e.GET("/api/poet-texts", handlers.GetPoetTextsHandler)
 	e.GET("/api/latvian-words", handlers.GetLatvinWordsHandler)
+	e.POST("/api/post-typing-test", handlers.PostTypingTestHandler)
 
 	e.GET("/ws", func(c echo.Context) error {
 		return handlers.WsHandler(c, lm)

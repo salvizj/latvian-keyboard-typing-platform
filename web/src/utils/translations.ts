@@ -132,6 +132,15 @@ const translations: Translations = {
         profile: 'profile',
         error_game_not_available: 'game available. Please try again later!',
         error_lessons_not_available: 'lessons unavailable. Please try again later!',
+        error_failed_to_save_typing_test: 'error: failed to save typing test',
+        date_from: 'date from',
+        date_till: 'date till',
+        error_incorect_date: 'error: the start date cannot be later than the end date',
+        error_incorrect_date: 'the dates are invalid. The start date cannot be later than the end date',
+        error_incorrect_date_format: 'the dates are invalid. The dates must be in YYYY-MM-DD format',
+        error_incorrect_page: 'the page number is invalid. The page number must be a positive number',
+        error_incorrect_history_type:
+            'the history type is invalid. The history type must be "typingTest" or "typingRace"',
     },
     lv: {
         login: 'pieslēgties',
@@ -264,6 +273,13 @@ const translations: Translations = {
         profile: 'profils',
         error_game_not_available: 'spele nav pieejama. Lūdzu mēģiniet vēlāk!',
         error_lessons_not_available: 'nodarības nav pieejamas. Lūdzu mēģiniet vēlāk!',
+        error_failed_to_save_typing_test: 'kļūda; neizdevās saglabāt rakstīšanas testu',
+        date_from: 'datums no',
+        date_till: 'datums līdz',
+        error_incorrect_date: 'datumi nav derīgs. Sākuma datums nevar būt vēlāks par beigu datumu',
+        error_incorrect_date_format: 'datumi nav derīgs. Datumi ir jābūt YYYY-MM-DD',
+        error_incorrect_page: 'lapas numurs nav derīgs. Lapas numuram ir jābūt pozitīvam skaitlim',
+        error_incorrect_history_type: 'vēstures tips nav derīgs. Vēstures tipam ir jābūt “typingTest” vai “typingRace”',
     },
 };
 

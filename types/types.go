@@ -107,3 +107,18 @@ type ProgressData struct {
 type ErrorData struct {
 	Message string `json:"message"`
 }
+type TypingTestSettings struct {
+	TypingTestSettingsId int    `json:"typingTestSettingsId,omitempty"`
+	TextType             string `json:"textType"`
+	TextId               int    `json:"textId,omitempty"`
+	CustomText           string `json:"customText,omitempty"`
+	Time                 int    `json:"time"`
+}
+
+type TypingTest struct {
+	UserId               string `json:"userId"`
+	TypingTestSettingsId int    `json:"typingTestSettingsId"`
+	Wpm                  int    `json:"wpm"`
+	MistakeCount         int    `json:"mistakeCount"`
+	Date                 string `json:"date"`
+}

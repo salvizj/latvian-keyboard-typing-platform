@@ -24,29 +24,31 @@ export const useTypingSession = () => {
     const [handFingerInfoObj, setHandFingerInfoObj] = useState<HandFingerInfoObj | null>(null);
 
     // gets next character from text with nextIndex and finds keyObj
-    const processNextCharacter = (nextIndex: number): number => {
-        // check if typing is finished
-        const newExpectedCharacter = text[nextIndex];
-        if (!newExpectedCharacter) {
-            if (!isTypingFinished) {
+    const processNextCharacter = useCallback(
+        (nextIndex: number): number => {
+            const newExpectedCharacter = text[nextIndex];
+            if (!newExpectedCharacter) {
+                if (!isTypingFinished) {
+                    setIsTypingFinished(true);
+                }
+                return nextIndex - 1;
+            }
+
+            const newExpectedCharacterKeyObj = findKeyObjInLayout(newExpectedCharacter, layout);
+
+            if (!newExpectedCharacter) {
                 setIsTypingFinished(true);
             }
-            return nextIndex - 1;
-        }
 
-        const newExpectedCharacterKeyObj = findKeyObjInLayout(newExpectedCharacter, layout);
+            updateWpm({ currentCharacterIndex, time, timeLeft, setWpm });
+            setExpectedCharacter(newExpectedCharacter);
+            setExpectedCharacterKeyObj(newExpectedCharacterKeyObj);
+            updateHandFingerInfoObj(newExpectedCharacterKeyObj, newExpectedCharacter, setHandFingerInfoObj);
 
-        if (!newExpectedCharacter) {
-            setIsTypingFinished(true);
-        }
-
-        updateWpm({ currentCharacterIndex, time, timeLeft, setWpm });
-        setExpectedCharacter(newExpectedCharacter);
-        setExpectedCharacterKeyObj(newExpectedCharacterKeyObj);
-        updateHandFingerInfoObj(newExpectedCharacterKeyObj, newExpectedCharacter, setHandFingerInfoObj);
-
-        return nextIndex;
-    };
+            return nextIndex;
+        },
+        [text, layout, currentCharacterIndex, time, timeLeft, setWpm, isTypingFinished, setIsTypingFinished]
+    );
 
     // pass this func to input field
     const onKeyPress = useCallback(
@@ -64,13 +66,13 @@ export const useTypingSession = () => {
                 setMistakeCount((prev) => prev + 1);
             }
         },
-        [isTypingFinished, expectedCharacter, currentCharacterIndex]
+        [isTypingFinished, expectedCharacter, setMistakeCount]
     );
 
     useEffect(() => {
         updateTypingProgress(currentCharacterIndex, text.length, setProcentsOfTextTyped);
         processNextCharacter(currentCharacterIndex);
-    }, [currentCharacterIndex]);
+    }, [currentCharacterIndex, processNextCharacter, setProcentsOfTextTyped, text.length]);
 
     useEffect(() => {
         if (!text) return;
@@ -105,7 +107,7 @@ export const useTypingSession = () => {
                 text,
             });
         }
-    }, [isTypingFinished, text]);
+    }, [isTypingFinished, setMistakeCount, text]);
 
     // return value
     return {

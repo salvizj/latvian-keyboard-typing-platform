@@ -31,6 +31,7 @@ const GamePage = () => {
         return (
             <CompletionScreen
                 title={completionTitle}
+                showMetrics={false}
                 buttons={[
                     {
                         text: 'home',

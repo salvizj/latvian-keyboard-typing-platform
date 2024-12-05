@@ -51,7 +51,6 @@ const KeyboardKey: React.FC<KeyboardKeyProps> = ({ keyObj, expectedCharacter, ex
             shouldHighlightShiftKey() ? 'shift-key' : '',
             shouldHighlightAltKey() ? 'alt-key' : '',
         ];
-        console.log(keyObj.width);
 
         return classes.filter(Boolean).join(' ');
     };

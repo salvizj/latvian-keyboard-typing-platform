@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { capitalize } from '../../utils/capitalizeString';
 import translate from '../../utils/translate';
 import DefaultPanel from './DefaultPanel';
 import { MdClose } from 'react-icons/md';
+import { useTyping } from '../../context/TypingContext';
 
 type ButtonProps = {
     text: string;
@@ -15,13 +16,27 @@ type ButtonProps = {
 type CompletionScreenProps = {
     title: string;
     buttons: ButtonProps[];
-    wpm?: number;
-    mistakeCount?: number;
+    error?: string | null;
+    showMetrics?: boolean;
 };
 
-const CompletionScreen: React.FC<CompletionScreenProps> = ({ title, buttons, wpm, mistakeCount }) => {
+const CompletionScreen: React.FC<CompletionScreenProps> = ({ title, buttons, error, showMetrics }) => {
     const { language } = useLanguage();
     const [close, setClose] = useState(false);
+    const { wpm, mistakeCount } = useTyping();
+    const [tempWpm, setTempWpm] = useState<number | null>(null);
+    const [tempMistakeCount, setTempMistakeCount] = useState<number | null>(null);
+
+    useEffect(() => {
+        if (!showMetrics) return;
+
+        if (wpm > 0) {
+            setTempWpm(wpm);
+        }
+        if (mistakeCount > 0) {
+            setTempMistakeCount(mistakeCount);
+        }
+    }, [wpm, mistakeCount, showMetrics]);
 
     return (
         <>
@@ -29,19 +44,26 @@ const CompletionScreen: React.FC<CompletionScreenProps> = ({ title, buttons, wpm
                 <DefaultPanel>
                     <h1 className="text-3xl font-bold mb-8 text-center">{capitalize(translate(title, language))}</h1>
 
-                    {/* display WPM and Mistakes if provided */}
-                    <div className="text-center mb-6">
-                        {wpm !== undefined && (
-                            <p className="text-xl mb-2">
-                                {capitalize(translate('wpm', language))} {wpm}
-                            </p>
-                        )}
-                        {mistakeCount !== undefined && (
-                            <p className="text-xl">
-                                {capitalize(translate('mistakes', language))} {mistakeCount}
-                            </p>
-                        )}
-                    </div>
+                    {showMetrics && (
+                        <div className="text-center mb-6">
+                            {tempWpm && (
+                                <p className="text-xl mb-2">
+                                    {capitalize(translate('wpm', language))} {tempWpm}
+                                </p>
+                            )}
+                            {tempMistakeCount && (
+                                <p className="text-xl">
+                                    {capitalize(translate('mistakes', language))} {tempMistakeCount}
+                                </p>
+                            )}
+                        </div>
+                    )}
+
+                    {error && (
+                        <p className="text-sm text-red-500 flex justify-center items-center p-4">
+                            {capitalize(translate(error, language))}
+                        </p>
+                    )}
 
                     <div className="flex flex-row gap-4 items-center justify-center">
                         {buttons.map((button, index) => (

@@ -1,10 +1,12 @@
+import { HandFingerInfoObj, KeyObj } from '../types';
+
 type ResetTypingStateParams = {
     setCurrentCharacterIndex: (value: number) => void;
     setExpectedCharacter: (value: string) => void;
     setCurrentPressedKey: (value: string | null) => void;
-    setHandFingerInfoObj: (value: any) => void;
+    setHandFingerInfoObj: (value: HandFingerInfoObj | null) => void;
     setMistakeCount: (value: number) => void;
-    setExpectedCharacterKeyObj: (value: any) => void;
+    setExpectedCharacterKeyObj: (value: KeyObj | null) => void;
     text: string;
 };
 

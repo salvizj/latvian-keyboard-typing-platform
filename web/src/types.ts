@@ -174,3 +174,19 @@ export enum HistoryTypes {
     TypingRace = 'typingRace',
     TypingTest = 'typingTest',
 }
+
+export type TypingTest = {
+    userId: string;
+    typingTestSettingsId: number | null;
+    wpm: number;
+    mistakeCount: number;
+    date: string;
+};
+
+export type TypingTestSettings = {
+    typingTestSettingsId: null | number;
+    textType: 'poet' | 'custom';
+    textId: number | null;
+    customText: string | null;
+    time: number;
+};

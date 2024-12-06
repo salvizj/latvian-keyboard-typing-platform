@@ -107,6 +107,7 @@ type ProgressData struct {
 type ErrorData struct {
 	Message string `json:"message"`
 }
+
 type TypingTestSettings struct {
 	TypingTestSettingsId int    `json:"typingTestSettingsId,omitempty"`
 	TextType             string `json:"textType"`
@@ -122,3 +123,37 @@ type TypingTest struct {
 	MistakeCount         int    `json:"mistakeCount"`
 	Date                 string `json:"date"`
 }
+
+type TypingRace struct {
+	TypingRaceId         string `json:"typingRaceId"`
+	TypingRaceSettingsId int    `json:"typingRaceSettingsId"`
+	Date                 string `json:"date"`
+}
+
+type TypingRaceSettings struct {
+	TypingRaceSettingsId int    `json:"typingRaceSettingsId"`
+	TextType             string `json:"textType"`
+	TextId               int    `json:"textId,omitempty"`
+	CustomText           string `json:"customText,omitempty"`
+	MaxPlayerCount       int    `json:"maxPlayerCount"`
+	Time                 int    `json:"time"`
+}
+
+type TypingRacePlayer struct {
+	TypingRacePlayerId   int    `json:"typingRacePlayerId"`
+	TypingRaceId         string `json:"typingRaceId"`
+	Username             string `json:"username"`
+	UserId               string `json:"userId"`
+	Role                 string `json:"role"`
+	Place                int    `json:"place"`
+	MistakeCount         int    `json:"mistakeCount"`
+	Wpm                  int    `json:"wpm"`
+	TypingRaceSettingsId int    `json:"typingRaceSettingsId"`
+}
+
+type HistoryType string
+
+const (
+	TypingRaceType HistoryType = "typingRace"
+	TypingTestType HistoryType = "typingTest"
+)

@@ -10,7 +10,7 @@ export const validateHistoryFilters = (
         return regex.test(date);
     };
 
-    if ((page && isNaN(Number(page))) || Number(page) <= 0) {
+    if ((page && isNaN(Number(page))) || Number(page) < 0) {
         return 'error_incorrect_page';
     }
 
@@ -19,18 +19,22 @@ export const validateHistoryFilters = (
         return 'error_incorrect_history_type"';
     }
 
-    if (dateFrom && dateTill) {
+    if (dateFrom) {
         if (!isValidDateFormat(dateFrom)) {
             return 'error_incorrect_date_format';
         }
+    }
+
+    if (dateTill) {
         if (!isValidDateFormat(dateTill)) {
             return 'error_incorrect_date_format';
         }
+    }
 
+    if (dateFrom && dateTill) {
         if (dateFrom > dateTill) {
             return 'error_incorrect_date';
         }
     }
-
     return null;
 };

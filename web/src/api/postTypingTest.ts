@@ -3,7 +3,7 @@ import { TypingTest, TypingTestSettings } from '../types';
 
 const postTypingTest = async (typingTest: TypingTest, typingTestSettings: TypingTestSettings): Promise<TypingTest> => {
     try {
-        const response = await axios.post<TypingTest>(`/api/post-typing-test`, {
+        const response = await axios.post<TypingTest>(`/api/post-post-typing-test`, {
             typingTest,
             typingTestSettings,
         });

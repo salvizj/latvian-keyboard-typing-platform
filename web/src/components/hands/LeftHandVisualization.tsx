@@ -1,7 +1,6 @@
 import { IoHandLeftOutline } from 'react-icons/io5';
 import { shouldHighlightFinger } from '../../utils/shouldHighlightFinger';
 import { Finger, Hand, HandFingerInfoObj } from '../../types';
-import { capitalize } from '../../utils/capitalizeString';
 import translate from '../../utils/translate';
 import { useLanguage } from '../../context/LanguageContext';
 
@@ -15,7 +14,7 @@ function LeftHandVisualization({ handFingerInfo }: LeftHandVisualizationProps) {
     if (handFingerInfo === null || handFingerInfo === undefined) {
         return (
             <p className="text-lg text-red-500 flex justify-center items-center h-full">
-                {capitalize(translate('error_hand_finger_info_not_found', language))}
+                {translate('error_hand_finger_info_not_found', language)}
             </p>
         );
     }

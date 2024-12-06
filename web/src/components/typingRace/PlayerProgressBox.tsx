@@ -1,6 +1,5 @@
 import React from 'react';
 import { Player } from '../../types';
-import { capitalize } from '../../utils/capitalizeString';
 import translate from '../../utils/translate';
 import { useLanguage } from '../../context/LanguageContext';
 
@@ -12,23 +11,21 @@ const PlayerStatsList: React.FC<PlayerStatsListProps> = ({ playerData }) => {
     const { language } = useLanguage();
     return (
         <div>
-            <h1>{capitalize(translate('progress', language))}</h1>
+            <h1>{translate('progress', language)}</h1>
             <ul>
                 {playerData.map((player) => (
                     <li key={player.playerId}>
                         <div>
-                            <strong>{capitalize(translate('username', language))}:</strong> {player.username}
+                            <strong>{translate('username', language)}:</strong> {player.username}
                         </div>
                         <div>
-                            <strong>{capitalize(translate('wpm', language))}:</strong> {player.wpm ?? 'N/A'}
+                            <strong>{translate('wpm', language)}:</strong> {player.wpm ?? 'N/A'}
                         </div>
                         <div>
-                            <strong>{capitalize(translate('mistake_count', language))}:</strong>{' '}
-                            {player.mistakeCount ?? 'N/A'}
+                            <strong>{translate('mistake_count', language)}:</strong> {player.mistakeCount ?? 'N/A'}
                         </div>
                         <div>
-                            <strong>{capitalize(translate('progress', language))}:</strong>{' '}
-                            {player.procentsOfTextTyped ?? 0}%
+                            <strong>{translate('progress', language)}:</strong> {player.procentsOfTextTyped ?? 0}%
                         </div>
                     </li>
                 ))}

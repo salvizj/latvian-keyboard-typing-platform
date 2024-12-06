@@ -1,5 +1,4 @@
 import translate from '../../utils/translate';
-import { capitalize } from '../../utils/capitalizeString';
 import { useLanguage } from '../../context/LanguageContext';
 
 type LobbyOptionsProps = {
@@ -37,7 +36,7 @@ const LobbyOptions: React.FC<LobbyOptionsProps> = ({
                         className="mr-2"
                     />
                     <label htmlFor="joinMode" className="text-primary">
-                        {capitalize(translate('join_lobby', language))}
+                        {translate('join_lobby', language)}
                     </label>
                 </div>
                 <div className="mt-2">
@@ -49,13 +48,13 @@ const LobbyOptions: React.FC<LobbyOptionsProps> = ({
                         className="mr-2"
                     />
                     <label htmlFor="createMode" className="text-primary">
-                        {capitalize(translate('create_lobby', language))}
+                        {translate('create_lobby', language)}
                     </label>
                 </div>
             </div>
             <div className="mt-2">
                 <label htmlFor="username" className="text-primary">
-                    {capitalize(translate('enter_username', language))}
+                    {translate('enter_username', language)}
                 </label>
                 <input
                     type="text"
@@ -67,14 +66,14 @@ const LobbyOptions: React.FC<LobbyOptionsProps> = ({
                         }
                     }}
                     className="border p-2 mt-2 w-full rounded-md bg-color-primary text-color-third placeholder-color-third text-md"
-                    placeholder={capitalize(translate('enter_username', language))}
+                    placeholder={translate('enter_username', language)}
                 />
             </div>
             {lobbyMode === 'join' && (
                 <div>
                     <div className="mb-4 mt-4">
                         <label htmlFor="lobbyId" className="text-primary">
-                            {capitalize(translate('enter_lobby_id', language))}
+                            {translate('enter_lobby_id', language)}
                         </label>
                         <input
                             type="text"
@@ -86,7 +85,7 @@ const LobbyOptions: React.FC<LobbyOptionsProps> = ({
                                 }
                             }}
                             className="border p-2 mt-2 w-full rounded-md bg-color-primary text-color-third placeholder-color-third text-md"
-                            placeholder={capitalize(translate('enter_lobby_id', language))}
+                            placeholder={translate('enter_lobby_id', language)}
                         />
                     </div>
                 </div>

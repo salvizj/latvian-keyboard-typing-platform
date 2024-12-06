@@ -10,11 +10,14 @@ import (
 func InitialRoutes(e *echo.Echo) error {
 	lm := managers.NewLobbyManager()
 
-	e.GET("/api/lesson/:id", handlers.GetLessonHandler)
-	e.GET("/api/lessons", handlers.GetLessonsHandler)
-	e.GET("/api/poet-texts", handlers.GetPoetTextsHandler)
-	e.GET("/api/latvian-words", handlers.GetLatvinWordsHandler)
 	e.POST("/api/post-typing-test", handlers.PostTypingTestHandler)
+
+	e.GET("/api/get-lesson/:id", handlers.GetLessonHandler)
+	e.GET("/api/get-lessons", handlers.GetLessonsHandler)
+	e.GET("/api/get-poet-texts", handlers.GetPoetTextsHandler)
+	e.GET("/api/get-typing-tests-and-races-count", handlers.GetTypingTestsAndRacesCountHandler)
+	e.GET("/api/get-typing-tests-and-races", handlers.GetTypingTestsAndRaces)
+	e.GET("/api/get-latvian-words", handlers.GetLatvinWordsHandler)
 
 	e.GET("/ws", func(c echo.Context) error {
 		return handlers.WsHandler(c, lm)

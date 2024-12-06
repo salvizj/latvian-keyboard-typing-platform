@@ -1,6 +1,5 @@
 import { useLanguage } from '../../context/LanguageContext';
 import translate from '../../utils/translate';
-import { capitalize } from '../../utils/capitalizeString';
 import { ValidationErrors } from '../../types';
 import LobbyOptions from '../typingRace/LobbyOptions';
 import TextSelectionSection from './TextSelectionSection';
@@ -68,7 +67,7 @@ const OptionBox: React.FC<OptionBoxProps> = ({ title, startText, setIsOptionsSet
     };
     return (
         <DefaultPanel>
-            <h1 className="text-3xl font-bold mb-8 text-center">{capitalize(translate(title, language))}</h1>
+            <h1 className="text-3xl font-bold mb-8 text-center">{translate(title, language)}</h1>
 
             {/* create or input lobbyId and username */}
             {isRace && lobbyMode && (
@@ -141,7 +140,7 @@ const OptionBox: React.FC<OptionBoxProps> = ({ title, startText, setIsOptionsSet
                 onClick={handleStartTest}
                 className="bg-transparent text-primary py-2 px-4 rounded-md text-center hover:opacity-90 transition-opacity text-base hover:text-color-primary-hover-text border secondary "
             >
-                {capitalize(translate(startText, language))}
+                {translate(startText, language)}
             </button>
             {poetTextsError && <p className="text-red-500 mt-1 mb-1 text-sm">{poetTextsError}</p>}
         </DefaultPanel>

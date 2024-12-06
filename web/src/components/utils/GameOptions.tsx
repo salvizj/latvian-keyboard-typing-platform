@@ -1,7 +1,6 @@
 import { useLanguage } from '../../context/LanguageContext';
 import { GameOption } from '../../types';
 import translate from '../../utils/translate';
-import { capitalize } from '../../utils/capitalizeString';
 import DefaultPanel from './DefaultPanel';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -15,10 +14,10 @@ const GameOptions = () => {
     const startGame = () => {
         if (!gameOption) {
             setShowError(true);
-            return; // Prevent navigation if no game option is selected
+            return; // prevent navigation if no game option is selected
         }
 
-        setShowError(false); // Clear error if a game option is selected
+        setShowError(false); // clear error if a game option is selected
         navigate(`/game/${gameOption}`);
     };
 
@@ -26,9 +25,9 @@ const GameOptions = () => {
         <>
             <DefaultPanel>
                 <div className="flex flex-col gap-4 items-start justify-center">
-                    <h1 className="text-3xl font-bold mb-6 text-center">{capitalize(translate('games', language))}</h1>
+                    <h1 className="text-3xl font-bold mb-6 text-center">{translate('games', language)}</h1>
                     <label htmlFor="games" className="text-primary mb-2">
-                        {capitalize(translate('games', language))}
+                        {translate('games', language)}
                     </label>
 
                     <select
@@ -37,7 +36,7 @@ const GameOptions = () => {
                         onChange={(e) => setGameOption(e.target.value as GameOption)}
                     >
                         <option value="" disabled>
-                            {capitalize(translate('choose_game', language))}
+                            {translate('choose_game', language)}
                         </option>
                         {Object.values(GameOption).map((gameOption) => (
                             <option key={gameOption} value={gameOption}>
@@ -47,14 +46,14 @@ const GameOptions = () => {
                     </select>
 
                     {!gameOption && showError && (
-                        <p className="text-red-500 text-sm">{capitalize(translate('must_select_game', language))}</p>
+                        <p className="text-red-500 text-sm">{translate('must_select_game', language)}</p>
                     )}
 
                     <button
                         onClick={startGame}
                         className="bg-transparent text-primary py-2 px-6 rounded-md text-center hover:opacity-90 transition-opacity text-base hover:text-color-primary-hover-text border secondary"
                     >
-                        {capitalize(translate('start_game', language))}
+                        {translate('start_game', language)}
                     </button>
                 </div>
             </DefaultPanel>

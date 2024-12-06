@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { PoetText } from '../../types';
-import { capitalize } from '../../utils/capitalizeString';
 import translate from '../../utils/translate';
 
 const TextSelectionSection: React.FC<{
@@ -43,13 +42,13 @@ const TextSelectionSection: React.FC<{
                         className={`py-2 px-6 rounded-md text-center hover:opacity-90 transition-opacity text-base hover:text-color-primary-hover-text border secondary ${!isCustomText ? 'bg-color-primary text-color-third' : 'bg-transparent text-primary'}`}
                         onClick={() => setIsCustomText(false)}
                     >
-                        {capitalize(translate('pick_text', language))}
+                        {translate('pick_text', language)}
                     </button>
                     <button
                         className={`py-2 px-6 rounded-md text-center hover:opacity-90 transition-opacity text-base hover:text-color-primary-hover-text border secondary ${isCustomText ? 'bg-color-primary text-color-third' : 'bg-transparent text-primary'}`}
                         onClick={() => setIsCustomText(true)}
                     >
-                        {capitalize(translate('custom_text', language))}
+                        {translate('custom_text', language)}
                     </button>
                 </div>
             )}
@@ -62,7 +61,7 @@ const TextSelectionSection: React.FC<{
                         className="w-full p-4 mb-2 border rounded-md resize-none text-color-third bg-color-primary placeholder-color-third"
                         maxLength={1000}
                         rows={4}
-                        placeholder={capitalize(translate('enter_custom_text', language))}
+                        placeholder={translate('enter_custom_text', language)}
                         value={customText}
                         onChange={(e) => setCustomText(e.target.value)}
                     />

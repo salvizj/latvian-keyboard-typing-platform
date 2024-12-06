@@ -3,7 +3,7 @@ import { Lesson } from '../types';
 
 const getLessons = async (): Promise<Lesson[]> => {
     try {
-        const response = await axios.get<Lesson[]>(`/api/lessons`);
+        const response = await axios.get<Lesson[]>(`/api/get-lessons`);
         return response.data;
     } catch (error) {
         console.error('Error fetching lessons:', error);

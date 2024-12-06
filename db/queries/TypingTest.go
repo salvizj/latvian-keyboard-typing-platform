@@ -1,6 +1,7 @@
 package queries
 
 import (
+	"database/sql"
 	"fmt"
 	"latvianKeyboardTypingPlatform/db"
 	"latvianKeyboardTypingPlatform/types"
@@ -28,21 +29,18 @@ func PostTypingTestSettings(settings types.TypingTestSettings) (int, error) {
 	return typingTestSettingsId, nil
 }
 
-// PostTypingTest handles inserting the user, typing test settings, and the typing test itself.
 func PostTypingTest(typingTest types.TypingTest, typingTestSettings types.TypingTestSettings) error {
-	// Ensure the user exists in the Users table (insert if not exists)
+
 	_, err := InsertUserIfNotExists(typingTest.UserId)
 	if err != nil {
 		return fmt.Errorf("error ensuring user exists: %v", err)
 	}
 
-	// Insert TypingTestSettings and get its ID
 	typingTestSettingsId, err := PostTypingTestSettings(typingTestSettings)
 	if err != nil {
 		return fmt.Errorf("error creating TypingTestSettings: %v", err)
 	}
 
-	// Insert the TypingTest with the valid userId and TypingTestSettingsId
 	query := `
 		INSERT INTO TypingTests (userId, typingTestSettingsId, wpm, mistakeCount, date)
 		VALUES ($1, $2, $3, $4, $5);
@@ -55,15 +53,12 @@ func PostTypingTest(typingTest types.TypingTest, typingTestSettings types.Typing
 	return nil
 }
 
-// InsertUserIfNotExists checks if the user exists, and inserts if not
 func InsertUserIfNotExists(userId string) (string, error) {
 	var existingUserId string
 
-	// Check if the user already exists in the Users table
 	checkQuery := `SELECT userId FROM Users WHERE userId = $1`
 	err := db.DB.QueryRow(checkQuery, userId).Scan(&existingUserId)
 
-	// If no rows are returned (user does not exist), insert a new user
 	if err != nil {
 		if err.Error() == "sql: no rows in result set" {
 			insertQuery := `INSERT INTO Users (userId) VALUES ($1) RETURNING userId`
@@ -77,4 +72,70 @@ func InsertUserIfNotExists(userId string) (string, error) {
 	}
 
 	return existingUserId, nil
+}
+
+func GetTypingTestsCount(userId string) (int, error) {
+	var count int
+	query := `SELECT COUNT(*) FROM TypingTests WHERE userId = $1`
+	err := db.DB.QueryRow(query, userId).Scan(&count)
+	if err != nil {
+		return 0, fmt.Errorf("error querying TypingTests count: %w", err)
+	}
+	return count, nil
+}
+
+func GetTypingTests(userId string, count int) ([]types.TypingTest, []types.TypingTestSettings, error) {
+	query := `
+		SELECT tt.userId, tt.typingTestSettingsId, tt.wpm, tt.mistakeCount, tt.date,
+		       tts.typingTestSettingsId, tts.textType, tts.textId, tts.customText, tts.time
+		FROM TypingTests tt
+		JOIN TypingTestSettings tts ON tt.typingTestSettingsId = tts.typingTestSettingsId
+		WHERE tt.userId = $1
+		LIMIT $2;
+	`
+
+	rows, err := db.DB.Query(query, userId, count)
+	if err != nil {
+		return nil, nil, fmt.Errorf("error executing query: %w", err)
+	}
+	defer rows.Close()
+
+	var tests []types.TypingTest
+	var settings []types.TypingTestSettings
+
+	for rows.Next() {
+		var test types.TypingTest
+		var setting types.TypingTestSettings
+		var textId sql.NullInt64
+		var customText sql.NullString
+
+		err := rows.Scan(
+			&test.UserId, &test.TypingTestSettingsId, &test.Wpm, &test.MistakeCount, &test.Date,
+			&setting.TypingTestSettingsId, &setting.TextType, &textId, &customText, &setting.Time,
+		)
+		if err != nil {
+			return nil, nil, fmt.Errorf("error scanning row: %w", err)
+		}
+
+		if textId.Valid {
+			setting.TextId = int(textId.Int64)
+		} else {
+			setting.TextId = 0
+		}
+
+		if customText.Valid {
+			setting.CustomText = customText.String
+		} else {
+			setting.CustomText = ""
+		}
+
+		tests = append(tests, test)
+		settings = append(settings, setting)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, nil, fmt.Errorf("error iterating over rows: %w", err)
+	}
+
+	return tests, settings, nil
 }

@@ -88,11 +88,10 @@ var tables = []Table{
 		`,
 	},
 
-	// 7. TypingRace (depends on TypingRaceSettings)
 	{
-		name: "TypingRace",
+		name: "TypingRaces",
 		query: `
-			CREATE TABLE IF NOT EXISTS TypingRace (
+			CREATE TABLE IF NOT EXISTS TypingRaces (
 				typingRaceId TEXT PRIMARY KEY,
 				typingRaceSettingsId INTEGER NOT NULL,
 				date DATE NOT NULL,
@@ -128,7 +127,7 @@ var tables = []Table{
 				mistakeCount INTEGER NOT NULL,
 				wpm INTEGER NOT NULL,
 				typingRaceSettingsId INTEGER NOT NULL,
-				FOREIGN KEY (typingRaceId) REFERENCES TypingRace(typingRaceId),
+				FOREIGN KEY (typingRaceId) REFERENCES TypingRaces(typingRaceId),
 				FOREIGN KEY (userId) REFERENCES Users(userId)
 			);
 		`,

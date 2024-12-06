@@ -1,8 +1,7 @@
 import { useLanguage } from '../../context/LanguageContext';
 import translate from '../../utils/translate';
-import { capitalize } from '../../utils/capitalizeString';
 import { FaUserPlus } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom'; // import useNavigate for navigation
+import { useNavigate } from 'react-router-dom';
 
 type SignUpBtnProps = {
     isMinimized: boolean;
@@ -22,7 +21,7 @@ export default function SignUpBtn({ isMinimized }: SignUpBtnProps) {
             className="text-color-primary text-lg hover:text-color-primary-hover-text flex items-center justify-start flex-row gap-4"
         >
             <FaUserPlus />
-            {!isMinimized && capitalize(translate('sign_up', language))}
+            {!isMinimized && translate('sign_up', language)}
         </button>
     );
 }

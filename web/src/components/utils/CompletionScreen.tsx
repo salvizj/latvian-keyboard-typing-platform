@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
-import { capitalize } from '../../utils/capitalizeString';
 import translate from '../../utils/translate';
 import DefaultPanel from './DefaultPanel';
 import { MdClose } from 'react-icons/md';
@@ -42,18 +41,18 @@ const CompletionScreen: React.FC<CompletionScreenProps> = ({ title, buttons, err
         <>
             {!close && (
                 <DefaultPanel>
-                    <h1 className="text-3xl font-bold mb-8 text-center">{capitalize(translate(title, language))}</h1>
+                    <h1 className="text-3xl font-bold mb-8 text-center">{translate(title, language)}</h1>
 
                     {showMetrics && (
                         <div className="text-center mb-6">
                             {tempWpm && (
                                 <p className="text-xl mb-2">
-                                    {capitalize(translate('wpm', language))} {tempWpm}
+                                    {translate('wpm', language)} {tempWpm}
                                 </p>
                             )}
                             {tempMistakeCount && (
                                 <p className="text-xl">
-                                    {capitalize(translate('mistakes', language))} {tempMistakeCount}
+                                    {translate('mistakes', language)} {tempMistakeCount}
                                 </p>
                             )}
                         </div>
@@ -61,7 +60,7 @@ const CompletionScreen: React.FC<CompletionScreenProps> = ({ title, buttons, err
 
                     {error && (
                         <p className="text-sm text-red-500 flex justify-center items-center p-4">
-                            {capitalize(translate(error, language))}
+                            {translate(error, language)}
                         </p>
                     )}
 
@@ -72,7 +71,7 @@ const CompletionScreen: React.FC<CompletionScreenProps> = ({ title, buttons, err
                                 onClick={button.onClick}
                                 className={`bg-transparent text-primary py-2 px-4 rounded-md text-center hover:opacity-90 transition-opacity text-base hover:text-color-primary-hover-text border secondary${button.styleClass || ''}`}
                             >
-                                {button.customContent || capitalize(translate(button.text, language))}
+                                {button.customContent || translate(button.text, language)}
                             </button>
                         ))}
                     </div>

@@ -1,7 +1,6 @@
 import { useSearchParams } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import translate from '../../utils/translate';
-import { capitalize } from '../../utils/capitalizeString';
 import { useEffect } from 'react';
 import { HistoryTypes } from '../../types';
 import DefaultPanel from '../utils/DefaultPanel';
@@ -31,7 +30,7 @@ const HistoryDashboard = () => {
     return (
         <DefaultPanel className="h-full" width="max-w-6xl">
             <div className="flex gap-4 justify-center items-center flex-col">
-                <h1 className="text-3xl font-bold mb-6 text-centel">{capitalize(translate('history', language))}</h1>
+                <h1 className="text-3xl font-bold mb-6 text-centel">{translate('history', language)}</h1>
                 <div className="flex flex-row gap-4">
                     <button
                         onClick={() => handleTypeChange(HistoryTypes.TypingTest)}
@@ -39,7 +38,7 @@ const HistoryDashboard = () => {
                             currentType === 'typingTest' ? 'bg-color-third text-color-primary border-gray-600' : ''
                         } hover:text-color-third-hover-text`}
                     >
-                        {capitalize(translate('typing_test', language))}
+                        {translate('typing_test', language)}
                     </button>
                     <button
                         onClick={() => handleTypeChange(HistoryTypes.TypingRace)}
@@ -47,7 +46,7 @@ const HistoryDashboard = () => {
                             currentType === 'typingRace' ? 'bg-color-third text-color-primary border-gray-600' : ''
                         } hover:text-color-third-hover-text`}
                     >
-                        {capitalize(translate('typing_race', language))}
+                        {translate('typing_race', language)}
                     </button>
                 </div>
             </div>

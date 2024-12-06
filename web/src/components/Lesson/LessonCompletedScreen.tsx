@@ -1,7 +1,6 @@
 import { FaArrowRight } from 'react-icons/fa';
 import { useParams, Link } from 'react-router-dom';
 import translate from '../../utils/translate';
-import { capitalize } from '../../utils/capitalizeString';
 import CompletionScreen from '../utils/CompletionScreen';
 import { useLanguage } from '../../context/LanguageContext';
 
@@ -14,7 +13,7 @@ const LessonFinishedScreen: React.FC<LessonFinishedProps> = ({ setFinished, rest
     const { id } = useParams<{ id: string }>();
     const lessonId = id ? parseInt(id, 10) : 1;
     const { language } = useLanguage();
-    const title = `${capitalize(translate('lesson', language))} ${capitalize(translate('completed', language))}`;
+    const title = `${translate('lesson', language)} ${translate('completed', language)}`;
 
     const buttons = [
         {
@@ -53,7 +52,7 @@ const LessonFinishedScreen: React.FC<LessonFinishedProps> = ({ setFinished, rest
             };
         }
         return {
-            text: capitalize(translate(text, language)),
+            text: translate(text, language),
             onClick,
             styleClass,
         };

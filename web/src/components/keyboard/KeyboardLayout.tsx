@@ -3,7 +3,6 @@ import { KeyObj } from '../../types';
 import KeyboardKey from './Key';
 import { useKeyboardSettings } from '../../context/KeyboardSettingsContext';
 import { getLayout } from '../../utils/getLayout';
-import { capitalize } from '../../utils/capitalizeString';
 import { useLanguage } from '../../context/LanguageContext';
 import translate from '../../utils/translate';
 
@@ -20,7 +19,7 @@ const KeyboardLayout: React.FC<KeyboardLayoutProps> = ({ expectedCharacterKeyObj
     if (layout === null) {
         return (
             <p className="text-lg text-red-500 flex justify-center items-center h-full">
-                {capitalize(translate('error_layout_not_found', language))}
+                {translate('error_layout_not_found', language)}
             </p>
         );
     }
@@ -28,7 +27,7 @@ const KeyboardLayout: React.FC<KeyboardLayoutProps> = ({ expectedCharacterKeyObj
     if (expectedCharacterKeyObj === null || expectedCharacterKeyObj === undefined) {
         return (
             <p className="text-lg text-red-500 flex justify-center items-center h-full">
-                {capitalize(translate('error_expected_character_key_obj_not_found', language))}
+                {translate('error_expected_character_key_obj_not_found', language)}
             </p>
         );
     }

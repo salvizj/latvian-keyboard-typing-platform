@@ -6,7 +6,6 @@ import CompletionScreen from '../components/utils/CompletionScreen';
 import { useNavigate } from 'react-router-dom';
 import useHideWords from '../hooks/useHideWords';
 import { useGetLatvianWords } from '../hooks/useGetLatvianWords';
-import { capitalize } from '../utils/capitalizeString';
 
 const GamePage = () => {
     const navigate = useNavigate();
@@ -19,9 +18,7 @@ const GamePage = () => {
     if (latvianWordsError || !hasWords) {
         return (
             <div className="flex justify-center items-center h-screen">
-                <p className="text-xl text-color-secondary">
-                    {capitalize(translate('error_game_not_available', language))}
-                </p>
+                <p className="text-xl text-color-secondary">{translate('error_game_not_available', language)}</p>
             </div>
         );
     }

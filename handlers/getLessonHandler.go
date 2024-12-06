@@ -9,7 +9,7 @@ import (
 )
 
 func GetLessonHandler(c echo.Context) error {
-	lessonIdStr := c.Param("lessonId")
+	lessonIdStr := c.QueryParam("lessonId")
 
 	// convert the string to an integer
 	lessonId, err := strconv.Atoi(lessonIdStr)

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { FiCopy, FiCheck } from 'react-icons/fi';
 import translate from '../../utils/translate';
-import { capitalize } from '../../utils/capitalizeString';
 import { useLanguage } from '../../context/LanguageContext';
 
 type CopyToClipboardProps = {
@@ -28,12 +27,12 @@ const CopyToClipboard: React.FC<CopyToClipboardProps> = ({ text }) => {
                 {isCopied ? (
                     <>
                         <FiCheck className="mr-2 text-green-500" />
-                        {capitalize(translate('copied', language))}
+                        {translate('copied', language)}
                     </>
                 ) : (
                     <>
                         <FiCopy className="mr-2 text-gray-500" />
-                        {capitalize(translate('copy_to_clipboard', language))}
+                        {translate('copy_to_clipboard', language)}
                     </>
                 )}
             </button>

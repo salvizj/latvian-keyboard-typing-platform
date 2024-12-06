@@ -1,4 +1,3 @@
-import { capitalize } from '../utils/capitalizeString';
 import { useLanguage } from '../context/LanguageContext';
 import LessonLinks from '../components/lesson/LesonLinks';
 import translate from '../utils/translate';
@@ -27,7 +26,7 @@ const LessonsPage = () => {
     if (!Array.isArray(lessons) || lessons.length === 0) {
         return (
             <p className="text-xl text-color-secondary flex justify-center items-center h-full">
-                {capitalize(translate('error_lessons_not_available', language))}
+                {translate('error_lessons_not_available', language)}
             </p>
         );
     }
@@ -35,7 +34,7 @@ const LessonsPage = () => {
     if (lessonsError) {
         return (
             <p className="text-xl text-color-secondary flex justify-center items-center h-full">
-                {capitalize(translate(lessonsError, language))}
+                {translate(lessonsError, language)}
             </p>
         );
     }
@@ -43,7 +42,7 @@ const LessonsPage = () => {
     if (Array.isArray(lessons) && !Array.isArray(filteredLessons)) {
         return (
             <p className="text-xl text-color-secondary flex justify-center items-center h-full">
-                {capitalize(translate('error_no_lessons_found_with_this_difficulty', language))}
+                {translate('error_no_lessons_found_with_this_difficulty', language)}
             </p>
         );
     }
@@ -51,19 +50,19 @@ const LessonsPage = () => {
     return (
         <DefaultPanel width="max-w-6xl">
             <div className="flex flex-col justify-center items-center min-h-screen gap-6 ">
-                <h1 className="text-4xl text-color-secondary mt-6">{capitalize(translate('lessons', language))}</h1>
+                <h1 className="text-4xl text-color-secondary mt-6">{translate('lessons', language)}</h1>
                 <label htmlFor="lessonDifficulty" className="text-lg text-color-secondary">
-                    {capitalize(translate('lesson_difficulty', language))}
+                    {translate('lesson_difficulty', language)}
                 </label>
                 <select
                     className="w-full max-w-sm p-4 border rounded-md text-color-third bg-color-primary"
                     value={selectedLessonDifficulty}
                     onChange={(e) => setSelectedLessonDifficulty(e.target.value)}
                 >
-                    <option value="">{capitalize(translate('all_difficulty', language))}</option>
+                    <option value="">{translate('all_difficulty', language)}</option>
                     {Object.values(LessonDifficulty).map((difficulty: LessonDifficulty) => (
                         <option key={difficulty} value={difficulty}>
-                            {capitalize(translate(difficulty, language)) + ' ' + translate('difficulty', language)}
+                            {translate(difficulty, language) + ' ' + translate('difficulty', language)}
                         </option>
                     ))}
                 </select>

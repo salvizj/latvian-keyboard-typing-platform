@@ -176,6 +176,7 @@ export enum HistoryTypes {
 }
 
 export type TypingTest = {
+    typingTestId?: string;
     userId: string;
     typingTestSettingsId: number | null;
     wpm: number;
@@ -190,3 +191,39 @@ export type TypingTestSettings = {
     customText: string | null;
     time: number;
 };
+
+export type TypingRace = {
+    typingRaceId: string;
+    typingRaceSettingsId: number;
+    date: string;
+};
+
+export type TypingRaceSettings = {
+    typingRaceSettingsId: number;
+    textType: string;
+    textId?: number;
+    customText?: string;
+    maxPlayerCount: number;
+    time: number;
+};
+
+export type TypingRacePlayer = {
+    typingRacePlayerId: number;
+    typingRaceId: string;
+    username: string;
+    userId: string;
+    role: string;
+    place: number;
+    mistakeCount: number;
+    wpm: number;
+    typingRaceSettingsId: number;
+};
+
+export type TypingTestOrRaceData =
+    | { type: HistoryTypes.TypingTest; tests: TypingTest[]; settings: TypingTestSettings[] }
+    | {
+          type: HistoryTypes.TypingRace;
+          players: TypingRacePlayer[];
+          settings: TypingRaceSettings[];
+          races: TypingRace[];
+      };

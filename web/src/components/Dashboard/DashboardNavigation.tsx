@@ -3,7 +3,6 @@ import Links from './Links';
 import translate from '../../utils/translate';
 import { useLanguage } from '../../context/LanguageContext';
 import { FaBook, FaChartLine, FaGamepad, FaHistory, FaHome, FaKeyboard, FaTrophy, FaUser } from 'react-icons/fa';
-import { capitalize } from '../../utils/capitalizeString';
 import { useAuthStatus } from '../../hooks/useAuthStatus';
 
 type DashboardNavigationProps = {
@@ -58,7 +57,7 @@ const DashboardNavigation = ({ isMinimized }: DashboardNavigationProps) => {
                         className="flex items-center justify-start gap-4 hover:text-color-primary-hover-text"
                     >
                         {getIcon(key)}
-                        {!isMinimized && capitalize(translate(key, language))}
+                        {!isMinimized && translate(key, language)}
                     </Link>
                 );
             })}

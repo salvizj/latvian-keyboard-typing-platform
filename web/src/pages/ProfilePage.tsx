@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import DefaultPanel from '../components/utils/DefaultPanel';
 import { supabase } from '../utils/supabaseClient';
-import { capitalize } from '../utils/capitalizeString';
 import { useLanguage } from '../context/LanguageContext';
 import translate from '../utils/translate';
 import { validateEditProfile } from '../utils/validateEditProfileInput';
@@ -26,7 +25,7 @@ const ProfilePage = () => {
                 setEmail(data.user.email);
             }
             if (error) {
-                const errorMessage = capitalize(translate('error_fetching_user', language));
+                const errorMessage = translate('error_fetching_user', language);
                 setError(errorMessage);
             }
         };
@@ -56,46 +55,44 @@ const ProfilePage = () => {
             <DefaultPanel>
                 <div>
                     <p className="flex flex-col gap-2 mb-2">
-                        <strong>{capitalize(translate('user_id', language))}</strong> {userId}
+                        <strong>{translate('user_id', language)}</strong> {userId}
                     </p>
                     <p className="flex flex-col gap-2 mb-2">
-                        <strong>{capitalize(translate('email', language))}</strong> {userEmail}
+                        <strong>{translate('email', language)}</strong> {userEmail}
                     </p>
 
                     {editMode && (
                         <form className="flex flex-col gap-2 my-2" onSubmit={handleEditSubmit}>
                             <input
                                 type="email"
-                                placeholder={capitalize(translate('email', language))}
+                                placeholder={translate('email', language)}
                                 className="border p-2 mt-2 w-full rounded-md bg-color-primary text-color-third placeholder-color-third text-md"
                                 value={email ?? ''}
                                 onChange={(e) => setEmail(e.target.value)}
                             />
                             <input
                                 type="password"
-                                placeholder={capitalize(translate('password', language))}
+                                placeholder={translate('password', language)}
                                 className="border p-2 mt-2 w-full rounded-md bg-color-primary text-color-third placeholder-color-third text-md"
                                 value={password ?? ''}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
                             <input
                                 type="password"
-                                placeholder={capitalize(translate('confirm_password', language))}
+                                placeholder={translate('confirm_password', language)}
                                 className="border p-2 mt-2 w-full rounded-md bg-color-primary text-color-third placeholder-color-third text-md"
                                 value={confirmPassword ?? ''}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
                             />
                             {error && (
-                                <p className="text-lg text-red-500 flex justify-center items-center h-full">
-                                    {capitalize(error)}
-                                </p>
+                                <p className="text-lg text-red-500 flex justify-center items-center h-full">{error}</p>
                             )}
 
                             <button
                                 type="submit"
                                 className="w-1/3 mt-2 py-2 px-6 rounded-md text-center transition-all text-base text-color-secondary bg-transparent border secondary hover:border-green-500 hover:text-green-500"
                             >
-                                {capitalize(translate('save_changes', language))}
+                                {translate('save_changes', language)}
                             </button>
                         </form>
                     )}
@@ -108,7 +105,7 @@ const ProfilePage = () => {
                                 : 'bg-transparent border secondary hover:text-color-primary-hover-text'
                         }`}
                     >
-                        {editMode ? capitalize(translate('cancel', language)) : capitalize(translate('edit', language))}
+                        {editMode ? translate('cancel', language) : translate('edit', language)}
                     </button>
                 </div>
             </DefaultPanel>

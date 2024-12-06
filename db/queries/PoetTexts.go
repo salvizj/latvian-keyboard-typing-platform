@@ -1,6 +1,7 @@
 package queries
 
 import (
+	"database/sql"
 	"latvianKeyboardTypingPlatform/db"
 	"latvianKeyboardTypingPlatform/types"
 	"log"
@@ -33,4 +34,22 @@ func GetPoetTexts() ([]types.PoetText, error) {
 	}
 
 	return poetTexts, nil
+}
+
+func GetPoetText(poetTextId int) (types.PoetText, error) {
+	query := "SELECT poetTextId, poetAuthor, poetFragmentName, poetTextContent FROM PoetTexts WHERE poetTextId = ?"
+
+	var poetText types.PoetText
+
+	row := db.DB.QueryRow(query, poetTextId)
+
+	if err := row.Scan(&poetText.PoetTextId, &poetText.PoetAuthor, &poetText.PoetFragmentName, &poetText.PoetTextContent); err != nil {
+		if err == sql.ErrNoRows {
+			return types.PoetText{}, nil
+		}
+		log.Println("Error scanning poet text:", err)
+		return types.PoetText{}, err
+	}
+
+	return poetText, nil
 }

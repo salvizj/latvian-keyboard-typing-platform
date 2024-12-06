@@ -1,6 +1,5 @@
 import { useLanguage } from '../../context/LanguageContext';
 import translate from '../../utils/translate';
-import { capitalize } from '../../utils/capitalizeString';
 import { FaSignOutAlt } from 'react-icons/fa';
 import { supabase } from '../../utils/supabaseClient';
 import { useNavigate } from 'react-router-dom';
@@ -44,7 +43,7 @@ export default function SignOutBtn({ isMinimized }: SignOutBtnProps) {
                 disabled={loading}
             >
                 <FaSignOutAlt />
-                {!isMinimized && capitalize(translate('sign_out', language))}
+                {!isMinimized && translate('sign_out', language)}
             </button>
             {error && <p className="text-red-500 mt-2">{error}</p>}
         </div>

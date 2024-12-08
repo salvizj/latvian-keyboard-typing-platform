@@ -1,30 +1,16 @@
 import TypingInputField from './TypingInputField';
 import TypingTextDisplay from './TypingTextDisplay';
 import KeyboardLayout from './KeyboardLayout';
-import { useEffect } from 'react';
 import { useTypingSession } from '../../hooks/useTypingSession';
 import { useKeyboardSettings } from '../../context/KeyboardSettingsContext';
 import LeftHandVisualization from '../hands/LeftHandVisualization';
 import RightHandVisualization from '../hands/RightHandVisualization';
-import { completeLesson, hasLessonBeenCompleted } from '../../utils/lessonCompletion';
+
 import { useTyping } from '../../context/TypingContext';
 
-type KeyboardProps = {
-    lessonId?: number;
-};
-
-const Keyboard: React.FC<KeyboardProps> = ({ lessonId }) => {
+const Keyboard = () => {
     const { showHands, showKeyboardLayout } = useKeyboardSettings();
     const { isTypingFinished } = useTyping();
-
-    useEffect(() => {
-        if (lessonId !== undefined && isTypingFinished) {
-            const completedAlready = hasLessonBeenCompleted(lessonId);
-            if (!completedAlready) {
-                completeLesson(lessonId);
-            }
-        }
-    }, [isTypingFinished, lessonId]);
 
     const {
         onKeyPress: manageKeyPress,
@@ -34,7 +20,6 @@ const Keyboard: React.FC<KeyboardProps> = ({ lessonId }) => {
         expectedCharacterKeyObj,
     } = useTypingSession();
 
-    console.log(!isTypingFinished && handFingerInfoObj && expectedCharacterKeyObj);
     return (
         <>
             <div className="flex justify-center flex-col items-center max-h-screen">

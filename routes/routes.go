@@ -11,14 +11,16 @@ func InitialRoutes(e *echo.Echo) error {
 	lm := managers.NewLobbyManager()
 
 	e.POST("/api/post-typing-test", handlers.PostTypingTestHandler)
+	e.POST("/api/post-lesson-completion", handlers.PostLessonCompletionHandler)
 
-	e.GET("/api/get-lesson/:id", handlers.GetLessonHandler)
+	e.GET("/api/get-lesson", handlers.GetLessonHandler)
 	e.GET("/api/get-lessons", handlers.GetLessonsHandler)
 	e.GET("/api/get-poet-texts", handlers.GetPoetTextsHandler)
 	e.GET("/api/get-typing-tests-and-races-count", handlers.GetTypingTestsAndRacesCountHandler)
 	e.GET("/api/get-typing-tests-and-races", handlers.GetTypingTestsAndRaces)
 	e.GET("/api/get-latvian-words", handlers.GetLatvinWordsHandler)
 	e.GET("/api/get-game-record", handlers.GetGameRecordHandler)
+	e.GET("/api/get-lesson-completion", handlers.GetLessonCompletionHandler)
 
 	e.GET("/ws", func(c echo.Context) error {
 		return handlers.WsHandler(c, lm)

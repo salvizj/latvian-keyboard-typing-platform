@@ -21,10 +21,10 @@ function LeftHandVisualization({ handFingerInfo }: LeftHandVisualizationProps) {
 
     return (
         <div className="relative w-48 h-48 flex-shrink-0">
-            {/* Hand Icon */}
+            {/* hand Icon */}
             <IoHandLeftOutline className="w-full h-full" />
 
-            {/* Conditionally highlight each finger based on conditions */}
+            {/* conditionally highlight each finger based on conditions */}
             {shouldHighlightFinger(handFingerInfo, Hand.Left, Finger.Thumb) && <div className="left-hand-thumb"></div>}
             {shouldHighlightFinger(handFingerInfo, Hand.Left, Finger.Index) && <div className="left-hand-index"></div>}
             {shouldHighlightFinger(handFingerInfo, Hand.Left, Finger.Middle) && (

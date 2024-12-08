@@ -51,6 +51,8 @@ const translations: Translations = {
         expert: 'Expert',
         all_difficulty: 'All difficulty',
         back_to_lessons: 'Back to lessons',
+        lesson_completed: 'Lesson completed',
+        next_lesson: 'Next lesson',
 
         // Typing Test Features
         typing_test: 'Typing test',
@@ -228,6 +230,8 @@ const translations: Translations = {
         expert: 'Eksperta',
         all_difficulty: 'Visu grūtību',
         back_to_lessons: 'Atpakaļ pie nodarbībām',
+        lesson_completed: 'Nodarība pabeigta',
+        next_lesson: 'Nākamā nodarība',
 
         // Typing Test Features
         typing_test: 'Rakstīšanas tests',

@@ -101,16 +101,15 @@ var tables = []Table{
 	},
 
 	{
-		name: "LessonProgress",
+		name: "LessonCompletion",
 		query: `
-			CREATE TABLE IF NOT EXISTS "LessonProgress" (
-				lessonProgressId SERIAL PRIMARY KEY,
-				userId TEXT NOT NULL,
+			CREATE TABLE IF NOT EXISTS "LessonCompletion" (
+				userId TEXT,
 				lessonId INTEGER NOT NULL,
-				isCompleted BOOLEAN NOT NULL DEFAULT FALSE,
-				FOREIGN KEY (lessonId) REFERENCES "Lessons"(lessonId),
-				FOREIGN KEY (userId) REFERENCES "Users"(userId)
+				PRIMARY KEY (userId, lessonId),
+				FOREIGN KEY (userId) REFERENCES "Users"(userId) ON DELETE CASCADE
 			);
+
 		`,
 	},
 

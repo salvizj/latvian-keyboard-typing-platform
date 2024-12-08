@@ -37,15 +37,16 @@ export const usePostTypingTest = () => {
                 date: new Date().toISOString().split('T')[0],
             };
 
-            const submitTypingTest = async () => {
-                try {
-                    setError(null);
-                    await postTypingTest(typingTestData, typingTestSettings);
-                    setSuccess(true);
-                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                } catch (err) {
-                    setError('error_failed_to_save_typing_test');
-                }
+            const submitTypingTest = () => {
+                setError(null);
+
+                postTypingTest(typingTestData, typingTestSettings)
+                    .then(() => {
+                        setSuccess(true);
+                    })
+                    .catch(() => {
+                        setError('error_failed_to_save_typing_test');
+                    });
             };
 
             submitTypingTest();

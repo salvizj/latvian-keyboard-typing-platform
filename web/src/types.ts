@@ -40,20 +40,17 @@ export type Lesson = {
     lessonText: string;
 };
 
+export type LessonCompletion = {
+    userId: string;
+    lessonId: number[];
+};
+
 export type HandFingerInfoObj = {
     hand: Hand;
     finger: Finger;
     isShift: boolean;
     isAlt: boolean;
 };
-
-export type LessonCompletionObj = {
-    lessonId: number;
-    completed: boolean;
-    completedDate: Date;
-};
-
-export type LessonCompletionData = Record<string, LessonCompletionObj>;
 
 export type PoetText = {
     poetTextId: number;

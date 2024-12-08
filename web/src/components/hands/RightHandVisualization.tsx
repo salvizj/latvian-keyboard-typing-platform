@@ -20,10 +20,10 @@ function RightHandVisualization({ handFingerInfo }: RightHandVisualizationProps)
     }
     return (
         <div className="relative w-48 h-48 flex-shrink-0">
-            {/* Hand Icon */}
+            {/* hand Icon */}
             <IoHandRightOutline className="w-full h-full" />
 
-            {/* Highlight fingers based on conditions */}
+            {/* highlight fingers based on conditions */}
             {shouldHighlightFinger(handFingerInfo, Hand.Right, Finger.Thumb) && (
                 <div className="right-hand-thumb"></div>
             )}

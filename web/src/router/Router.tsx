@@ -28,10 +28,12 @@ const Router = () => {
                     }
                 ></Route>
                 <Route
-                    path="/lesson/:id"
+                    path="/lesson/:lessonId"
                     element={
                         <TypingProvider>
-                            <LessonPage />
+                            <OptionsProvider>
+                                <LessonPage />
+                            </OptionsProvider>
                         </TypingProvider>
                     }
                 />
@@ -81,9 +83,7 @@ const Router = () => {
                     path="/sign-up"
                     element={
                         <TypingProvider>
-                            <OptionsProvider>
-                                <SignUpPage />
-                            </OptionsProvider>
+                            <SignUpPage />
                         </TypingProvider>
                     }
                 />
@@ -91,9 +91,7 @@ const Router = () => {
                     path="/sign-in"
                     element={
                         <TypingProvider>
-                            <OptionsProvider>
-                                <SignInPage />
-                            </OptionsProvider>
+                            <SignInPage />
                         </TypingProvider>
                     }
                 />

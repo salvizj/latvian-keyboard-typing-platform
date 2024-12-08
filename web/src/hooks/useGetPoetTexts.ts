@@ -31,7 +31,7 @@ export const useGetPoetTexts = (poetTextId?: number) => {
                     .then((data) => {
                         if (Array.isArray(data)) {
                             setPoetTexts(data);
-                            setPoetTextsError(null); // Clear previous errors
+                            setPoetTextsError(null);
                         } else {
                             setPoetTexts([]);
                             setPoetTextsError('error_fetching_poet_texts');

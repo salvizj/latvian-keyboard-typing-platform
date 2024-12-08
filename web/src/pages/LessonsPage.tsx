@@ -4,12 +4,17 @@ import translate from '../utils/translate';
 import { LessonDifficulty, Lesson } from '../types';
 import { useEffect, useState } from 'react';
 import { useGetLessons } from '../hooks/useGetLessons';
+import useGetLessonCompletion from '../hooks/useGetLessonCompletion';
 
 const LessonsPage = () => {
     const { language } = useLanguage();
     const [selectedLessonDifficulty, setSelectedLessonDifficulty] = useState<string>('');
     const { lessons, lessonsError } = useGetLessons();
     const [filteredLessons, setFilteredLessons] = useState<Lesson[]>([]);
+
+    const lessonIds = filteredLessons.map((lesson) => lesson.lessonId).join(',');
+
+    const { lessonGetError, lessonCompletion, lessonGetLoading } = useGetLessonCompletion(lessonIds);
 
     useEffect(() => {
         if (lessons) {
@@ -46,6 +51,14 @@ const LessonsPage = () => {
         );
     }
 
+    if (lessonGetError) {
+        return (
+            <p className="text-xl text-color-secondary flex justify-center items-center h-full">
+                {translate(lessonGetError, language)}
+            </p>
+        );
+    }
+
     return (
         <div className="flex flex-col justify-center items-center min-h-screen gap-6 ">
             <h1 className="text-4xl text-color-secondary mt-6">{translate('lessons', language)}</h1>
@@ -64,7 +77,9 @@ const LessonsPage = () => {
                     </option>
                 ))}
             </select>
-            <LessonLinks lessons={filteredLessons} />
+            {lessonCompletion && !lessonGetLoading && (
+                <LessonLinks lessons={filteredLessons} lessonCompletion={lessonCompletion} />
+            )}
         </div>
     );
 };

@@ -12,28 +12,44 @@ import (
 
 func GetTypingTestsAndRaces(c echo.Context) error {
 	userId := c.QueryParam("userId")
-	countStr := c.QueryParam("count")
 	typeStr := c.QueryParam("type")
+	pageStr := c.QueryParam("page")
+	itemsPerPageStr := c.QueryParam("itemsPerPage")
 
-	if userId == "" || countStr == "" || typeStr == "" {
+	if userId == "" || typeStr == "" || pageStr == "" || itemsPerPageStr == "" {
 		return c.JSON(http.StatusBadRequest, map[string]string{
 			"error": "Missing required parameters",
 		})
 	}
 
-	count, err := strconv.Atoi(countStr)
+	page, err := strconv.Atoi(pageStr)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{
-			"error": "Invalid count parameter",
+			"error": "Invalid page parameter",
+		})
+	}
+
+	itemsPerPage, err := strconv.Atoi(itemsPerPageStr)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{
+			"error": "Invalid itemsPerPage parameter",
 		})
 	}
 
 	switch typeStr {
 	case "typingTest":
-		tests, settings, err := queries.GetTypingTests(userId, count)
+		tests, settings, err := queries.GetTypingTests(userId, page, itemsPerPage)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{
 				"error": fmt.Sprintf("Error fetching typing tests: %v", err),
+			})
+		}
+		// check for empty results
+		if len(tests) == 0 || len(settings) == 0 {
+			return c.JSON(http.StatusOK, map[string]interface{}{
+				"type":     types.TypingTestType,
+				"tests":    []interface{}{},
+				"settings": []interface{}{},
 			})
 		}
 		return c.JSON(http.StatusOK, map[string]interface{}{
@@ -43,10 +59,19 @@ func GetTypingTestsAndRaces(c echo.Context) error {
 		})
 
 	case "typingRace":
-		players, settings, races, err := queries.GetTypingRaces(userId, count)
+		players, settings, races, err := queries.GetTypingRaces(userId, page, itemsPerPage)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{
 				"error": fmt.Sprintf("Error fetching typing races: %v", err),
+			})
+		}
+		// check for empty results
+		if len(players) == 0 || len(settings) == 0 || len(races) == 0 {
+			return c.JSON(http.StatusOK, map[string]interface{}{
+				"type":     types.TypingRaceType,
+				"players":  []interface{}{},
+				"settings": []interface{}{},
+				"races":    []interface{}{},
 			})
 		}
 		return c.JSON(http.StatusOK, map[string]interface{}{

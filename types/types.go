@@ -117,6 +117,7 @@ type TypingTestSettings struct {
 }
 
 type TypingTest struct {
+	TypingTestId         int    `json:"typingTestId"`
 	UserId               string `json:"userId"`
 	TypingTestSettingsId int    `json:"typingTestSettingsId"`
 	Wpm                  int    `json:"wpm"`

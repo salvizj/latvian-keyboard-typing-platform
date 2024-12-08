@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { PoetText } from '../../types';
 import translate from '../../utils/translate';
+import { useGetPoetTexts } from '../../hooks/useGetPoetTexts';
 
 const TextSelectionSection: React.FC<{
     isCustomText: boolean;
@@ -10,7 +11,7 @@ const TextSelectionSection: React.FC<{
     setCustomText: (text: string) => void;
     selectedText: string;
     setSelectedText: (text: string) => void;
-    poetTexts: PoetText[];
+    setSelectedTextId: (selectedTextId: number) => void;
     setText: (text: string) => void;
 }> = ({
     isCustomText,
@@ -19,10 +20,11 @@ const TextSelectionSection: React.FC<{
     setCustomText,
     selectedText,
     setSelectedText,
-    poetTexts,
     setText,
+    setSelectedTextId,
 }) => {
     const { language } = useLanguage();
+    const { poetTexts, poetTextsError } = useGetPoetTexts();
 
     useEffect(() => {
         if (isCustomText) {
@@ -53,6 +55,7 @@ const TextSelectionSection: React.FC<{
                 </div>
             )}
 
+            {poetTextsError && <p className="text-red-500 mt-2">{translate('poet_text_not_available', language)}</p>}
             {!poetTexts && <p className="text-red-500 mt-2">{translate('poet_text_not_available', language)}</p>}
 
             <div className="mt-2">
@@ -69,10 +72,16 @@ const TextSelectionSection: React.FC<{
                     <select
                         className="w-full p-4 mb-2 border rounded-md text-color-third bg-color-primary"
                         value={selectedText}
-                        onChange={(e) => setSelectedText(e.target.value)}
+                        onChange={(e) => {
+                            setSelectedText(e.target.value);
+                            const selectedKey = e.target.options[e.target.selectedIndex].getAttribute('key');
+                            if (selectedKey !== null) {
+                                setSelectedTextId(Number(selectedKey));
+                            }
+                        }}
                     >
                         <option value="" disabled>
-                            {translate('choose_predefined_text', language)}
+                            {translate('pick_text', language)}
                         </option>
                         {Array.isArray(poetTexts) &&
                             poetTexts.map((text: PoetText) => (

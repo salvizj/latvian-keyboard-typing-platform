@@ -16,7 +16,7 @@ func PostTypingTestSettings(settings types.TypingTestSettings) (int, error) {
 	}
 
 	query := `
-		INSERT INTO TypingTestSettings (textType, textId, customText, time)
+		INSERT INTO "TypingTestSettings" (textType, textId, customText, time)
 		VALUES ($1, $2, $3, $4) RETURNING typingTestSettingsId;
 	`
 
@@ -42,7 +42,7 @@ func PostTypingTest(typingTest types.TypingTest, typingTestSettings types.Typing
 	}
 
 	query := `
-		INSERT INTO TypingTests (userId, typingTestSettingsId, wpm, mistakeCount, date)
+		INSERT INTO "TypingTests" (userId, typingTestSettingsId, wpm, mistakeCount, date)
 		VALUES ($1, $2, $3, $4, $5);
 	`
 	_, err = db.DB.Exec(query, typingTest.UserId, typingTestSettingsId, typingTest.Wpm, typingTest.MistakeCount, typingTest.Date)
@@ -56,12 +56,12 @@ func PostTypingTest(typingTest types.TypingTest, typingTestSettings types.Typing
 func InsertUserIfNotExists(userId string) (string, error) {
 	var existingUserId string
 
-	checkQuery := `SELECT userId FROM Users WHERE userId = $1`
+	checkQuery := `SELECT userId FROM "Users" WHERE userId = $1`
 	err := db.DB.QueryRow(checkQuery, userId).Scan(&existingUserId)
 
 	if err != nil {
 		if err.Error() == "sql: no rows in result set" {
-			insertQuery := `INSERT INTO Users (userId) VALUES ($1) RETURNING userId`
+			insertQuery := `INSERT INTO "Users" (userId) VALUES ($1) RETURNING userId`
 			err := db.DB.QueryRow(insertQuery, userId).Scan(&existingUserId)
 			if err != nil {
 				return "", fmt.Errorf("error inserting user: %v", err)
@@ -76,7 +76,7 @@ func InsertUserIfNotExists(userId string) (string, error) {
 
 func GetTypingTestsCount(userId string) (int, error) {
 	var count int
-	query := `SELECT COUNT(*) FROM TypingTests WHERE userId = $1`
+	query := `SELECT COUNT(*) FROM "TypingTests" WHERE userId = $1`
 	err := db.DB.QueryRow(query, userId).Scan(&count)
 	if err != nil {
 		return 0, fmt.Errorf("error querying TypingTests count: %w", err)
@@ -84,33 +84,40 @@ func GetTypingTestsCount(userId string) (int, error) {
 	return count, nil
 }
 
-func GetTypingTests(userId string, count int) ([]types.TypingTest, []types.TypingTestSettings, error) {
+func GetTypingTests(userId string, page, itemsPerPage int) ([]types.TypingTest, []types.TypingTestSettings, error) {
+	offset := 0
+	if page > 0 {
+		offset = page * itemsPerPage
+	}
 	query := `
-		SELECT tt.userId, tt.typingTestSettingsId, tt.wpm, tt.mistakeCount, tt.date,
-		       tts.typingTestSettingsId, tts.textType, tts.textId, tts.customText, tts.time
-		FROM TypingTests tt
-		JOIN TypingTestSettings tts ON tt.typingTestSettingsId = tts.typingTestSettingsId
-		WHERE tt.userId = $1
-		LIMIT $2;
-	`
+    SELECT tt.typingTestId, tt.userId, tt.typingTestSettingsId, tt.wpm, tt.mistakeCount, TO_CHAR(tt.date, 'YYYY-MM-DD') AS date,
+           tts.typingTestSettingsId, tts.textType, tts.textId, tts.customText, tts.time
+    FROM "TypingTests" tt
+    JOIN "TypingTestSettings" tts ON tt.typingTestSettingsId = tts.typingTestSettingsId
+    WHERE tt.userId = $1
+    LIMIT $2 OFFSET $3;
+`
 
-	rows, err := db.DB.Query(query, userId, count)
+	rows, err := db.DB.Query(query, userId, itemsPerPage, offset)
 	if err != nil {
 		return nil, nil, fmt.Errorf("error executing query: %w", err)
 	}
 	defer rows.Close()
 
+	// slices to hold the data from the query results
 	var tests []types.TypingTest
 	var settings []types.TypingTestSettings
 
 	for rows.Next() {
+
+		// iterate over the query results and populate the slices
 		var test types.TypingTest
 		var setting types.TypingTestSettings
 		var textId sql.NullInt64
 		var customText sql.NullString
 
 		err := rows.Scan(
-			&test.UserId, &test.TypingTestSettingsId, &test.Wpm, &test.MistakeCount, &test.Date,
+			&test.TypingTestId, &test.UserId, &test.TypingTestSettingsId, &test.Wpm, &test.MistakeCount, &test.Date,
 			&setting.TypingTestSettingsId, &setting.TextType, &textId, &customText, &setting.Time,
 		)
 		if err != nil {
@@ -129,6 +136,7 @@ func GetTypingTests(userId string, count int) ([]types.TypingTest, []types.Typin
 			setting.CustomText = ""
 		}
 
+		// append to the slices
 		tests = append(tests, test)
 		settings = append(settings, setting)
 	}

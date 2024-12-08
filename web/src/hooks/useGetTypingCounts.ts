@@ -1,40 +1,37 @@
 import { useState, useEffect } from 'react';
 import getTypingTestsAndRacesCount from '../api/getTypingTestsAndRacesCount';
 
-const useTypingCounts = (userId: string | null) => {
-    const [testsCount, setTestsCount] = useState<number | null>(null);
-    const [racesCount, setRacesCount] = useState<number | null>(null);
+export const useGetTypingCounts = (userId: string | null) => {
+    const [testsCount, setTestsCount] = useState(0);
+    const [racesCount, setRacesCount] = useState(0);
     const [fetchingCountError, setFetchingCountError] = useState<string | null>(null);
     const [loadingCountData, setLoadingCountData] = useState<boolean>(false);
 
     useEffect(() => {
-        const fetchData = async () => {
-            if (!userId) {
-                setTestsCount(null);
-                setRacesCount(null);
-                setFetchingCountError(null);
-                setLoadingCountData(false);
-                return;
-            }
+        if (!userId) {
+            setFetchingCountError(null);
+            setLoadingCountData(false);
+            return;
+        }
 
-            setLoadingCountData(true);
-            try {
-                const data = await getTypingTestsAndRacesCount(userId);
+        setLoadingCountData(true);
+
+        getTypingTestsAndRacesCount(userId)
+            .then((data) => {
                 setTestsCount(data.testsCount);
                 setRacesCount(data.racesCount);
                 setFetchingCountError(null);
-            } catch (error) {
+            })
+            .catch((error) => {
                 console.error('Error fetching typing counts:', error);
                 setFetchingCountError('error_failed_to_fetch_typing_and_race_count');
-            } finally {
+                setTestsCount(0);
+                setRacesCount(0);
+            })
+            .finally(() => {
                 setLoadingCountData(false);
-            }
-        };
-
-        fetchData();
+            });
     }, [userId]);
 
     return { testsCount, racesCount, fetchingCountError, loadingCountData };
 };
-
-export default useTypingCounts;

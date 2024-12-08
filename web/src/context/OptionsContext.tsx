@@ -1,6 +1,4 @@
 import React, { createContext, useState, ReactNode, useContext, useEffect } from 'react';
-import { PoetText } from '../types';
-import { useGetPoetTexts } from '../hooks/useGetPoetTexts';
 import { useLocation } from 'react-router-dom';
 
 type OptionsContextType = {
@@ -24,8 +22,8 @@ type OptionsContextType = {
     setCustomText: React.Dispatch<React.SetStateAction<string>>;
     selectedText: string;
     setSelectedText: React.Dispatch<React.SetStateAction<string>>;
-    poetTexts: PoetText[];
-    poetTextsError: string | null;
+    selectedTextId: number | null;
+    setSelectedTextId: React.Dispatch<React.SetStateAction<number | null>>;
 };
 
 const OptionsContext = createContext<OptionsContextType | undefined>(undefined);
@@ -45,7 +43,7 @@ export const OptionsProvider: React.FC<OptionsProviderProps> = ({ children }) =>
     const [isCustomText, setIsCustomText] = useState(false);
     const [customText, setCustomText] = useState('');
     const [selectedText, setSelectedText] = useState('');
-    const { poetTexts, poetTextsError } = useGetPoetTexts();
+    const [selectedTextId, setSelectedTextId] = useState<number | null>(null);
     const location = useLocation();
     const [prevPathname, setPrevPathname] = useState(location.pathname);
 
@@ -88,8 +86,8 @@ export const OptionsProvider: React.FC<OptionsProviderProps> = ({ children }) =>
                 setIsCustomText,
                 customText,
                 setCustomText,
-                poetTexts,
-                poetTextsError,
+                selectedTextId,
+                setSelectedTextId,
             }}
         >
             {children}

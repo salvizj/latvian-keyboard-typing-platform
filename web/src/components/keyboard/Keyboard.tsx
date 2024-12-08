@@ -34,10 +34,11 @@ const Keyboard: React.FC<KeyboardProps> = ({ lessonId }) => {
         expectedCharacterKeyObj,
     } = useTypingSession();
 
+    console.log(!isTypingFinished && handFingerInfoObj && expectedCharacterKeyObj);
     return (
         <>
             <div className="flex justify-center flex-col items-center max-h-screen">
-                {!isTypingFinished && handFingerInfoObj && expectedCharacterKeyObj && (
+                {!isTypingFinished && (
                     <>
                         <TypingTextDisplay currentCorrectTextCharacterIndex={currentCharacterIndex} />
                         <TypingInputField onKeyPress={manageKeyPress} isTypingFinished={isTypingFinished} />

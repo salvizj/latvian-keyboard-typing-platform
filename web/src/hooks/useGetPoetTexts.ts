@@ -7,27 +7,40 @@ export const useGetPoetTexts = (poetTextId?: number) => {
     const [poetTextsError, setPoetTextsError] = useState<string | null>(null);
 
     useEffect(() => {
-        const fetchPoetTexts = async () => {
-            try {
-                let data;
-                console.log(poetTextId);
-                if (poetTextId) {
-                    data = await getPoetTexts(poetTextId);
-                    if (!data) {
-                        setPoetTextsError('Poet text not found');
-                    } else {
-                        setPoetTexts(data);
-                    }
-                } else {
-                    data = await getPoetTexts();
-                    if (Array.isArray(data)) {
-                        setPoetTexts(data);
-                    } else {
+        const fetchPoetTexts = () => {
+            if (poetTextId != null && !isNaN(poetTextId)) {
+                getPoetTexts(poetTextId)
+                    .then((data) => {
+                        if (!data) {
+                            setPoetTextsError('error_fetching_poet_text');
+                            setPoetTexts([]);
+                        } else if (Array.isArray(data)) {
+                            setPoetTexts(data);
+                            setPoetTextsError(null);
+                        } else {
+                            setPoetTexts([]);
+                            setPoetTextsError('error_fetching_poet_text');
+                        }
+                    })
+                    .catch(() => {
+                        setPoetTextsError('error_fetching_poet_texts');
                         setPoetTexts([]);
-                    }
-                }
-            } catch {
-                setPoetTextsError('Error fetching poet texts');
+                    });
+            } else {
+                getPoetTexts()
+                    .then((data) => {
+                        if (Array.isArray(data)) {
+                            setPoetTexts(data);
+                            setPoetTextsError(null); // Clear previous errors
+                        } else {
+                            setPoetTexts([]);
+                            setPoetTextsError('error_fetching_poet_texts');
+                        }
+                    })
+                    .catch(() => {
+                        setPoetTextsError('error_fetching_poet_texts');
+                        setPoetTexts([]);
+                    });
             }
         };
 

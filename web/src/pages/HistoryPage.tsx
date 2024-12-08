@@ -5,18 +5,19 @@ import { HistoryTypes } from '../types';
 import DefaultPanel from '../components/utils/DefaultPanel';
 import translate from '../utils/translate';
 import { validateHistoryFilters } from '../utils/validateHistoryFilters';
-import useTypingCounts from '../hooks/useTypingCounts';
 import { useAuthStatus } from '../hooks/useAuthStatus';
-import useTypingTestsAndRaces from '../hooks/useTypingTestsAndRaces';
+import { useGetTypingTestsAndRaces } from '../hooks/useGetTypingTestsAndRaces';
 import TypingDataDisplay from '../components/history/TypingDateDisplay';
+import { useGetTypingCounts } from '../hooks/useGetTypingCounts';
+
+const ITEMS_PER_PAGE = 5;
 
 const HistoryPage = () => {
     const { userId } = useAuthStatus();
     const { language } = useLanguage();
     const [searchParams, setSearchParams] = useSearchParams();
     const [validateError, setValidateError] = useState('');
-    const { testsCount, racesCount, fetchingCountError, loadingCountData } = useTypingCounts(userId);
-
+    const { testsCount, racesCount, fetchingCountError, loadingCountData } = useGetTypingCounts(userId);
     // initial parameters and validation
     useEffect(() => {
         const params = {
@@ -40,6 +41,7 @@ const HistoryPage = () => {
         if (errorMsg) setValidateError(errorMsg);
     }, [searchParams, setSearchParams]);
 
+    // update search params and validate
     const handleChange = (updates: { type?: string; page?: string; dateFrom?: string; dateTill?: string }) => {
         const newParams = {
             type: updates.type || searchParams.get('type') || HistoryTypes.TypingTest,
@@ -48,7 +50,6 @@ const HistoryPage = () => {
             dateTill: updates.dateTill || searchParams.get('dateTill') || '',
         };
 
-        // update search params and validate
         setSearchParams(newParams);
         validateHistoryFilters(newParams.page, newParams.type, newParams.dateFrom, newParams.dateTill);
     };
@@ -67,11 +68,10 @@ const HistoryPage = () => {
     const dateFrom = searchParams.get('dateFrom') || '';
     const dateTill = searchParams.get('dateTill') || '';
 
-    // get count based on type
     const currentCount = currentType === HistoryTypes.TypingTest ? testsCount : racesCount;
 
-    // if count more than 5 we show next page
-    const shouldShowMultiplePages = currentCount ?? 0 > 5;
+    // calculate total number of pages
+    const totalPages = Math.ceil(currentCount / ITEMS_PER_PAGE);
 
     const updatePage = (newPage: number) => {
         setSearchParams({ ...searchParams, page: newPage.toString() });
@@ -86,10 +86,12 @@ const HistoryPage = () => {
         }
         updatePage(newPage);
     };
-    const { data, loadingTypingData, fetchingTypingDataError } = useTypingTestsAndRaces(
+
+    const { data, loadingTypingData, fetchingTypingDataError } = useGetTypingTestsAndRaces(
         userId,
-        currentCount,
-        currentType
+        currentPage,
+        currentType,
+        ITEMS_PER_PAGE
     );
 
     return (
@@ -186,24 +188,26 @@ const HistoryPage = () => {
                 )}
             </div>
 
-            <div className="flex justify-center items-center mt-20 h-screen ">
-                {currentPage > 0 && (
-                    <button
-                        onClick={() => handlePageChange('left')}
-                        className="px-4 py-2 rounded-lg bg-color-third text-color-primary hover:bg-color-secondary"
-                    >
-                        &lt;
-                    </button>
-                )}
-                <span className="mx-4 text-lg font-semibold">{currentPage}</span>
-                {shouldShowMultiplePages && (
-                    <button
-                        onClick={() => handlePageChange('right')}
-                        className="px-4 py-2 rounded-lg bg-color-third text-color-primary hover:bg-color-secondary"
-                    >
-                        &gt;
-                    </button>
-                )}
+            <div className="fixed bottom-5 left-1/2 transform -translate-x-1/2 flex justify-center items-center">
+                <div className="flex items-center bg-transparent">
+                    {currentPage > 0 && (
+                        <button
+                            onClick={() => handlePageChange('left')}
+                            className="py-2 rounded-lg bg-color-third text-color-primary hover:bg-color-secondary"
+                        >
+                            &lt;
+                        </button>
+                    )}
+                    <span className="mx-4 text-lg font-semibold min-w-[2rem] text-center">{currentPage}</span>
+                    {currentPage < totalPages - 1 && (
+                        <button
+                            onClick={() => handlePageChange('right')}
+                            className="py-2 rounded-lg bg-color-third text-color-primary hover:bg-color-secondary"
+                        >
+                            &gt;
+                        </button>
+                    )}
+                </div>
             </div>
         </DefaultPanel>
     );

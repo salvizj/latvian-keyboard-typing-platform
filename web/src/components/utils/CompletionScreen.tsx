@@ -23,18 +23,14 @@ const CompletionScreen: React.FC<CompletionScreenProps> = ({ title, buttons, err
     const { language } = useLanguage();
     const [close, setClose] = useState(false);
     const { wpm, mistakeCount } = useTyping();
-    const [tempWpm, setTempWpm] = useState<number | null>(null);
-    const [tempMistakeCount, setTempMistakeCount] = useState<number | null>(null);
+    const [tempWpm, setTempWpm] = useState<number>(0);
+    const [tempMistakeCount, setTempMistakeCount] = useState<number>(0);
 
     useEffect(() => {
         if (!showMetrics) return;
 
-        if (wpm > 0) {
-            setTempWpm(wpm);
-        }
-        if (mistakeCount > 0) {
-            setTempMistakeCount(mistakeCount);
-        }
+        setTempWpm(wpm);
+        setTempMistakeCount(mistakeCount);
     }, [wpm, mistakeCount, showMetrics]);
 
     return (

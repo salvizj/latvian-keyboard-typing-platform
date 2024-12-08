@@ -8,7 +8,7 @@ import (
 )
 
 func GetPoetTexts() ([]types.PoetText, error) {
-	query := "SELECT poetTextId, poetAuthor, poetfragmentName, poetTextContent FROM PoetTexts"
+	query := `SELECT poetTextId, poetAuthor, poetfragmentName, poetTextContent FROM "PoetTexts"`
 
 	var poetTexts []types.PoetText
 
@@ -37,7 +37,7 @@ func GetPoetTexts() ([]types.PoetText, error) {
 }
 
 func GetPoetText(poetTextId int) (types.PoetText, error) {
-	query := "SELECT poetTextId, poetAuthor, poetFragmentName, poetTextContent FROM PoetTexts WHERE poetTextId = ?"
+	query := `SELECT poetTextId, poetAuthor, poetFragmentName, poetTextContent FROM "PoetTexts" WHERE poetTextId = ?`
 
 	var poetText types.PoetText
 

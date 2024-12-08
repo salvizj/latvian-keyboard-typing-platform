@@ -12,20 +12,18 @@ import (
 var DB *sql.DB
 
 func Initialize() {
-	// load environment variables from .env file
 	if err := godotenv.Load(".env"); err != nil {
 		fmt.Fprintf(os.Stderr, "Warning: Could not load .env file\n")
 		os.Exit(1)
 	}
 
-	// fetch the necessary environment variables
 	user := os.Getenv("SUPABASE_USER")
 	password := os.Getenv("SUPABASE_PASSWORD")
 	host := os.Getenv("SUPABASE_HOST")
 	port := os.Getenv("SUPABASE_PORT")
 	dbname := os.Getenv("SUPABASE_DB_NAME")
 
-	// Ensure all required environment variables are set
+	// ensure all required environment variables are set
 	if user == "" || password == "" || host == "" || port == "" || dbname == "" {
 		fmt.Fprintf(os.Stderr, "Error: One or more environment variables are not set\n")
 		os.Exit(1)

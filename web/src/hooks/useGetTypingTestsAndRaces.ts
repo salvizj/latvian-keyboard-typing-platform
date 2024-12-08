@@ -1,8 +1,13 @@
 import { useState, useEffect } from 'react';
 import { TypingTestOrRaceData } from '../types';
-import axios from 'axios';
+import getTypingTestsAndRaces from '../api/getTypingTestsAndRaces';
 
-const useTypingTestsAndRaces = (userId: string | null, count: number | null, type: string | null) => {
+export const useGetTypingTestsAndRaces = (
+    userId: string | null,
+    page: number | null,
+    type: string | null,
+    itemsPerPage: number | null
+) => {
     const [data, setData] = useState<TypingTestOrRaceData | null>(null);
     const [loadingTypingData, setLoadingTypingData] = useState<boolean>(false);
     const [fetchingTypingDataError, setFetchingTypingDataError] = useState<string | null>(null);
@@ -12,31 +17,24 @@ const useTypingTestsAndRaces = (userId: string | null, count: number | null, typ
         setLoadingTypingData(true);
         setFetchingTypingDataError(null);
 
-        if (userId && count && type) {
-            const fetchData = async () => {
-                try {
-                    const response = await axios.post<TypingTestOrRaceData>('/api/get-typing-tests-and-races', {
-                        userId,
-                        count: count.toString(),
-                        type,
-                    });
-
-                    setData(response.data);
-                } catch (err) {
+        if (userId && page !== null && page >= 0 && type && itemsPerPage && itemsPerPage >= 0) {
+            getTypingTestsAndRaces(userId, page, type, itemsPerPage)
+                .then((response) => {
+                    setData(response);
+                })
+                .catch((err) => {
                     setFetchingTypingDataError('error_failed_to_fetch_typing_data');
                     console.error(err);
-                } finally {
+                })
+                .finally(() => {
                     setLoadingTypingData(false);
-                }
-            };
-
-            fetchData();
+                });
         } else {
             setLoadingTypingData(false);
         }
-    }, [userId, count, type]);
+    }, [userId, type, page, itemsPerPage]);
 
     return { data, loadingTypingData, fetchingTypingDataError };
 };
 
-export default useTypingTestsAndRaces;
+export default useGetTypingTestsAndRaces;

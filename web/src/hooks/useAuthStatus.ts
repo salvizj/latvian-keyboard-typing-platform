@@ -7,21 +7,25 @@ export const useAuthStatus = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchSession = async () => {
-            const {
-                data: { session },
-            } = await supabase.auth.getSession();
-            if (session) {
-                setIsSignedIn(true);
-                setUserId(session.user?.id || null);
-            } else {
+        supabase.auth
+            .getSession()
+            .then(({ data: { session } }) => {
+                if (session) {
+                    setIsSignedIn(true);
+                    setUserId(session.user?.id || null);
+                } else {
+                    setIsSignedIn(false);
+                    setUserId(null);
+                }
+            })
+            .catch((error) => {
+                console.error('Error fetching session:', error);
                 setIsSignedIn(false);
                 setUserId(null);
-            }
-            setLoading(false);
-        };
-
-        fetchSession();
+            })
+            .finally(() => {
+                setLoading(false);
+            });
 
         const {
             data: { subscription },

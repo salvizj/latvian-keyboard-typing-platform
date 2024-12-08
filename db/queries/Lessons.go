@@ -8,7 +8,7 @@ import (
 )
 
 func GetLesson(lessonId int) (*types.Lesson, error) {
-	query := `SELECT lessonId, lessonText, lessonDifficulty FROM Lessons WHERE lessonId = $1`
+	query := `SELECT lessonId, lessonText, lessonDifficulty FROM "Lessons" WHERE lessonId = $1`
 
 	var lesson types.Lesson
 
@@ -23,7 +23,7 @@ func GetLesson(lessonId int) (*types.Lesson, error) {
 }
 
 func GetLessons() ([]types.Lesson, error) {
-	query := `SELECT lessonId, lessonText, lessonDifficulty FROM Lessons ORDER BY lessonId ASC`
+	query := `SELECT lessonId, lessonText, lessonDifficulty FROM "Lessons" ORDER BY lessonId ASC`
 
 	rows, err := db.DB.Query(query)
 	if err != nil {

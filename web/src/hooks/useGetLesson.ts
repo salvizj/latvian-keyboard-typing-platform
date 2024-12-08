@@ -4,28 +4,34 @@ import getLesson from '../api/getLesson';
 import { Lesson } from '../types';
 
 export const useGetLesson = () => {
-    const { lessonId } = useParams();
+    const { lessonId } = useParams<{ lessonId: string }>();
     const [lesson, setLesson] = useState<Lesson | null>(null);
     const [lessonError, setLessonError] = useState<string | null>(null);
 
     useEffect(() => {
-        // check if the lessonId is a vallessonId number
-        if (lessonId === undefined || lessonId === null) {
-            // if lessonId is not provided at all
-            setLessonError('error_lesson_lessonId_not_provIded');
-        } else if (isNaN(Number(lessonId))) {
-            // if lessonId is provided but it's not a valid number
-            setLessonError('error_lesson_lessonId_not_a_number');
-        } else {
-            // if lessonId is valid, fetch the lesson
-            getLesson(Number(lessonId))
-                .then((data) => {
-                    setLesson(data);
-                })
-                .catch(() => {
-                    setLessonError('error_fetching_lesson_text');
-                });
+        if (!lessonId) {
+            setLessonError('error_lesson_lessonId_not_provided');
+            return;
         }
+
+        const lessonIdNumber = Number(lessonId);
+
+        if (isNaN(lessonIdNumber)) {
+            setLessonError('error_lesson_lessonId_not_a_number');
+            return;
+        }
+
+        getLesson(lessonIdNumber)
+            .then((data) => {
+                setLesson(data);
+                setLessonError(null);
+            })
+            .catch((error) => {
+                console.error('Error fetching lesson:', error);
+                setLessonError('error_fetching_lesson_text');
+                setLesson(null);
+            });
     }, [lessonId]);
+
     return { lesson, lessonError };
 };

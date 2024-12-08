@@ -60,6 +60,8 @@ const translations: Translations = {
         seconds: 'Seconds',
         mistakes: 'Mistakes',
         wpm: 'Words per minute',
+        time: 'Time',
+        test_id: 'Test identificator',
 
         // Typing Race Features
         typing_race: 'Typing race',
@@ -69,6 +71,12 @@ const translations: Translations = {
         join_lobby: 'Join lobby',
         current_lobby_id: 'Current lobby identifier.',
         enter_lobby_id: 'Enter lobby identifier.',
+        place: 'Place',
+        race_id: 'Race identificator',
+        select_max_player_count: 'Select maximum player count',
+        max_player_count: 'Maximum player count',
+        go_to_type_racing_lobby: 'Go to type racing lobby',
+        enter_username: 'Enter username',
 
         // Game Settings
         games: 'Games',
@@ -229,6 +237,10 @@ const translations: Translations = {
         seconds: 'Sekundes',
         mistakes: 'Kļūdas',
         wpm: 'Vārdu skaits minūtē',
+        time: 'Laiks',
+        test_id: 'Testa identifikators',
+        custom: 'Pielagots',
+        poet: 'Dzejnieka',
 
         // Typing Race Features
         typing_race: 'Rakstīšanas sacensības',
@@ -238,6 +250,10 @@ const translations: Translations = {
         join_lobby: 'Pievienoties istabai',
         current_lobby_id: 'Pašreizējais istabas ID',
         enter_lobby_id: 'Ievadiet istabas identifikatoru',
+        select_max_player_count: 'Izvēlieties maksimalo spelētaju daudzumu',
+        max_player_count: 'Maksimālais spēlētāju daudzums',
+        go_to_type_racing_lobby: 'Iet uz rakstīšanas sacensību istabu',
+        enter_username: 'Ievadiet lietotajvārdu',
 
         // Game Settings
         games: 'Spēles',
@@ -249,6 +265,8 @@ const translations: Translations = {
         leader: 'Līderis',
         player: 'Spēlētājs',
         progress: 'Progress',
+        place: 'Vieta',
+        race_id: 'Sacensību identifikators',
 
         // History & Stats
         history: 'Vēsture',

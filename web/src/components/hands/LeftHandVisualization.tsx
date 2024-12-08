@@ -5,7 +5,7 @@ import translate from '../../utils/translate';
 import { useLanguage } from '../../context/LanguageContext';
 
 type LeftHandVisualizationProps = {
-    handFingerInfo: HandFingerInfoObj;
+    handFingerInfo: HandFingerInfoObj | null;
 };
 
 function LeftHandVisualization({ handFingerInfo }: LeftHandVisualizationProps) {

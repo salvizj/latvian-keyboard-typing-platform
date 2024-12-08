@@ -8,13 +8,13 @@ type LessonLinksProps = {
 
 const LessonLinks = ({ lessons }: LessonLinksProps) => {
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-12 gap-4 p-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-12 gap-4 p-6 ">
             {lessons.map((lesson) => {
                 const completedAlready = hasLessonBeenCompleted(lesson.lessonId);
                 return (
                     <Link
                         key={lesson.lessonId}
-                        className={`border secondary text-color-secondary w-16 h-16 flex justify-center items-center hover:text-color-primary-hover-text ${
+                        className={`border-color-primary hover:border-color-third text-color-secondary w-12 h-12 flex justify-center items-center hover:text-color-third-hover-text ${
                             completedAlready ? 'lesson-complete' : ''
                         }`}
                         to={`/lesson/${lesson.lessonId}`}

@@ -37,7 +37,6 @@ export enum LessonDifficulty {
 export type Lesson = {
     lessonId: number;
     lessonDifficulty: LessonDifficulty;
-    lessonType: string;
     lessonText: string;
 };
 
@@ -75,8 +74,6 @@ export type TestCompletionObj = {
     time: number;
     completedDate: Date;
 };
-
-export type TestCompletionData = Record<string, TestCompletionObj>;
 
 export type Lobby = {
     lobbyId: string;
@@ -176,7 +173,7 @@ export enum HistoryTypes {
 }
 
 export type TypingTest = {
-    typingTestId?: string;
+    typingTestId?: number;
     userId: string;
     typingTestSettingsId: number | null;
     wpm: number;

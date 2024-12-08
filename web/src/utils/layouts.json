@@ -15,19 +15,99 @@
             { "label": "F12", "width": "w-10", "key": "F12" }
         ],
         [
-            { "label": "`", "width": "w-10", "key": "`", "altLabel": "~" },
-            { "label": "1", "width": "w-10", "key": "1", "altLabel": "!", "hand": "left", "finger": "pinky" },
-            { "label": "2", "width": "w-10", "key": "2", "altLabel": "@", "hand": "left", "finger": "ring" },
-            { "label": "3", "width": "w-10", "key": "3", "altLabel": "#", "hand": "left", "finger": "middle" },
+            { "label": "`", "width": "w-10", "key": "`", "altLabel": "~", "altKey": "~" },
+            {
+                "label": "1",
+                "width": "w-10",
+                "key": "1",
+                "altLabel": "!",
+                "hand": "left",
+                "finger": "pinky",
+                "altKey": "!"
+            },
+            {
+                "label": "2",
+                "width": "w-10",
+                "key": "2",
+                "altLabel": "@",
+                "hand": "left",
+                "finger": "ring",
+                "altKey": "@"
+            },
+            {
+                "label": "3",
+                "width": "w-10",
+                "key": "3",
+                "altLabel": "#",
+                "hand": "left",
+                "finger": "middle",
+                "altKey": "#"
+            },
             { "label": "4", "width": "w-10", "key": "4", "altLabel": "$", "hand": "left", "finger": "index" },
             { "label": "5", "width": "w-10", "key": "5", "altLabel": "%", "hand": "left", "finger": "index" },
-            { "label": "6", "width": "w-10", "key": "6", "altLabel": "^", "hand": "right", "finger": "index" },
-            { "label": "7", "width": "w-10", "key": "7", "altLabel": "&", "hand": "right", "finger": "index" },
-            { "label": "8", "width": "w-10", "key": "8", "altLabel": "*", "hand": "right", "finger": "middle" },
-            { "label": "9", "width": "w-10", "key": "9", "altLabel": "(", "hand": "right", "finger": "ring" },
-            { "label": "0", "width": "w-10", "key": "0", "altLabel": ")", "hand": "right", "finger": "pinky" },
-            { "label": "[", "width": "w-10", "key": "[", "altLabel": "{", "hand": "right", "finger": "pinky" },
-            { "label": "]", "width": "w-10", "key": "]", "altLabel": "}", "hand": "right", "finger": "pinky" },
+            {
+                "label": "6",
+                "width": "w-10",
+                "key": "6",
+                "altLabel": "^",
+                "hand": "right",
+                "finger": "index",
+                "altKey": "%"
+            },
+            {
+                "label": "7",
+                "width": "w-10",
+                "key": "7",
+                "altLabel": "&",
+                "hand": "right",
+                "finger": "index",
+                "altKey": "&"
+            },
+            {
+                "label": "8",
+                "width": "w-10",
+                "key": "8",
+                "altLabel": "*",
+                "hand": "right",
+                "finger": "middle",
+                "altKey": "*"
+            },
+            {
+                "label": "9",
+                "width": "w-10",
+                "key": "9",
+                "altLabel": "(",
+                "hand": "right",
+                "finger": "ring",
+                "altKey": "("
+            },
+            {
+                "label": "0",
+                "width": "w-10",
+                "key": "0",
+                "altLabel": ")",
+                "hand": "right",
+                "finger": "pinky",
+                "altKey": ")"
+            },
+            {
+                "label": "-",
+                "width": "w-10",
+                "key": "-",
+                "altLabel": "_",
+                "hand": "right",
+                "finger": "pinky",
+                "altKey": "_"
+            },
+            {
+                "label": "=",
+                "width": "w-10",
+                "key": "=",
+                "altLabel": "+",
+                "hand": "right",
+                "finger": "pinky",
+                "altKey": "+"
+            },
             {
                 "label": "Backspace",
                 "width": "w-18 ",
@@ -38,47 +118,111 @@
         ],
         [
             { "label": "Tab", "width": "w-14 ", "key": "Tab", "hand": "left", "finger": "pinky" },
-            { "label": "'", "width": "w-10", "key": "'", "altLabel": "\"", "hand": "left", "finger": "pinky" },
-            { "label": ",", "width": "w-10", "key": ",", "altLabel": "<", "hand": "left", "finger": "ring" },
-            { "label": ".", "width": "w-10", "key": ".", "altLabel": ">", "hand": "left", "finger": "middle" },
+            {
+                "label": "'",
+                "width": "w-10",
+                "key": "'",
+                "altLabel": "\"",
+                "hand": "left",
+                "finger": "pinky",
+                "altKey": "\""
+            },
+            {
+                "label": ",",
+                "width": "w-10",
+                "key": ",",
+                "altLabel": "<",
+                "hand": "left",
+                "finger": "ring",
+                "altKey": "<"
+            },
+            {
+                "label": ".",
+                "width": "w-10",
+                "key": ".",
+                "altLabel": ">",
+                "hand": "left",
+                "finger": "middle",
+                "altKey": ">"
+            },
             { "label": "P", "width": "w-10", "key": "P", "hand": "left", "finger": "index" },
             { "label": "Y", "width": "w-10", "key": "Y", "hand": "left", "finger": "index" },
             { "label": "F", "width": "w-10", "key": "F", "hand": "right", "finger": "index" },
-            { "label": "G", "width": "w-10", "key": "G", "hand": "right", "finger": "index" },
-            { "label": "C", "width": "w-10", "key": "C", "hand": "right", "finger": "middle" },
-            { "label": "R", "width": "w-10", "key": "R", "hand": "right", "finger": "ring" },
-            { "label": "L", "width": "w-10", "key": "L", "hand": "right", "finger": "pinky" },
-            { "label": "/", "width": "w-10", "key": "/", "altLabel": "?", "hand": "right", "finger": "pinky" },
-            { "label": "=", "width": "w-10", "key": "=", "altLabel": "+", "hand": "right", "finger": "pinky" },
-            { "label": "\\", "width": "w-14", "key": "\\", "altLabel": "|", "hand": "right", "finger": "pinky" }
+            { "label": "G", "width": "w-10", "key": "G", "hand": "right", "finger": "index", "altKey": "Ģ" },
+            { "label": "C", "width": "w-10", "key": "C", "hand": "right", "finger": "middle", "altKey": "Č" },
+            { "label": "R", "width": "w-10", "key": "R", "hand": "right", "finger": "ring", "altKey": "Ŗ" },
+            { "label": "L", "width": "w-10", "key": "L", "hand": "right", "finger": "pinky", "altKey": "Ļ" },
+            {
+                "label": "/",
+                "width": "w-10",
+                "key": "/",
+                "altLabel": "?",
+                "hand": "right",
+                "finger": "pinky",
+                "altKey": "?"
+            },
+            {
+                "label": "=",
+                "width": "w-10",
+                "key": "=",
+                "altLabel": "+",
+                "hand": "right",
+                "finger": "pinky",
+                "altKey": "+"
+            },
+            {
+                "label": "\\",
+                "width": "w-14",
+                "key": "\\",
+                "altLabel": "|",
+                "hand": "right",
+                "finger": "pinky",
+                "altKey": "|"
+            }
         ],
         [
             { "label": "Caps", "width": "w-16 ", "key": "Caps", "hand": "left", "finger": "pinky" },
-            { "label": "A", "width": "w-10", "key": "A", "hand": "left", "finger": "pinky" },
+            { "label": "A", "width": "w-10", "key": "A", "hand": "left", "finger": "pinky", "altKey": "Ā" },
             { "label": "O", "width": "w-10", "key": "O", "hand": "left", "finger": "ring" },
-            { "label": "E", "width": "w-10", "key": "E", "hand": "left", "finger": "middle" },
-            { "label": "U", "width": "w-10", "key": "U", "hand": "left", "finger": "index" },
+            { "label": "E", "width": "w-10", "key": "E", "hand": "left", "finger": "middle", "altKey": "Ē" },
+            { "label": "U", "width": "w-10", "key": "U", "hand": "left", "finger": "index", "altKey": "Ū" },
             { "label": "I", "width": "w-10", "key": "I", "hand": "left", "finger": "index" },
             { "label": "D", "width": "w-10", "key": "D", "hand": "right", "finger": "index" },
             { "label": "H", "width": "w-10", "key": "H", "hand": "right", "finger": "index" },
             { "label": "T", "width": "w-10", "key": "T", "hand": "right", "finger": "middle" },
-            { "label": "N", "width": "w-10", "key": "N", "hand": "right", "finger": "ring" },
-            { "label": "S", "width": "w-10", "key": "S", "hand": "right", "finger": "pinky" },
-            { "label": "-", "width": "w-10", "key": "-", "altLabel": "_", "hand": "right", "finger": "pinky" },
+            { "label": "N", "width": "w-10", "key": "N", "hand": "right", "finger": "ring", "altKey": "Ņ" },
+            { "label": "S", "width": "w-10", "key": "S", "hand": "right", "finger": "pinky", "altKey": "Š" },
+            {
+                "label": "-",
+                "width": "w-10",
+                "key": "-",
+                "altLabel": "_",
+                "hand": "right",
+                "finger": "pinky",
+                "altKey": "_"
+            },
             { "label": "Enter", "width": "w-24 ", "key": "Enter", "hand": "right", "finger": "pinky" }
         ],
         [
             { "label": "Shift", "width": "w-24", "key": "Shift", "hand": "left", "finger": "pinky" },
-            { "label": ";", "width": "w-10", "key": ";", "altLabel": ":", "hand": "left", "finger": "pinky" },
+            {
+                "label": ";",
+                "width": "w-10",
+                "key": ";",
+                "altLabel": ":",
+                "hand": "left",
+                "finger": "pinky",
+                "altKey": ":"
+            },
             { "label": "Q", "width": "w-10", "key": "Q", "hand": "left", "finger": "ring" },
             { "label": "J", "width": "w-10", "key": "J", "hand": "left", "finger": "middle" },
-            { "label": "K", "width": "w-10", "key": "K", "hand": "left", "finger": "index" },
+            { "label": "K", "width": "w-10", "key": "K", "hand": "left", "finger": "index", "AltKey": "Ķ" },
             { "label": "X", "width": "w-10", "key": "X", "hand": "left", "finger": "index" },
             { "label": "B", "width": "w-10", "key": "B", "hand": "right", "finger": "index" },
             { "label": "M", "width": "w-10", "key": "M", "hand": "right", "finger": "index" },
             { "label": "W", "width": "w-10", "key": "W", "hand": "right", "finger": "middle" },
             { "label": "V", "width": "w-10", "key": "V", "hand": "right", "finger": "ring" },
-            { "label": "Z", "width": "w-10", "key": "Z", "hand": "right", "finger": "pinky" },
+            { "label": "Z", "width": "w-10", "key": "Z", "hand": "right", "finger": "pinky", "AltKey": "ž" },
             { "label": "Shift", "width": "w-24", "key": "Shift", "hand": "right", "finger": "pinky" }
         ],
         [
@@ -109,19 +253,99 @@
             { "label": "F12", "width": "w-10", "key": "F12" }
         ],
         [
-            { "label": "`", "width": "w-10", "key": "`", "altLabel": "~" },
-            { "label": "1", "width": "w-10", "key": "1", "altLabel": "!", "hand": "left", "finger": "pinky" },
-            { "label": "2", "width": "w-10", "key": "2", "altLabel": "@", "hand": "left", "finger": "ring" },
-            { "label": "3", "width": "w-10", "key": "3", "altLabel": "#", "hand": "left", "finger": "middle" },
+            { "label": "`", "width": "w-10", "key": "`", "altLabel": "~", "altKey": "~" },
+            {
+                "label": "1",
+                "width": "w-10",
+                "key": "1",
+                "altLabel": "!",
+                "hand": "left",
+                "finger": "pinky",
+                "altKey": "!"
+            },
+            {
+                "label": "2",
+                "width": "w-10",
+                "key": "2",
+                "altLabel": "@",
+                "hand": "left",
+                "finger": "ring",
+                "altKey": "@"
+            },
+            {
+                "label": "3",
+                "width": "w-10",
+                "key": "3",
+                "altLabel": "#",
+                "hand": "left",
+                "finger": "middle",
+                "altKey": "#"
+            },
             { "label": "4", "width": "w-10", "key": "4", "altLabel": "$", "hand": "left", "finger": "index" },
             { "label": "5", "width": "w-10", "key": "5", "altLabel": "%", "hand": "left", "finger": "index" },
-            { "label": "6", "width": "w-10", "key": "6", "altLabel": "^", "hand": "right", "finger": "index" },
-            { "label": "7", "width": "w-10", "key": "7", "altLabel": "&", "hand": "right", "finger": "index" },
-            { "label": "8", "width": "w-10", "key": "8", "altLabel": "*", "hand": "right", "finger": "middle" },
-            { "label": "9", "width": "w-10", "key": "9", "altLabel": "(", "hand": "right", "finger": "ring" },
-            { "label": "0", "width": "w-10", "key": "0", "altLabel": ")", "hand": "right", "finger": "pinky" },
-            { "label": "-", "width": "w-10", "key": "-", "altLabel": "_", "hand": "right", "finger": "pinky" },
-            { "label": "=", "width": "w-10", "key": "=", "altLabel": "+", "hand": "right", "finger": "pinky" },
+            {
+                "label": "6",
+                "width": "w-10",
+                "key": "6",
+                "altLabel": "^",
+                "hand": "right",
+                "finger": "index",
+                "altKey": "%"
+            },
+            {
+                "label": "7",
+                "width": "w-10",
+                "key": "7",
+                "altLabel": "&",
+                "hand": "right",
+                "finger": "index",
+                "altKey": "&"
+            },
+            {
+                "label": "8",
+                "width": "w-10",
+                "key": "8",
+                "altLabel": "*",
+                "hand": "right",
+                "finger": "middle",
+                "altKey": "*"
+            },
+            {
+                "label": "9",
+                "width": "w-10",
+                "key": "9",
+                "altLabel": "(",
+                "hand": "right",
+                "finger": "ring",
+                "altKey": "("
+            },
+            {
+                "label": "0",
+                "width": "w-10",
+                "key": "0",
+                "altLabel": ")",
+                "hand": "right",
+                "finger": "pinky",
+                "altKey": ")"
+            },
+            {
+                "label": "-",
+                "width": "w-10",
+                "key": "-",
+                "altLabel": "_",
+                "hand": "right",
+                "finger": "pinky",
+                "altKey": "_"
+            },
+            {
+                "label": "=",
+                "width": "w-10",
+                "key": "=",
+                "altLabel": "+",
+                "hand": "right",
+                "finger": "pinky",
+                "altKey": "+"
+            },
             {
                 "label": "Backspace",
                 "width": "w-18 ",
@@ -142,15 +366,32 @@
             { "label": "I", "width": "w-10", "key": "I", "altKey": "Ī", "hand": "right", "finger": "middle" },
             { "label": "O", "width": "w-10", "key": "O", "hand": "right", "finger": "ring" },
             { "label": "P", "width": "w-10", "key": "P", "hand": "right", "finger": "pinky" },
-            { "label": "[", "width": "w-10", "key": "[", "altLabel": "{", "hand": "right", "finger": "pinky" },
-            { "label": "]", "width": "w-10", "key": "]", "altLabel": "}", "hand": "right", "finger": "pinky" },
+            {
+                "label": "[",
+                "width": "w-10",
+                "key": "[",
+                "altLabel": "{",
+                "hand": "right",
+                "finger": "pinky",
+                "altKey": "{"
+            },
+            {
+                "label": "]",
+                "width": "w-10",
+                "key": "]",
+                "altLabel": "}",
+                "hand": "right",
+                "finger": "pinky",
+                "altKey": "}"
+            },
             {
                 "label": "\\",
                 "width": "w-14 ",
                 "key": "\\",
                 "altLabel": "|",
                 "hand": "right",
-                "finger": "pinky"
+                "finger": "pinky",
+                "altKey": "|"
             }
         ],
         [
@@ -164,22 +405,62 @@
             { "label": "J", "width": "w-10", "key": "J", "hand": "right", "finger": "index" },
             { "label": "K", "width": "w-10", "key": "K", "altKey": "Ķ", "hand": "right", "finger": "middle" },
             { "label": "L", "width": "w-10", "key": "L", "altKey": "Ļ", "hand": "right", "finger": "ring" },
-            { "label": ";", "width": "w-10", "key": ";", "altLabel": ":", "hand": "right", "finger": "pinky" },
-            { "label": "'", "width": "w-10", "key": "'", "altLabel": "\"", "hand": "right", "finger": "pinky" },
+            {
+                "label": ";",
+                "width": "w-10",
+                "key": ";",
+                "altLabel": ":",
+                "altKey": ":",
+                "hand": "right",
+                "finger": "pinky"
+            },
+            {
+                "label": "'",
+                "width": "w-10",
+                "key": "'",
+                "altLabel": "\"",
+                "hand": "right",
+                "finger": "pinky",
+                "altKey": "\""
+            },
             { "label": "Enter", "width": "w-24 ", "key": "Enter", "hand": "right", "finger": "pinky" }
         ],
         [
             { "label": "Shift", "width": "w-24 mr-2 ml-2", "key": "Shift", "hand": "left", "finger": "pinky" },
-            { "label": "Z", "width": "w-10", "key": "Z", "hand": "left", "finger": "pinky" },
+            { "label": "Z", "width": "w-10", "key": "Z", "hand": "left", "finger": "pinky", "altKey": "Ž" },
             { "label": "X", "width": "w-10", "key": "X", "hand": "left", "finger": "ring" },
-            { "label": "C", "width": "w-10", "key": "C", "hand": "left", "finger": "middle" },
+            { "label": "C", "width": "w-10", "key": "C", "hand": "left", "finger": "middle", "altKey": "Č" },
             { "label": "V", "width": "w-10", "key": "V", "hand": "left", "finger": "index" },
             { "label": "B", "width": "w-10", "key": "B", "hand": "left", "finger": "index" },
-            { "label": "N", "width": "w-10", "key": "N", "hand": "right", "finger": "index" },
+            { "label": "N", "width": "w-10", "key": "N", "hand": "right", "finger": "index", "altKey": "Ņ" },
             { "label": "M", "width": "w-10", "key": "M", "hand": "right", "finger": "index" },
-            { "label": ",", "width": "w-10", "key": ",", "altLabel": "<", "hand": "right", "finger": "middle" },
-            { "label": ".", "width": "w-10", "key": ".", "altLabel": ">", "hand": "right", "finger": "ring" },
-            { "label": "/", "width": "w-10", "key": "/", "altLabel": "?", "hand": "right", "finger": "pinky" },
+            {
+                "label": ",",
+                "width": "w-10",
+                "key": ",",
+                "altLabel": "<",
+                "hand": "right",
+                "finger": "middle",
+                "altKey": "<"
+            },
+            {
+                "label": ".",
+                "width": "w-10",
+                "key": ".",
+                "altLabel": ">",
+                "hand": "right",
+                "finger": "ring",
+                "altKey": ">"
+            },
+            {
+                "label": "/",
+                "width": "w-10",
+                "key": "/",
+                "altLabel": "?",
+                "hand": "right",
+                "finger": "pinky",
+                "altKey": "?"
+            },
             { "label": "Shift", "width": "w-24 ml-2 mr-2", "key": "Shift", "hand": "right", "finger": "pinky" }
         ],
         [

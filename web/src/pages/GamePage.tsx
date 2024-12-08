@@ -4,8 +4,8 @@ import { useLanguage } from '../context/LanguageContext';
 import Countdown from '../components/utils/Countdown';
 import CompletionScreen from '../components/utils/CompletionScreen';
 import { useNavigate } from 'react-router-dom';
-import useHideWords from '../hooks/useHideWords';
 import { useGetLatvianWords } from '../hooks/useGetLatvianWords';
+import { useHideWords } from '../hooks/useHideWords';
 
 const GamePage = () => {
     const navigate = useNavigate();

@@ -7,7 +7,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import translate from '../../utils/translate';
 
 type KeyboardLayoutProps = {
-    expectedCharacterKeyObj: KeyObj;
+    expectedCharacterKeyObj: KeyObj | null;
     expectedCharacter: string;
 };
 
@@ -23,7 +23,6 @@ const KeyboardLayout: React.FC<KeyboardLayoutProps> = ({ expectedCharacterKeyObj
             </p>
         );
     }
-
     if (expectedCharacterKeyObj === null || expectedCharacterKeyObj === undefined) {
         return (
             <p className="text-lg text-red-500 flex justify-center items-center h-full">

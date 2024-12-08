@@ -68,26 +68,24 @@ var lessons = []types.Lesson{
 func SeedLessons() {
 	for _, lesson := range lessons {
 
-		// Step 1: Check if the lesson already exists in the database by its ID
+		// check if the lesson already exists in the database by its ID
 		var count int
-		query := `SELECT COUNT(*) FROM Lessons WHERE lessonId = $1`
+		query := `SELECT COUNT(*) FROM "Lessons" WHERE lessonId = $1`
 		err := db.DB.QueryRow(query, lesson.LessonId).Scan(&count)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error checking if lesson with ID %d exists: %v\n", lesson.LessonId, err)
 			continue
 		}
 
-		// Step 2: If the lesson doesn't exist, insert it into the database
+		// if the lesson doesn't exist, insert it into the database
 		if count == 0 {
-			insertQuery := `INSERT INTO Lessons (lessonId, lessonText, lessonDifficulty) VALUES ($1, $2, $3)`
+			insertQuery := `INSERT INTO "Lessons" (lessonId, lessonText, lessonDifficulty) VALUES ($1, $2, $3)`
 			_, err := db.DB.Exec(insertQuery, lesson.LessonId, lesson.LessonText, lesson.LessonDifficulty)
 			if err != nil {
 				fmt.Fprintf(os.Stderr, "Error inserting lesson with lessonId %d: %v\n", lesson.LessonId, err)
 			} else {
 				fmt.Printf("Inserted lesson with ID %d and text: %s, difficulty: %s\n", lesson.LessonId, lesson.LessonText, lesson.LessonDifficulty)
 			}
-		} else {
-			fmt.Printf("Lesson with ID %d already exists. Skipping.\n", lesson.LessonId)
 		}
 	}
 }

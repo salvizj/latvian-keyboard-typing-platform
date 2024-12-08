@@ -60,6 +60,38 @@ body {
     background-color: var(--bg-general);
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
+
+/* Normal border color */
+.border-color-primary {
+    border-color: var(--color-primary);
+    border-width: 1px;
+    border-style: solid;
+}
+
+.border-color-secondary {
+    border-color: var(--color-secondary);
+    border-width: 1px;
+    border-style: solid;
+}
+
+.border-color-third {
+    border-color: var(--color-third);
+    border-width: 1px;
+    border-style: solid;
+}
+
+/* Hover effect for border color */
+.hover\:border-color-primary:hover {
+    border-color: var(--color-primary);
+}
+
+.hover\:border-color-secondary:hover {
+    border-color: var(--color-secondary);
+}
+
+.hover\:border-color-third:hover {
+    border-color: var(--color-third);
+}
 /* Text Color Classes */
 .text-color-primary {
     color: var(--color-primary);

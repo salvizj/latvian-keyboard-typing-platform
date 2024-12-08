@@ -6,7 +6,7 @@ import (
 )
 
 func GetLatvianWords() ([]string, error) {
-	query := `SELECT latvianWord FROM LatvianWords`
+	query := `SELECT latvianWord FROM "LatvianWords"`
 
 	var latvianWords []string
 

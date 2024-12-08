@@ -33,10 +33,9 @@ const OptionBox: React.FC<OptionBoxProps> = ({ title, startText, setIsOptionsSet
         setIsCustomText,
         selectedText,
         setSelectedText,
-        poetTexts,
-        poetTextsError,
         customText,
         setCustomText,
+        setSelectedTextId,
     } = useOptions();
 
     const { language } = useLanguage();
@@ -124,8 +123,8 @@ const OptionBox: React.FC<OptionBoxProps> = ({ title, startText, setIsOptionsSet
                         customText={customText}
                         selectedText={selectedText}
                         setSelectedText={setSelectedText}
-                        poetTexts={poetTexts}
                         setIsCustomText={setIsCustomText}
+                        setSelectedTextId={setSelectedTextId}
                     />
                     {showErrors && validationErrors.customText && (
                         <p className="text-red-500 text-sm mb-4">{validationErrors.customText}</p>
@@ -142,7 +141,6 @@ const OptionBox: React.FC<OptionBoxProps> = ({ title, startText, setIsOptionsSet
             >
                 {translate(startText, language)}
             </button>
-            {poetTextsError && <p className="text-red-500 mt-1 mb-1 text-sm">{poetTextsError}</p>}
         </DefaultPanel>
     );
 };

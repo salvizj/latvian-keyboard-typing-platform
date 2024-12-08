@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import getLesson from '../api/getLesson';
 import { Lesson } from '../types';
 
-export const useGetLesson = () => {
+const useGetLesson = () => {
     const { lessonId } = useParams<{ lessonId: string }>();
     const [lesson, setLesson] = useState<Lesson | null>(null);
     const [lessonGetError, setLessonGetError] = useState<string | null>(null);
@@ -41,3 +41,4 @@ export const useGetLesson = () => {
 
     return { lesson, lessonGetError, lessonGetLoading };
 };
+export default useGetLesson;

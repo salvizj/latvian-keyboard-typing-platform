@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import getLessonCompletion from '../api/getLessonCompletion';
-import { useAuthStatus } from './useAuthStatus';
+import useAuthStatus from './useAuthStatus';
 
 const useGetLessonCompletion = (lessonIds: string) => {
     const [lessonCompletion, setLessonCompletion] = useState<{ [key: number]: boolean } | null>(null);
@@ -31,5 +31,4 @@ const useGetLessonCompletion = (lessonIds: string) => {
         lessonGetLoading,
     };
 };
-
 export default useGetLessonCompletion;

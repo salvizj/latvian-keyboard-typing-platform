@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { PoetText } from '../../types';
 import translate from '../../utils/translate';
-import { useGetPoetTexts } from '../../hooks/useGetPoetTexts';
+import useGetPoetTexts from '../../hooks/useGetPoetTexts';
 
 const TextSelectionSection: React.FC<{
     isCustomText: boolean;

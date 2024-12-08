@@ -1,4 +1,3 @@
-import { useGetLesson } from '../hooks/useGetLesson';
 import Keyboard from '../components/keyboard/Keyboard';
 import { useLanguage } from '../context/LanguageContext';
 import translate from '../utils/translate';
@@ -8,6 +7,7 @@ import { useEffect } from 'react';
 import { useOptions } from '../context/OptionsContext';
 import CompletionScreen from '../components/utils/CompletionScreen';
 import { useNavigate, useParams } from 'react-router-dom';
+import useGetLesson from '../hooks/useGetLesson';
 
 const LessonPage = () => {
     const { lessonId } = useParams<{ lessonId: string }>();

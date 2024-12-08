@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import getLatvianWords from '../api/getLatvianWords';
 
-export const useGetLatvianWords = () => {
+const useGetLatvianWords = () => {
     const [latvianWords, setLatvianWords] = useState<string[]>([]);
     const [latvianWordsError, setLatvianWordsError] = useState<string | null>(null);
 
@@ -17,3 +17,4 @@ export const useGetLatvianWords = () => {
 
     return { latvianWords, latvianWordsError };
 };
+export default useGetLatvianWords;

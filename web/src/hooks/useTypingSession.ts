@@ -11,7 +11,7 @@ import { resetTypingState } from '../utils/resetTypingState';
 import { updateTypingProgress } from '../utils/updateTypingProgress';
 import { updateHandFingerInfoObj } from '../utils/updateHandFingerInfoObj';
 
-export const useTypingSession = () => {
+const useTypingSession = () => {
     const { text, time, timeLeft } = useOptions();
     const { setProcentsOfTextTyped, isTypingFinished, setIsTypingFinished, setMistakeCount, setWpm } = useTyping();
     const { keyboardLayout } = useKeyboardSettings();
@@ -119,3 +119,4 @@ export const useTypingSession = () => {
         expectedCharacterKeyObj,
     };
 };
+export default useTypingSession;

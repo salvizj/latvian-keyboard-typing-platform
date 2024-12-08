@@ -11,17 +11,12 @@ func GetGameRecordHandler(c echo.Context) error {
 	gameName := c.QueryParam("gameName")
 	userId := c.QueryParam("userId")
 
-	if gameName == "" {
+	if gameName == "" || userId == "" {
 		return c.JSON(http.StatusBadRequest, map[string]string{
-			"error": "game name missing",
+			"error": "Misisng required parameters",
 		})
 	}
 
-	if userId == "" {
-		return c.JSON(http.StatusBadRequest, map[string]string{
-			"error": "userId name missing",
-		})
-	}
 	record, err := queries.GetGameRecord(gameName, userId)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{

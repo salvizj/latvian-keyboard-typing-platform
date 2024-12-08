@@ -11,7 +11,7 @@ type GameState = {
     isGameOver: boolean;
 };
 
-export const useHideWords = (words: string[]) => {
+const useHideWords = (words: string[]) => {
     const TYPING_TIME = 10;
     const { language } = useLanguage();
     const { setTime, timeLeft, setTimeLeft } = useOptions();
@@ -126,3 +126,4 @@ export const useHideWords = (words: string[]) => {
         isTypingFinished,
     };
 };
+export default useHideWords;

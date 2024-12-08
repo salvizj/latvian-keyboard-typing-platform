@@ -6,7 +6,7 @@ type UseLobbyStatusManagementParams = {
     setLobbyStatus: (lobbyStatus: LobbyStatus) => void;
 };
 
-export const useLobbyStatusMenagement = ({ messages, setLobbyStatus }: UseLobbyStatusManagementParams) => {
+const useLobbyStatusMenagement = ({ messages, setLobbyStatus }: UseLobbyStatusManagementParams) => {
     useEffect(() => {
         const startGameMessage = messages.find((msg) => msg.type === WebSocketMessageType.StartRace);
         const endGameMessage = messages.find((msg) => msg.type === WebSocketMessageType.EndRace);
@@ -19,3 +19,4 @@ export const useLobbyStatusMenagement = ({ messages, setLobbyStatus }: UseLobbyS
         }
     }, [messages, setLobbyStatus]);
 };
+export default useLobbyStatusMenagement;

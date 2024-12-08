@@ -6,8 +6,8 @@ import TypingStats from '../components/keyboard/TypingStats';
 import CompletionScreen from '../components/utils/CompletionScreen';
 import { useNavigate } from 'react-router-dom';
 import { useTyping } from '../context/TypingContext';
-import { usePostTypingTest } from '../hooks/usePostTypingTest';
 import { useLanguage } from '../context/LanguageContext';
+import usePostTypingTest from '../hooks/usePostTypingTest';
 
 const TypingTestPage = () => {
     const isRace = false;

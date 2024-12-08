@@ -11,7 +11,7 @@ type UseHandleWebSocketMessagesParams = {
     lobbyStatus: LobbyStatus;
     sendMessage: (message: WebSocketMessage<WebSocketMessageData>) => void;
 };
-export const useHandleWebSocketMessages = ({
+const useHandleWebSocketMessages = ({
     isSocketOpen,
     userIdOrEmpty,
     isOptionsSet,
@@ -103,3 +103,4 @@ export const useHandleWebSocketMessages = ({
         sendMessage,
     ]);
 };
+export default useHandleWebSocketMessages;

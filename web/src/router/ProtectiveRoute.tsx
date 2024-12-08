@@ -1,8 +1,8 @@
 import { Navigate } from 'react-router-dom';
-import { useAuthStatus } from '../hooks/useAuthStatus';
 import { ReactNode } from 'react';
 import translate from '../utils/translate';
 import { useLanguage } from '../context/LanguageContext';
+import useAuthStatus from '../hooks/useAuthStatus';
 
 type ProtectedRouteProps = {
     children: ReactNode;

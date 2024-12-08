@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import postLessonCompletion from '../api/postLessonCompletion';
-import { useAuthStatus } from './useAuthStatus';
 import { useParams } from 'react-router-dom';
 import { useTyping } from '../context/TypingContext';
+import useAuthStatus from './useAuthStatus';
 
 const usePostLessonCompletion = () => {
     const [lessonPostError, setLessonPostError] = useState<string | null>(null);

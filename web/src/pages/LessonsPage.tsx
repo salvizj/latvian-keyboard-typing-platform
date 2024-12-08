@@ -3,8 +3,8 @@ import LessonLinks from '../components/lesson/LesonLinks';
 import translate from '../utils/translate';
 import { LessonDifficulty, Lesson } from '../types';
 import { useEffect, useState } from 'react';
-import { useGetLessons } from '../hooks/useGetLessons';
 import useGetLessonCompletion from '../hooks/useGetLessonCompletion';
+import useGetLessons from '../hooks/useGetLessons';
 
 const LessonsPage = () => {
     const { language } = useLanguage();

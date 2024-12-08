@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
 import OptionBox from '../components/utils/OptionBox';
 import Lobby from '../components/typingRace/Lobby';
-import { useWebSocketMenagement } from '../hooks/useWebSocketMenagement';
 import Keyboard from '../components/keyboard/Keyboard';
 import { JoinLobbyData, LobbyStatus, Player, ProgressData, WebSocketMessageType } from '../types';
 import PlayerProgressBox from '../components/typingRace/PlayerProgressBox';
 import Countdown from '../components/utils/Countdown';
 import { useOptions } from '../context/OptionsContext';
+import useAuthStatus from '../hooks/useAuthStatus';
+import useLobbyStatusMenagement from '../hooks/useLobbyStatusMenagement';
+import useHandleWebSocketMessages from '../hooks/useHandleWebSocketMessages';
+import useWebSocketMenagement from '../hooks/useWebSocketMenagement';
 // import { useTyping } from '../context/TypingContext';
-import { useLobbyStatusMenagement } from '../hooks/useLobbyStatusMenagement';
-import { useHandleWebSocketMessages } from '../hooks/useHandleWebSocketMessages';
-import { useAuthStatus } from '../hooks/useAuthStatus';
 
 const TypingRacePage = () => {
     const isRace = true;

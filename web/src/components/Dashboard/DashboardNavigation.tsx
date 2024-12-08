@@ -3,7 +3,7 @@ import Links from './Links';
 import translate from '../../utils/translate';
 import { useLanguage } from '../../context/LanguageContext';
 import { FaBook, FaChartLine, FaGamepad, FaHistory, FaHome, FaKeyboard, FaTrophy, FaUser } from 'react-icons/fa';
-import { useAuthStatus } from '../../hooks/useAuthStatus';
+import useAuthStatus from '../../hooks/useAuthStatus';
 
 type DashboardNavigationProps = {
     isMinimized: boolean;

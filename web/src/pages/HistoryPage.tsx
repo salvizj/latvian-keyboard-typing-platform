@@ -5,10 +5,10 @@ import { HistoryTypes } from '../types';
 import DefaultPanel from '../components/utils/DefaultPanel';
 import translate from '../utils/translate';
 import { validateHistoryFilters } from '../utils/validateHistoryFilters';
-import { useAuthStatus } from '../hooks/useAuthStatus';
-import { useGetTypingTestsAndRaces } from '../hooks/useGetTypingTestsAndRaces';
 import TypingDataDisplay from '../components/history/TypingDateDisplay';
-import { useGetTypingCounts } from '../hooks/useGetTypingCounts';
+import useAuthStatus from '../hooks/useAuthStatus';
+import useGetTypingCounts from '../hooks/useGetTypingCounts';
+import useGetTypingTestsAndRaces from '../hooks/useGetTypingTestsAndRaces';
 
 const ITEMS_PER_PAGE = 5;
 

@@ -5,9 +5,9 @@ import SignInButton from '../user/SignInButton';
 import SignUpButton from '../user/SignUpButton';
 import DashboardNavigation from './DashboardNavigation';
 import KeyboardSettings from '../utils/KeyboardSettings';
-import { useAuthStatus } from '../../hooks/useAuthStatus';
 import translate from '../../utils/translate';
 import { useLanguage } from '../../context/LanguageContext';
+import useAuthStatus from '../../hooks/useAuthStatus';
 
 type DashboardProps = {
     isMinimized: boolean;

@@ -4,8 +4,9 @@ import { useLanguage } from '../context/LanguageContext';
 import Countdown from '../components/utils/Countdown';
 import CompletionScreen from '../components/utils/CompletionScreen';
 import { useNavigate } from 'react-router-dom';
-import { useGetLatvianWords } from '../hooks/useGetLatvianWords';
-import { useHideWords } from '../hooks/useHideWords';
+import useHideWords from '../hooks/useHideWords';
+import useGetLatvianWords from '../hooks/useGetLatvianWords';
+import usePostGameRecord from '../hooks/usePostGameRecord';
 
 const GamePage = () => {
     const navigate = useNavigate();
@@ -14,6 +15,8 @@ const GamePage = () => {
     const { gameState, handleKeyPress, completionTitle, currentWord, hasWords, isTypingFinished } =
         useHideWords(latvianWords);
 
+    const { gameRecordPostError, gameRecordPostLoading } = usePostGameRecord(gameState.round, gameState.isGameOver);
+
     // early return if there's an error or no words available
     if (latvianWordsError || !hasWords) {
         return (
@@ -21,6 +24,10 @@ const GamePage = () => {
                 <p className="text-xl text-color-secondary">{translate('error_game_not_available', language)}</p>
             </div>
         );
+    }
+
+    if (!gameRecordPostLoading && gameRecordPostError) {
+        return <p className="text-xl text-color-secondary">{translate(gameRecordPostError, language)}</p>;
     }
 
     // show completion screen if game is over or no more words

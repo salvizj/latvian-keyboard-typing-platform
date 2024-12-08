@@ -4,7 +4,7 @@ import { FaSignOutAlt } from 'react-icons/fa';
 import { supabase } from '../../utils/supabaseClient';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { useAuthStatus } from '../../hooks/useAuthStatus';
+import useAuthStatus from '../../hooks/useAuthStatus';
 
 type SignOutBtnProps = {
     isMinimized: boolean;

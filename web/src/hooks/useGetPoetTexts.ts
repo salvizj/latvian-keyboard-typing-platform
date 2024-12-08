@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import getPoetTexts from '../api/getPoetTexts';
 import { PoetText } from '../types';
 
-export const useGetPoetTexts = (poetTextId?: number) => {
+const useGetPoetTexts = (poetTextId?: number) => {
     const [poetTexts, setPoetTexts] = useState<PoetText[]>([]);
     const [poetTextsError, setPoetTextsError] = useState<string | null>(null);
 
@@ -49,3 +49,4 @@ export const useGetPoetTexts = (poetTextId?: number) => {
 
     return { poetTexts, poetTextsError };
 };
+export default useGetPoetTexts;

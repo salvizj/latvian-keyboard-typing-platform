@@ -1,12 +1,12 @@
 import { useEffect, useState, useRef } from 'react';
 import { TypingTest, TypingTestSettings } from '../types';
 import postTypingTest from '../api/postTypingTest';
-import { useAuthStatus } from './useAuthStatus';
 import { useTyping } from '../context/TypingContext';
 import { useOptions } from '../context/OptionsContext';
-import { useGetPoetTexts } from './useGetPoetTexts';
+import useAuthStatus from './useAuthStatus';
+import useGetPoetTexts from './useGetPoetTexts';
 
-export const usePostTypingTest = () => {
+const usePostTypingTest = () => {
     const { userId } = useAuthStatus();
     const { isTypingFinished, wpm, mistakeCount } = useTyping();
     const { time, isCustomText, customText, selectedTextId } = useOptions();
@@ -55,3 +55,4 @@ export const usePostTypingTest = () => {
 
     return { success, error };
 };
+export default usePostTypingTest;

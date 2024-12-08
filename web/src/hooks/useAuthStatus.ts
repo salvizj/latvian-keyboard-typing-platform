@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../utils/supabaseClient';
 
-export const useAuthStatus = () => {
+const useAuthStatus = () => {
     const [isSignedIn, setIsSignedIn] = useState(false);
     const [userId, setUserId] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
@@ -44,3 +44,4 @@ export const useAuthStatus = () => {
 
     return { isSignedIn, userId, loading };
 };
+export default useAuthStatus;

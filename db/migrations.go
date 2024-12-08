@@ -138,7 +138,7 @@ var tables = []Table{
 			CREATE TABLE IF NOT EXISTS "GameRecords" (
 				gameRecordId SERIAL PRIMARY KEY,
 				gameName TEXT NOT NULL,
-				record INTEGER NOT NULL,
+				gameRecord INTEGER NOT NULL,
 				userId TEXT NOT NULL,
 				FOREIGN KEY (userId) REFERENCES "Users"(userId)
 			);

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import getTypingTestsAndRacesCount from '../api/getTypingTestsAndRacesCount';
 
-export const useGetTypingCounts = (userId: string | null) => {
+const useGetTypingCounts = (userId: string | null) => {
     const [testsCount, setTestsCount] = useState(0);
     const [racesCount, setRacesCount] = useState(0);
     const [fetchingCountError, setFetchingCountError] = useState<string | null>(null);
@@ -35,3 +35,4 @@ export const useGetTypingCounts = (userId: string | null) => {
 
     return { testsCount, racesCount, fetchingCountError, loadingCountData };
 };
+export default useGetTypingCounts;

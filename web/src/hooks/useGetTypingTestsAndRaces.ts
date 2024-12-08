@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { TypingTestOrRaceData } from '../types';
 import getTypingTestsAndRaces from '../api/getTypingTestsAndRaces';
 
-export const useGetTypingTestsAndRaces = (
+const useGetTypingTestsAndRaces = (
     userId: string | null,
     page: number | null,
     type: string | null,
@@ -36,5 +36,4 @@ export const useGetTypingTestsAndRaces = (
 
     return { data, loadingTypingData, fetchingTypingDataError };
 };
-
 export default useGetTypingTestsAndRaces;

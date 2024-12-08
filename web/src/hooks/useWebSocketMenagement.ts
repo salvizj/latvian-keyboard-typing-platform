@@ -6,7 +6,7 @@ type UseWebSocketManagementParams = {
     isOptionsSet: boolean;
 };
 
-export const useWebSocketMenagement = ({ wsUrl, isOptionsSet }: UseWebSocketManagementParams) => {
+const useWebSocketMenagement = ({ wsUrl, isOptionsSet }: UseWebSocketManagementParams) => {
     const [socket, setSocket] = useState<WebSocket | null>(null);
     const [messages, setMessages] = useState<WebSocketMessage<WebSocketMessageData>[]>([]);
     const [lastMessage, setLastMessage] = useState<WebSocketMessage<WebSocketMessageData> | null>(null);
@@ -60,3 +60,4 @@ export const useWebSocketMenagement = ({ wsUrl, isOptionsSet }: UseWebSocketMana
         sendMessage,
     };
 };
+export default useWebSocketMenagement;

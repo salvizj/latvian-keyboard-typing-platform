@@ -1,12 +1,12 @@
 import TypingInputField from './TypingInputField';
 import TypingTextDisplay from './TypingTextDisplay';
 import KeyboardLayout from './KeyboardLayout';
-import { useTypingSession } from '../../hooks/useTypingSession';
 import { useKeyboardSettings } from '../../context/KeyboardSettingsContext';
 import LeftHandVisualization from '../hands/LeftHandVisualization';
 import RightHandVisualization from '../hands/RightHandVisualization';
 
 import { useTyping } from '../../context/TypingContext';
+import useTypingSession from '../../hooks/useTypingSession';
 
 const Keyboard = () => {
     const { showHands, showKeyboardLayout } = useKeyboardSettings();

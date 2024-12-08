@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Lesson } from '../types';
 import getLessons from '../api/getLessons';
 
-export const useGetLessons = () => {
+const useGetLessons = () => {
     const [lessons, setLessons] = useState<Lesson[] | null>(null);
     const [lessonsError, setLessonError] = useState<string | null>(null);
 
@@ -18,3 +18,4 @@ export const useGetLessons = () => {
 
     return { lessons, lessonsError };
 };
+export default useGetLessons;

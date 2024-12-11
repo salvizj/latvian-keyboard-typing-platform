@@ -24,18 +24,18 @@ type CompletionScreenProps = {
 const CompletionScreen: React.FC<CompletionScreenProps> = ({ title, buttons, error, showMetrics, place }) => {
     const { language } = useLanguage();
     const [close, setClose] = useState(false);
-    const { wpm, mistakeCount, procentsOfTextTyped } = useTyping();
+    const { wpm, mistakeCount, percentageOfTextTyped } = useTyping();
     const [tempWpm, setTempWpm] = useState<number>(0);
     const [tempMistakeCount, setTempMistakeCount] = useState<number>(0);
-    const [tempProcentsOfTextTyped, setTempProcentsOfTextTyped] = useState<number>(0);
+    const [temppercentageOfTextTyped, setTemppercentageOfTextTyped] = useState<number>(0);
     const { userId } = useAuthStatus();
     useEffect(() => {
         if (!showMetrics) return;
         setTempWpm(wpm ?? 0);
         setTempMistakeCount(mistakeCount ?? 0);
-        setTempProcentsOfTextTyped(procentsOfTextTyped ?? 0);
-    }, [wpm, mistakeCount, showMetrics, procentsOfTextTyped, place]);
-
+        setTemppercentageOfTextTyped(percentageOfTextTyped ?? 0);
+    }, [wpm, mistakeCount, showMetrics, percentageOfTextTyped, place]);
+    console.log(place);
     return (
         <>
             {!close && (
@@ -51,11 +51,13 @@ const CompletionScreen: React.FC<CompletionScreenProps> = ({ title, buttons, err
                                 {translate('mistakes', language)} {tempMistakeCount ?? 0}
                             </p>
                             <p className="text-xl">
-                                {translate('procents_of_text_typed', language)} {tempProcentsOfTextTyped ?? 0} {'%'}
+                                {translate('percentage_of_text_typed', language)} {temppercentageOfTextTyped ?? 0} {'%'}
                             </p>
-                            <p className="text-xl">
-                                {translate('place', language)} {place ?? 0} {'%'}
-                            </p>
+                            {place && (
+                                <p className="text-xl">
+                                    {translate('place', language)} {place}
+                                </p>
+                            )}
                         </div>
                     )}
 

@@ -28,28 +28,36 @@ type LatvianWord struct {
 }
 
 type Lobby struct {
-	LobbyId       string        `json:"lobbyId"`
-	LobbySettings LobbySettings `json:"lobbySettings"`
-	Players       []Player      `json:"players"`
-	LobbyStatus   LobbyStatus   `json:"lobbyStatus"`
+	LobbyId         string        `json:"lobbyId"`
+	LobbySettings   LobbySettings `json:"lobbySettings"`
+	LobbySettingsId int           `json:"lobbySettingsId,omitempty"`
+	Players         []Player      `json:"players"`
+	LobbyStatus     LobbyStatus   `json:"lobbyStatus,omitempty"`
+	Date            string        `json:"date,omitempty"`
 }
 
 type LobbySettings struct {
-	Text           string `json:"text"`
-	Time           int    `json:"time"`
-	MaxPlayerCount int    `json:"maxPlayerCount"`
+	LobbySettingsId int    `json:"lobbySettingsId,omitempty"`
+	TextType        string `json:"textType,omitempty"`
+	TextId          int    `json:"textId,omitempty"`
+	CustomText      string `json:"customText,omitempty"`
+	Text            string `json:"text"`
+	MaxPlayerCount  int    `json:"maxPlayerCount"`
+	Time            int    `json:"time"`
 }
 
 type Player struct {
-	PlayerId            string     `json:"playerId"`
-	Username            string     `json:"username"`
-	UserId              string     `json:"userId,omitempty"`
-	Role                PlayerRole `json:"role,omitempty"`
-	Place               int        `json:"place,omitempty"`
-	ProcentsOfTextTyped int        `json:"procentsOfTextTyped,omitempty"`
-	MistakeCount        int        `json:"mistakeCount,omitempty"`
-	Wpm                 int        `json:"wpm,omitempty"`
-	FinishedTyping      bool       `json:"finishedTyping,omitempty"`
+	PlayerId              string     `json:"playerId,omitempty"`
+	LobbyId               string     `json:"lobbyId,omitempty"`
+	Username              string     `json:"username"`
+	UserId                string     `json:"userId,omitempty"`
+	Role                  PlayerRole `json:"role,omitempty"`
+	Place                 int        `json:"place,omitempty"`
+	MistakeCount          int        `json:"mistakeCount,omitempty"`
+	Wpm                   int        `json:"wpm,omitempty"`
+	PercentageOfTextTyped int        `json:"percentageOfTextTyped,omitempty"`
+	FinishedTyping        bool       `json:"finishedTyping,omitempty"`
+	LobbySettingsid       int        `json:"lobbySettingsId,omitempty"`
 }
 
 type PlayerRole string
@@ -129,34 +137,6 @@ type TypingTest struct {
 	Wpm                  int    `json:"wpm"`
 	MistakeCount         int    `json:"mistakeCount"`
 	Date                 string `json:"date"`
-}
-
-type TypingRace struct {
-	TypingRaceId         string `json:"typingRaceId"`
-	TypingRaceSettingsId int    `json:"typingRaceSettingsId"`
-	Date                 string `json:"date"`
-}
-
-type TypingRaceSettings struct {
-	TypingRaceSettingsId int    `json:"typingRaceSettingsId"`
-	TextType             string `json:"textType"`
-	TextId               int    `json:"textId,omitempty"`
-	CustomText           string `json:"customText,omitempty"`
-	MaxPlayerCount       int    `json:"maxPlayerCount"`
-	Time                 int    `json:"time"`
-}
-
-type TypingRacePlayer struct {
-	TypingRacePlayerId   int    `json:"typingRacePlayerId"`
-	TypingRaceId         string `json:"typingRaceId"`
-	Username             string `json:"username"`
-	UserId               string `json:"userId"`
-	Role                 string `json:"role"`
-	Place                int    `json:"place"`
-	MistakeCount         int    `json:"mistakeCount"`
-	Wpm                  int    `json:"wpm"`
-	ProcentsOfTextTyped  int    `json:"procentsOfTextTyped"`
-	TypingRaceSettingsId int    `json:"typingRaceSettingsId"`
 }
 
 type HistoryType string

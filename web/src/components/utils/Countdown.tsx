@@ -32,7 +32,7 @@ const Countdown: React.FC<CountdownProps> = ({ start }) => {
     return (
         <>
             {timeLeft != 0 && (
-                <div className="flex justify-center items-center text-color-primary text-3xl">
+                <div className="flex justify-center items-center text-color-primary text-xl">
                     {translate('time_left', language)} {timeLeft}
                 </div>
             )}

@@ -6,8 +6,8 @@ type TypingContextType = {
     setWpm: React.Dispatch<React.SetStateAction<number>>;
     mistakeCount: number;
     setMistakeCount: React.Dispatch<React.SetStateAction<number>>;
-    procentsOfTextTyped: number;
-    setProcentsOfTextTyped: React.Dispatch<React.SetStateAction<number>>;
+    percentageOfTextTyped: number;
+    setpercentageOfTextTyped: React.Dispatch<React.SetStateAction<number>>;
     isTypingFinished: boolean;
     setIsTypingFinished: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -21,7 +21,7 @@ type TypingProviderProps = {
 export const TypingProvider: React.FC<TypingProviderProps> = ({ children }) => {
     const [wpm, setWpm] = useState(0);
     const [mistakeCount, setMistakeCount] = useState(0);
-    const [procentsOfTextTyped, setProcentsOfTextTyped] = useState(0);
+    const [percentageOfTextTyped, setpercentageOfTextTyped] = useState(0);
     const [isTypingFinished, setIsTypingFinished] = useState(false);
     const location = useLocation();
     const [prevPathname, setPrevPathname] = useState(location.pathname);
@@ -29,7 +29,7 @@ export const TypingProvider: React.FC<TypingProviderProps> = ({ children }) => {
     useEffect(() => {
         setWpm(0);
         setMistakeCount(0);
-        setProcentsOfTextTyped(0);
+        setpercentageOfTextTyped(0);
         setIsTypingFinished(false);
 
         setPrevPathname(location.pathname);
@@ -42,8 +42,8 @@ export const TypingProvider: React.FC<TypingProviderProps> = ({ children }) => {
                 setWpm,
                 mistakeCount,
                 setMistakeCount,
-                procentsOfTextTyped,
-                setProcentsOfTextTyped,
+                percentageOfTextTyped,
+                setpercentageOfTextTyped,
                 isTypingFinished,
                 setIsTypingFinished,
             }}

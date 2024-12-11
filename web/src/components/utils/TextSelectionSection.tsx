@@ -11,8 +11,9 @@ const TextSelectionSection: React.FC<{
     setCustomText: (text: string) => void;
     selectedText: string;
     setSelectedText: (text: string) => void;
-    setSelectedTextId: (selectedTextId: number) => void;
+    setTextid: (textid: number) => void;
     setText: (text: string) => void;
+    setTextType: (textType: 'poet' | 'custom') => void;
 }> = ({
     isCustomText,
     setIsCustomText,
@@ -21,7 +22,8 @@ const TextSelectionSection: React.FC<{
     selectedText,
     setSelectedText,
     setText,
-    setSelectedTextId,
+    setTextid,
+    setTextType,
 }) => {
     const { language } = useLanguage();
     const { poetTexts, poetTextsError } = useGetPoetTexts();
@@ -29,10 +31,13 @@ const TextSelectionSection: React.FC<{
     useEffect(() => {
         if (isCustomText) {
             setText(customText.trim());
+            setCustomText(customText.trim());
+            setTextType('custom');
         } else {
             setText(selectedText);
+            setTextType('poet');
         }
-    }, [isCustomText, customText, selectedText, setText]);
+    }, [isCustomText, customText, selectedText, setText, setCustomText, setTextType]);
 
     return (
         <div className="flex flex-col gap-4 mb-4">
@@ -76,7 +81,7 @@ const TextSelectionSection: React.FC<{
                             setSelectedText(e.target.value);
                             const selectedKey = e.target.options[e.target.selectedIndex].getAttribute('key');
                             if (selectedKey !== null) {
-                                setSelectedTextId(Number(selectedKey));
+                                setTextid(Number(selectedKey));
                             }
                         }}
                     >

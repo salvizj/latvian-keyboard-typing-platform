@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"latvianKeyboardTypingPlatform/db"
 	"latvianKeyboardTypingPlatform/types"
+	"log"
 	"strings"
 )
 
@@ -35,7 +36,7 @@ func GetTypingRacesCount(userId string, dateFrom, dateTill *string) (int, error)
 	return count, nil
 }
 
-func GetTypingRaces(userId string, page, itemsPerPage int, dateFrom, dateTill *string) ([]types.TypingRacePlayer, []types.TypingRaceSettings, []types.TypingRace, error) {
+func GetTypingRaces(userId string, page, itemsPerPage int, dateFrom, dateTill *string) ([]types.Player, []types.LobbySettings, []types.Lobby, error) {
 
 	// calculate offset for pagination
 	offset := 0
@@ -89,20 +90,19 @@ func GetTypingRaces(userId string, page, itemsPerPage int, dateFrom, dateTill *s
 	defer rows.Close()
 
 	// slices to hold the data from the query
-	var players []types.TypingRacePlayer
-	var settings []types.TypingRaceSettings
-	var races []types.TypingRace
+	var players []types.Player
+	var settings []types.LobbySettings
+	var races []types.Lobby
 
 	// iterate over the query results
 	for rows.Next() {
-		var player types.TypingRacePlayer
-		var setting types.TypingRaceSettings
-		var race types.TypingRace
+		var player types.Player
+		var setting types.LobbySettings
+		var race types.Lobby
 
 		err := rows.Scan(
-			&player.TypingRacePlayerId, &player.TypingRaceId, &player.Username, &player.UserId, &player.Role,
-			&player.Place, &player.MistakeCount, &player.Wpm, &player.TypingRaceSettingsId,
-			&race.TypingRaceSettingsId, &race.Date, &setting.TextType, &setting.TextId,
+			&player.LobbyId, &player.Username, &player.UserId, &player.Role,
+			&player.Place, &player.MistakeCount, &player.Wpm, &player.LobbySettingsid, &race.Date, &setting.TextType, &setting.TextId,
 			&setting.CustomText, &setting.MaxPlayerCount, &setting.Time,
 		)
 		if err != nil {
@@ -126,7 +126,7 @@ func GetTypingRaces(userId string, page, itemsPerPage int, dateFrom, dateTill *s
 	return players, settings, races, nil
 }
 
-func PostTypingRaceSettings(typingRaceSettings types.TypingRaceSettings) (int, error) {
+func PostTypingRaceSettings(typingRaceSettings types.LobbySettings) (int, error) {
 	// Set textId based on the settings
 	var textId interface{}
 	if typingRaceSettings.TextType == "custom" {
@@ -147,12 +147,12 @@ func PostTypingRaceSettings(typingRaceSettings types.TypingRaceSettings) (int, e
 	return typingRaceSettingsId, nil
 }
 
-func PostTypingRacePlayers(typingRaceId string, typingRaceSettingsId int, typingRacePlayers []types.TypingRacePlayer) error {
+func PostTypingRacePlayers(typingRaceId string, typingRaceSettingsId int, typingRacePlayers []types.Player) error {
 	for _, player := range typingRacePlayers {
 		_, err := db.DB.Exec(`
 			INSERT INTO "TypingRacePlayers" (typingRacePlayerId, typingRaceId, username, userId, role, place, mistakeCount, wpm, typingRaceSettingsId)
 			VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9);
-		`, player.TypingRacePlayerId, typingRaceId, player.Username, player.UserId, player.Role, player.Place, player.MistakeCount, player.Wpm, typingRaceSettingsId)
+		`, player.PlayerId, typingRaceId, player.Username, player.UserId, player.Role, player.Place, player.MistakeCount, player.Wpm, typingRaceSettingsId)
 		if err != nil {
 			return fmt.Errorf("failed to insert TypingRacePlayer: %v", err)
 		}
@@ -161,7 +161,12 @@ func PostTypingRacePlayers(typingRaceId string, typingRaceSettingsId int, typing
 	return nil
 }
 
-func PostTypingRace(typingRace types.TypingRace, typingRaceSettings types.TypingRaceSettings, typingRacePlayers []types.TypingRacePlayer) error {
+func PostTypingRace(typingRace types.Lobby, typingRaceSettings types.LobbySettings, typingRacePlayers []types.Player) error {
+
+	log.Printf("Received TypingRace: %+v", typingRace)
+	log.Printf("Received TypingRaceSettings: %+v", typingRaceSettings)
+	log.Printf("Received TypingRacePlayers: %+v", typingRacePlayers)
+
 	// insert TypingRaceSettings and get its ID
 	var textId interface{}
 	if typingRaceSettings.TextType == "custom" {
@@ -184,7 +189,7 @@ func PostTypingRace(typingRace types.TypingRace, typingRaceSettings types.Typing
 	err = db.DB.QueryRow(`
 		INSERT INTO "TypingRaces" (typingRaceId, typingSettingsId, date)
 		VALUES ($1, $2, $3) RETURNING typingRaceId;
-	`, typingRace.TypingRaceId, typingRaceSettingsId, typingRace.Date).Scan(&typingRaceId)
+	`, typingRace.LobbyId, typingRaceSettingsId, typingRace.Date).Scan(&typingRaceId)
 	if err != nil {
 		return fmt.Errorf("failed to insert TypingRace: %v", err)
 	}
@@ -194,7 +199,7 @@ func PostTypingRace(typingRace types.TypingRace, typingRaceSettings types.Typing
 		_, err = db.DB.Exec(`
 			INSERT INTO "TypingRacePlayers" (typingRacePlayerId, typingRaceId, username, userId, role, place, mistakeCount, wpm, typingRaceSettingsId)
 			VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9);
-		`, player.TypingRacePlayerId, typingRaceId, player.Username, player.UserId, player.Role, player.Place, player.MistakeCount, player.Wpm, typingRaceSettingsId)
+		`, player.LobbyId, typingRaceId, player.Username, player.UserId, player.Role, player.Place, player.MistakeCount, player.Wpm, typingRaceSettingsId)
 		if err != nil {
 			return fmt.Errorf("failed to insert TypingRacePlayer: %v", err)
 		}

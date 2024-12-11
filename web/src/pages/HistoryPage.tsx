@@ -7,8 +7,7 @@ import translate from '../utils/translate';
 import { validateHistoryFilters } from '../utils/validateHistoryFilters';
 import TypingDataDisplay from '../components/history/TypingDateDisplay';
 import useAuthStatus from '../hooks/useAuthStatus';
-import useGetTypingCounts from '../hooks/useGetTypingCounts';
-import useGetTypingTestsAndRaces from '../hooks/useGetTypingTestsAndRaces';
+import useGetTypingData from '../hooks/useGetTypingData';
 
 const ITEMS_PER_PAGE = 5;
 
@@ -67,16 +66,6 @@ const HistoryPage = () => {
     const dateFrom = searchParams.get('dateFrom') || '';
     const dateTill = searchParams.get('dateTill') || '';
 
-    const { testsCount, racesCount, fetchingCountError, loadingCountData } = useGetTypingCounts(
-        userId,
-        dateFrom,
-        dateTill
-    );
-    const currentCount = currentType === HistoryTypes.TypingTest ? testsCount : racesCount;
-
-    // calculate total number of pages
-    const totalPages = ITEMS_PER_PAGE > 0 ? Math.ceil(currentCount / ITEMS_PER_PAGE) : 0;
-
     const updatePage = (newPage: number) => {
         setSearchParams({ ...searchParams, page: newPage.toString() });
     };
@@ -90,15 +79,17 @@ const HistoryPage = () => {
         }
         updatePage(newPage);
     };
-
-    const { data, loadingTypingData, fetchingTypingDataError } = useGetTypingTestsAndRaces(
+    const { data, loadingTypingData, fetchingTypingDataError, racesCount, testsCount } = useGetTypingData(
         userId,
+        dateFrom,
+        dateTill,
         currentPage,
         currentType,
-        ITEMS_PER_PAGE,
-        dateFrom,
-        dateTill
+        ITEMS_PER_PAGE
     );
+    const count = currentType === 'typingTest' ? testsCount : racesCount;
+    const totalPages = Math.ceil(count / ITEMS_PER_PAGE);
+
     return (
         <DefaultPanel className="h-full" width="max-w-6xl">
             <div className="flex gap-4 justify-center items-center flex-col">
@@ -141,7 +132,7 @@ const HistoryPage = () => {
                             max="2025-11-10"
                             value={dateFrom}
                             onChange={handleDateChange}
-                            className="p-2 border rounded-lg min-w-[12rem] ml-2"
+                            className="p-2 border rounded-lg min-w-[12rem] ml-2 bg-color-primary"
                         />
                     </div>
                     <div>
@@ -156,20 +147,10 @@ const HistoryPage = () => {
                             max="2025-11-10"
                             value={dateTill}
                             onChange={handleDateChange}
-                            className="p-2 border rounded-lg min-w-[12rem] ml-2"
+                            className="p-2 border rounded-lg min-w-[12rem] ml-2 bg-color-primary"
                         />
                     </div>
                 </div>
-
-                {fetchingCountError && (
-                    <p className="text-sm text-red-500">{translate(fetchingCountError, language)}</p>
-                )}
-
-                {!loadingCountData && !testsCount && !racesCount && (
-                    <p className="text-sm text-red-500">
-                        {translate('error_failed_to_fetch_typing_and_race_count', language)}
-                    </p>
-                )}
 
                 {!data && !loadingTypingData && (
                     <p className="text-sm text-red-500">{translate('error_failed_to_fetch_typing_data', language)}</p>

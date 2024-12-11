@@ -9,7 +9,7 @@ import useGetPoetTexts from './useGetPoetTexts';
 const usePostTypingTest = () => {
     const { userId } = useAuthStatus();
     const { isTypingFinished, wpm, mistakeCount } = useTyping();
-    const { time, isCustomText, customText, selectedTextId } = useOptions();
+    const { time, isCustomText, customText, textId } = useOptions();
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<boolean>(false);
     const { poetTexts } = useGetPoetTexts();
@@ -25,7 +25,7 @@ const usePostTypingTest = () => {
                 typingTestSettingsId: null,
                 textType: isCustomText ? 'custom' : 'poet',
                 customText: isCustomText ? customText : null,
-                textId: selectedTextId,
+                textId: textId,
                 time: time,
             };
 
@@ -51,7 +51,7 @@ const usePostTypingTest = () => {
 
             submitTypingTest();
         }
-    }, [isTypingFinished, userId, isCustomText, customText, poetTexts, time, wpm, mistakeCount, selectedTextId]);
+    }, [isTypingFinished, userId, isCustomText, customText, poetTexts, time, wpm, mistakeCount, textId]);
 
     return { success, error };
 };

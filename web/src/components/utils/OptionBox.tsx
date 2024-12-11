@@ -35,7 +35,8 @@ const OptionBox: React.FC<OptionBoxProps> = ({ title, startText, setIsOptionsSet
         setSelectedText,
         customText,
         setCustomText,
-        setSelectedTextId,
+        setTextId,
+        setTextType,
     } = useOptions();
 
     const { language } = useLanguage();
@@ -124,7 +125,8 @@ const OptionBox: React.FC<OptionBoxProps> = ({ title, startText, setIsOptionsSet
                         selectedText={selectedText}
                         setSelectedText={setSelectedText}
                         setIsCustomText={setIsCustomText}
-                        setSelectedTextId={setSelectedTextId}
+                        setTextid={setTextId}
+                        setTextType={setTextType}
                     />
                     {showErrors && validationErrors.customText && (
                         <p className="text-red-500 text-sm mb-4">{validationErrors.customText}</p>

@@ -22,8 +22,10 @@ type OptionsContextType = {
     setCustomText: React.Dispatch<React.SetStateAction<string>>;
     selectedText: string;
     setSelectedText: React.Dispatch<React.SetStateAction<string>>;
-    selectedTextId: number | null;
-    setSelectedTextId: React.Dispatch<React.SetStateAction<number | null>>;
+    textId: number | null;
+    setTextId: React.Dispatch<React.SetStateAction<number | null>>;
+    setTextType: React.Dispatch<React.SetStateAction<'custom' | 'poet'>>;
+    textType: 'custom' | 'poet';
 };
 
 const OptionsContext = createContext<OptionsContextType | undefined>(undefined);
@@ -35,15 +37,16 @@ type OptionsProviderProps = {
 export const OptionsProvider: React.FC<OptionsProviderProps> = ({ children }) => {
     const [text, setText] = useState<string>('');
     const [time, setTime] = useState<number>(60);
-    const [timeLeft, setTimeLeft] = useState<number | null>(time);
+    const [timeLeft, setTimeLeft] = useState<number | null>(60);
     const [lobbyId, setLobbyId] = useState<string>('');
     const [username, setUsername] = useState<string>('');
-    const [maxPlayerCount, setMaxPlayerCount] = useState(2);
+    const [maxPlayerCount, setMaxPlayerCount] = useState<number>(2);
     const [lobbyMode, setLobbyMode] = useState<'create' | 'join'>('create');
-    const [isCustomText, setIsCustomText] = useState(false);
-    const [customText, setCustomText] = useState('');
-    const [selectedText, setSelectedText] = useState('');
-    const [selectedTextId, setSelectedTextId] = useState<number | null>(null);
+    const [isCustomText, setIsCustomText] = useState<boolean>(false);
+    const [customText, setCustomText] = useState<string>('');
+    const [selectedText, setSelectedText] = useState<string>('');
+    const [textId, setTextId] = useState<number | null>(null);
+    const [textType, setTextType] = useState<'custom' | 'poet'>('poet'); // Default to 'poet'
     const location = useLocation();
     const [prevPathname, setPrevPathname] = useState(location.pathname);
 
@@ -51,7 +54,7 @@ export const OptionsProvider: React.FC<OptionsProviderProps> = ({ children }) =>
         if (location.pathname !== prevPathname) {
             setText('');
             setTime(60);
-            setTimeLeft(time);
+            setTimeLeft(60);
             setLobbyId('');
             setUsername('');
             setMaxPlayerCount(2);
@@ -59,9 +62,10 @@ export const OptionsProvider: React.FC<OptionsProviderProps> = ({ children }) =>
             setIsCustomText(false);
             setCustomText('');
             setSelectedText('');
+            setTextType('poet'); // Reset to default if required
             setPrevPathname(location.pathname);
         }
-    }, [location.pathname, prevPathname, time]);
+    }, [location.pathname, prevPathname]);
 
     return (
         <OptionsContext.Provider
@@ -79,21 +83,24 @@ export const OptionsProvider: React.FC<OptionsProviderProps> = ({ children }) =>
                 maxPlayerCount,
                 setMaxPlayerCount,
                 lobbyMode,
-                selectedText,
-                setSelectedText,
                 setLobbyMode,
                 isCustomText,
                 setIsCustomText,
                 customText,
                 setCustomText,
-                selectedTextId,
-                setSelectedTextId,
+                selectedText,
+                setSelectedText,
+                textId,
+                setTextId,
+                textType,
+                setTextType,
             }}
         >
             {children}
         </OptionsContext.Provider>
     );
 };
+
 export const useOptions = () => {
     const context = useContext(OptionsContext);
 

@@ -31,7 +31,7 @@ const CopyToClipboard: React.FC<CopyToClipboardProps> = ({ text }) => {
                     </>
                 ) : (
                     <>
-                        <FiCopy className="mr-2 text-gray-500" />
+                        <FiCopy className="mr-2 text-color-secondary" />
                         {translate('copy_to_clipboard', language)}
                     </>
                 )}

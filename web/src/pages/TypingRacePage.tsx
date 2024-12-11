@@ -41,6 +41,7 @@ const TypingRacePage = () => {
     const [lobbyStatus, setLobbyStatus] = useState<LobbyStatus>(LobbyStatus.Waiting);
     const [playerData, setPlayerData] = useState<Player[] | null>(null);
     const userIdOrEmpty = userId ? userId : '';
+
     // connects to ws
     const { lastMessage, messages, sendMessage, isSocketOpen } = useWebSocketMenagement({
         wsUrl,
@@ -55,7 +56,6 @@ const TypingRacePage = () => {
     // handle ws messaging
     useHandleWebSocketMessages({
         playerId,
-        isTypingFinished,
         isSocketOpen,
         userIdOrEmpty,
         lobbyStatus,
@@ -79,24 +79,23 @@ const TypingRacePage = () => {
             const data = lastMessage.data as JoinLobbyData;
             setText(data.lobbySettings.text);
             setTime(data.lobbySettings.time);
-            setTimeLeft(data.lobbySettings.time);
             setPlayerData(data.players);
             const currentPlayer = data.players.find((player) => player.username === username);
-            if (currentPlayer && currentPlayer.playerId && currentPlayer.place) {
-                setPlayerId(currentPlayer.playerId);
-                setPlace(currentPlayer.place);
-            }
+            if (currentPlayer && currentPlayer.playerId) setPlayerId(currentPlayer.playerId);
         }
 
         if (lastMessage.type === WebSocketMessageType.Progress && lastMessage.data) {
             const data = lastMessage.data as ProgressData;
+            const currentPlayer = data.players.find((player) => player.playerId === playerId);
+            if (currentPlayer && currentPlayer.place) setPlace(currentPlayer.place);
             setPlayerData(data.players);
         }
+
         if (lastMessage.type === WebSocketMessageType.EndRace && lastMessage.data) {
             const data = lastMessage.data as EndRaceData;
             setPlayerData(data.players);
         }
-    }, [lastMessage, setLobbyId, setText, setTime, setTimeLeft, text, time, username]);
+    }, [lastMessage, playerId, setLobbyId, setText, setTime, setTimeLeft, text, time, username]);
 
     if (lobbyStatus === LobbyStatus.Finished) {
         return (
@@ -140,7 +139,6 @@ const TypingRacePage = () => {
             />
         );
     }
-
     return (
         <>
             {lobbyStatus === LobbyStatus.InProgress && timeLeft != null && time != null && !isTypingFinished && (

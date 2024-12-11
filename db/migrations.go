@@ -121,7 +121,7 @@ var tables = []Table{
 				typingRaceId TEXT NOT NULL,
 				playerId TEXT NOT NULL,
 				username TEXT NOT NULL,
-				userId TEXT NOT NULL,
+				userId TEXT,
 				role TEXT NOT NULL,
 				place INTEGER NOT NULL,
 				mistakeCount INTEGER NOT NULL,

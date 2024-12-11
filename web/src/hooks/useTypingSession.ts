@@ -13,7 +13,7 @@ import { updateHandFingerInfoObj } from '../utils/updateHandFingerInfoObj';
 
 const useTypingSession = () => {
     const { text, time, timeLeft } = useOptions();
-    const { setProcentsOfTextTyped, isTypingFinished, setIsTypingFinished, setMistakeCount, setWpm } = useTyping();
+    const { setpercentageOfTextTyped, isTypingFinished, setIsTypingFinished, setMistakeCount, setWpm } = useTyping();
     const { keyboardLayout } = useKeyboardSettings();
     const layout = getLayout(keyboardLayout);
 
@@ -70,9 +70,9 @@ const useTypingSession = () => {
     );
 
     useEffect(() => {
-        updateTypingProgress(currentCharacterIndex, text.length, setProcentsOfTextTyped);
+        updateTypingProgress(currentCharacterIndex, text.length, setpercentageOfTextTyped);
         processNextCharacter(currentCharacterIndex);
-    }, [currentCharacterIndex, processNextCharacter, setProcentsOfTextTyped, text.length]);
+    }, [currentCharacterIndex, processNextCharacter, setpercentageOfTextTyped, text.length]);
 
     useEffect(() => {
         if (!text) return;

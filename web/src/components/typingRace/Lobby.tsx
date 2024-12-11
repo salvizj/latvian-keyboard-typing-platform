@@ -73,12 +73,12 @@ const Lobby: React.FC<LobbyProps> = ({ sendMessage, title, playerData, lobbyId, 
                         </button>
                     )}
                     {!isEnoughPlayers && (
-                        <div className="text-center text-gray-600">
+                        <div className="text-center text-color-secondary ">
                             {translate('not_enough_players_to_start', language)}
                         </div>
                     )}
                     {!isOwner && (
-                        <div className="text-center text-gray-600">
+                        <div className="text-center text-color-secondary">
                             {translate('wait_for_owner_to_start_the_race', language)}
                         </div>
                     )}

@@ -37,7 +37,6 @@ func WsHandler(c echo.Context, manager *managers.LobbyManager) error {
 			}
 			return nil
 		}
-		log.Printf("Received message: %+v", msg)
 
 		var response *types.WebSocketMessage
 		var handlerErr error
@@ -45,10 +44,8 @@ func WsHandler(c echo.Context, manager *managers.LobbyManager) error {
 		// Handle the message based on its type
 		switch msg.Type {
 		case types.CreateLobby:
-			log.Println("Handling CreateLobby message")
 			response, handlerErr = manager.HandleCreateLobby(msg, ws)
 		case types.JoinLobby:
-			log.Println("Handling JoinLobby message")
 			response, handlerErr = manager.HandleJoinLobby(msg, ws)
 		case types.StartRace:
 			response, handlerErr = manager.HandleStartRace(msg, ws)

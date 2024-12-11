@@ -2,6 +2,7 @@ package managers
 
 import (
 	"fmt"
+	"latvianKeyboardTypingPlatform/db/queries"
 	"latvianKeyboardTypingPlatform/types"
 	"log"
 	"sort"
@@ -243,12 +244,6 @@ func (lm *LobbyManager) HandleJoinLobby(message types.WebSocketMessage, conn *we
 		userId = ""
 	}
 
-	// check if username already exists in the lobby
-	for _, player := range lobby.Players {
-		if player.Username == username {
-			return nil, fmt.Errorf("username %s already exists in the lobby", username)
-		}
-	}
 	// initiate player
 	player := types.Player{
 		PlayerId:     uuid.NewString(),
@@ -320,53 +315,54 @@ func (lm *LobbyManager) allPlayersFinishedTyping(lobbyId string) bool {
 	return true
 }
 
-// func (lm *LobbyManager) SaveRaceResults(lobbyId string) error {
-// 	lm.mu.RLock()
-// 	defer lm.mu.RUnlock()
+func (lm *LobbyManager) SaveRaceResults(lobbyId string) error {
+	lm.mu.RLock()
+	defer lm.mu.RUnlock()
 
-// 	lobby, exists := lm.Lobbies[lobbyId]
-// 	if !exists {
-// 		return fmt.Errorf("lobby with id %s not found", lobbyId)
-// 	}
+	lobby, exists := lm.Lobbies[lobbyId]
+	if !exists {
+		return fmt.Errorf("lobby with id %s not found", lobbyId)
+	}
 
-// 	typingRaceSettings := types.TypingRaceSettings{
-// 		TextType:       lobby.LobbySettings.TextType,
-// 		TextId:         lobby.LobbySettings.TextId,
-// 		CustomText:     lobby.LobbySettings.CustomText,
-// 		MaxPlayerCount: lobby.LobbySettings.MaxPlayerCount,
-// 		Time:           lobby.LobbySettings.Time,
-// 	}
+	lobbySettings := types.LobbySettings{
+		TextType:       lobby.LobbySettings.TextType,
+		TextId:         lobby.LobbySettings.TextId,
+		CustomText:     lobby.LobbySettings.CustomText,
+		MaxPlayerCount: lobby.LobbySettings.MaxPlayerCount,
+		Time:           lobby.LobbySettings.Time,
+	}
 
-// 	typingRace := types.TypingRace{
-// 		TypingRaceId:         lobby.LobbyId,
-// 		TypingRaceSettingsId: 0,
-// 		Date:                 time.Now().Format(time.RFC3339),
-// 	}
+	lobbyy := types.Lobby{
+		LobbyId:         lobby.LobbyId,
+		LobbySettingsId: 0,
+		Date:            time.Now().Format(time.RFC3339),
+	}
 
-// 	var typingRacePlayers []types.TypingRacePlayer
-// 	for _, player := range lobby.Players {
-// 		typingRacePlayers = append(typingRacePlayers, types.TypingRacePlayer{
-// 			TypingRacePlayerId:   player.PlayerId,
-// 			TypingRaceId:         typingRace.TypingRaceId,
-// 			Username:             player.Username,
-// 			UserId:               player.UserId,
-// 			Role:                 player.Role,
-// 			Place:                player.Place,
-// 			MistakeCount:         player.MistakeCount,
-// 			Wpm:                  player.Wpm,
-// 			ProcentsOfTextTyped:  player.ProcentsOfTextTyped,
-// 			TypingRaceSettingsId: typingRaceSettings.TypingRaceSettingsId,
-// 		})
-// 	}
+	var lobbyPlayers []types.Player
+	for _, player := range lobby.Players {
+		lobbyPlayers = append(lobbyPlayers, types.Player{
+			PlayerId:              player.PlayerId,
+			LobbyId:               lobbyy.LobbyId,
+			Username:              player.Username,
+			UserId:                player.UserId,
+			Role:                  player.Role,
+			Place:                 player.Place,
+			MistakeCount:          player.MistakeCount,
+			Wpm:                   player.Wpm,
+			PercentageOfTextTyped: player.PercentageOfTextTyped,
+			LobbySettingsid:       lobbySettings.LobbySettingsId,
+		})
+	}
 
-// 	// Call PostTypingRace to insert the data into the database
-// 	err := queries.PostTypingRace(typingRace, typingRaceSettings, typingRacePlayers)
-// 	if err != nil {
-// 		return fmt.Errorf("failed to save race results: %v", err)
-// 	}
+	fmt.Println("Lobby Settings:", lobbySettings)
 
-// 	return nil
-// }
+	err := queries.PostTypingRace(lobbyy, lobbySettings, lobbyPlayers)
+	if err != nil {
+		return fmt.Errorf("failed to save race results: %v", err)
+	}
+
+	return nil
+}
 
 func (lm *LobbyManager) startCountdown(lobbyId string) {
 	ticker := time.NewTicker(1 * time.Second)
@@ -385,7 +381,16 @@ func (lm *LobbyManager) startCountdown(lobbyId string) {
 				return
 			}
 
-			if lm.allPlayersFinishedTyping(lobbyId) || timeLeft <= 0 {
+			allFinished := lm.allPlayersFinishedTyping(lobbyId)
+			if allFinished || timeLeft <= 0 {
+				fmt.Printf("All players finished typing: %v\n", allFinished)
+				fmt.Printf("Time left: %d\n", timeLeft)
+
+				err := lm.SaveRaceResults(lobbyId)
+				if err != nil {
+					fmt.Printf("Error saving race results: %v\n", err)
+				}
+
 				endRaceMessage := &types.WebSocketMessage{
 					Type:    types.EndRace,
 					LobbyId: lobbyId,
@@ -476,11 +481,11 @@ func (lm *LobbyManager) HandleProgress(message types.WebSocketMessage, conn *web
 	}
 	mistakeCount := int(mistakeCountFloat)
 
-	procentsOfTextTypedFloat, ok := playerData["procentsOfTextTyped"].(float64)
+	percentageOfTextTypedFloat, ok := playerData["percentageOfTextTyped"].(float64)
 	if !ok {
-		return nil, fmt.Errorf("procentsOfTextTyped is required and should be a number")
+		return nil, fmt.Errorf("percentageOfTextTyped is required and should be a number")
 	}
-	procentsOfTextTyped := int(procentsOfTextTypedFloat)
+	percentageOfTextTyped := int(percentageOfTextTypedFloat)
 
 	playerId, ok := playerData["playerId"].(string)
 	if !ok {
@@ -492,18 +497,18 @@ func (lm *LobbyManager) HandleProgress(message types.WebSocketMessage, conn *web
 		if player.PlayerId == playerId {
 			lobby.Players[i].Wpm = wpm
 			lobby.Players[i].MistakeCount = mistakeCount
-			lobby.Players[i].ProcentsOfTextTyped = procentsOfTextTyped
-			if procentsOfTextTyped == 100 {
+			lobby.Players[i].PercentageOfTextTyped = percentageOfTextTyped
+			if percentageOfTextTyped == 100 {
 				lobby.Players[i].FinishedTyping = true
 			}
 			break
 		}
 	}
 
-	// recalculate the player's place based on highest ProcentsOfTextTyped
-	// sort players in descending order of ProcentsOfTextTyped
+	// recalculate the player's place based on highest percentageOfTextTyped
+	// sort players in descending order of percentageOfTextTyped
 	sort.Slice(lobby.Players, func(i, j int) bool {
-		return lobby.Players[i].ProcentsOfTextTyped > lobby.Players[j].ProcentsOfTextTyped
+		return lobby.Players[i].PercentageOfTextTyped > lobby.Players[j].PercentageOfTextTyped
 	})
 
 	// assign place based on the sorted order

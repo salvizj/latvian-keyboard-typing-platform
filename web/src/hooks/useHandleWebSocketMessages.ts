@@ -4,27 +4,27 @@ import { useOptions } from '../context/OptionsContext';
 import { LobbyStatus, WebSocketMessage, WebSocketMessageData, WebSocketMessageType } from '../types';
 import constructWebSocketMessage from '../utils/constructWebsocktMessage';
 
-type UseHandleWebSocketMessagesParams = {
+export type UseHandleWebSocketMessagesParams = {
     isSocketOpen: boolean;
     userIdOrEmpty: string;
     playerId: string | null;
     isOptionsSet: boolean;
-    isTypingFinished: boolean;
     lobbyStatus: LobbyStatus;
     sendMessage: (message: WebSocketMessage<WebSocketMessageData>) => void;
 };
+
 const useHandleWebSocketMessages = ({
     isSocketOpen,
     userIdOrEmpty,
     isOptionsSet,
     playerId,
-    isTypingFinished,
     lobbyStatus,
     sendMessage,
 }: UseHandleWebSocketMessagesParams) => {
-    const { text, time, lobbyId, username, maxPlayerCount, lobbyMode, timeLeft } = useOptions();
+    const { text, time, lobbyId, username, maxPlayerCount, lobbyMode, timeLeft, textId, customText, textType } =
+        useOptions();
     const previousProcentsRef = useRef<number | null>(null);
-    const { wpm, mistakeCount, procentsOfTextTyped } = useTyping();
+    const { wpm, mistakeCount, percentageOfTextTyped } = useTyping();
 
     const [hasSentCreateLobby, setHasSentCreateLobby] = useState(false);
     const [hasSentJoinLobby, setHasSentJoinLobby] = useState(false);
@@ -41,7 +41,7 @@ const useHandleWebSocketMessages = ({
         if (lobbyMode === 'create' && time != null && !hasSentCreateLobby) {
             const createLobbyMessage = constructWebSocketMessage({
                 messageType: WebSocketMessageType.CreateLobby,
-                lobbySettings: { time, maxPlayerCount, text },
+                lobbySettings: { time, maxPlayerCount, text, textId, customText, textType },
                 players: [basePlayerData],
             });
 
@@ -60,14 +60,13 @@ const useHandleWebSocketMessages = ({
                 setHasSentJoinLobby(true);
             }
         }
-
         // handle game progress update
         if (
             lobbyStatus === LobbyStatus.InProgress &&
             playerId != null &&
-            procentsOfTextTyped !== previousProcentsRef.current
+            percentageOfTextTyped !== previousProcentsRef.current
         ) {
-            previousProcentsRef.current = procentsOfTextTyped;
+            previousProcentsRef.current = percentageOfTextTyped;
             const progressMessage = constructWebSocketMessage({
                 messageType: WebSocketMessageType.Progress,
                 lobbyId,
@@ -78,11 +77,10 @@ const useHandleWebSocketMessages = ({
                         userId: userIdOrEmpty,
                         wpm: wpm,
                         mistakeCount: mistakeCount,
-                        procentsOfTextTyped: procentsOfTextTyped,
+                        percentageOfTextTyped: percentageOfTextTyped,
                     },
                 ],
             });
-
             if (progressMessage) sendMessage(progressMessage);
         }
     }, [
@@ -96,7 +94,7 @@ const useHandleWebSocketMessages = ({
         lobbyId,
         wpm,
         mistakeCount,
-        procentsOfTextTyped,
+        percentageOfTextTyped,
         timeLeft,
         lobbyStatus,
         userIdOrEmpty,
@@ -104,7 +102,9 @@ const useHandleWebSocketMessages = ({
         hasSentCreateLobby,
         hasSentJoinLobby,
         playerId,
-        isTypingFinished,
+        customText,
+        textType,
+        textId,
     ]);
 };
 export default useHandleWebSocketMessages;

@@ -108,11 +108,8 @@ const TypingDataDisplay: FC<TypingDataDisplayProps> = ({ data, loading, error, p
                                     </div>
                                     <div className="space-y-2">
                                         {data.players.map((player) => (
-                                            <div
-                                                key={player.typingRacePlayerId}
-                                                className="grid grid-cols-5 gap-4 p-2 border-t"
-                                            >
-                                                <div className="p-2">{player.typingRaceId}</div>
+                                            <div key={player.playerId} className="grid grid-cols-5 gap-4 p-2 border-t">
+                                                <div className="p-2">{player.lobbyid}</div>
                                                 <div className="p-2">{player.username}</div>
                                                 <div className="p-2">{player.wpm}</div>
                                                 <div className="p-2">{player.mistakeCount}</div>
@@ -199,12 +196,12 @@ const TypingDataDisplay: FC<TypingDataDisplayProps> = ({ data, loading, error, p
                         data.races.map((race, raceIndex) => {
                             // find the player for the current race based on userId
                             const playerForRace = playersToDisplay.find(
-                                (player) => player.typingRaceId === race.typingRaceId && player.userId === userId
+                                (player) => player.lobbyid === race.lobbyId && player.userId === userId
                             );
 
                             return playerForRace ? (
                                 <div
-                                    key={playerForRace.typingRacePlayerId}
+                                    key={playerForRace.playerId}
                                     onClick={() => handleOpen(raceIndex)}
                                     className="flex flex-row gap-10 text-color-primary border-color-primary hover:border-color-secondary cursor-pointer p-4"
                                 >

@@ -64,7 +64,7 @@ const translations: Translations = {
         wpm: 'Words per minute',
         time: 'Time',
         test_id: 'Test identificator',
-        procents_of_text_typed: 'Procents of text typed.',
+        percentage_of_text_typed: 'Percentage of text typed.',
         time_left: 'Time left',
 
         // Typing Race Features
@@ -284,7 +284,7 @@ const translations: Translations = {
         progress: 'Progress',
         place: 'Vieta',
         race_id: 'Sacensību identifikators',
-        procents_of_text_typed: 'Procenti no uzrakstītā teksta',
+        percentage_of_text_typed: 'Procents no uzrakstītā teksta',
         game: 'Speles',
         record: 'rekords',
 

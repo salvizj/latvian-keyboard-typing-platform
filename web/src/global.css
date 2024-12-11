@@ -1,24 +1,24 @@
 :root {
-    --text-color-typing: #b76c6c;
-    --text-color-typing-correct: #d4d6e5;
-    --bg-typing-box: #5f6588;
+    --text-color-typing: #b64e4e;
+    --text-color-typing-correct: #a4a6c4;
+    --bg-typing-box: #4c4f71;
 
-    --bg-next-key: #c1c4d9;
-    --text-color-next-key: #2a2f50;
+    --bg-next-key: #a0a3c5;
+    --text-color-next-key: #212740;
 
-    --bg-modifier: #c1c4d9;
-    --text-color-modifier: #2a2f50;
+    --bg-modifier: #a0a3c5;
+    --text-color-modifier: #212740;
 
-    --color-primary: #d4d6e5;
-    --color-primary-hover: #8a8eaf;
-    --color-third-hover: #7981af;
-    --color-secondary: #ffffff;
+    --color-primary: #e6edf1;
+    --color-primary-hover: #b0b0b0;
+    --color-third-hover: #7983b2;
+    --color-secondary: #e3ebf0;
 
-    --bg-general: #d6d4ec;
-    --color-third: #5f6588;
+    --bg-general: #9499ba;
+    --color-third: #4c4f71;
 
-    --border-keyboard: #b8b6b6;
-    --bg-lesson-complete: #5f6588;
+    --border-keyboard: #9e9b9b;
+    --bg-lesson-complete: #4c4f71;
 
     --bg-hand-thumb: #f87171;
     --bg-hand-index: #6ee7b7;

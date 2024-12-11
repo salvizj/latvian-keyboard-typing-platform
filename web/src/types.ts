@@ -76,23 +76,29 @@ export type Lobby = {
     lobbyId: string;
     lobbySettings: LobbySettings;
     players: Player[];
+    date?: string;
 };
 
 export type LobbySettings = {
+    lobbySettingsId?: null | number;
+    textType: 'poet' | 'custom';
+    textId: number | null;
+    customText: string | null;
     text: string;
-    time: number;
     maxPlayerCount: number;
+    time: number;
 };
 
 export type Player = {
     playerId?: string;
+    lobbyid?: string;
     username: string;
     userId?: string;
     role?: PlayerRole;
     place?: number;
     mistakeCount?: number;
     wpm?: number;
-    procentsOfTextTyped?: number;
+    percentageOfTextTyped?: number;
     finishedTyping?: boolean;
 };
 
@@ -195,38 +201,11 @@ export type TypingTestSettings = {
     time: number;
 };
 
-export type TypingRace = {
-    typingRaceId: string;
-    typingRaceSettingsId: number;
-    date: string;
-};
-
-export type TypingRaceSettings = {
-    typingRaceSettingsId: number;
-    textType: string;
-    textId?: number;
-    customText?: string;
-    maxPlayerCount: number;
-    time: number;
-};
-
-export type TypingRacePlayer = {
-    typingRacePlayerId: number;
-    typingRaceId: string;
-    username: string;
-    userId: string;
-    role: string;
-    place: number;
-    mistakeCount: number;
-    wpm: number;
-    typingRaceSettingsId: number;
-};
-
 export type TypingTestOrRaceData =
     | { type: HistoryTypes.TypingTest; tests: TypingTest[]; settings: TypingTestSettings[] }
     | {
           type: HistoryTypes.TypingRace;
-          players: TypingRacePlayer[];
-          settings: TypingRaceSettings[];
-          races: TypingRace[];
+          players: Player[];
+          settings: LobbySettings[];
+          races: Lobby[];
       };

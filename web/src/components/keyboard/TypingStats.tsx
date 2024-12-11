@@ -9,7 +9,7 @@ type TypingStatsProps = {
 
 const TypingStats: React.FC<TypingStatsProps> = ({ start }) => {
     const { language } = useLanguage();
-    const { wpm, mistakeCount, isTypingFinished, procentsOfTextTyped } = useTyping();
+    const { wpm, mistakeCount, isTypingFinished, percentageOfTextTyped } = useTyping();
     const [show, setShow] = useState(false);
 
     useEffect(() => {
@@ -37,7 +37,7 @@ const TypingStats: React.FC<TypingStatsProps> = ({ start }) => {
                 </div>
                 <div>
                     <p className="mb-1">
-                        {translate('procents_of_text_typed', language)}: {procentsOfTextTyped} {'%'}
+                        {translate('percentage_of_text_typed', language)}: {percentageOfTextTyped} {'%'}
                     </p>
                 </div>
             </div>

@@ -62,7 +62,7 @@ type LobbyStatus string
 
 const (
 	LobbyStatusWaiting    LobbyStatus = "waiting"
-	LobbyStatusInProgress LobbyStatus = "in-progress"
+	LobbyStatusInProgress LobbyStatus = "inProgress"
 	LobbyStatusFinished   LobbyStatus = "finished"
 )
 

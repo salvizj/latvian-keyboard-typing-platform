@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { useOptions } from '../../context/OptionsContext';
 import { useTyping } from '../../context/TypingContext';
+import translate from '../../utils/translate';
+import { useLanguage } from '../../context/LanguageContext';
 
 type CountdownProps = {
     start: boolean;
@@ -9,6 +11,7 @@ type CountdownProps = {
 const Countdown: React.FC<CountdownProps> = ({ start }) => {
     const { time, setTimeLeft, timeLeft } = useOptions();
     const { isTypingFinished, setIsTypingFinished } = useTyping();
+    const { language } = useLanguage();
 
     useEffect(() => {
         if (start && time !== null) {
@@ -29,7 +32,9 @@ const Countdown: React.FC<CountdownProps> = ({ start }) => {
     return (
         <>
             {timeLeft != 0 && (
-                <div className="flex justify-center items-center text-color-primary text-3xl">{timeLeft}</div>
+                <div className="flex justify-center items-center text-color-primary text-3xl">
+                    {translate('time_left', language)} {timeLeft}
+                </div>
             )}
         </>
     );

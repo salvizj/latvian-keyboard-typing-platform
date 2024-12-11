@@ -1,16 +1,14 @@
 import { useEffect, useState } from 'react';
 import postGameRecord from '../api/postGameRecord';
-import { useParams } from 'react-router-dom';
 import useAuthStatus from './useAuthStatus';
 
-const usePostGameRecord = (gameRecord: number, isGameOver: boolean) => {
+const usePostGameRecord = (gameOption: string | undefined, gameRecord: number, isGameOver: boolean) => {
     const [gameRecordPostError, setGameRecordPostError] = useState<string | null>(null);
     const [gameRecordPostLoading, setGameRecordPostLoading] = useState<boolean>(false);
     const { userId } = useAuthStatus();
-    const { gameOption } = useParams<{ gameOption: string }>();
 
     useEffect(() => {
-        if (userId && gameOption && gameRecord !== null && isGameOver) {
+        if (userId && gameOption && gameOption != '' && gameRecord !== null && isGameOver) {
             setGameRecordPostLoading(true);
             postGameRecord(gameOption, userId, gameRecord)
                 .then(() => {
@@ -22,7 +20,7 @@ const usePostGameRecord = (gameRecord: number, isGameOver: boolean) => {
                     setGameRecordPostLoading(false);
                 });
         }
-    }, [userId, gameOption, gameRecord, isGameOver]);
+    }, [userId, gameRecord, isGameOver, gameOption]);
 
     return { gameRecordPostError, gameRecordPostLoading };
 };

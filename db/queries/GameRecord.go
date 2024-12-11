@@ -7,22 +7,18 @@ import (
 )
 
 func GetGameRecord(gameName, userId string) (int, error) {
-	var record int
-
 	query := `
-        SELECT record  FROM "GameRecords" WHERE "gameName" = $1 AND 
-		"userId" = $2 
-        LIMIT 1;
+    SELECT record FROM "GameRecords" WHERE gameName = $1 AND userId = $2
     `
-
+	var record int
 	err := db.DB.QueryRow(query, gameName, userId).Scan(&record)
 	if err != nil {
 		if err == sql.ErrNoRows {
+			// return 0 if no records are found
 			return 0, nil
 		}
-		return 0, err
+		return 0, fmt.Errorf("failed to execute query: %v", err)
 	}
-
 	return record, nil
 }
 

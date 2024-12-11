@@ -15,6 +15,8 @@ func GetTypingTestsAndRaces(c echo.Context) error {
 	typeStr := c.QueryParam("type")
 	pageStr := c.QueryParam("page")
 	itemsPerPageStr := c.QueryParam("itemsPerPage")
+	dateFromStr := c.QueryParam("dateFrom")
+	dateTillStr := c.QueryParam("dateTill")
 
 	if userId == "" || typeStr == "" || pageStr == "" || itemsPerPageStr == "" {
 		return c.JSON(http.StatusBadRequest, map[string]string{
@@ -36,9 +38,17 @@ func GetTypingTestsAndRaces(c echo.Context) error {
 		})
 	}
 
+	var dateFrom, dateTill *string
+	if dateFromStr != "" {
+		dateFrom = &dateFromStr
+	}
+	if dateTillStr != "" {
+		dateTill = &dateTillStr
+	}
+
 	switch typeStr {
 	case "typingTest":
-		tests, settings, err := queries.GetTypingTests(userId, page, itemsPerPage)
+		tests, settings, err := queries.GetTypingTests(userId, page, itemsPerPage, dateFrom, dateTill)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{
 				"error": fmt.Sprintf("Error fetching typing tests: %v", err),
@@ -59,7 +69,7 @@ func GetTypingTestsAndRaces(c echo.Context) error {
 		})
 
 	case "typingRace":
-		players, settings, races, err := queries.GetTypingRaces(userId, page, itemsPerPage)
+		players, settings, races, err := queries.GetTypingRaces(userId, page, itemsPerPage, dateFrom, dateTill)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{
 				"error": fmt.Sprintf("Error fetching typing races: %v", err),

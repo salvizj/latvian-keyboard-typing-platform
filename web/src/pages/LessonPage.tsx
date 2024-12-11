@@ -35,7 +35,6 @@ const LessonPage = () => {
     if (!lesson && !lessonGetLoading) {
         return <p> {translate('error_fetching_lesson_text', language)}</p>;
     }
-
     if (isTypingFinished && lessonId) {
         return (
             <CompletionScreen

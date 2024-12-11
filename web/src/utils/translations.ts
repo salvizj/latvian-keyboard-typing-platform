@@ -64,6 +64,8 @@ const translations: Translations = {
         wpm: 'Words per minute',
         time: 'Time',
         test_id: 'Test identificator',
+        procents_of_text_typed: 'Procents of text typed.',
+        time_left: 'Time left',
 
         // Typing Race Features
         typing_race: 'Typing race',
@@ -84,12 +86,14 @@ const translations: Translations = {
         games: 'Games',
         choose_game: 'Choose game',
         start_game: 'Start game',
-        round: 'Round',
-        rounds: 'Rounds',
+        round: 'round',
+        rounds: 'rounds',
         players: 'Players',
         leader: 'Leader',
         player: 'Player',
         progress: 'Progress.',
+        game: 'Game',
+        record: 'record',
 
         // History & Stats
         history: 'History',
@@ -107,6 +111,7 @@ const translations: Translations = {
         enter_custom_text: 'Enter custom text.',
         choose_predefined_text: 'Choose predefined text.',
         hide_words: 'Hide words',
+        poet_text_not_available: 'Poet texts currently are not available.',
 
         // UI Actions
         create: 'Create',
@@ -245,10 +250,11 @@ const translations: Translations = {
         test_id: 'Testa identifikators',
         custom: 'Pielagots',
         poet: 'Dzejnieka',
+        time_left: 'Atlikušais laiks',
 
         // Typing Race Features
         typing_race: 'Rakstīšanas sacensības',
-        typing_race_lobby: 'Rakstīšanas sacīkšu istaba',
+        typing_race_lobby: 'Rakstīšanas sacensību istaba',
         start_typing_race: 'Sākt rakstīšanas sacensības',
         create_lobby: 'Izveidot istabu',
         join_lobby: 'Pievienoties istabai',
@@ -263,14 +269,17 @@ const translations: Translations = {
         games: 'Spēles',
         choose_game: 'Izvēlieties spēli',
         start_game: 'Sākt spēli',
-        round: 'Raunds',
-        rounds: 'Raundi',
+        round: 'raundu',
+        rounds: 'raundus',
         players: 'Spēlētāji',
         leader: 'Līderis',
         player: 'Spēlētājs',
         progress: 'Progress',
         place: 'Vieta',
         race_id: 'Sacensību identifikators',
+        procents_of_text_typed: 'Procenti no uzrakstītā teksta',
+        game: 'Speles',
+        record: 'rekords',
 
         // History & Stats
         history: 'Vēsture',
@@ -287,6 +296,7 @@ const translations: Translations = {
         custom_text: 'Pielāgots teksts',
         enter_custom_text: 'Ievadiet pielāgotu tekstu',
         hide_words: 'Paslēpt vārdus',
+        poet_text_not_available: 'Dzeju teksti pašreiz nav pieejami.',
 
         // UI Actions
         create: 'Izveidot',

@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"latvianKeyboardTypingPlatform/db/queries"
 	"net/http"
 
@@ -19,10 +20,13 @@ func GetGameRecordHandler(c echo.Context) error {
 
 	record, err := queries.GetGameRecord(gameName, userId)
 	if err != nil {
+		fmt.Printf("Error fetching game record: %v\n", err)
 		return c.JSON(http.StatusInternalServerError, map[string]string{
 			"error": "Unable to fetch game record. Please try again later.",
 		})
 	}
 
-	return c.JSON(http.StatusOK, record)
+	return c.JSON(http.StatusOK, map[string]int{
+		"record": record,
+	})
 }

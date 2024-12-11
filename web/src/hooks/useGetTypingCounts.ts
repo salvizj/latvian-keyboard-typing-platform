@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import getTypingTestsAndRacesCount from '../api/getTypingTestsAndRacesCount';
 
-const useGetTypingCounts = (userId: string | null) => {
+const useGetTypingCounts = (userId: string | null, dateFrom: string, dateTill: string) => {
     const [testsCount, setTestsCount] = useState(0);
     const [racesCount, setRacesCount] = useState(0);
     const [fetchingCountError, setFetchingCountError] = useState<string | null>(null);
@@ -16,7 +16,7 @@ const useGetTypingCounts = (userId: string | null) => {
 
         setLoadingCountData(true);
 
-        getTypingTestsAndRacesCount(userId)
+        getTypingTestsAndRacesCount(userId, dateFrom, dateTill)
             .then((data) => {
                 setTestsCount(data.testsCount);
                 setRacesCount(data.racesCount);
@@ -31,7 +31,7 @@ const useGetTypingCounts = (userId: string | null) => {
             .finally(() => {
                 setLoadingCountData(false);
             });
-    }, [userId]);
+    }, [dateFrom, dateTill, userId]);
 
     return { testsCount, racesCount, fetchingCountError, loadingCountData };
 };

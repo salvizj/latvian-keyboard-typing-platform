@@ -4,9 +4,11 @@ import getTypingTestsAndRaces from '../api/getTypingTestsAndRaces';
 
 const useGetTypingTestsAndRaces = (
     userId: string | null,
-    page: number | null,
+    page: number,
     type: string | null,
-    itemsPerPage: number | null
+    itemsPerPage: number,
+    dateFrom: string,
+    dateTill: string
 ) => {
     const [data, setData] = useState<TypingTestOrRaceData | null>(null);
     const [loadingTypingData, setLoadingTypingData] = useState<boolean>(false);
@@ -17,8 +19,8 @@ const useGetTypingTestsAndRaces = (
         setLoadingTypingData(true);
         setFetchingTypingDataError(null);
 
-        if (userId && page !== null && page >= 0 && type && itemsPerPage && itemsPerPage >= 0) {
-            getTypingTestsAndRaces(userId, page, type, itemsPerPage)
+        if (userId && page >= 0 && type && type !== '' && itemsPerPage >= 0) {
+            getTypingTestsAndRaces(userId, page, type, itemsPerPage, dateFrom, dateTill)
                 .then((response) => {
                     setData(response);
                 })
@@ -32,7 +34,7 @@ const useGetTypingTestsAndRaces = (
         } else {
             setLoadingTypingData(false);
         }
-    }, [userId, type, page, itemsPerPage]);
+    }, [userId, type, page, itemsPerPage, dateFrom, dateTill]);
 
     return { data, loadingTypingData, fetchingTypingDataError };
 };

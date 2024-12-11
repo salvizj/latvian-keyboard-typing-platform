@@ -159,14 +159,12 @@ const TypingDataDisplay: FC<TypingDataDisplayProps> = ({ data, loading, error, p
 
     if (data) {
         if (data.type === HistoryTypes.TypingTest) {
-            const testsToDisplay = data.tests.slice(page * ITEMS_PER_PAGE, (page + 1) * ITEMS_PER_PAGE);
-
             return (
                 <div className="space-y-4 p-4 mt-4">
-                    {testsToDisplay.length === 0 ? (
+                    {data.tests.length === 0 || data.tests.length === 0 ? (
                         <p className="text-primary-color p-2 text-sm">{translate('test_count_0', language)}</p>
                     ) : (
-                        testsToDisplay.map((test: TypingTest, index: number) => {
+                        data.tests.map((test: TypingTest, index: number) => {
                             return (
                                 <div
                                     key={index}
@@ -190,19 +188,15 @@ const TypingDataDisplay: FC<TypingDataDisplayProps> = ({ data, loading, error, p
                 </div>
             );
         } else if (data.type === HistoryTypes.TypingRace) {
-            const raceToDisplay = data.races.slice(page * ITEMS_PER_PAGE, (page + 1) * ITEMS_PER_PAGE);
-
             // get only user date
-            const playersToDisplay = userId
-                ? data.players.filter((player) => player.userId === userId)
-                : data.players.slice(page * ITEMS_PER_PAGE, (page + 1) * ITEMS_PER_PAGE);
+            const playersToDisplay = data.players.filter((player) => player.userId === userId);
 
             return (
                 <div className="space-y-4 p-4 mt-4">
-                    {raceToDisplay.length === 0 || playersToDisplay.length === 0 ? (
+                    {data.races.length === 0 || data.races.length === 0 ? (
                         <p className="text-primary-color p-2 text-sm">{translate('race_count_0', language)}</p>
                     ) : (
-                        raceToDisplay.map((race, raceIndex) => {
+                        data.races.map((race, raceIndex) => {
                             // find the player for the current race based on userId
                             const playerForRace = playersToDisplay.find(
                                 (player) => player.typingRaceId === race.typingRaceId && player.userId === userId

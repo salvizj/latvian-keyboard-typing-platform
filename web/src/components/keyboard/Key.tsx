@@ -20,7 +20,7 @@ const KeyboardKey: React.FC<KeyboardKeyProps> = ({ keyObj, expectedCharacter, ex
     const isCurrentKeyLeft = keyObj.hand === ('left' as Hand | undefined);
 
     // add higliht clases
-    // function to check if the Shift key should be highlighted
+    //  to check if the Shift key should be highlighted
     const shouldHighlightShiftKey = (): boolean => {
         if (!isCurrentKeyShift) return false;
 
@@ -32,7 +32,7 @@ const KeyboardKey: React.FC<KeyboardKeyProps> = ({ keyObj, expectedCharacter, ex
         return false;
     };
 
-    // function to check if the Alt key should be highlighted
+    //  to check if the Alt key should be highlighted
     const shouldHighlightAltKey = (): boolean => {
         if (!isCurrentKeyAlt) return false;
 

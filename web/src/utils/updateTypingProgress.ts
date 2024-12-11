@@ -4,5 +4,6 @@ export const updateTypingProgress = (
     setProcentsOfTextTyped?: (progress: number) => void
 ): void => {
     const progress = (currentIndex / totalLength) * 100;
-    setProcentsOfTextTyped?.(progress);
+    const roundedProgress = parseFloat(progress.toFixed(2));
+    setProcentsOfTextTyped?.(roundedProgress);
 };

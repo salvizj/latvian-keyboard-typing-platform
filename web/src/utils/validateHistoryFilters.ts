@@ -10,7 +10,7 @@ export const validateHistoryFilters = (
         return regex.test(date);
     };
 
-    if ((page && isNaN(Number(page))) || Number(page) < 0) {
+    if (page && isNaN(Number(page))) {
         return 'error_incorrect_page';
     }
 

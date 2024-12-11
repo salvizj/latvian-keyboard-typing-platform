@@ -1,9 +1,13 @@
 import axios from 'axios';
 
-const getTypingTestsAndRacesCount = (userId: string): Promise<{ testsCount: number; racesCount: number }> => {
+const getTypingTestsAndRacesCount = (
+    userId: string,
+    dateFrom: string,
+    dateTill: string
+): Promise<{ testsCount: number; racesCount: number }> => {
     return axios
         .get<{ testsCount: number; racesCount: number }>('/api/get-typing-tests-and-races-count', {
-            params: { userId },
+            params: { userId, dateFrom, dateTill },
         })
         .then((response) => response.data)
         .catch((error) => {

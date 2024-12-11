@@ -103,7 +103,7 @@ export enum PlayerRole {
 
 export enum LobbyStatus {
     Waiting = 'waiting',
-    InProgress = 'in-progress',
+    InProgress = 'inProgress',
     Finished = 'finished',
 }
 
@@ -142,6 +142,7 @@ export type EndRaceData = object;
 export type ErrorData = {
     message: string;
 };
+
 export enum WebSocketMessageType {
     CreateLobby = 'createLobby',
     JoinLobby = 'joinLobby',

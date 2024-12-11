@@ -5,26 +5,26 @@ import useAuthStatus from './useAuthStatus';
 const useGetGameRecord = (gameName: string) => {
     const [gameRecord, setGameRecord] = useState<number | null>(null);
     const [gameRecordGetError, setGameRecordGetError] = useState<string | null>(null);
-    const [gameNameGetLoading, setGameNameGetLoading] = useState<boolean>(false);
+    const [gameRecordGetLoading, setGameRecordGetLoading] = useState<boolean>(false);
     const { userId } = useAuthStatus();
 
     useEffect(() => {
         if (userId && gameName !== '' && gameName) {
-            setGameNameGetLoading(true);
+            setGameRecordGetLoading(true);
             getGameRecord(gameName, userId)
                 .then((data) => {
                     setGameRecord(data);
                     setGameRecordGetError(null);
-                    setGameNameGetLoading(false);
+                    setGameRecordGetLoading(false);
                 })
                 .catch(() => {
                     setGameRecordGetError('error_fetching_game_record');
                     setGameRecord(null);
-                    setGameNameGetLoading(false);
+                    setGameRecordGetLoading(false);
                 });
         }
     }, [userId, gameName]);
 
-    return { gameRecord, gameRecordGetError, gameNameGetLoading };
+    return { gameRecord, gameRecordGetError, gameRecordGetLoading };
 };
 export default useGetGameRecord;

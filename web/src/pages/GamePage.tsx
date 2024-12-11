@@ -3,7 +3,7 @@ import translate from '../utils/translate';
 import { useLanguage } from '../context/LanguageContext';
 import Countdown from '../components/utils/Countdown';
 import CompletionScreen from '../components/utils/CompletionScreen';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import useHideWords from '../hooks/useHideWords';
 import useGetLatvianWords from '../hooks/useGetLatvianWords';
 import usePostGameRecord from '../hooks/usePostGameRecord';
@@ -14,8 +14,12 @@ const GamePage = () => {
     const { latvianWords, latvianWordsError } = useGetLatvianWords();
     const { gameState, handleKeyPress, completionTitle, currentWord, hasWords, isTypingFinished } =
         useHideWords(latvianWords);
-
-    const { gameRecordPostError, gameRecordPostLoading } = usePostGameRecord(gameState.round, gameState.isGameOver);
+    const { gameOption } = useParams<{ gameOption: string }>();
+    const { gameRecordPostError, gameRecordPostLoading } = usePostGameRecord(
+        gameOption,
+        gameState.round,
+        gameState.isGameOver
+    );
 
     // early return if there's an error or no words available
     if (latvianWordsError || !hasWords) {
@@ -52,7 +56,7 @@ const GamePage = () => {
 
     return (
         <div className="flex flex-col justify-center items-center h-screen">
-            <div className="text-2xl text-center text-color-secondary p-4">
+            <div className="text-xl text-center text-color-primary p-4">
                 {translate('round', language)} {gameState.round}
             </div>
             <Countdown start={!gameState.isGameOver} />

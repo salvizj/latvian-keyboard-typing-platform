@@ -17,7 +17,6 @@ const HistoryPage = () => {
     const { language } = useLanguage();
     const [searchParams, setSearchParams] = useSearchParams();
     const [validateError, setValidateError] = useState('');
-    const { testsCount, racesCount, fetchingCountError, loadingCountData } = useGetTypingCounts(userId);
     // initial parameters and validation
     useEffect(() => {
         const params = {
@@ -68,10 +67,15 @@ const HistoryPage = () => {
     const dateFrom = searchParams.get('dateFrom') || '';
     const dateTill = searchParams.get('dateTill') || '';
 
+    const { testsCount, racesCount, fetchingCountError, loadingCountData } = useGetTypingCounts(
+        userId,
+        dateFrom,
+        dateTill
+    );
     const currentCount = currentType === HistoryTypes.TypingTest ? testsCount : racesCount;
 
     // calculate total number of pages
-    const totalPages = Math.ceil(currentCount / ITEMS_PER_PAGE);
+    const totalPages = ITEMS_PER_PAGE > 0 ? Math.ceil(currentCount / ITEMS_PER_PAGE) : 0;
 
     const updatePage = (newPage: number) => {
         setSearchParams({ ...searchParams, page: newPage.toString() });
@@ -91,9 +95,10 @@ const HistoryPage = () => {
         userId,
         currentPage,
         currentType,
-        ITEMS_PER_PAGE
+        ITEMS_PER_PAGE,
+        dateFrom,
+        dateTill
     );
-
     return (
         <DefaultPanel className="h-full" width="max-w-6xl">
             <div className="flex gap-4 justify-center items-center flex-col">
@@ -178,13 +183,6 @@ const HistoryPage = () => {
                         userId={userId}
                         page={currentPage}
                     />
-                )}
-
-                {testsCount === 0 && currentType === HistoryTypes.TypingTest && (
-                    <p className="text-sm text-red-500">{translate('test_count_0', language)}</p>
-                )}
-                {racesCount === 0 && currentType === HistoryTypes.TypingRace && (
-                    <p className="text-sm text-red-500">{translate('race_count_0', language)}</p>
                 )}
             </div>
 

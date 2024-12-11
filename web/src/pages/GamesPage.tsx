@@ -11,10 +11,10 @@ const GamesPage = () => {
     const [gameOption, setGameOption] = useState<GameOption | string>('');
     const [showError, setShowError] = useState<boolean>(false);
     const navigate = useNavigate();
-    const { gameRecord, gameRecordGetError, gameNameGetLoading } = useGetGameRecord(gameOption);
+    const { gameRecord, gameRecordGetError, gameRecordGetLoading } = useGetGameRecord(gameOption);
 
     const startGame = () => {
-        if (!gameOption && !gameRecordGetError && !gameNameGetLoading) {
+        if (!gameOption && !gameRecordGetError && !gameRecordGetLoading) {
             setShowError(true);
             return; // prevent navigation if no game option is selected
         }
@@ -22,19 +22,17 @@ const GamesPage = () => {
         setShowError(false);
         navigate(`/game/${gameOption}`);
     };
-
     return (
         <>
             <DefaultPanel>
                 <div className="flex flex-col gap-4 items-start justify-center">
                     <h1 className="text-3xl font-bold mb-6 text-center">{translate('games', language)}</h1>
-                    <label htmlFor="games" className="text-primary mb-2">
-                        {translate('games', language)}
-                    </label>
 
-                    {!gameNameGetLoading && !gameRecordGetError && gameRecord && (
+                    {gameRecord != null && (
                         <p>
-                            {translate('game_record', language)} {gameRecord}
+                            {translate(gameOption, language)} {translate('record', language)}
+                            {': '}
+                            {gameRecord}
                         </p>
                     )}
 
@@ -56,7 +54,7 @@ const GamesPage = () => {
                     {!gameOption && showError && (
                         <p className="text-red-500 text-sm">{translate('must_select_game', language)}</p>
                     )}
-                    {!gameNameGetLoading && gameRecordGetError && <p>{translate(gameRecordGetError, language)}</p>}
+                    {!gameRecordGetLoading && gameRecordGetError && <p>{translate(gameRecordGetError, language)}</p>}
                     <button
                         onClick={startGame}
                         className="bg-transparent text-primary py-2 px-6 rounded-md text-center hover:opacity-90 transition-opacity text-base hover:text-color-primary-hover-text border secondary"

@@ -4,6 +4,7 @@ import translate from '../../utils/translate';
 import DefaultPanel from './DefaultPanel';
 import { MdClose } from 'react-icons/md';
 import { useTyping } from '../../context/TypingContext';
+import useAuthStatus from '../../hooks/useAuthStatus';
 
 type ButtonProps = {
     text: string;
@@ -22,16 +23,17 @@ type CompletionScreenProps = {
 const CompletionScreen: React.FC<CompletionScreenProps> = ({ title, buttons, error, showMetrics }) => {
     const { language } = useLanguage();
     const [close, setClose] = useState(false);
-    const { wpm, mistakeCount } = useTyping();
+    const { wpm, mistakeCount, procentsOfTextTyped } = useTyping();
     const [tempWpm, setTempWpm] = useState<number>(0);
     const [tempMistakeCount, setTempMistakeCount] = useState<number>(0);
-
+    const [tempProcentsOfTextTyped, setTempProcentsOfTextTyped] = useState<number>(0);
+    const { userId } = useAuthStatus();
     useEffect(() => {
         if (!showMetrics) return;
-
-        setTempWpm(wpm);
-        setTempMistakeCount(mistakeCount);
-    }, [wpm, mistakeCount, showMetrics]);
+        setTempWpm(wpm ?? 0);
+        setTempMistakeCount(mistakeCount ?? 0);
+        setTempProcentsOfTextTyped(procentsOfTextTyped ?? 0);
+    }, [wpm, mistakeCount, showMetrics, procentsOfTextTyped]);
 
     return (
         <>
@@ -41,20 +43,19 @@ const CompletionScreen: React.FC<CompletionScreenProps> = ({ title, buttons, err
 
                     {showMetrics && (
                         <div className="text-center mb-6">
-                            {tempWpm && (
-                                <p className="text-xl mb-2">
-                                    {translate('wpm', language)} {tempWpm}
-                                </p>
-                            )}
-                            {tempMistakeCount && (
-                                <p className="text-xl">
-                                    {translate('mistakes', language)} {tempMistakeCount}
-                                </p>
-                            )}
+                            <p className="text-xl mb-2">
+                                {translate('wpm', language)} {tempWpm ?? 0}
+                            </p>
+                            <p className="text-xl">
+                                {translate('mistakes', language)} {tempMistakeCount ?? 0}
+                            </p>
+                            <p className="text-xl">
+                                {translate('procents_of_text_typed', language)} {tempProcentsOfTextTyped ?? 0} {'%'}
+                            </p>
                         </div>
                     )}
 
-                    {error && (
+                    {error && userId && (
                         <p className="text-sm text-red-500 flex justify-center items-center p-4">
                             {translate(error, language)}
                         </p>

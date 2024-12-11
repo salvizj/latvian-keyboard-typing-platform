@@ -54,7 +54,7 @@ const useHideWords = (words: string[]) => {
 
     currentWord = words[gameState.round] || '';
 
-    const completionTitle = `${translate('game_over_you_held_up', language)} ${gameState.round} ${translate('rounds', language)}`;
+    const completionTitle = `${translate('game_over_you_held_up', language)} ${gameState.round} ${translate(gameState.round === 1 ? 'round' : 'rounds', language)}`;
 
     const handleKeyPress = useCallback(
         (lastKeyPress: string) => {

@@ -41,14 +41,15 @@ type LobbySettings struct {
 }
 
 type Player struct {
-	Username            string     `json:"username"`
 	PlayerId            string     `json:"playerId"`
-	UserId              string     `json:"userId"`
+	Username            string     `json:"username"`
+	UserId              string     `json:"userId,omitempty"`
 	Role                PlayerRole `json:"role,omitempty"`
 	Place               int        `json:"place,omitempty"`
 	ProcentsOfTextTyped int        `json:"procentsOfTextTyped,omitempty"`
 	MistakeCount        int        `json:"mistakeCount,omitempty"`
 	Wpm                 int        `json:"wpm,omitempty"`
+	FinishedTyping      bool       `json:"finishedTyping,omitempty"`
 }
 
 type PlayerRole string
@@ -73,15 +74,15 @@ const (
 	JoinLobby   WebSocketMessageTypes = "joinLobby"
 	Progess     WebSocketMessageTypes = "progress"
 	StartRace   WebSocketMessageTypes = "startRace"
+	TimeLeft    WebSocketMessageTypes = "timeLeft"
 	EndRace     WebSocketMessageTypes = "endRace"
 	Error       WebSocketMessageTypes = "error"
 )
 
 type WebSocketMessage struct {
-	Type        WebSocketMessageTypes `json:"type"`
-	LobbyId     string                `json:"lobbyId"`
-	LobbyStatus LobbyStatus           `json:"lobbyStatus,omitempty"`
-	Data        interface{}           `json:"data"`
+	Type    WebSocketMessageTypes `json:"type"`
+	LobbyId string                `json:"lobbyId"`
+	Data    interface{}           `json:"data"`
 }
 
 type CreateLobbyData struct {
@@ -94,10 +95,15 @@ type JoinLobbyData struct {
 	Players       []Player      `json:"players"`
 }
 
+type TimeLeftData struct {
+	TimeLeft int `json:"timeLeft"`
+}
+
 type StartRaceData struct {
 }
 
 type EndRaceData struct {
+	Players []Player `json:"players"`
 }
 
 type ProgressData struct {
@@ -149,6 +155,7 @@ type TypingRacePlayer struct {
 	Place                int    `json:"place"`
 	MistakeCount         int    `json:"mistakeCount"`
 	Wpm                  int    `json:"wpm"`
+	ProcentsOfTextTyped  int    `json:"procentsOfTextTyped"`
 	TypingRaceSettingsId int    `json:"typingRaceSettingsId"`
 }
 

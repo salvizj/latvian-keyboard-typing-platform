@@ -23,14 +23,10 @@ func GetGameRecord(gameName, userId string) (int, error) {
 }
 
 func PostGameRecord(gameName, userId string, gameRecord int) error {
-	_, err := InsertUserIfNotExists(userId)
-	if err != nil {
-		return fmt.Errorf("error ensuring user exists: %v", err)
-	}
 
 	// check if a record already exists for the user and the game
 	var existingRecord int
-	err = db.DB.QueryRow(`
+	err := db.DB.QueryRow(`
 		SELECT record FROM "GameRecords" WHERE userId = $1 AND gameName = $2
 	`, userId, gameName).Scan(&existingRecord)
 

@@ -8,13 +8,12 @@ type UseLobbyStatusManagementParams = {
 
 const useLobbyStatusMenagement = ({ messages, setLobbyStatus }: UseLobbyStatusManagementParams) => {
     useEffect(() => {
-        const startGameMessage = messages.find((msg) => msg.type === WebSocketMessageType.StartRace);
-        const endGameMessage = messages.find((msg) => msg.type === WebSocketMessageType.EndRace);
-
-        if (startGameMessage) {
+        const timeLeftMessage = messages.find((msg) => msg.type === WebSocketMessageType.TimeLeft);
+        const raceEndedtMessage = messages.find((msg) => msg.type === WebSocketMessageType.EndRace);
+        if (timeLeftMessage) {
             setLobbyStatus(LobbyStatus.InProgress);
         }
-        if (endGameMessage) {
+        if (raceEndedtMessage) {
             setLobbyStatus(LobbyStatus.Finished);
         }
     }, [messages, setLobbyStatus]);

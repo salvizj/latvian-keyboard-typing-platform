@@ -32,11 +32,6 @@ func PostTypingTestSettings(settings types.TypingTestSettings) (int, error) {
 
 func PostTypingTest(typingTest types.TypingTest, typingTestSettings types.TypingTestSettings) error {
 
-	_, err := InsertUserIfNotExists(typingTest.UserId)
-	if err != nil {
-		return fmt.Errorf("error ensuring user exists: %v", err)
-	}
-
 	typingTestSettingsId, err := PostTypingTestSettings(typingTestSettings)
 	if err != nil {
 		return fmt.Errorf("error creating TypingTestSettings: %v", err)

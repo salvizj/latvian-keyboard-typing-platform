@@ -18,9 +18,10 @@ type CompletionScreenProps = {
     buttons: ButtonProps[];
     error?: string | null;
     showMetrics?: boolean;
+    place?: number;
 };
 
-const CompletionScreen: React.FC<CompletionScreenProps> = ({ title, buttons, error, showMetrics }) => {
+const CompletionScreen: React.FC<CompletionScreenProps> = ({ title, buttons, error, showMetrics, place }) => {
     const { language } = useLanguage();
     const [close, setClose] = useState(false);
     const { wpm, mistakeCount, procentsOfTextTyped } = useTyping();
@@ -33,7 +34,7 @@ const CompletionScreen: React.FC<CompletionScreenProps> = ({ title, buttons, err
         setTempWpm(wpm ?? 0);
         setTempMistakeCount(mistakeCount ?? 0);
         setTempProcentsOfTextTyped(procentsOfTextTyped ?? 0);
-    }, [wpm, mistakeCount, showMetrics, procentsOfTextTyped]);
+    }, [wpm, mistakeCount, showMetrics, procentsOfTextTyped, place]);
 
     return (
         <>
@@ -51,6 +52,9 @@ const CompletionScreen: React.FC<CompletionScreenProps> = ({ title, buttons, err
                             </p>
                             <p className="text-xl">
                                 {translate('procents_of_text_typed', language)} {tempProcentsOfTextTyped ?? 0} {'%'}
+                            </p>
+                            <p className="text-xl">
+                                {translate('place', language)} {place ?? 0} {'%'}
                             </p>
                         </div>
                     )}

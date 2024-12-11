@@ -23,7 +23,6 @@ const constructWebSocketMessage = ({
     messageType,
     lobbySettings,
     players,
-    lobbyStatus,
     lobbyId = '',
 }: ConstructWebSocketMessageParams): WebSocketMessage<WebSocketMessageData> | null => {
     const baseMessage: WebSocketMessage<WebSocketMessageData> = {
@@ -71,9 +70,6 @@ const constructWebSocketMessage = ({
         case WebSocketMessageType.Progress:
             if (!lobbyId) {
                 throw new Error('lobbyId is required ');
-            }
-            if (!lobbyStatus) {
-                throw new Error('lobby status required ');
             }
             return {
                 ...baseMessage,

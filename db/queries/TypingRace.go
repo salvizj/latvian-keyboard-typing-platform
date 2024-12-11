@@ -125,3 +125,81 @@ func GetTypingRaces(userId string, page, itemsPerPage int, dateFrom, dateTill *s
 
 	return players, settings, races, nil
 }
+
+func PostTypingRaceSettings(typingRaceSettings types.TypingRaceSettings) (int, error) {
+	// Set textId based on the settings
+	var textId interface{}
+	if typingRaceSettings.TextType == "custom" {
+		textId = nil
+	} else {
+		textId = typingRaceSettings.TextId
+	}
+
+	var typingRaceSettingsId int
+	err := db.DB.QueryRow(`
+		INSERT INTO "TypingRaceSettings" (textType, textId, customText, maxPlayerCount, time)
+		VALUES ($1, $2, $3, $4, $5) RETURNING typingRaceSettingsId;
+	`, typingRaceSettings.TextType, textId, typingRaceSettings.CustomText, typingRaceSettings.MaxPlayerCount, typingRaceSettings.Time).Scan(&typingRaceSettingsId)
+	if err != nil {
+		return 0, fmt.Errorf("failed to insert TypingRaceSettings: %v", err)
+	}
+
+	return typingRaceSettingsId, nil
+}
+
+func PostTypingRacePlayers(typingRaceId string, typingRaceSettingsId int, typingRacePlayers []types.TypingRacePlayer) error {
+	for _, player := range typingRacePlayers {
+		_, err := db.DB.Exec(`
+			INSERT INTO "TypingRacePlayers" (typingRacePlayerId, typingRaceId, username, userId, role, place, mistakeCount, wpm, typingRaceSettingsId)
+			VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9);
+		`, player.TypingRacePlayerId, typingRaceId, player.Username, player.UserId, player.Role, player.Place, player.MistakeCount, player.Wpm, typingRaceSettingsId)
+		if err != nil {
+			return fmt.Errorf("failed to insert TypingRacePlayer: %v", err)
+		}
+	}
+
+	return nil
+}
+
+func PostTypingRace(typingRace types.TypingRace, typingRaceSettings types.TypingRaceSettings, typingRacePlayers []types.TypingRacePlayer) error {
+	// insert TypingRaceSettings and get its ID
+	var textId interface{}
+	if typingRaceSettings.TextType == "custom" {
+		textId = nil
+	} else {
+		textId = typingRaceSettings.TextId
+	}
+
+	var typingRaceSettingsId int
+	err := db.DB.QueryRow(`
+		INSERT INTO "TypingRaceSettings" (textType, textId, customText, maxPlayerCount, time)
+		VALUES ($1, $2, $3, $4, $5) RETURNING typingRaceSettingsId;
+	`, typingRaceSettings.TextType, textId, typingRaceSettings.CustomText, typingRaceSettings.MaxPlayerCount, typingRaceSettings.Time).Scan(&typingRaceSettingsId)
+	if err != nil {
+		return fmt.Errorf("failed to insert TypingRaceSettings: %v", err)
+	}
+
+	// insert TypingRace and get its ID
+	var typingRaceId string
+	err = db.DB.QueryRow(`
+		INSERT INTO "TypingRaces" (typingRaceId, typingSettingsId, date)
+		VALUES ($1, $2, $3) RETURNING typingRaceId;
+	`, typingRace.TypingRaceId, typingRaceSettingsId, typingRace.Date).Scan(&typingRaceId)
+	if err != nil {
+		return fmt.Errorf("failed to insert TypingRace: %v", err)
+	}
+
+	// insert TypingRacePlayers
+	for _, player := range typingRacePlayers {
+		_, err = db.DB.Exec(`
+			INSERT INTO "TypingRacePlayers" (typingRacePlayerId, typingRaceId, username, userId, role, place, mistakeCount, wpm, typingRaceSettingsId)
+			VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9);
+		`, player.TypingRacePlayerId, typingRaceId, player.Username, player.UserId, player.Role, player.Place, player.MistakeCount, player.Wpm, typingRaceSettingsId)
+		if err != nil {
+			return fmt.Errorf("failed to insert TypingRacePlayer: %v", err)
+		}
+	}
+
+	// Return nil if everything is successful
+	return nil
+}

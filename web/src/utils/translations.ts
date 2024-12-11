@@ -68,6 +68,7 @@ const translations: Translations = {
         time_left: 'Time left',
 
         // Typing Race Features
+        typing_race_completed: 'Typing race completed',
         typing_race: 'Typing race',
         typing_race_lobby: 'Typing race lobby.',
         start_typing_race: 'Start typing race',
@@ -81,6 +82,8 @@ const translations: Translations = {
         max_player_count: 'Maximum player count',
         go_to_type_racing_lobby: 'Go to type racing lobby',
         enter_username: 'Enter username',
+        congratulation_wait_for_others_to_finish:
+            'Congratulations! You have successfully finished writing, wait until others are done.',
 
         // Game Settings
         games: 'Games',
@@ -253,6 +256,8 @@ const translations: Translations = {
         time_left: 'Atlikušais laiks',
 
         // Typing Race Features
+
+        typing_race_completed: 'Rakstīšanas sacensības pabeigtas',
         typing_race: 'Rakstīšanas sacensības',
         typing_race_lobby: 'Rakstīšanas sacensību istaba',
         start_typing_race: 'Sākt rakstīšanas sacensības',
@@ -264,6 +269,8 @@ const translations: Translations = {
         max_player_count: 'Maksimālais spēlētāju daudzums',
         go_to_type_racing_lobby: 'Iet uz rakstīšanas sacensību istabu',
         enter_username: 'Ievadiet lietotajvārdu',
+        congratulation_wait_for_others_to_finish:
+            'Apsveicu! Tu veiksmīgi pabeidzi rakstīšanu, pagaidi, kamēr citi beigs.',
 
         // Game Settings
         games: 'Spēles',

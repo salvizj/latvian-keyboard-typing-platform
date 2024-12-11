@@ -53,7 +53,7 @@ const Lobby: React.FC<LobbyProps> = ({ sendMessage, title, playerData, lobbyId, 
                     <ul>
                         {playerData &&
                             playerData.map((player) => (
-                                <li key={player.playerId} className="mb-1">
+                                <li key={player.username} className="mb-1">
                                     <span className="font-bold">{translate('username', language)}:</span>{' '}
                                     {player.username},
                                     <span className="font-bold ml-2">{translate('role', language)}:</span>{' '}

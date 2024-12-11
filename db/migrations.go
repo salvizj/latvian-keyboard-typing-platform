@@ -119,6 +119,7 @@ var tables = []Table{
 			CREATE TABLE IF NOT EXISTS "TypingRacePlayers" (
 				typingRacePlayerId SERIAL PRIMARY KEY,
 				typingRaceId TEXT NOT NULL,
+				playerId TEXT NOT NULL,
 				username TEXT NOT NULL,
 				userId TEXT NOT NULL,
 				role TEXT NOT NULL,

@@ -205,6 +205,5 @@ func PostTypingRace(typingRace types.Lobby, typingRaceSettings types.LobbySettin
 		}
 	}
 
-	// Return nil if everything is successful
 	return nil
 }

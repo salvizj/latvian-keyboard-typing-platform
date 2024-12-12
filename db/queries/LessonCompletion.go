@@ -7,19 +7,13 @@ import (
 
 func PostLessonCompletion(userId string, lessonId int) error {
 
-	// cnsure the user exists
-	_, err := InsertUserIfNotExists(userId)
-	if err != nil {
-		return fmt.Errorf("error ensuring user exists: %v", err)
-	}
-
 	query := `
 		INSERT INTO "LessonCompletion" (userId, lessonId)
 		VALUES ($1, $2)
 		ON CONFLICT (userId, lessonId) DO NOTHING;
 	`
 
-	_, err = db.DB.Exec(query, userId, lessonId)
+	_, err := db.DB.Exec(query, userId, lessonId)
 	if err != nil {
 		return fmt.Errorf("error inserting lesson completion: %v", err)
 	}

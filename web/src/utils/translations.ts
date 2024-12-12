@@ -168,6 +168,7 @@ const translations: Translations = {
         error_lesson_id_not_a_number: 'Error: The lesson identifier is not a valid number. Please enter a correct ID.',
         error_no_lessons_found_with_this_difficulty: 'Error: No lessons found with this difficulty level.',
         error_no_lessons_found: 'Error: No lessons found. Please try again.',
+        error_post_user_id: 'Error: Coulnd`t save user identificator',
 
         // Validation Messages
         must_enter_username: 'Error: Enter username.',
@@ -353,6 +354,7 @@ const translations: Translations = {
             'Kļūda: Vēstures tips nav derīgs. Vēstures tipam ir jābūt "typingTest" vai "typingRace"',
         error_failed_to_fetch_typing_and_race_count: 'Kļūda: nevarēja iegūt testu un/vai sacensību skaitu',
         error_failed_to_fetch_typing_data: 'kļūda: nevarēja iegūt rakstīšanas datus',
+        error_post_user_id: 'Kļūda: nevarēja saglabāt lietotāja identifikatoru',
 
         // Validation Messages
         must_enter_username: 'Kļūda: Jāievada lietotājvārdu',

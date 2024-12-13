@@ -68,7 +68,7 @@ var lessons = []types.Lesson{
 func SeedLessons() {
 	for _, lesson := range lessons {
 
-		// check if the lesson already exists in the database by its ID
+		// check if the lesson already exists in the database by its Id
 		var count int
 		query := `SELECT COUNT(*) FROM "Lessons" WHERE lessonId = $1`
 		err := db.DB.QueryRow(query, lesson.LessonId).Scan(&count)

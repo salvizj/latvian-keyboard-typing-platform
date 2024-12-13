@@ -37,7 +37,6 @@ const useGetTypingData = (
 
                 // Fetch detailed typing tests and races data
                 setData(null);
-                setLoadingTypingData(true);
                 setFetchingTypingDataError(null);
 
                 if (page >= 0 && type && type !== '' && itemsPerPage >= 0) {
@@ -48,9 +47,6 @@ const useGetTypingData = (
                         .catch((err) => {
                             setFetchingTypingDataError('error_failed_to_fetch_typing_data');
                             console.error(err);
-                        })
-                        .finally(() => {
-                            setLoadingTypingData(false);
                         });
                 } else {
                     setLoadingTypingData(false);

@@ -40,7 +40,7 @@ const TypingRacePage = () => {
     const [isOptionsSet, setIsOptionsSet] = useState(false);
     const [lobbyStatus, setLobbyStatus] = useState<LobbyStatus>(LobbyStatus.Waiting);
     const [playerData, setPlayerData] = useState<Player[] | null>(null);
-    const userIdOrEmpty = userId ? userId : '';
+    const userIdOrNull = userId ? userId : null;
 
     // connects to ws
     const { lastMessage, messages, sendMessage, isSocketOpen } = useWebSocketMenagement({
@@ -57,7 +57,7 @@ const TypingRacePage = () => {
     useHandleWebSocketMessages({
         playerId,
         isSocketOpen,
-        userIdOrEmpty,
+        userIdOrNull,
         lobbyStatus,
         sendMessage,
         isOptionsSet,

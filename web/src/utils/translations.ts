@@ -355,6 +355,7 @@ const translations: Translations = {
         error_failed_to_fetch_typing_and_race_count: 'Kļūda: nevarēja iegūt testu un/vai sacensību skaitu',
         error_failed_to_fetch_typing_data: 'kļūda: nevarēja iegūt rakstīšanas datus',
         error_post_user_id: 'Kļūda: nevarēja saglabāt lietotāja identifikatoru',
+        error_fetching_lesson_text: 'Kļūda: Nevarēja iegūt nodarības tekstu.',
 
         // Validation Messages
         must_enter_username: 'Kļūda: Jāievada lietotājvārdu',

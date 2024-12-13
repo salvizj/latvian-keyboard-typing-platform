@@ -1,5 +1,7 @@
 package types
 
+import "sync"
+
 type Lesson struct {
 	LessonId         int              `json:"lessonId"`
 	LessonDifficulty LessonDifficulty `json:"lessonDifficulty"`
@@ -27,6 +29,16 @@ type LatvianWord struct {
 	LatvianWord   string `json:"latvianWord"`
 }
 
+type LobbyWithLock struct {
+	LobbyMu         sync.RWMutex
+	LobbyId         string        `json:"lobbyId"`
+	LobbySettings   LobbySettings `json:"lobbySettings"`
+	LobbySettingsId int           `json:"lobbySettingsId,omitempty"`
+	Players         []Player      `json:"players"`
+	LobbyStatus     LobbyStatus   `json:"lobbyStatus,omitempty"`
+	Date            string        `json:"date,omitempty"`
+}
+
 type Lobby struct {
 	LobbyId         string        `json:"lobbyId"`
 	LobbySettings   LobbySettings `json:"lobbySettings"`
@@ -37,20 +49,20 @@ type Lobby struct {
 }
 
 type LobbySettings struct {
-	LobbySettingsId int    `json:"lobbySettingsId,omitempty"`
-	TextType        string `json:"textType,omitempty"`
-	TextId          int    `json:"textId,omitempty"`
-	CustomText      string `json:"customText,omitempty"`
-	Text            string `json:"text"`
-	MaxPlayerCount  int    `json:"maxPlayerCount"`
-	Time            int    `json:"time"`
+	LobbySettingsId int     `json:"lobbySettingsId,omitempty"`
+	TextType        string  `json:"textType"`
+	TextId          *int    `json:"textId,omitempty"`
+	CustomText      *string `json:"customText,omitempty"`
+	Text            string  `json:"text"`
+	MaxPlayerCount  int     `json:"maxPlayerCount"`
+	Time            int     `json:"time"`
 }
 
 type Player struct {
 	PlayerId              string     `json:"playerId,omitempty"`
 	LobbyId               string     `json:"lobbyId,omitempty"`
 	Username              string     `json:"username"`
-	UserId                string     `json:"userId,omitempty"`
+	UserId                *string    `json:"userId,omitempty"`
 	Role                  PlayerRole `json:"role,omitempty"`
 	Place                 int        `json:"place,omitempty"`
 	MistakeCount          int        `json:"mistakeCount,omitempty"`
@@ -137,6 +149,15 @@ type TypingTest struct {
 	Wpm                  int    `json:"wpm"`
 	MistakeCount         int    `json:"mistakeCount"`
 	Date                 string `json:"date"`
+}
+
+type TypingTestWithSettings struct {
+	TypingTestId string             `json:"typingTestId"`
+	UserId       string             `json:"userId"`
+	Wpm          int                `json:"wpm"`
+	MistakeCount int                `json:"mistakeCount"`
+	Date         string             `json:"date"`
+	Settings     TypingTestSettings `json:"settings"`
 }
 
 type HistoryType string

@@ -8,7 +8,6 @@ import (
 )
 
 func GetLatvinWordsHandler(c echo.Context) error {
-
 	latvinaWords, err := queries.GetLatvianWords()
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{

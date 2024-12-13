@@ -93,7 +93,7 @@ export type Player = {
     playerId?: string;
     lobbyid?: string;
     username: string;
-    userId?: string;
+    userId?: string | null;
     role?: PlayerRole;
     place?: number;
     mistakeCount?: number;
@@ -193,6 +193,15 @@ export type TypingTest = {
     date: string;
 };
 
+export type TypingTestWithSettings = {
+    typingTestId?: number;
+    userId: string;
+    typingTestSettings: TypingTestSettings;
+    wpm: number;
+    mistakeCount: number;
+    date: string;
+};
+
 export type TypingTestSettings = {
     typingTestSettingsId: null | number;
     textType: 'poet' | 'custom';
@@ -202,10 +211,8 @@ export type TypingTestSettings = {
 };
 
 export type TypingTestOrRaceData =
-    | { type: HistoryTypes.TypingTest; tests: TypingTest[]; settings: TypingTestSettings[] }
+    | { type: HistoryTypes.TypingTest; tests: TypingTestWithSettings[] }
     | {
           type: HistoryTypes.TypingRace;
-          players: Player[];
-          settings: LobbySettings[];
           races: Lobby[];
       };

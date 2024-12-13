@@ -23,7 +23,7 @@ func StartServer() {
 		os.Exit(1)
 	}
 
-	// reate a new Echo instance.
+	// create a new Echo instance.
 	e := echo.New()
 
 	if err := routes.InitialRoutes(e); err != nil {

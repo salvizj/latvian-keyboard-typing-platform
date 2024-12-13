@@ -1,10 +1,10 @@
 package queries
 
 import (
+	"database/sql"
 	"fmt"
 	"latvianKeyboardTypingPlatform/db"
 	"latvianKeyboardTypingPlatform/types"
-	"log"
 	"strings"
 )
 
@@ -14,6 +14,7 @@ func GetTypingRacesCount(userId string, dateFrom, dateTill *string) (int, error)
 	queryArgs := []interface{}{userId}
 	paramCount := 1
 
+	// dynamic query building for date range filtering
 	if dateFrom != nil && *dateFrom != "" {
 		paramCount++
 		queryParts = append(queryParts, fmt.Sprintf("AND date >= $%d::DATE", paramCount))
@@ -36,24 +37,22 @@ func GetTypingRacesCount(userId string, dateFrom, dateTill *string) (int, error)
 	return count, nil
 }
 
-func GetTypingRaces(userId string, page, itemsPerPage int, dateFrom, dateTill *string) ([]types.Player, []types.LobbySettings, []types.Lobby, error) {
-
-	// calculate offset for pagination
+func GetTypingRaces(userId string, page, itemsPerPage int, dateFrom, dateTill *string) ([]types.Lobby, error) {
+	// Calculate offset for pagination
 	offset := 0
 	if page > 0 {
 		offset = page * itemsPerPage
 	}
 
-	// base query
 	query := `
-    SELECT trp.typingRacePlayerId, trp.typingRaceId, trp.username, trp.userId, trp.role,
-           trp.place, trp.mistakeCount, trp.wpm, trp.typingRaceSettingsId,
-           tr.typingRaceSettingsId, TO_CHAR(tr.date, 'YYYY-MM-DD') AS date, trs.textType, trs.textId, trs.customText,
-           trs.maxPlayerCount, trs.time
-    FROM "TypingRacePlayers" trp
-    JOIN "TypingRaces" tr ON trp.typingRaceId = tr.typingRaceId
-    JOIN "TypingRaceSettings" trs ON tr.typingRaceSettingsId = trs.typingRaceSettingsId
-    WHERE trp.userid = $1`
+	SELECT trp.typingRacePlayerId, trp.typingRaceId, trp.username, trp.userId, trp.role,
+		trp.place, trp.mistakeCount, trp.wpm,
+		tr.typingRaceSettingsId, TO_CHAR(tr.date, 'YYYY-MM-DD') AS date, trs.textType, trs.textId, trs.customText,
+		trs.maxPlayerCount, trs.time
+	FROM "TypingRacePlayers" trp
+	JOIN "TypingRaces" tr ON trp.typingRaceId = tr.typingRaceId
+	JOIN "TypingRaceSettings" trs ON tr.typingRaceSettingsId = trs.typingRaceSettingsId
+	WHERE trp.userId = $1`
 
 	queryParts := []string{query}
 	queryArgs := []interface{}{userId}
@@ -71,7 +70,7 @@ func GetTypingRaces(userId string, page, itemsPerPage int, dateFrom, dateTill *s
 		queryArgs = append(queryArgs, *dateTill)
 	}
 
-	// add ordering, LIMIT, and OFFSET
+	// Add pagination parameters
 	paramCount++
 	queryParts = append(queryParts, fmt.Sprintf("ORDER BY tr.typingRaceId ASC LIMIT $%d", paramCount))
 	queryArgs = append(queryArgs, itemsPerPage)
@@ -80,54 +79,101 @@ func GetTypingRaces(userId string, page, itemsPerPage int, dateFrom, dateTill *s
 	queryParts = append(queryParts, fmt.Sprintf("OFFSET $%d", paramCount))
 	queryArgs = append(queryArgs, offset)
 
-	// combine all query parts
+	// Combine all query parts
 	query = strings.Join(queryParts, " ")
 
 	rows, err := db.DB.Query(query, queryArgs...)
 	if err != nil {
-		return nil, nil, nil, fmt.Errorf("error executing query: %w", err)
+		return nil, fmt.Errorf("error executing query: %w", err)
 	}
 	defer rows.Close()
 
-	// slices to hold the data from the query
-	var players []types.Player
-	var settings []types.LobbySettings
-	var races []types.Lobby
+	lobbiesMap := make(map[string]*types.Lobby)
 
-	// iterate over the query results
 	for rows.Next() {
 		var player types.Player
-		var setting types.LobbySettings
-		var race types.Lobby
+		var lobbySetting types.LobbySettings
+		var lobbyId string
+		var date string
+
+		var textId sql.NullInt64
+		var customText sql.NullString
+		var userId sql.NullString
 
 		err := rows.Scan(
-			&player.LobbyId, &player.Username, &player.UserId, &player.Role,
-			&player.Place, &player.MistakeCount, &player.Wpm, &player.LobbySettingsid, &race.Date, &setting.TextType, &setting.TextId,
-			&setting.CustomText, &setting.MaxPlayerCount, &setting.Time,
+			&player.LobbyId,
+			&lobbyId,
+			&player.Username,
+			&userId,
+			&player.Role,
+			&player.Place,
+			&player.MistakeCount,
+			&player.Wpm,
+			&lobbySetting.LobbySettingsId,
+			&date,
+			&lobbySetting.TextType,
+			&textId,
+			&customText,
+			&lobbySetting.MaxPlayerCount,
+			&lobbySetting.Time,
 		)
 		if err != nil {
-			return nil, nil, nil, fmt.Errorf("error scanning row: %w", err)
+			return nil, fmt.Errorf("error scanning row: %w", err)
 		}
 
-		players = append(players, player)
-		settings = append(settings, setting)
-		races = append(races, race)
+		// Handle nullable fields
+		if userId.Valid {
+			player.UserId = &userId.String
+		} else {
+			player.UserId = nil
+		}
+
+		if textId.Valid {
+			tempInt := int(textId.Int64)
+			lobbySetting.TextId = &tempInt
+		} else {
+			lobbySetting.TextId = nil
+		}
+
+		if customText.Valid {
+			lobbySetting.CustomText = &customText.String
+		} else {
+			lobbySetting.CustomText = nil
+		}
+
+		// Populate or create a new lobby in the map
+		lobby, exists := lobbiesMap[lobbyId]
+		if !exists {
+			lobby = &types.Lobby{
+				LobbyId:       lobbyId,
+				LobbySettings: lobbySetting,
+				Date:          date,
+				Players:       []types.Player{},
+			}
+			lobbiesMap[lobbyId] = lobby
+		}
+		lobby.Players = append(lobby.Players, player)
 	}
 
 	if err := rows.Err(); err != nil {
-		return nil, nil, nil, fmt.Errorf("error iterating over rows: %w", err)
+		return nil, fmt.Errorf("error iterating over rows: %w", err)
 	}
 
-	// check if there are any results when page > 0
-	if len(players) == 0 && page > 0 {
-		return nil, nil, nil, fmt.Errorf("no records available for page %d", page)
+	var races []types.Lobby
+	for _, lobby := range lobbiesMap {
+		races = append(races, *lobby)
 	}
 
-	return players, settings, races, nil
+	// handle case where requested page has no results
+	if len(races) == 0 && page > 0 {
+		return nil, fmt.Errorf("no records available for page %d", page)
+	}
+
+	return races, nil
 }
 
 func PostTypingRaceSettings(typingRaceSettings types.LobbySettings) (int, error) {
-	// Set textId based on the settings
+	// textId based on the settings
 	var textId interface{}
 	if typingRaceSettings.TextType == "custom" {
 		textId = nil
@@ -161,13 +207,9 @@ func PostTypingRacePlayers(typingRaceId string, typingRaceSettingsId int, typing
 	return nil
 }
 
-func PostTypingRace(typingRace types.Lobby, typingRaceSettings types.LobbySettings, typingRacePlayers []types.Player) error {
+func PostTypingRace(typingRace *types.Lobby, typingRaceSettings types.LobbySettings, typingRacePlayers []types.Player) error {
 
-	log.Printf("Received TypingRace: %+v", typingRace)
-	log.Printf("Received TypingRaceSettings: %+v", typingRaceSettings)
-	log.Printf("Received TypingRacePlayers: %+v", typingRacePlayers)
-
-	// insert TypingRaceSettings and get its ID
+	var typingRaceSettingsId int
 	var textId interface{}
 	if typingRaceSettings.TextType == "custom" {
 		textId = nil
@@ -175,7 +217,6 @@ func PostTypingRace(typingRace types.Lobby, typingRaceSettings types.LobbySettin
 		textId = typingRaceSettings.TextId
 	}
 
-	var typingRaceSettingsId int
 	err := db.DB.QueryRow(`
 		INSERT INTO "TypingRaceSettings" (textType, textId, customText, maxPlayerCount, time)
 		VALUES ($1, $2, $3, $4, $5) RETURNING typingRaceSettingsId;
@@ -184,22 +225,25 @@ func PostTypingRace(typingRace types.Lobby, typingRaceSettings types.LobbySettin
 		return fmt.Errorf("failed to insert TypingRaceSettings: %v", err)
 	}
 
-	// insert TypingRace and get its ID
-	var typingRaceId string
-	err = db.DB.QueryRow(`
-		INSERT INTO "TypingRaces" (typingRaceId, typingSettingsId, date)
+	_, err = db.DB.Exec(`
+		INSERT INTO "TypingRaces" (typingRaceId, typingRaceSettingsId, date)
 		VALUES ($1, $2, $3) RETURNING typingRaceId;
-	`, typingRace.LobbyId, typingRaceSettingsId, typingRace.Date).Scan(&typingRaceId)
+	`, typingRace.LobbyId, typingRaceSettingsId, typingRace.Date)
 	if err != nil {
 		return fmt.Errorf("failed to insert TypingRace: %v", err)
 	}
 
-	// insert TypingRacePlayers
 	for _, player := range typingRacePlayers {
+		var userId interface{}
+		if player.UserId == nil {
+			userId = nil
+		} else {
+			userId = player.UserId
+		}
 		_, err = db.DB.Exec(`
-			INSERT INTO "TypingRacePlayers" (typingRacePlayerId, typingRaceId, username, userId, role, place, mistakeCount, wpm, typingRaceSettingsId)
-			VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9);
-		`, player.LobbyId, typingRaceId, player.Username, player.UserId, player.Role, player.Place, player.MistakeCount, player.Wpm, typingRaceSettingsId)
+			INSERT INTO "TypingRacePlayers" (typingRacePlayerId, typingRaceId, username, userId, role, place, mistakeCount, wpm)
+			VALUES ($1, $2, $3, $4, $5, $6, $7, $8);
+		`, player.PlayerId, typingRace.LobbyId, player.Username, userId, player.Role, player.Place, player.MistakeCount, player.Wpm)
 		if err != nil {
 			return fmt.Errorf("failed to insert TypingRacePlayer: %v", err)
 		}

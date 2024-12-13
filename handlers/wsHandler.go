@@ -25,13 +25,12 @@ func WsHandler(c echo.Context, manager *managers.LobbyManager) error {
 	}
 	defer ws.Close()
 
-	// Main message handling loop
+	// main message handling loop
 	for {
 		var msg types.WebSocketMessage
-		// Read WebSocket message and store it in msg
 		err := ws.ReadJSON(&msg)
 		if err != nil {
-			// Handle unexpected close and cleanup
+			// handle unexpected close and cleanup
 			if websocket.IsUnexpectedCloseError(err) {
 				manager.HandleConnectionClose(ws)
 			}
@@ -41,7 +40,7 @@ func WsHandler(c echo.Context, manager *managers.LobbyManager) error {
 		var response *types.WebSocketMessage
 		var handlerErr error
 
-		// Handle the message based on its type
+		// handle the message based on its type
 		switch msg.Type {
 		case types.CreateLobby:
 			response, handlerErr = manager.HandleCreateLobby(msg, ws)

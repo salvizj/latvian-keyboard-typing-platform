@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import { TypingTestOrRaceData, TypingTest, HistoryTypes } from '../../types';
+import { TypingTestOrRaceData, HistoryTypes, TypingTestWithSettings, Lobby } from '../../types';
 import { useLanguage } from '../../context/LanguageContext';
 import translate from '../../utils/translate';
 import DefaultPanel from '../utils/DefaultPanel';
@@ -24,7 +24,7 @@ const TypingDataDisplay: FC<TypingDataDisplayProps> = ({ data, loading, error, p
         const adjustedIndex = page > 0 ? index + page * ITEMS_PER_PAGE : index;
         setSelectedIndex(adjustedIndex);
     };
-
+    console.log(data);
     const handleClose = () => {
         setClose(true);
         setSelectedIndex(null);
@@ -60,13 +60,13 @@ const TypingDataDisplay: FC<TypingDataDisplayProps> = ({ data, loading, error, p
                                     </div>
 
                                     <div className="grid grid-cols-5 gap-4 p-2 border-t">
-                                        <div className="p-2">{data.tests[selectedIndex].typingTestId}</div>
-                                        <div className="p-2">{data.tests[selectedIndex].wpm}</div>
-                                        <div className="p-2">{data.tests[selectedIndex].mistakeCount}</div>
+                                        <div className="p-2">{data.tests[selectedIndex]?.typingTestId}</div>
+                                        <div className="p-2">{data.tests[selectedIndex]?.wpm}</div>
+                                        <div className="p-2">{data.tests[selectedIndex]?.mistakeCount}</div>
                                     </div>
                                 </div>
 
-                                {data.settings && data.settings[selectedIndex] && (
+                                {data.tests && data.tests[selectedIndex] && (
                                     <div className="mt-6">
                                         <h3 className="font-semibold text-lg mb-3">
                                             {translate('text_settings', language)}
@@ -74,19 +74,24 @@ const TypingDataDisplay: FC<TypingDataDisplayProps> = ({ data, loading, error, p
                                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                             <div>
                                                 <p className="font-semibold">{translate('text_type', language)}:</p>
-                                                <p>{translate(data.settings[selectedIndex].textType, language)}</p>
+                                                <p>
+                                                    {translate(
+                                                        data.tests[selectedIndex].typingTestSettings.textType,
+                                                        language
+                                                    )}
+                                                </p>
                                             </div>
                                             <div>
                                                 <p className="font-semibold">{translate('time', language)}:</p>
-                                                <p>{data.settings[selectedIndex].time}s</p>
+                                                <p>{data.tests[selectedIndex].typingTestSettings.time}s</p>
                                             </div>
-                                            {data.settings[selectedIndex].customText && (
+                                            {data.tests[selectedIndex].typingTestSettings.customText && (
                                                 <div>
                                                     <p className="font-semibold">
                                                         {translate('custom_text', language)}:
                                                     </p>
                                                     <p className="break-words">
-                                                        {data.settings[selectedIndex].customText}
+                                                        {data.tests[selectedIndex].typingTestSettings.customText}
                                                     </p>
                                                 </div>
                                             )}
@@ -96,20 +101,20 @@ const TypingDataDisplay: FC<TypingDataDisplayProps> = ({ data, loading, error, p
                             </div>
                         )}
 
-                        {data.type === HistoryTypes.TypingRace && (
+                        {data.type === HistoryTypes.TypingRace && selectedIndex !== null && (
                             <div className="space-y-4 p-2 mt-4">
                                 <div className="overflow-x-auto">
                                     <div className="grid grid-cols-5">
-                                        <div className="p-2 font-semibold">{translate('race_id', language)}</div>
+                                        <div className="p-2 font-semibold">{translate('player_id', language)}</div>
                                         <div className="p-2 font-semibold">{translate('username', language)}</div>
                                         <div className="p-2 font-semibold">{translate('wpm', language)}</div>
                                         <div className="p-2 font-semibold">{translate('mistake_count', language)}</div>
                                         <div className="p-2 font-semibold">{translate('place', language)}</div>
                                     </div>
                                     <div className="space-y-2">
-                                        {data.players.map((player) => (
+                                        {data.races[selectedIndex]?.players.map((player) => (
                                             <div key={player.playerId} className="grid grid-cols-5 gap-4 p-2 border-t">
-                                                <div className="p-2">{player.lobbyid}</div>
+                                                <div className="p-2">{player.playerId}</div>
                                                 <div className="p-2">{player.username}</div>
                                                 <div className="p-2">{player.wpm}</div>
                                                 <div className="p-2">{player.mistakeCount}</div>
@@ -119,7 +124,7 @@ const TypingDataDisplay: FC<TypingDataDisplayProps> = ({ data, loading, error, p
                                     </div>
                                 </div>
 
-                                {data.settings && data.settings[selectedIndex] && (
+                                {data.races && data.races[selectedIndex] && (
                                     <div className="mt-6">
                                         <h3 className="font-semibold text-lg mb-3">
                                             {translate('text_settings', language)}
@@ -127,19 +132,24 @@ const TypingDataDisplay: FC<TypingDataDisplayProps> = ({ data, loading, error, p
                                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                             <div>
                                                 <p className="font-semibold">{translate('text_type', language)}:</p>
-                                                <p>{translate(data.settings[selectedIndex].textType, language)}</p>
+                                                <p>
+                                                    {translate(
+                                                        data.races[selectedIndex].lobbySettings.textType,
+                                                        language
+                                                    )}
+                                                </p>
                                             </div>
                                             <div>
                                                 <p className="font-semibold">{translate('time', language)}:</p>
-                                                <p>{data.settings[selectedIndex].time}s</p>
+                                                <p>{data.races[selectedIndex].lobbySettings.time}s</p>
                                             </div>
-                                            {data.settings[selectedIndex].customText && (
+                                            {data.races[selectedIndex].lobbySettings.customText && (
                                                 <div>
                                                     <p className="font-semibold">
                                                         {translate('custom_text', language)}:
                                                     </p>
                                                     <p className="break-words">
-                                                        {data.settings[selectedIndex].customText}
+                                                        {data.races[selectedIndex].lobbySettings.customText}
                                                     </p>
                                                 </div>
                                             )}
@@ -158,10 +168,10 @@ const TypingDataDisplay: FC<TypingDataDisplayProps> = ({ data, loading, error, p
         if (data.type === HistoryTypes.TypingTest) {
             return (
                 <div className="space-y-4 p-4 mt-4">
-                    {data.tests.length === 0 || data.tests.length === 0 ? (
+                    {data.tests.length === 0 ? (
                         <p className="text-primary-color p-2 text-sm">{translate('test_count_0', language)}</p>
                     ) : (
-                        data.tests.map((test: TypingTest, index: number) => {
+                        data.tests.map((test: TypingTestWithSettings, index: number) => {
                             return (
                                 <div
                                     key={index}
@@ -185,28 +195,22 @@ const TypingDataDisplay: FC<TypingDataDisplayProps> = ({ data, loading, error, p
                 </div>
             );
         } else if (data.type === HistoryTypes.TypingRace) {
-            // get only user date
-            const playersToDisplay = data.players.filter((player) => player.userId === userId);
-
             return (
                 <div className="space-y-4 p-4 mt-4">
-                    {data.races.length === 0 || data.races.length === 0 ? (
+                    {data.races.length === 0 ? (
                         <p className="text-primary-color p-2 text-sm">{translate('race_count_0', language)}</p>
                     ) : (
-                        data.races.map((race, raceIndex) => {
-                            // find the player for the current race based on userId
-                            const playerForRace = playersToDisplay.find(
-                                (player) => player.lobbyid === race.lobbyId && player.userId === userId
-                            );
+                        data.races.map((race: Lobby, index) => {
+                            const playerForRace = race.players.find((player) => player.userId === userId);
 
                             return playerForRace ? (
                                 <div
                                     key={playerForRace.playerId}
-                                    onClick={() => handleOpen(raceIndex)}
+                                    onClick={() => handleOpen(index)}
                                     className="flex flex-row gap-10 text-color-primary border-color-primary hover:border-color-secondary cursor-pointer p-4"
                                 >
-                                    <p>{playerForRace.place}</p>
-                                    <p>
+                                    <p>{index + 1}</p>
+                                    <p className="text-wrap">
                                         {translate('username', language)}: {playerForRace.username}
                                     </p>
                                     <p>

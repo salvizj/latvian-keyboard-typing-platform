@@ -10,6 +10,7 @@ import (
 
 func GetLessonsHandler(c echo.Context) error {
 	lessons, err := queries.GetLessons()
+
 	if err != nil {
 		fmt.Println("Error fetching lessons:", err)
 		return c.JSON(http.StatusNotFound, map[string]string{

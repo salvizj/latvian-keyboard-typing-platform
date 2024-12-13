@@ -6,7 +6,6 @@ import (
 	"latvianKeyboardTypingPlatform/server"
 )
 
-// entry point
 func main() {
 
 	db.Initialize()

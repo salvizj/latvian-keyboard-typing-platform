@@ -15,7 +15,7 @@ var poetTexts = []types.PoetText{
 func SeedPoetTexts() {
 	for _, poetText := range poetTexts {
 
-		// check if the poet text already exists in the database by its ID
+		// check if the poet text already exists in the database by its Id
 		var count int
 		query := `SELECT COUNT(*) FROM "PoetTexts" WHERE poetTextId = $1`
 		err := db.DB.QueryRow(query, poetText.PoetTextId).Scan(&count)

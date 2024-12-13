@@ -48,47 +48,33 @@ func GetTypingTestsAndRaces(c echo.Context) error {
 
 	switch typeStr {
 	case "typingTest":
-		tests, settings, err := queries.GetTypingTests(userId, page, itemsPerPage, dateFrom, dateTill)
+		tests, err := queries.GetTypingTests(userId, page, itemsPerPage, dateFrom, dateTill)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{
 				"error": fmt.Sprintf("Error fetching typing tests: %v", err),
 			})
 		}
-		// check for empty results
-		if len(tests) == 0 || len(settings) == 0 {
-			return c.JSON(http.StatusOK, map[string]interface{}{
-				"type":     types.TypingTestType,
-				"tests":    []interface{}{},
-				"settings": []interface{}{},
-			})
+		if tests == nil {
+			tests = []types.TypingTest{}
 		}
 		return c.JSON(http.StatusOK, map[string]interface{}{
-			"type":     types.TypingTestType,
-			"tests":    tests,
-			"settings": settings,
+			"type":  types.TypingTestType,
+			"tests": tests,
 		})
 
 	case "typingRace":
-		players, settings, races, err := queries.GetTypingRaces(userId, page, itemsPerPage, dateFrom, dateTill)
+		races, err := queries.GetTypingRaces(userId, page, itemsPerPage, dateFrom, dateTill)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{
 				"error": fmt.Sprintf("Error fetching typing races: %v", err),
 			})
 		}
-		// check for empty results
-		if len(players) == 0 || len(settings) == 0 || len(races) == 0 {
-			return c.JSON(http.StatusOK, map[string]interface{}{
-				"type":     types.TypingRaceType,
-				"players":  []interface{}{},
-				"settings": []interface{}{},
-				"races":    []interface{}{},
-			})
+		if races == nil {
+			races = []types.Lobby{}
 		}
 		return c.JSON(http.StatusOK, map[string]interface{}{
-			"type":     types.TypingRaceType,
-			"players":  players,
-			"settings": settings,
-			"races":    races,
+			"type":  types.TypingRaceType,
+			"races": races,
 		})
 
 	default:

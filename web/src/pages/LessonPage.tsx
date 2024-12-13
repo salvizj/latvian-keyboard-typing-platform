@@ -25,15 +25,29 @@ const LessonPage = () => {
     }, [lesson, lessonGetError, lessonGetLoading, setText]);
 
     if (lessonPostError && !lessonPostLoading) {
-        return <p> {translate(lessonPostError, language)}</p>;
+        return (
+            <p className="flex justify-center items-start min-h-screen text-color-primary text-xl">
+                {' '}
+                {translate(lessonPostError, language)}
+            </p>
+        );
     }
 
     if (lessonGetError && !lessonGetLoading) {
-        return <p> {translate('error_fetching_lesson_text', language)}</p>;
+        return (
+            <p className="flex justify-center items-start min-h-screen text-color-primary text-xl">
+                {translate('error_fetching_lesson_text', language)}
+            </p>
+        );
     }
 
     if (!lesson && !lessonGetLoading) {
-        return <p> {translate('error_fetching_lesson_text', language)}</p>;
+        return (
+            <p className="flex justify-center items-start min-h-screen text-color-primary text-xl">
+                {' '}
+                {translate('error_fetching_lesson_text', language)}
+            </p>
+        );
     }
     if (isTypingFinished && lessonId) {
         return (

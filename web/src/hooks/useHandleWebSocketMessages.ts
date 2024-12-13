@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTyping } from '../context/TypingContext';
 import { useOptions } from '../context/OptionsContext';
-import { LobbyStatus, WebSocketMessage, WebSocketMessageData, WebSocketMessageType } from '../types';
+import { CreateLobbyData, LobbyStatus, WebSocketMessage, WebSocketMessageData, WebSocketMessageType } from '../types';
 import constructWebSocketMessage from '../utils/constructWebsocktMessage';
 
 export type UseHandleWebSocketMessagesParams = {
     isSocketOpen: boolean;
-    userIdOrEmpty: string;
+    userIdOrNull: string | null;
     playerId: string | null;
     isOptionsSet: boolean;
     lobbyStatus: LobbyStatus;
@@ -15,7 +15,7 @@ export type UseHandleWebSocketMessagesParams = {
 
 const useHandleWebSocketMessages = ({
     isSocketOpen,
-    userIdOrEmpty,
+    userIdOrNull,
     isOptionsSet,
     playerId,
     lobbyStatus,
@@ -34,7 +34,7 @@ const useHandleWebSocketMessages = ({
 
         const basePlayerData = {
             username,
-            userId: userIdOrEmpty,
+            userId: userIdOrNull,
         };
 
         // handle join or create lobby
@@ -44,6 +44,13 @@ const useHandleWebSocketMessages = ({
                 lobbySettings: { time, maxPlayerCount, text, textId, customText, textType },
                 players: [basePlayerData],
             });
+            const createLobbyMessageData = createLobbyMessage?.data as CreateLobbyData;
+            console.log(
+                createLobbyMessageData.lobbySettings.customText,
+                createLobbyMessageData.lobbySettings.text,
+                createLobbyMessageData.lobbySettings.textId,
+                createLobbyMessageData.lobbySettings.textType
+            );
 
             if (createLobbyMessage) {
                 sendMessage(createLobbyMessage);
@@ -74,7 +81,7 @@ const useHandleWebSocketMessages = ({
                     {
                         playerId: playerId,
                         username,
-                        userId: userIdOrEmpty,
+                        userId: userIdOrNull,
                         wpm: wpm,
                         mistakeCount: mistakeCount,
                         percentageOfTextTyped: percentageOfTextTyped,
@@ -97,7 +104,6 @@ const useHandleWebSocketMessages = ({
         percentageOfTextTyped,
         timeLeft,
         lobbyStatus,
-        userIdOrEmpty,
         sendMessage,
         hasSentCreateLobby,
         hasSentJoinLobby,
@@ -105,6 +111,7 @@ const useHandleWebSocketMessages = ({
         customText,
         textType,
         textId,
+        userIdOrNull,
     ]);
 };
 export default useHandleWebSocketMessages;

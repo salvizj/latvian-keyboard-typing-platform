@@ -27,7 +27,7 @@ var tables = []Table{
 		name: "Users",
 		query: `
 			CREATE TABLE IF NOT EXISTS "Users" (
-				userId TEXT PRIMARY KEY
+				userId UUID PRIMARY KEY
 			);
 		`,
 	},
@@ -77,7 +77,7 @@ var tables = []Table{
 		query: `
 			CREATE TABLE IF NOT EXISTS "TypingTests" (
 				typingTestId SERIAL PRIMARY KEY,
-				userId TEXT NOT NULL,
+				userId UUID NOT NULL,
 				typingTestSettingsId INTEGER NOT NULL,
 				wpm INTEGER NOT NULL,
 				mistakeCount INTEGER NOT NULL,
@@ -92,7 +92,7 @@ var tables = []Table{
 		name: "TypingRaces",
 		query: `
 			CREATE TABLE IF NOT EXISTS "TypingRaces" (
-				typingRaceId TEXT PRIMARY KEY,
+				typingRaceId UUID PRIMARY KEY,
 				typingRaceSettingsId INTEGER NOT NULL,
 				date DATE NOT NULL,
 				FOREIGN KEY (typingRaceSettingsId) REFERENCES "TypingRaceSettings"(typingRaceSettingsId)
@@ -104,7 +104,7 @@ var tables = []Table{
 		name: "LessonCompletion",
 		query: `
 			CREATE TABLE IF NOT EXISTS "LessonCompletion" (
-				userId TEXT,
+				userId UUID,
 				lessonId INTEGER NOT NULL,
 				PRIMARY KEY (userId, lessonId),
 				FOREIGN KEY (userId) REFERENCES "Users"(userId) ON DELETE CASCADE
@@ -117,18 +117,16 @@ var tables = []Table{
 		name: "TypingRacePlayers",
 		query: `
 			CREATE TABLE IF NOT EXISTS "TypingRacePlayers" (
-				typingRacePlayerId SERIAL PRIMARY KEY,
-				typingRaceId TEXT NOT NULL,
-				playerId TEXT NOT NULL,
+				typingRacePlayerId UUID PRIMARY KEY,
+				typingRaceId UUID NOT NULL,
 				username TEXT NOT NULL,
-				userId TEXT,
+				userId UUID,
 				role TEXT NOT NULL,
 				place INTEGER NOT NULL,
 				mistakeCount INTEGER NOT NULL,
 				wpm INTEGER NOT NULL,
-				typingRaceSettingsId INTEGER NOT NULL,
 				FOREIGN KEY (typingRaceId) REFERENCES "TypingRaces"(typingRaceId),
-				FOREIGN KEY (userId) REFERENCES "Users"(userId)
+				FOREIGN KEY (userId) REFERENCES "Users"(userId) 
 			);
 		`,
 	},
@@ -140,7 +138,7 @@ var tables = []Table{
 				gameRecordId SERIAL PRIMARY KEY,
 				gameName TEXT NOT NULL,
 				gameRecord INTEGER NOT NULL,
-				userId TEXT NOT NULL,
+				userId UUID NOT NULL,
 				FOREIGN KEY (userId) REFERENCES "Users"(userId)
 			);
 		`,

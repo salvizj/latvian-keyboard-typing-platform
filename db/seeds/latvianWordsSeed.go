@@ -15,7 +15,7 @@ var latvianWords = []types.LatvianWord{
 func SeedLatvianWords() {
 	for _, latvianText := range latvianWords {
 
-		// check if the Latvian word already exists in the database by its ID
+		// check if the Latvian word already exists in the database by its Id
 		var count int
 		query := `SELECT COUNT(*) FROM "LatvianWords" WHERE latvianWordId = $1`
 		err := db.DB.QueryRow(query, latvianText.LatvianWordId).Scan(&count)

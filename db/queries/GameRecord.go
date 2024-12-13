@@ -30,7 +30,7 @@ func PostGameRecord(gameName, userId string, gameRecord int) error {
 		SELECT record FROM "GameRecords" WHERE userId = $1 AND gameName = $2
 	`, userId, gameName).Scan(&existingRecord)
 
-	// ff no record exists, we can insert the new record
+	// if no record exists, insert the new record
 	if err == sql.ErrNoRows {
 		query := `
 		INSERT INTO "GameRecords" (gameName, userId,  record)
@@ -42,7 +42,6 @@ func PostGameRecord(gameName, userId string, gameRecord int) error {
 		}
 		return nil
 	} else if err != nil {
-		// Handle other potential errors in the query
 		return fmt.Errorf("error querying existing game record: %v", err)
 	}
 

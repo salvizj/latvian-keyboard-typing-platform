@@ -22,10 +22,6 @@ func PostLessonCompletion(userId string, lessonId int) error {
 }
 
 func GetLessonCompletion(userId string, lessonIds string) (map[int]bool, error) {
-	// Validate that lessonIds is not empty or malformed
-	if lessonIds == "" {
-		return nil, fmt.Errorf("lessonIds cannot be empty")
-	}
 
 	query := `
         SELECT lessonId

@@ -37,7 +37,7 @@ func GetPoetTexts() ([]types.PoetText, error) {
 }
 
 func GetPoetText(poetTextId int) (types.PoetText, error) {
-	query := `SELECT poetTextId, poetAuthor, poetFragmentName, poetTextContent FROM "PoetTexts" WHERE poetTextId = ?`
+	query := `SELECT poetTextId, poetAuthor, poetFragmentName, poetTextContent FROM "PoetTexts" WHERE poetTextId = $1`
 
 	var poetText types.PoetText
 

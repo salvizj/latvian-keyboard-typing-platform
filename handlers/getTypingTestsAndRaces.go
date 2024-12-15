@@ -55,7 +55,7 @@ func GetTypingTestsAndRaces(c echo.Context) error {
 			})
 		}
 		if tests == nil {
-			tests = []types.TypingTest{}
+			tests = []types.TypingTestWithSettings{}
 		}
 		return c.JSON(http.StatusOK, map[string]interface{}{
 			"type":  types.TypingTestType,

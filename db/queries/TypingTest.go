@@ -77,18 +77,29 @@ func GetTypingTestsCount(userId string, dateFrom, dateTill *string) (int, error)
 	return count, nil
 }
 
-func GetTypingTests(userId string, page, itemsPerPage int, dateFrom, dateTill *string) ([]types.TypingTest, error) {
-	// Calculate offset for pagination
+func GetTypingTests(userId string, page, itemsPerPage int, dateFrom, dateTill *string) ([]types.TypingTestWithSettings, error) {
+	// calculate offset for pagination
 	offset := 0
 	if page > 0 {
 		offset = page * itemsPerPage
 	}
 
 	query := `
-    SELECT tt.typingTestId, tt.userId, tt.typingTestSettingsId, tt.wpm, tt.mistakeCount, TO_CHAR(tt.date, 'YYYY-MM-DD') AS date
+    SELECT
+        tt.typingTestId,
+        tt.userId,
+        tt.wpm,
+        tt.mistakeCount,
+        TO_CHAR(tt.date, 'YYYY-MM-DD') AS date,
+        tts.typingTestSettingsId,
+        tts.textType,
+        tts.textId,
+        tts.customText,
+        tts.time
     FROM "TypingTests" tt
     JOIN "TypingTestSettings" tts ON tt.typingTestSettingsId = tts.typingTestSettingsId
-    WHERE tt.userId = $1`
+    WHERE tt.userId = $1
+	`
 
 	queryParts := []string{query}
 	queryArgs := []interface{}{userId}
@@ -106,7 +117,7 @@ func GetTypingTests(userId string, page, itemsPerPage int, dateFrom, dateTill *s
 		queryArgs = append(queryArgs, *dateTill)
 	}
 
-	// Add pagination parameters
+	// add pagination parameters
 	paramCount++
 	queryParts = append(queryParts, fmt.Sprintf("ORDER BY tt.typingTestId ASC LIMIT $%d", paramCount))
 	queryArgs = append(queryArgs, itemsPerPage)
@@ -115,7 +126,7 @@ func GetTypingTests(userId string, page, itemsPerPage int, dateFrom, dateTill *s
 	queryParts = append(queryParts, fmt.Sprintf("OFFSET $%d", paramCount))
 	queryArgs = append(queryArgs, offset)
 
-	// Combine all query parts
+	// combine all query parts
 	query = strings.Join(queryParts, " ")
 
 	rows, err := db.DB.Query(query, queryArgs...)
@@ -124,19 +135,24 @@ func GetTypingTests(userId string, page, itemsPerPage int, dateFrom, dateTill *s
 	}
 	defer rows.Close()
 
-	var tests []types.TypingTest
+	var tests []types.TypingTestWithSettings
 
 	for rows.Next() {
-		var test types.TypingTest
+		var test types.TypingTestWithSettings
 
 		err := rows.Scan(
 			&test.TypingTestId,
 			&test.UserId,
-			&test.TypingTestSettingsId,
 			&test.Wpm,
 			&test.MistakeCount,
 			&test.Date,
+			&test.TypingTestSettings.TypingTestSettingsId,
+			&test.TypingTestSettings.TextType,
+			&test.TypingTestSettings.TextId,
+			&test.TypingTestSettings.CustomText,
+			&test.TypingTestSettings.Time,
 		)
+
 		if err != nil {
 			return nil, fmt.Errorf("error scanning row: %w", err)
 		}
@@ -148,8 +164,8 @@ func GetTypingTests(userId string, page, itemsPerPage int, dateFrom, dateTill *s
 		return nil, fmt.Errorf("error iterating over rows: %w", err)
 	}
 
-	// Handle case where requested page has no results
-	if len(tests) == 0 && page > 0 {
+	// handle case where requested page has no results
+	if len(tests) == 0 {
 		return nil, fmt.Errorf("no records available for page %d", page)
 	}
 

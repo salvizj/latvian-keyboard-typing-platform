@@ -1,30 +1,30 @@
 import { FC, useState } from 'react';
-import { TypingTestOrRaceData, HistoryTypes, TypingTestWithSettings, Lobby } from '../../types';
+import { HistoryTypes, TypingTestOrRaceData } from '../../types';
 import { useLanguage } from '../../context/LanguageContext';
 import translate from '../../utils/translate';
 import DefaultPanel from '../utils/DefaultPanel';
-import { MdClose } from 'react-icons/md';
+import RaceList from './RaceList';
+import TestList from './TestList';
+import TestDetails from './TestDetails';
+import RaceDetails from './RaceDetails';
 
 type TypingDataDisplayProps = {
     data: TypingTestOrRaceData | null;
     loading: boolean;
     error: string | null;
-    page: number;
     userId: string | null;
 };
 
-const ITEMS_PER_PAGE = 5;
-const TypingDataDisplay: FC<TypingDataDisplayProps> = ({ data, loading, error, page, userId }) => {
+const TypingDataDisplay: FC<TypingDataDisplayProps> = ({ data, loading, error, userId }) => {
     const { language } = useLanguage();
     const [close, setClose] = useState(true);
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
     const handleOpen = (index: number) => {
         setClose(false);
-        const adjustedIndex = page > 0 ? index + page * ITEMS_PER_PAGE : index;
+        const adjustedIndex = index;
         setSelectedIndex(adjustedIndex);
     };
-    console.log(data);
     const handleClose = () => {
         setClose(true);
         setSelectedIndex(null);
@@ -37,203 +37,30 @@ const TypingDataDisplay: FC<TypingDataDisplayProps> = ({ data, loading, error, p
     if (error) {
         return <p className="text-red-500 mt-1 mb-1 text-sm">{translate(error, language)}</p>;
     }
-
+    console.log(selectedIndex);
     if (!close && selectedIndex !== null && data) {
         return (
-            <>
-                <DefaultPanel width="max-w-6xl">
-                    <div className="flex flex-col mt-4">
-                        <button
-                            onClick={handleClose}
-                            className="absolute top-4 right-4 text-3xl hover:text-color-primary-hover-text"
-                        >
-                            <MdClose />
-                        </button>
-
-                        {data.type === HistoryTypes.TypingTest && selectedIndex !== null && (
-                            <div className="space-y-4 p-4 mt-4">
-                                <div className="overflow-x-auto">
-                                    <div className="grid grid-cols-5">
-                                        <div className="p-2 font-semibold">{translate('test_id', language)}</div>
-                                        <div className="p-2 font-semibold">{translate('wpm', language)}</div>
-                                        <div className="p-2 font-semibold">{translate('mistake_count', language)}</div>
-                                    </div>
-
-                                    <div className="grid grid-cols-5 gap-4 p-2 border-t">
-                                        <div className="p-2">{data.tests[selectedIndex]?.typingTestId}</div>
-                                        <div className="p-2">{data.tests[selectedIndex]?.wpm}</div>
-                                        <div className="p-2">{data.tests[selectedIndex]?.mistakeCount}</div>
-                                    </div>
-                                </div>
-
-                                {data.tests && data.tests[selectedIndex] && (
-                                    <div className="mt-6">
-                                        <h3 className="font-semibold text-lg mb-3">
-                                            {translate('text_settings', language)}
-                                        </h3>
-                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                            <div>
-                                                <p className="font-semibold">{translate('text_type', language)}:</p>
-                                                <p>
-                                                    {translate(
-                                                        data.tests[selectedIndex].typingTestSettings.textType,
-                                                        language
-                                                    )}
-                                                </p>
-                                            </div>
-                                            <div>
-                                                <p className="font-semibold">{translate('time', language)}:</p>
-                                                <p>{data.tests[selectedIndex].typingTestSettings.time}s</p>
-                                            </div>
-                                            {data.tests[selectedIndex].typingTestSettings.customText && (
-                                                <div>
-                                                    <p className="font-semibold">
-                                                        {translate('custom_text', language)}:
-                                                    </p>
-                                                    <p className="break-words">
-                                                        {data.tests[selectedIndex].typingTestSettings.customText}
-                                                    </p>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        )}
-
-                        {data.type === HistoryTypes.TypingRace && selectedIndex !== null && (
-                            <div className="space-y-4 p-2 mt-4">
-                                <div className="overflow-x-auto">
-                                    <div className="grid grid-cols-5">
-                                        <div className="p-2 font-semibold">{translate('player_id', language)}</div>
-                                        <div className="p-2 font-semibold">{translate('username', language)}</div>
-                                        <div className="p-2 font-semibold">{translate('wpm', language)}</div>
-                                        <div className="p-2 font-semibold">{translate('mistake_count', language)}</div>
-                                        <div className="p-2 font-semibold">{translate('place', language)}</div>
-                                    </div>
-                                    <div className="space-y-2">
-                                        {data.races[selectedIndex]?.players.map((player) => (
-                                            <div key={player.playerId} className="grid grid-cols-5 gap-4 p-2 border-t">
-                                                <div className="p-2">{player.playerId}</div>
-                                                <div className="p-2">{player.username}</div>
-                                                <div className="p-2">{player.wpm}</div>
-                                                <div className="p-2">{player.mistakeCount}</div>
-                                                <div className="p-2">{player.place}</div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                {data.races && data.races[selectedIndex] && (
-                                    <div className="mt-6">
-                                        <h3 className="font-semibold text-lg mb-3">
-                                            {translate('text_settings', language)}
-                                        </h3>
-                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                            <div>
-                                                <p className="font-semibold">{translate('text_type', language)}:</p>
-                                                <p>
-                                                    {translate(
-                                                        data.races[selectedIndex].lobbySettings.textType,
-                                                        language
-                                                    )}
-                                                </p>
-                                            </div>
-                                            <div>
-                                                <p className="font-semibold">{translate('time', language)}:</p>
-                                                <p>{data.races[selectedIndex].lobbySettings.time}s</p>
-                                            </div>
-                                            {data.races[selectedIndex].lobbySettings.customText && (
-                                                <div>
-                                                    <p className="font-semibold">
-                                                        {translate('custom_text', language)}:
-                                                    </p>
-                                                    <p className="break-words">
-                                                        {data.races[selectedIndex].lobbySettings.customText}
-                                                    </p>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        )}
-                    </div>
-                </DefaultPanel>
-            </>
+            <DefaultPanel width="max-w-6xl">
+                {data.type === HistoryTypes.TypingTest && (
+                    <TestDetails test={data.tests[selectedIndex]} language={language} handleClose={handleClose} />
+                )}
+                {data.type === HistoryTypes.TypingRace && (
+                    <RaceDetails race={data.races[selectedIndex]} language={language} handleClose={handleClose} />
+                )}
+            </DefaultPanel>
         );
     }
 
-    if (data) {
-        if (data.type === HistoryTypes.TypingTest) {
-            return (
-                <div className="space-y-4 p-4 mt-4">
-                    {data.tests.length === 0 ? (
-                        <p className="text-primary-color p-2 text-sm">{translate('test_count_0', language)}</p>
-                    ) : (
-                        data.tests.map((test: TypingTestWithSettings, index: number) => {
-                            return (
-                                <div
-                                    key={index}
-                                    onClick={() => handleOpen(index)}
-                                    className="flex flex-row gap-20 text-color-primary border-color-primary hover:border-color-secondary cursor-pointer p-4"
-                                >
-                                    <p>{index + 1}</p>
-                                    <p>
-                                        {translate('wpm', language)}: {test.wpm}
-                                    </p>
-                                    <p>
-                                        {translate('mistake_count', language)}: {test.mistakeCount}
-                                    </p>
-                                    <p>
-                                        {translate('date', language)}: {test.date}
-                                    </p>
-                                </div>
-                            );
-                        })
-                    )}
-                </div>
-            );
-        } else if (data.type === HistoryTypes.TypingRace) {
-            return (
-                <div className="space-y-4 p-4 mt-4">
-                    {data.races.length === 0 ? (
-                        <p className="text-primary-color p-2 text-sm">{translate('race_count_0', language)}</p>
-                    ) : (
-                        data.races.map((race: Lobby, index) => {
-                            const playerForRace = race.players.find((player) => player.userId === userId);
-
-                            return playerForRace ? (
-                                <div
-                                    key={playerForRace.playerId}
-                                    onClick={() => handleOpen(index)}
-                                    className="flex flex-row gap-10 text-color-primary border-color-primary hover:border-color-secondary cursor-pointer p-4"
-                                >
-                                    <p>{index + 1}</p>
-                                    <p className="text-wrap">
-                                        {translate('username', language)}: {playerForRace.username}
-                                    </p>
-                                    <p>
-                                        {translate('wpm', language)}: {playerForRace.wpm} WPM
-                                    </p>
-                                    <p>
-                                        {translate('mistake_count', language)}: {playerForRace.mistakeCount}
-                                    </p>
-                                    <p>
-                                        {translate('place', language)}: {playerForRace.place}
-                                    </p>
-                                    <p>
-                                        {translate('date', language)}: {race.date}
-                                    </p>
-                                </div>
-                            ) : null;
-                        })
-                    )}
-                </div>
-            );
-        }
-    }
-
-    return null;
+    return (
+        <div className="space-y-4 p-4 mt-4">
+            {data?.type === HistoryTypes.TypingTest && (
+                <TestList tests={data.tests} handleOpen={handleOpen} language={language} />
+            )}
+            {data?.type === HistoryTypes.TypingRace && (
+                <RaceList races={data.races} handleOpen={handleOpen} userId={userId} language={language} />
+            )}
+        </div>
+    );
 };
+
 export default TypingDataDisplay;

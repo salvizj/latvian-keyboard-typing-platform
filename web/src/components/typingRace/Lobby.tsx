@@ -4,6 +4,7 @@ import { WebSocketMessage, Player, WebSocketMessageType, WebSocketMessageData, P
 import translate from '../../utils/translate';
 import CopyToClipboard from '../utils/CopyToClipboar';
 import constructWebSocketMessage from '../../utils/constructWebsocktMessage';
+import { useNavigate } from 'react-router-dom';
 
 type LobbyProps = {
     title: string;
@@ -14,6 +15,7 @@ type LobbyProps = {
 };
 
 const Lobby: React.FC<LobbyProps> = ({ sendMessage, title, playerData, lobbyId, username }) => {
+    const navigate = useNavigate();
     const { language } = useLanguage();
     const [isOwner, setIsOwner] = useState(false);
     const [isEnoughPlayers, setIsEnoughPlayers] = useState(false);
@@ -37,6 +39,17 @@ const Lobby: React.FC<LobbyProps> = ({ sendMessage, title, playerData, lobbyId, 
         if (startMessage) sendMessage(startMessage);
     };
 
+    if (!playerData) {
+        <div className="fixed inset-0 bg-black/50 flex justify-center items-center">
+            {' '}
+            <button
+                onClick={() => navigate('/options')}
+                className="bg-transparent text-primary py-2 px-4 rounded-md text-center hover:opacity-90 transition-opacity text-base hover:text-color-primary-hover-text border secondary"
+            >
+                {translate('go_back', language)}
+            </button>
+        </div>;
+    }
     return (
         <div className="fixed inset-0 bg-black/50 flex justify-center items-center">
             <div className="bg-color-third text-color-primary p-8 rounded-xl shadow-xl w-full max-w-2xl animate-in fade-in zoom-in duration-300">

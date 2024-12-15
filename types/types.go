@@ -69,7 +69,6 @@ type Player struct {
 	Wpm                   int        `json:"wpm,omitempty"`
 	PercentageOfTextTyped int        `json:"percentageOfTextTyped,omitempty"`
 	FinishedTyping        bool       `json:"finishedTyping,omitempty"`
-	LobbySettingsid       int        `json:"lobbySettingsId,omitempty"`
 }
 
 type PlayerRole string
@@ -135,11 +134,11 @@ type ErrorData struct {
 }
 
 type TypingTestSettings struct {
-	TypingTestSettingsId int    `json:"typingTestSettingsId,omitempty"`
-	TextType             string `json:"textType"`
-	TextId               int    `json:"textId,omitempty"`
-	CustomText           string `json:"customText,omitempty"`
-	Time                 int    `json:"time"`
+	TypingTestSettingsId int     `json:"typingTestSettingsId,omitempty"`
+	TextType             string  `json:"textType"`
+	TextId               *int    `json:"textId,omitempty"`
+	CustomText           *string `json:"customText,omitempty"`
+	Time                 int     `json:"time"`
 }
 
 type TypingTest struct {
@@ -152,12 +151,12 @@ type TypingTest struct {
 }
 
 type TypingTestWithSettings struct {
-	TypingTestId string             `json:"typingTestId"`
-	UserId       string             `json:"userId"`
-	Wpm          int                `json:"wpm"`
-	MistakeCount int                `json:"mistakeCount"`
-	Date         string             `json:"date"`
-	Settings     TypingTestSettings `json:"settings"`
+	TypingTestId       string             `json:"typingTestId"`
+	UserId             string             `json:"userId"`
+	Wpm                int                `json:"wpm"`
+	MistakeCount       int                `json:"mistakeCount"`
+	Date               string             `json:"date"`
+	TypingTestSettings TypingTestSettings `json:"typingTestSettings"`
 }
 
 type HistoryType string

@@ -84,6 +84,7 @@ const translations: Translations = {
         enter_username: 'Enter username',
         congratulation_wait_for_others_to_finish:
             'Congratulations! You have successfully finished writing, wait until others are done.',
+        go_back: 'Go back',
 
         // Game Settings
         games: 'Games',
@@ -106,6 +107,8 @@ const translations: Translations = {
         mistake_count: 'Mistake count',
         test_count_0: 'You haven`t done any typing test.',
         race_count_0: 'You haven`t done any typing race.',
+        settings_not_found: 'Settings not found. Please try again later.',
+        lobby_id: 'Race Id',
 
         // Text Management
         select_text_option: 'Select text option.',
@@ -272,6 +275,7 @@ const translations: Translations = {
         enter_username: 'Ievadiet lietotajvārdu',
         congratulation_wait_for_others_to_finish:
             'Apsveicu! Tu veiksmīgi pabeidzi rakstīšanu, pagaidi, kamēr citi beigs.',
+        go_back: 'Iet atpakaļ',
 
         // Game Settings
         games: 'Spēles',
@@ -297,6 +301,8 @@ const translations: Translations = {
         mistake_count: 'Kļūdu skaits',
         test_count_0: 'Jums nav veikts neviens rakstīšanas tests',
         race_count_0: 'Jums nav veiktas nevienas rakstīšanas sacensības',
+        settings_not_found: 'Iestatījumi netika atrasti. Lūdzu mēģiniet vēlāk atkārtoti',
+        lobby_id: 'Sacensību Id',
 
         // Text Management
         select_text_option: 'Izvēlieties teksta opciju',

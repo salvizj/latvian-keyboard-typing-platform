@@ -228,11 +228,13 @@ func (lm *LobbyManager) HandleJoinLobby(message types.WebSocketMessage, conn *we
 
 	lm.globalMu.RLock()
 	lobby, exists := lm.Lobbies[lobbyId]
-	lm.globalMu.RUnlock()
 
 	if !exists {
+
+		lm.globalMu.RUnlock()
 		return nil, fmt.Errorf("lobby with ID %s does not exist", lobbyId)
 	}
+	lm.globalMu.RUnlock()
 
 	if len(lobby.Players) >= lobby.LobbySettings.MaxPlayerCount {
 		return nil, fmt.Errorf("lobby %s is full", lobbyId)
@@ -324,11 +326,12 @@ func (lm *LobbyManager) HandleStartRace(message types.WebSocketMessage, conn *we
 func (lm *LobbyManager) allPlayersFinishedTyping(lobbyId string) bool {
 	lm.globalMu.RLock()
 	lobby, exists := lm.Lobbies[lobbyId]
-	lm.globalMu.RUnlock()
 
 	if !exists {
+		lm.globalMu.RUnlock()
 		return false
 	}
+	lm.globalMu.RUnlock()
 
 	lobby.LobbyMu.RLock()
 	defer lobby.LobbyMu.RUnlock()
@@ -346,11 +349,13 @@ func (lm *LobbyManager) SaveRaceResults(lobbyId string) error {
 
 	lm.globalMu.RLock()
 	lobby, exists := lm.Lobbies[lobbyId]
-	lm.globalMu.RUnlock()
 
 	if !exists {
+		lm.globalMu.RUnlock()
 		return fmt.Errorf("lobby with id %s not found", lobbyId)
 	}
+
+	lm.globalMu.RUnlock()
 
 	lobby.LobbyMu.RLock()
 	defer lobby.LobbyMu.RUnlock()
@@ -381,7 +386,6 @@ func (lm *LobbyManager) SaveRaceResults(lobbyId string) error {
 			MistakeCount:          player.MistakeCount,
 			Wpm:                   player.Wpm,
 			PercentageOfTextTyped: player.PercentageOfTextTyped,
-			LobbySettingsid:       0, // this later changes when we get serial id from db
 		})
 	}
 
@@ -401,15 +405,16 @@ func (lm *LobbyManager) startCountdown(lobbyId string) {
 		select {
 		case <-ticker.C:
 			lm.globalMu.Lock()
-			lm.TimeLeft[lobbyId]--
-			timeLeft := lm.TimeLeft[lobbyId]
-
 			lobby, exists := lm.Lobbies[lobbyId]
-			lm.globalMu.Unlock()
 
 			if !exists {
+				lm.globalMu.Unlock()
 				return
 			}
+
+			lm.TimeLeft[lobbyId]--
+			timeLeft := lm.TimeLeft[lobbyId]
+			lm.globalMu.Unlock()
 
 			lobby.LobbyMu.RLock()
 			allFinished := true
@@ -472,7 +477,9 @@ func (lm *LobbyManager) HandleProgress(message types.WebSocketMessage, conn *web
 
 	lm.globalMu.RLock()
 	lobby, exists := lm.Lobbies[lobbyId]
+
 	if !exists {
+		lm.globalMu.RUnlock()
 		return nil, fmt.Errorf("lobby does not exist")
 	}
 	lm.globalMu.RUnlock()

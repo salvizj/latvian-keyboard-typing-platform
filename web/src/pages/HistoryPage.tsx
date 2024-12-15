@@ -66,10 +66,6 @@ const HistoryPage = () => {
     const dateFrom = searchParams.get('dateFrom') || '';
     const dateTill = searchParams.get('dateTill') || '';
 
-    const updatePage = (newPage: number) => {
-        setSearchParams({ ...searchParams, page: newPage.toString() });
-    };
-
     const handlePageChange = (direction: 'left' | 'right') => {
         let newPage = currentPage;
         if (direction === 'right') {
@@ -77,7 +73,15 @@ const HistoryPage = () => {
         } else if (direction === 'left' && currentPage > 0) {
             newPage = currentPage - 1;
         }
-        updatePage(newPage);
+
+        setSearchParams((prevParams) => {
+            return {
+                type: prevParams.get('type') || HistoryTypes.TypingTest,
+                page: newPage.toString(),
+                dateFrom: prevParams.get('dateFrom') || '',
+                dateTill: prevParams.get('dateTill') || '',
+            };
+        });
     };
     const { data, loadingTypingData, fetchingTypingDataError, racesCount, testsCount } = useGetTypingData(
         userId,
@@ -87,9 +91,9 @@ const HistoryPage = () => {
         currentType,
         ITEMS_PER_PAGE
     );
+
     const count = currentType === 'typingTest' ? testsCount : racesCount;
     const totalPages = Math.ceil(count / ITEMS_PER_PAGE);
-
     return (
         <DefaultPanel className="h-full" width="max-w-6xl">
             <div className="flex gap-4 justify-center items-center flex-col">
@@ -162,7 +166,6 @@ const HistoryPage = () => {
                         loading={loadingTypingData}
                         error={fetchingTypingDataError}
                         userId={userId}
-                        page={currentPage}
                     />
                 )}
             </div>
@@ -172,7 +175,7 @@ const HistoryPage = () => {
                     {currentPage > 0 && (
                         <button
                             onClick={() => handlePageChange('left')}
-                            className="py-2 rounded-lg bg-color-third text-color-primary hover:bg-color-secondary"
+                            className="py-2 rounded-lg bg-transparent text-color-primary"
                         >
                             &lt;
                         </button>
@@ -181,7 +184,7 @@ const HistoryPage = () => {
                     {currentPage < totalPages - 1 && (
                         <button
                             onClick={() => handlePageChange('right')}
-                            className="py-2 rounded-lg bg-color-third text-color-primary hover:bg-color-secondary"
+                            className="py-2 rounded-lg bg-transparent text-color-primary"
                         >
                             &gt;
                         </button>

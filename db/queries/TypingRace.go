@@ -1,7 +1,6 @@
 package queries
 
 import (
-	"database/sql"
 	"fmt"
 	"latvianKeyboardTypingPlatform/db"
 	"latvianKeyboardTypingPlatform/types"
@@ -38,73 +37,76 @@ func GetTypingRacesCount(userId string, dateFrom, dateTill *string) (int, error)
 }
 
 func GetTypingRaces(userId string, page, itemsPerPage int, dateFrom, dateTill *string) ([]types.Lobby, error) {
-	// Calculate offset for pagination
+	// calculate offset for pagination
 	offset := 0
 	if page > 0 {
 		offset = page * itemsPerPage
 	}
 
 	query := `
-	SELECT trp.typingRacePlayerId, trp.typingRaceId, trp.username, trp.userId, trp.role,
-		trp.place, trp.mistakeCount, trp.wpm,
-		tr.typingRaceSettingsId, TO_CHAR(tr.date, 'YYYY-MM-DD') AS date, trs.textType, trs.textId, trs.customText,
-		trs.maxPlayerCount, trs.time
-	FROM "TypingRacePlayers" trp
-	JOIN "TypingRaces" tr ON trp.typingRaceId = tr.typingRaceId
-	JOIN "TypingRaceSettings" trs ON tr.typingRaceSettingsId = trs.typingRaceSettingsId
-	WHERE trp.userId = $1`
+    SELECT 
+        trp.typingRacePlayerId, 
+        trp.typingRaceId, 
+        trp.username, 
+        trp.userId, 
+        trp.role,
+        trp.place, 
+        trp.mistakeCount, 
+        trp.wpm,
+        tr.typingRaceSettingsId, 
+        TO_CHAR(tr.date, 'YYYY-MM-DD') AS date, 
+        trs.textType, 
+        trs.textId, 
+        trs.customText,
+        trs.maxPlayerCount, 
+        trs.time
+    FROM "TypingRacePlayers" trp
+    JOIN "TypingRaces" tr ON trp.typingRaceId = tr.typingRaceId
+    JOIN "TypingRaceSettings" trs ON tr.typingRaceSettingsId = trs.typingRaceSettingsId
+    WHERE trp.typingRaceId IN (
+        SELECT trp.typingRaceId 
+        FROM "TypingRacePlayers" trp 
+        WHERE trp.userId = $1
+    )
+    `
 
-	queryParts := []string{query}
+	// query arguments
 	queryArgs := []interface{}{userId}
-	paramCount := 1
+
+	// add pagination parameters
+	query = query + " ORDER BY tr.typingRaceId ASC LIMIT $2 OFFSET $3"
+	queryArgs = append(queryArgs, itemsPerPage, offset)
 
 	if dateFrom != nil && *dateFrom != "" {
-		paramCount++
-		queryParts = append(queryParts, fmt.Sprintf("AND tr.date >= $%d::DATE", paramCount))
+		query = query + " AND tr.date >= $4::DATE"
 		queryArgs = append(queryArgs, *dateFrom)
 	}
 
 	if dateTill != nil && *dateTill != "" {
-		paramCount++
-		queryParts = append(queryParts, fmt.Sprintf("AND tr.date <= $%d::DATE", paramCount))
+		query = query + " AND tr.date <= $5::DATE"
 		queryArgs = append(queryArgs, *dateTill)
 	}
 
-	// Add pagination parameters
-	paramCount++
-	queryParts = append(queryParts, fmt.Sprintf("ORDER BY tr.typingRaceId ASC LIMIT $%d", paramCount))
-	queryArgs = append(queryArgs, itemsPerPage)
-
-	paramCount++
-	queryParts = append(queryParts, fmt.Sprintf("OFFSET $%d", paramCount))
-	queryArgs = append(queryArgs, offset)
-
-	// Combine all query parts
-	query = strings.Join(queryParts, " ")
-
 	rows, err := db.DB.Query(query, queryArgs...)
 	if err != nil {
-		return nil, fmt.Errorf("error executing query: %w", err)
+		return nil, fmt.Errorf("error executing query to get races: %w", err)
 	}
 	defer rows.Close()
 
+	// map to hold lobbies by lobbyId
 	lobbiesMap := make(map[string]*types.Lobby)
 
 	for rows.Next() {
 		var player types.Player
 		var lobbySetting types.LobbySettings
-		var lobbyId string
+		var raceId string
 		var date string
 
-		var textId sql.NullInt64
-		var customText sql.NullString
-		var userId sql.NullString
-
 		err := rows.Scan(
-			&player.LobbyId,
-			&lobbyId,
+			&player.PlayerId,
+			&raceId,
 			&player.Username,
-			&userId,
+			&player.UserId,
 			&player.Role,
 			&player.Place,
 			&player.MistakeCount,
@@ -112,46 +114,27 @@ func GetTypingRaces(userId string, page, itemsPerPage int, dateFrom, dateTill *s
 			&lobbySetting.LobbySettingsId,
 			&date,
 			&lobbySetting.TextType,
-			&textId,
-			&customText,
+			&lobbySetting.TextId,
+			&lobbySetting.CustomText,
 			&lobbySetting.MaxPlayerCount,
 			&lobbySetting.Time,
 		)
 		if err != nil {
-			return nil, fmt.Errorf("error scanning row: %w", err)
+			return nil, fmt.Errorf("error scanning player row: %w", err)
 		}
 
-		// Handle nullable fields
-		if userId.Valid {
-			player.UserId = &userId.String
-		} else {
-			player.UserId = nil
-		}
-
-		if textId.Valid {
-			tempInt := int(textId.Int64)
-			lobbySetting.TextId = &tempInt
-		} else {
-			lobbySetting.TextId = nil
-		}
-
-		if customText.Valid {
-			lobbySetting.CustomText = &customText.String
-		} else {
-			lobbySetting.CustomText = nil
-		}
-
-		// Populate or create a new lobby in the map
-		lobby, exists := lobbiesMap[lobbyId]
+		lobby, exists := lobbiesMap[raceId]
 		if !exists {
+			//  create a new lobby if doesn`t exist and add it to the map
 			lobby = &types.Lobby{
-				LobbyId:       lobbyId,
+				LobbyId:       raceId,
 				LobbySettings: lobbySetting,
 				Date:          date,
 				Players:       []types.Player{},
 			}
-			lobbiesMap[lobbyId] = lobby
+			lobbiesMap[raceId] = lobby
 		}
+
 		lobby.Players = append(lobby.Players, player)
 	}
 
@@ -159,14 +142,15 @@ func GetTypingRaces(userId string, page, itemsPerPage int, dateFrom, dateTill *s
 		return nil, fmt.Errorf("error iterating over rows: %w", err)
 	}
 
+	// convert the lobbies map to a slice
 	var races []types.Lobby
 	for _, lobby := range lobbiesMap {
 		races = append(races, *lobby)
 	}
 
 	// handle case where requested page has no results
-	if len(races) == 0 && page > 0 {
-		return nil, fmt.Errorf("no records available for page %d", page)
+	if len(races) == 0 {
+		return nil, fmt.Errorf("no races found for userId: %s", userId)
 	}
 
 	return races, nil

@@ -11,6 +11,7 @@ import useAuthStatus from '../../hooks/useAuthStatus';
 
 type DashboardProps = {
     isMinimized: boolean;
+    setIsMinimized: (isMinimized: boolean) => void;
 };
 
 const Dashboard = ({ isMinimized }: DashboardProps) => {
@@ -35,7 +36,7 @@ const Dashboard = ({ isMinimized }: DashboardProps) => {
                     </div>
                 )}
 
-                <div className={`px-4 py-6 border-b border-gray-700 ${isMinimized ? 'items-center' : ''}`}>
+                <div className={`px-4 h-auto py-6 border-b border-gray-700 ${isMinimized ? 'items-center' : ''}`}>
                     {!isSignedIn && (
                         <div className={`flex ${isMinimized ? 'flex-col items-center' : 'flex-col'} gap-4`}>
                             {}

@@ -21,7 +21,7 @@ const KeyboardSettings = ({ isMinimized }: KeyboardSettingsProps) => {
         <>
             {!close && (
                 <DefaultPanel>
-                    <div className="flex flex-col gap-6 items-center">
+                    <div className="flex flex-col gap-6 items-start">
                         <h1 className="text-3xl font-bold mb-6 text-center">
                             {translate('keyboard_settings', language)}
                         </h1>
@@ -85,10 +85,10 @@ const KeyboardSettings = ({ isMinimized }: KeyboardSettingsProps) => {
             )}
             <button
                 onClick={() => setClose(false)}
-                className="text-color-primary flex flex-row-reverse gap-4 justify-end items-center text-lg mt-6 hover:text-color-primary-hover-text"
+                className="text-color-primary text-lg hover:text-color-primary-hover-text flex justify-start items-center gap-0 sm:gap-4 mt-6 text-left"
             >
-                {!isMinimized && translate('keyboard_settings', language)}
                 <FaCog />
+                {!isMinimized && translate('keyboard_settings', language)}
             </button>
         </>
     );

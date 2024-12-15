@@ -67,14 +67,10 @@ func (lm *LobbyManager) HandleConnectionClose(ws *websocket.Conn) {
 }
 
 func (lm *LobbyManager) Broadcast(msg *types.WebSocketMessage) error {
-
-	lm.globalMu.Lock()
 	conns, exists := lm.Connections[msg.LobbyId]
 	if !exists {
 		return nil
 	}
-
-	lm.globalMu.Unlock()
 
 	for _, conn := range conns {
 		if err := conn.WriteJSON(msg); err != nil {
@@ -90,9 +86,12 @@ func (lm *LobbyManager) HandleCreateLobby(message types.WebSocketMessage, conn *
 	var lobbyId string
 	for {
 		lobbyId = uuid.New().String()
+		lm.globalMu.RLock()
 		if _, exists := lm.Lobbies[lobbyId]; !exists {
+			lm.globalMu.RUnlock()
 			break
 		}
+		lm.globalMu.RUnlock()
 	}
 
 	if message.Data == nil {
@@ -189,12 +188,11 @@ func (lm *LobbyManager) HandleCreateLobby(message types.WebSocketMessage, conn *
 			TextId:         textId,
 		},
 	}
-
 	if lm.Lobbies == nil {
 		lm.Lobbies = make(map[string]*types.LobbyWithLock)
 	}
-	lm.globalMu.Lock()
 
+	lm.globalMu.Lock()
 	lm.Lobbies[lobbyId] = lobby
 
 	if lm.Connections == nil {
@@ -228,7 +226,10 @@ func (lm *LobbyManager) HandleJoinLobby(message types.WebSocketMessage, conn *we
 
 	lobbyId := message.LobbyId
 
+	lm.globalMu.RLock()
 	lobby, exists := lm.Lobbies[lobbyId]
+	lm.globalMu.RUnlock()
+
 	if !exists {
 		return nil, fmt.Errorf("lobby with ID %s does not exist", lobbyId)
 	}
@@ -283,8 +284,9 @@ func (lm *LobbyManager) HandleJoinLobby(message types.WebSocketMessage, conn *we
 	lm.Connections[lobbyId] = append(lm.Connections[lobbyId], conn)
 
 	lm.Lobbies[message.LobbyId] = lobby
-
 	lm.globalMu.Unlock()
+
+	lobby.LobbyMu.RLock()
 	broadcastMessage := &types.WebSocketMessage{
 		Type:    types.JoinLobby,
 		LobbyId: lobbyId,
@@ -293,6 +295,7 @@ func (lm *LobbyManager) HandleJoinLobby(message types.WebSocketMessage, conn *we
 			Players:       lobby.Players,
 		},
 	}
+	lobby.LobbyMu.RUnlock()
 
 	if err := lm.Broadcast(broadcastMessage); err != nil {
 		return nil, fmt.Errorf("error broadcasting lobby join: %v", err)
@@ -306,14 +309,11 @@ func (lm *LobbyManager) HandleStartRace(message types.WebSocketMessage, conn *we
 	lobby, exists := lm.Lobbies[message.LobbyId]
 
 	if !exists {
-		lm.globalMu.RUnlock()
 		return nil, fmt.Errorf("lobby %s not found", message.LobbyId)
 	}
-	lm.globalMu.RUnlock()
 
-	lm.globalMu.Lock()
 	lm.TimeLeft[message.LobbyId] = lobby.LobbySettings.Time
-	lm.globalMu.Unlock()
+	lm.globalMu.RUnlock()
 
 	// start the countdown in a separate goroutine
 	go lm.startCountdown(message.LobbyId)
@@ -405,8 +405,9 @@ func (lm *LobbyManager) startCountdown(lobbyId string) {
 			timeLeft := lm.TimeLeft[lobbyId]
 
 			lobby, exists := lm.Lobbies[lobbyId]
+			lm.globalMu.Unlock()
+
 			if !exists {
-				lm.globalMu.Unlock()
 				return
 			}
 
@@ -421,6 +422,7 @@ func (lm *LobbyManager) startCountdown(lobbyId string) {
 			lobby.LobbyMu.RUnlock()
 
 			if allFinished || timeLeft <= 0 {
+				lobby.LobbyMu.RLock()
 				endRaceMessage := &types.WebSocketMessage{
 					Type:    types.EndRace,
 					LobbyId: lobbyId,
@@ -428,7 +430,7 @@ func (lm *LobbyManager) startCountdown(lobbyId string) {
 						Players: lobby.Players,
 					},
 				}
-
+				lobby.LobbyMu.RUnlock()
 				if err := lm.Broadcast(endRaceMessage); err != nil {
 					fmt.Printf("Error broadcasting end race: %v\n", err)
 				}
@@ -442,7 +444,6 @@ func (lm *LobbyManager) startCountdown(lobbyId string) {
 					}
 				}()
 
-				lm.globalMu.Unlock()
 				return
 			}
 
@@ -457,7 +458,6 @@ func (lm *LobbyManager) startCountdown(lobbyId string) {
 			if err := lm.Broadcast(timeLeftMessage); err != nil {
 				fmt.Printf("Error broadcasting time left: %v\n", err)
 			}
-			lm.globalMu.Unlock()
 		}
 	}
 }
@@ -470,10 +470,12 @@ func (lm *LobbyManager) HandleProgress(message types.WebSocketMessage, conn *web
 
 	lobbyId := message.LobbyId
 
+	lm.globalMu.RLock()
 	lobby, exists := lm.Lobbies[lobbyId]
 	if !exists {
 		return nil, fmt.Errorf("lobby does not exist")
 	}
+	lm.globalMu.RUnlock()
 
 	data, ok := message.Data.(map[string]interface{})
 	if !ok {
@@ -514,6 +516,7 @@ func (lm *LobbyManager) HandleProgress(message types.WebSocketMessage, conn *web
 	}
 
 	lobby.LobbyMu.Lock()
+	defer lobby.LobbyMu.Unlock()
 
 	// find and update player data
 	for i, player := range lobby.Players {
@@ -540,7 +543,6 @@ func (lm *LobbyManager) HandleProgress(message types.WebSocketMessage, conn *web
 	}
 
 	lm.Lobbies[message.LobbyId] = lobby
-	lobby.LobbyMu.Unlock()
 
 	broadcastMessage := &types.WebSocketMessage{
 		LobbyId: lobbyId,

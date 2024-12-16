@@ -186,7 +186,8 @@ const translations: Translations = {
         inalid_time_large: "Error: Invalid time, time can't be over 120 seconds.",
         invalid_player_count_large: "Error: Invalid player count, maximum player count can't be over 10.",
         invalid_player_count_small: "Error: Invalid player count, maximum player count can't be under 2.",
-
+        invalid_username_lenght_small: 'Error: Invalid username lenght. Username can`t be smaller than 3 characters.',
+        invalid_username_lenght_large: 'Error: Invalid username lenght. Username can`t be larger than 20 characters.',
         // Game Status Messages
         not_enough_players_to_start: 'Not enough players to start, need at least 2 players.',
         wait_for_owner_to_start_the_race: 'Wait for lobby leader to start the race.',
@@ -379,7 +380,9 @@ const translations: Translations = {
             'Kļūda: Nederīgs spēlētaju daudzums. Maksimālais spēlētāju daudzums nevar pārsniegt 10',
         invalid_player_count_small:
             'Kļūda: nekorekts spēlētāju daudzums, maksimālais spēlētāju daudzums nevar būt mazāks par 2',
-
+        invalid_username_lenght_small: 'Kļūda: Nederīgs lietotājvārds. Lietotājvārds nevar būt īsāks par 3 simboliem.',
+        invalid_username_lenght_large:
+            'Kļūda: Nederīgs lietotājvārds. Lietotājvārds nevar būt garāks par 20 simboliem.',
         // Game Status Messages
         not_enough_players_to_start: 'Nav pietiekami daudz spēlētāju, lai sāktu, vajadzīgi vismaz 2 spēlētāji',
         wait_for_owner_to_start_the_race: 'Gaidi, kad istabas līderis sāks sacensības',

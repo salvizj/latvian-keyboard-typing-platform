@@ -17,12 +17,14 @@ const LessonsPage = () => {
     const { lessonGetError, lessonCompletion, lessonGetLoading } = useGetLessonCompletion(lessonIds);
 
     useEffect(() => {
-        if (lessons) {
-            if (!selectedLessonDifficulty) {
-                setFilteredLessons(lessons);
-            } else {
-                const filtered = lessons.filter((lesson) => lesson.lessonDifficulty === selectedLessonDifficulty);
-                setFilteredLessons(filtered);
+        if (Array.isArray(lessons)) {
+            if (lessons) {
+                if (!selectedLessonDifficulty) {
+                    setFilteredLessons(lessons);
+                } else {
+                    const filtered = lessons.filter((lesson) => lesson.lessonDifficulty === selectedLessonDifficulty);
+                    setFilteredLessons(filtered);
+                }
             }
         }
     }, [lessons, selectedLessonDifficulty]);

@@ -63,6 +63,14 @@ const validateOptions = (props: ValidateOptionsParams): ValidationErrors => {
         if (!username?.trim()) {
             errors.username = translate('must_enter_username', language);
         }
+        if (username) {
+            if (username?.length < 3) {
+                errors.username = translate('invalid_username_lenght_small', language);
+            }
+            if (username?.length > 20) {
+                errors.username = translate('invalid_username_lenght_large', language);
+            }
+        }
 
         if (lobbyMode === 'join' && !lobbyId?.trim()) {
             errors.lobbyId = translate('must_enter_lobby_id', language);

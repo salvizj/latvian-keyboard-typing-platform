@@ -43,7 +43,7 @@ const Layout = () => {
             >
                 {!isSmallScreen && (
                     <button
-                        className={`text-color-primary rounded hover:bg-primary flex justify-center items-center text-3xl z-50 absolute transition-all top-6 left-6`}
+                        className={`text-color-primary rounded hover:bg-primary flex justify-center items-center text-3xl z-50 absolute transition-all top-6 left-8`}
                         onClick={toggleAside}
                     >
                         {isMinimized ? <FiChevronRight /> : <FiChevronLeft />}

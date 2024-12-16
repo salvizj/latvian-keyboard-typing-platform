@@ -37,9 +37,7 @@ const Dashboard = ({ isMinimized }: DashboardProps) => {
                         <ThemeToggleButton />
                     </div>
                 )}
-                <div
-                    className={`w-full flex flex-1 justify-center items-center ${!isMinimized ? 'border-b border-gray-700 pb-5' : ''}`}
-                >
+                <div className={'w-1/2 flex flex-1 flex-col justify-center items-start mt-4 gap-2'}>
                     {!isSignedIn && (
                         <>
                             <SignUpButton isMinimized={isMinimized} />

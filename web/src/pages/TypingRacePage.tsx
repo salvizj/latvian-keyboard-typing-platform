@@ -30,7 +30,7 @@ import DefaultPanel from '../components/utils/DefaultPanel';
 const TypingRacePage = () => {
     const isRace = true;
     const { language } = useLanguage();
-    const wsUrl = `ws://localhost:${import.meta.env.VITE_PORT}/ws`;
+    const wsUrl = `ws://${import.meta.env.VITE_URL}:${import.meta.env.VITE_PORT}/ws`;
     const { text, setText, time, setTime, lobbyId, setLobbyId, username, timeLeft, setTimeLeft } = useOptions();
     const { userId } = useAuthStatus();
     const navigate = useNavigate();

@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import Dashboard from '../../components/dashboard/Dashboard';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
-const BREAKPOINT = 978;
+const BREAKPOINT = 1280;
 
 const Layout = () => {
     const [isMinimized, setIsMinimized] = useState(false);
@@ -32,21 +32,21 @@ const Layout = () => {
     };
 
     return (
-        <div className="flex flex-row h-full">
-            <main className="flex-1">
+        <div className="flex h-full w-full">
+            <main className={`transition-all ${isMinimized || isSmallScreen ? 'w-[95%]' : 'w-[85%]'} overflow-hidden`}>
                 <Outlet />
             </main>
             <aside
                 className={`h-full min-h-screen transition-all ${
-                    isMinimized ? 'w-20' : 'w-2/12'
+                    isMinimized ? 'w-[5%]' : 'w-[15%]'
                 } bg-color-third sticky top-0 min-w-[5rem]`}
             >
                 {!isSmallScreen && (
                     <button
-                        className={`text-color-primary rounded hover:bg-primary flex justify-center items-center text-3xl z-50 absolute transition-all top-6 right-6`}
+                        className={`text-color-primary rounded hover:bg-primary flex justify-center items-center text-3xl z-50 absolute transition-all top-6 left-6`}
                         onClick={toggleAside}
                     >
-                        {isMinimized ? <FiChevronLeft /> : <FiChevronRight />}
+                        {isMinimized ? <FiChevronRight /> : <FiChevronLeft />}
                     </button>
                 )}
                 <Dashboard isMinimized={isMinimized} setIsMinimized={setIsMinimized} />

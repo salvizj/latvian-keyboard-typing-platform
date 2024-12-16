@@ -46,7 +46,7 @@ const DashboardNavigation = ({ isMinimized }: DashboardNavigationProps) => {
     };
 
     return (
-        <nav className="flex flex-col justify-center items-left text-lg text-color-primary gap-6">
+        <nav className="flex flex-col text-lg text-color-primary gap-6">
             {Links.map(({ key, path, protected: isProtected }) => {
                 if (isProtected && !isSignedIn) return null;
 

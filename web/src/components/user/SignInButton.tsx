@@ -18,7 +18,7 @@ export default function SignInBtn({ isMinimized }: SignInBtnProps) {
     return (
         <button
             onClick={handleSignIn}
-            className="text-color-primary text-lg hover:text-color-primary-hover-text flex items-center justify-start flex-row gap-4"
+            className="text-color-primary text-lg hover:text-color-primary-hover-text flex justify-start items-center gap-0 sm:gap-4 mt-6 text-left"
         >
             <FaSignInAlt />
             {!isMinimized && translate('sign_in', language)}

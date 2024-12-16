@@ -1,5 +1,5 @@
-import LanguageTogleButton from './LanguageToggleButton';
-import ThemeTogleButton from './ThemeToggleButton';
+import LanguageToggleButton from './LanguageToggleButton';
+import ThemeToggleButton from './ThemeToggleButton';
 import LogoutButton from '../user/SignOutButton';
 import SignInButton from '../user/SignInButton';
 import SignUpButton from '../user/SignUpButton';
@@ -28,32 +28,33 @@ const Dashboard = ({ isMinimized }: DashboardProps) => {
     }
     return (
         <>
-            <div className={`flex flex-col h-full z-10 relative ${isMinimized ? 'pt-20' : ''}`}>
+            <div
+                className={`flex flex-col justify-center items-center w-full h-full z-10 relative ${isMinimized ? 'pt-20' : ''}`}
+            >
                 {!isMinimized && (
-                    <div className="px-4 py-6 border-b border-gray-700 flex flex-row items-center justify-start gap-2">
-                        <LanguageTogleButton />
-                        <ThemeTogleButton />
+                    <div className="px-4 py-6 border-b border-gray-700 flex flex-row gap-2 justify-center w-full">
+                        <LanguageToggleButton />
+                        <ThemeToggleButton />
                     </div>
                 )}
-
-                <div className={`px-4 h-auto py-6 border-b border-gray-700 ${isMinimized ? 'items-center' : ''}`}>
+                <div
+                    className={`w-full flex flex-1 justify-center items-center ${!isMinimized ? 'border-b border-gray-700 pb-5' : ''}`}
+                >
                     {!isSignedIn && (
-                        <div className={`flex ${isMinimized ? 'flex-col items-center' : 'flex-col'} gap-4`}>
-                            {}
+                        <>
                             <SignUpButton isMinimized={isMinimized} />
                             <SignInButton isMinimized={isMinimized} />
-                        </div>
+                        </>
                     )}
                     {isSignedIn && (
-                        <div className={`flex ${isMinimized ? 'flex-col items-center' : 'flex-col'} gap-4`}>
-                            {}
+                        <>
                             <LogoutButton isMinimized={isMinimized} />
-                        </div>
+                        </>
                     )}
                 </div>
 
-                <div className="flex-1 px-4 py-6  ">
-                    <div className={`flex flex-col ${isMinimized ? 'items-center' : ''} pt-6 sticky top-0`}>
+                <div className="flex-1 px-4 py-6 justify-center">
+                    <div className="flex flex-col pt-6 sticky top-0 flex-grow">
                         <DashboardNavigation isMinimized={isMinimized} />
                         <KeyboardSettings isMinimized={isMinimized} />
                     </div>

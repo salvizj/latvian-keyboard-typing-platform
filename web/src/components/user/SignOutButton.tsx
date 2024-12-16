@@ -36,9 +36,9 @@ export default function SignOutBtn({ isMinimized }: SignOutBtnProps) {
     };
 
     return (
-        <div>
+        <div className="flex justify-center items-center w-full h-full">
             <button
-                className="text-color-primary text-lg hover:text-color-primary-hover-text flex items-center gap-4"
+                className="text-color-primary text-lg hover:text-color-primary-hover-text flex items-center gap-4 mt-6 text-left px-4"
                 onClick={handleSignOut}
                 disabled={loading}
             >

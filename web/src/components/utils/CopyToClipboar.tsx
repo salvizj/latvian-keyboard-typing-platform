@@ -12,10 +12,32 @@ const CopyToClipboard: React.FC<CopyToClipboardProps> = ({ text }) => {
     const { language } = useLanguage();
 
     const handleCopy = () => {
-        navigator.clipboard.writeText(text).then(() => {
-            setIsCopied(true);
-            setTimeout(() => setIsCopied(false), 2000);
-        });
+        if (navigator.clipboard) {
+            navigator.clipboard
+                .writeText(text)
+                .then(() => {
+                    setIsCopied(true);
+                    setTimeout(() => setIsCopied(false), 2000);
+                })
+                .catch(() => {
+                    fallbackCopyToClipboard(text);
+                });
+        } else {
+            fallbackCopyToClipboard(text);
+        }
+    };
+
+    const fallbackCopyToClipboard = (text: string) => {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        document.body.appendChild(textarea);
+        textarea.select();
+        textarea.setSelectionRange(0, 99999);
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+
+        setIsCopied(true);
+        setTimeout(() => setIsCopied(false), 2000);
     };
 
     return (

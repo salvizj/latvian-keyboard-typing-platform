@@ -30,6 +30,6 @@ func StartServer() {
 		e.Logger.Fatal("Failed to initialize routes:", err)
 	}
 
-	// Start the server
+	// start the server
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%s", port)))
 }

@@ -172,7 +172,7 @@ const translations: Translations = {
         error_no_lessons_found_with_this_difficulty: 'Error: No lessons found with this difficulty level.',
         error_no_lessons_found: 'Error: No lessons found. Please try again.',
         error_post_user_id: 'Error: Coulnd`t save user identificator',
-
+        error_fetching_game_record: 'Error: Coulnd`t get selected games record.',
         // Validation Messages
         must_enter_username: 'Error: Enter username.',
         must_enter_costum_text: 'Error: Enter custom text.',
@@ -363,7 +363,7 @@ const translations: Translations = {
         error_failed_to_fetch_typing_data: 'kļūda: nevarēja iegūt rakstīšanas datus',
         error_post_user_id: 'Kļūda: nevarēja saglabāt lietotāja identifikatoru',
         error_fetching_lesson_text: 'Kļūda: Nevarēja iegūt nodarības tekstu.',
-
+        error_fetching_game_record: 'Kļūda: Nevarēja iegūt izvēlētās spēles uzstādīto rekordu.',
         // Validation Messages
         must_enter_username: 'Kļūda: Jāievada lietotājvārdu',
         must_enter_costum_text: 'Kļūda: Jāievada pielāgotu tekstu',

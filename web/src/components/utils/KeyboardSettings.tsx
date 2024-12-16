@@ -21,10 +21,18 @@ const KeyboardSettings = ({ isMinimized }: KeyboardSettingsProps) => {
         <>
             {!close && (
                 <DefaultPanel className="fixed top-0 left-0 w-full h-full bg-opacity-90 bg-color-primary z-50">
-                    <div className="flex flex-col gap-6 items-start relative">
-                        <h1 className="text-3xl font-bold mb-6 text-center">
-                            {translate('keyboard_settings', language)}
-                        </h1>
+                    <div className="flex flex-col gap-6 items-start relative sm:fle">
+                        <div className="flex flex-row w-full justify-between items-center">
+                            <h1 className="text-3xl font-bold text-center">
+                                {translate('keyboard_settings', language)}
+                            </h1>
+                            <button
+                                onClick={() => setClose(true)}
+                                className="text-3xl hover:text-color-primary-hover-text"
+                            >
+                                <MdClose />
+                            </button>
+                        </div>
 
                         <div className="flex flex-col gap-4 w-full">
                             <label htmlFor="keyboardLayout" className="text-primary">
@@ -73,13 +81,6 @@ const KeyboardSettings = ({ isMinimized }: KeyboardSettingsProps) => {
                                 </label>
                             </div>
                         </div>
-
-                        <button
-                            onClick={() => setClose(true)}
-                            className="absolute top-0 right-0 text-3xl hover:text-color-primary-hover-text"
-                        >
-                            <MdClose />
-                        </button>
                     </div>
                 </DefaultPanel>
             )}

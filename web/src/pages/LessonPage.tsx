@@ -49,6 +49,7 @@ const LessonPage = () => {
             </p>
         );
     }
+
     if (isTypingFinished && lessonId) {
         return (
             <CompletionScreen

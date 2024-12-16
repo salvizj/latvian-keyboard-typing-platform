@@ -40,11 +40,11 @@ const TextSelectionSection: React.FC<{
     }, [isCustomText, customText, selectedText, setText, setCustomText, setTextType]);
 
     return (
-        <div className="flex flex-col gap-4 mb-4">
+        <div className="flex flex-col gap-4 mb-2 ms:gap-4">
             <label className="text-left">{translate('select_text_option', language)}</label>
 
             {poetTexts && (
-                <div className="flex gap-4 justify-start items-center">
+                <div className="flex gap-4 flex-col sm:flex-row justify-start">
                     <button
                         className={`py-2 px-6 rounded-md text-center hover:opacity-90 transition-opacity text-base hover:text-color-primary-hover-text border secondary ${!isCustomText ? 'bg-color-primary text-color-third' : 'bg-transparent text-primary'}`}
                         onClick={() => setIsCustomText(false)}

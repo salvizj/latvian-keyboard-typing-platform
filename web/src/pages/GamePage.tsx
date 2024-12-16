@@ -25,13 +25,13 @@ const GamePage = () => {
     if (latvianWordsError || !hasWords) {
         return (
             <div className="flex justify-center items-center h-screen">
-                <p className="text-xl text-color-secondary">{translate('error_game_not_available', language)}</p>
+                <p className="text-xl text-red-500">{translate('error_game_not_available', language)}</p>
             </div>
         );
     }
 
     if (!gameRecordPostLoading && gameRecordPostError) {
-        return <p className="text-xl text-color-secondary">{translate(gameRecordPostError, language)}</p>;
+        return <p className="text-xl text-red-500">{translate(gameRecordPostError, language)}</p>;
     }
 
     // show completion screen if game is over or no more words

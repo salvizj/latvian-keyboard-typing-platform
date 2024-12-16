@@ -94,10 +94,15 @@ const HistoryPage = () => {
 
     const count = currentType === 'typingTest' ? testsCount : racesCount;
     const totalPages = Math.ceil(count / ITEMS_PER_PAGE);
+
     return (
-        <DefaultPanel className="h-full" width="max-w-6xl">
-            <div className="flex gap-4 justify-center items-center flex-col">
-                <h1 className="text-3xl font-bold mb-6 text-center">{translate('history', language)}</h1>
+        <DefaultPanel
+            className="h-full w-full flex items-start justify-center"
+            width="max-w-6xl"
+            flexAlignment="center"
+        >
+            <div className="flex-1 flex flex-col items-center justify-start gap-4">
+                <h1 className="text-3xl font-bold text-center">{translate('history', language)}</h1>
                 <div className="flex flex-row gap-4">
                     <button
                         onClick={() => handleTypeChange(HistoryTypes.TypingTest)}
@@ -168,27 +173,20 @@ const HistoryPage = () => {
                         userId={userId}
                     />
                 )}
-            </div>
-
-            <div className="fixed bottom-5 left-1/2 transform -translate-x-1/2 flex justify-center items-center">
-                <div className="flex items-center bg-transparent">
-                    {currentPage > 0 && (
-                        <button
-                            onClick={() => handlePageChange('left')}
-                            className="py-2 rounded-lg bg-transparent text-color-primary"
-                        >
-                            &lt;
-                        </button>
-                    )}
-                    <span className="mx-4 text-lg font-semibold min-w-[2rem] text-center">{currentPage}</span>
-                    {currentPage < totalPages - 1 && (
-                        <button
-                            onClick={() => handlePageChange('right')}
-                            className="py-2 rounded-lg bg-transparent text-color-primary"
-                        >
-                            &gt;
-                        </button>
-                    )}
+                <div className="flex h-full items-center justify-center bg-transparent">
+                    <button
+                        onClick={() => handlePageChange('left')}
+                        className={`py-2 px-1 rounded-lg bg-transparent text-color-primary text-lg ${currentPage > 0 ? '' : 'invisible'}`}
+                    >
+                        &lt;
+                    </button>
+                    <span className="mx-4 text-lg font-semibold min-w-[1rem] text-center">{currentPage}</span>
+                    <button
+                        onClick={() => handlePageChange('right')}
+                        className={`py-2 px-1 rounded-lg bg-transparent text-color-primary text-lg ${currentPage < totalPages - 1 ? '' : 'invisible'}`}
+                    >
+                        &gt;
+                    </button>
                 </div>
             </div>
         </DefaultPanel>

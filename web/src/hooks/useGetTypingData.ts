@@ -35,7 +35,6 @@ const useGetTypingData = (
                 setRacesCount(countData.racesCount);
                 setFetchingCountError(null);
 
-                // Fetch detailed typing tests and races data
                 setData(null);
                 setFetchingTypingDataError(null);
 

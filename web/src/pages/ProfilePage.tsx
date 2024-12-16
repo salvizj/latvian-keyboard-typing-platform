@@ -90,7 +90,7 @@ const ProfilePage = () => {
 
                             <button
                                 type="submit"
-                                className="w-1/3 mt-2 py-2 px-6 rounded-md text-center transition-all text-base text-color-secondary bg-transparent border secondary hover:border-green-500 hover:text-green-500"
+                                className=" w-1/2 sm:w-1/3 lg:w-1/3 mt-2 py-2 px-6 rounded-md text-center transition-all text-base text-color-secondary bg-transparent border secondary hover:border-green-500 hover:text-green-500"
                             >
                                 {translate('save_changes', language)}
                             </button>

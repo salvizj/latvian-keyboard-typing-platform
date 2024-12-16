@@ -8,7 +8,7 @@ import (
 
 func GetGameRecord(gameName, userId string) (int, error) {
 	query := `
-    SELECT record FROM "GameRecords" WHERE gameName = $1 AND userId = $2
+    SELECT gamerecord FROM "GameRecords" WHERE gameName = $1 AND userId = $2
     `
 	var record int
 	err := db.DB.QueryRow(query, gameName, userId).Scan(&record)
@@ -27,7 +27,7 @@ func PostGameRecord(gameName, userId string, gameRecord int) error {
 	// check if a record already exists for the user and the game
 	var existingRecord int
 	err := db.DB.QueryRow(`
-		SELECT record FROM "GameRecords" WHERE userId = $1 AND gameName = $2
+		SELECT gamerecord FROM "GameRecords" WHERE userId = $1 AND gameName = $2
 	`, userId, gameName).Scan(&existingRecord)
 
 	// if no record exists, insert the new record
@@ -49,7 +49,7 @@ func PostGameRecord(gameName, userId string, gameRecord int) error {
 	if gameRecord > existingRecord {
 		query := `
 			UPDATE "GameRecords"
-			SET record = $1
+			SET gamerecord = $1
 			WHERE userId = $2 AND gameName = $3
 		`
 		_, err := db.DB.Exec(query, gameRecord, userId, gameName)

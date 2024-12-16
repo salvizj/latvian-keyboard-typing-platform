@@ -2,7 +2,6 @@ import { FC, useState } from 'react';
 import { HistoryTypes, TypingTestOrRaceData } from '../../types';
 import { useLanguage } from '../../context/LanguageContext';
 import translate from '../../utils/translate';
-import DefaultPanel from '../utils/DefaultPanel';
 import RaceList from './RaceList';
 import TestList from './TestList';
 import TestDetails from './TestDetails';
@@ -37,17 +36,16 @@ const TypingDataDisplay: FC<TypingDataDisplayProps> = ({ data, loading, error, u
     if (error) {
         return <p className="text-red-500 mt-1 mb-1 text-sm">{translate(error, language)}</p>;
     }
-    console.log(selectedIndex);
     if (!close && selectedIndex !== null && data) {
         return (
-            <DefaultPanel width="max-w-6xl">
+            <div className="w-full border border-secondary-color rounded-md mt-4">
                 {data.type === HistoryTypes.TypingTest && (
                     <TestDetails test={data.tests[selectedIndex]} language={language} handleClose={handleClose} />
                 )}
                 {data.type === HistoryTypes.TypingRace && (
                     <RaceDetails race={data.races[selectedIndex]} language={language} handleClose={handleClose} />
                 )}
-            </DefaultPanel>
+            </div>
         );
     }
 

@@ -1,5 +1,5 @@
 import { useLanguage } from '../context/LanguageContext';
-import LessonLinks from '../components/lesson/LesonLinks';
+import LessonLinks from '../components/lesson/LessonLinks';
 import translate from '../utils/translate';
 import { LessonDifficulty, Lesson } from '../types';
 import { useEffect, useState } from 'react';
@@ -60,7 +60,6 @@ const LessonsPage = () => {
             </p>
         );
     }
-
     return (
         <div className="flex flex-col justify-center items-center min-h-screen gap-6 ">
             <h1 className="text-4xl text-color-secondary mt-6">{translate('lessons', language)}</h1>
@@ -79,9 +78,7 @@ const LessonsPage = () => {
                     </option>
                 ))}
             </select>
-            {lessonCompletion && !lessonGetLoading && (
-                <LessonLinks lessons={filteredLessons} lessonCompletion={lessonCompletion} />
-            )}
+            {!lessonGetLoading && <LessonLinks lessons={filteredLessons} lessonCompletion={lessonCompletion} />}
         </div>
     );
 };

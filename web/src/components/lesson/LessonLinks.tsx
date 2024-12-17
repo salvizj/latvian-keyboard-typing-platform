@@ -3,14 +3,15 @@ import { Lesson } from '../../types';
 
 type LessonLinksProps = {
     lessons: Lesson[];
-    lessonCompletion: { [key: number]: boolean };
+    lessonCompletion: { [key: number]: boolean } | null;
 };
 
 const LessonLinks = ({ lessons, lessonCompletion }: LessonLinksProps) => {
     return (
         <div className="grid grid-cols-3 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-12 xl:grid-cols-12 gap-4 p-6 ">
             {lessons.map((lesson) => {
-                const completedAlready = lessonCompletion[lesson.lessonId] || false;
+                const completedAlready = lessonCompletion ? lessonCompletion[lesson.lessonId] : false;
+                console.log(completedAlready);
                 return (
                     <Link
                         key={lesson.lessonId}

@@ -9,6 +9,11 @@ const useGetLessonCompletion = (lessonIds: string) => {
     const { userId } = useAuthStatus();
 
     useEffect(() => {
+        if (!userId) {
+            setLessonGetLoading(false);
+            setLessonCompletion(null);
+        }
+
         if (userId && lessonIds.length > 0) {
             setLessonGetLoading(true);
             setLessonGetError(null);
@@ -19,7 +24,7 @@ const useGetLessonCompletion = (lessonIds: string) => {
                     setLessonGetLoading(false);
                 })
                 .catch(() => {
-                    setLessonGetError('Error fetching lesson completion status');
+                    setLessonGetError('error_fetching_lessons_completion');
                     setLessonGetLoading(false);
                 });
         }

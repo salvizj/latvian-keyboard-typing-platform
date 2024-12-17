@@ -166,6 +166,7 @@ const translations: Translations = {
         error_failed_to_fetch_typing_and_race_count: 'Error: Failed to fetch typing and race count.',
         error_failed_to_fetch_typing_data: 'Error: Failed to fetch typing data',
         error_fetching_lesson_text: 'Error: Failed to load lesson.  Please try again.',
+        error_fetching_lessons_completion: 'Error: Failed to fetch lesson completion data.',
         error_fetching_poet_text: 'Error: Error loading poet text. Please try again.',
         error_lesson_id_not_provide: 'Error: Lesson ID was not provided. Please select a lesson.',
         error_lesson_id_not_a_number: 'Error: The lesson identifier is not a valid number. Please enter a correct ID.',
@@ -363,6 +364,7 @@ const translations: Translations = {
         error_failed_to_fetch_typing_data: 'kļūda: nevarēja iegūt rakstīšanas datus',
         error_post_user_id: 'Kļūda: nevarēja saglabāt lietotāja identifikatoru',
         error_fetching_lesson_text: 'Kļūda: Nevarēja iegūt nodarības tekstu.',
+        error_fetching_lessons_completion: 'Kļūda: Nevarēja iegūt nodarbību pabeigtības datus.',
         error_fetching_game_record: 'Kļūda: Nevarēja iegūt izvēlētās spēles uzstādīto rekordu.',
         // Validation Messages
         must_enter_username: 'Kļūda: Jāievada lietotājvārdu',

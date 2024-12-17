@@ -35,7 +35,6 @@ const CompletionScreen: React.FC<CompletionScreenProps> = ({ title, buttons, err
         setTempMistakeCount(mistakeCount ?? 0);
         setTemppercentageOfTextTyped(percentageOfTextTyped ?? 0);
     }, [wpm, mistakeCount, showMetrics, percentageOfTextTyped, place]);
-    console.log(place);
     return (
         <>
             {!close && (

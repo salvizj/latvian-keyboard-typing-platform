@@ -11,7 +11,6 @@ type RaceDetailsProps = {
 
 const RaceDetails: FC<RaceDetailsProps> = ({ race, language, handleClose }) => {
     const lobbySettings = race.lobbySettings;
-
     return (
         <div className="flex flex-col mt-4 bg-transparent relative p-4">
             <button

@@ -23,7 +23,6 @@ const useWebSocketMenagement = ({ wsUrl, isOptionsSet }: UseWebSocketManagementP
             ws.onmessage = (event) => {
                 const parsedMessage: WebSocketMessage<WebSocketMessageData> = JSON.parse(event.data);
                 setLastMessage(parsedMessage);
-                console.log('receives msg', parsedMessage);
 
                 // only append to messages if it's not the same message
                 if (parsedMessage !== lastMessage) {
@@ -48,7 +47,6 @@ const useWebSocketMenagement = ({ wsUrl, isOptionsSet }: UseWebSocketManagementP
 
     const sendMessage = (message: WebSocketMessage<WebSocketMessageData>) => {
         if (socket && socket.readyState === WebSocket.OPEN) {
-            console.log('sent messages client', message);
             socket.send(JSON.stringify(message));
         }
     };

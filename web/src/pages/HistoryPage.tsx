@@ -94,6 +94,10 @@ const HistoryPage = () => {
 
     const count = currentType === 'typingTest' ? testsCount : racesCount;
     const totalPages = Math.ceil(count / ITEMS_PER_PAGE);
+    console.log('Fetched Data:', data);
+    console.log('Total Count:', count); // Should be 10 based on the backend query
+    console.log('Items Per Page:', ITEMS_PER_PAGE); // Should be 5
+    console.log('Total Pages:', totalPages); // Ensure correct pagination is calculated
 
     return (
         <DefaultPanel

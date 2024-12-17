@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTyping } from '../context/TypingContext';
 import { useOptions } from '../context/OptionsContext';
-import { CreateLobbyData, LobbyStatus, WebSocketMessage, WebSocketMessageData, WebSocketMessageType } from '../types';
+import { LobbyStatus, WebSocketMessage, WebSocketMessageData, WebSocketMessageType } from '../types';
 import constructWebSocketMessage from '../utils/constructWebsocktMessage';
 
 export type UseHandleWebSocketMessagesParams = {
@@ -44,13 +44,6 @@ const useHandleWebSocketMessages = ({
                 lobbySettings: { time, maxPlayerCount, text, textId, customText, textType },
                 players: [basePlayerData],
             });
-            const createLobbyMessageData = createLobbyMessage?.data as CreateLobbyData;
-            console.log(
-                createLobbyMessageData.lobbySettings.customText,
-                createLobbyMessageData.lobbySettings.text,
-                createLobbyMessageData.lobbySettings.textId,
-                createLobbyMessageData.lobbySettings.textType
-            );
 
             if (createLobbyMessage) {
                 sendMessage(createLobbyMessage);

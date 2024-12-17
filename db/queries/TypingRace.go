@@ -148,11 +148,6 @@ func GetTypingRaces(userId string, page, itemsPerPage int, dateFrom, dateTill *s
 		races = append(races, *lobby)
 	}
 
-	// handle case where requested page has no results
-	if len(races) == 0 {
-		return nil, fmt.Errorf("no races found for userId: %s", userId)
-	}
-
 	return races, nil
 }
 

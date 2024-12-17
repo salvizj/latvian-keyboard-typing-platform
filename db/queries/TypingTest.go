@@ -164,10 +164,5 @@ func GetTypingTests(userId string, page, itemsPerPage int, dateFrom, dateTill *s
 		return nil, fmt.Errorf("error iterating over rows: %w", err)
 	}
 
-	// handle case where requested page has no results
-	if len(tests) == 0 {
-		return nil, fmt.Errorf("no records available for page %d", page)
-	}
-
 	return tests, nil
 }

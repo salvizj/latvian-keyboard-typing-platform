@@ -23,17 +23,16 @@ func GetGameRecord(gameName, userId string) (int, error) {
 }
 
 func PostGameRecord(gameName, userId string, gameRecord int) error {
+	// Reuse the GetGameRecord function to get the current game record
+	existingRecord, err := GetGameRecord(gameName, userId)
+	if err != nil {
+		return fmt.Errorf("error getting existing game record: %v", err)
+	}
 
-	// check if a record already exists for the user and the game
-	var existingRecord int
-	err := db.DB.QueryRow(`
-		SELECT gamerecord FROM "GameRecords" WHERE userId = $1 AND gameName = $2
-	`, userId, gameName).Scan(&existingRecord)
-
-	// if no record exists, insert the new record
-	if err == sql.ErrNoRows {
+	// If no record exists, insert the new record
+	if existingRecord == 0 {
 		query := `
-		INSERT INTO "GameRecords" (gameName, userId,  record)
+		INSERT INTO "GameRecords" (gameName, userId, gamerecord)
 		VALUES ($1, $2, $3)
 		`
 		_, err := db.DB.Exec(query, gameName, userId, gameRecord)
@@ -41,11 +40,9 @@ func PostGameRecord(gameName, userId string, gameRecord int) error {
 			return fmt.Errorf("error inserting new game record: %v", err)
 		}
 		return nil
-	} else if err != nil {
-		return fmt.Errorf("error querying existing game record: %v", err)
 	}
 
-	// if a record exists, only update if the new record is greater
+	// If a record exists, only update if the new record is greater
 	if gameRecord > existingRecord {
 		query := `
 			UPDATE "GameRecords"

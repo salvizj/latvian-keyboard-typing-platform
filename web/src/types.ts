@@ -175,10 +175,6 @@ export type ValidationErrors = {
     maxPlayerCount?: string;
 };
 
-export enum GameOption {
-    HideWords = 'hide_words',
-}
-
 export enum HistoryTypes {
     TypingRace = 'typingRace',
     TypingTest = 'typingTest',
@@ -216,3 +212,19 @@ export type TypingTestOrRaceData =
           type: HistoryTypes.TypingRace;
           races: Lobby[];
       };
+
+export enum GameOption {
+    HideWords = 'hide_words',
+    HideLetters = 'hide_letters',
+}
+export type GameLogic = {
+    currentWord?: string;
+    currentLetter?: string;
+    handleKeyPress: (key: string) => void;
+    completionTitle: string;
+    round: number;
+    isGameOver: boolean;
+    showWord?: boolean;
+    record?: number;
+    mode: GameOption;
+};

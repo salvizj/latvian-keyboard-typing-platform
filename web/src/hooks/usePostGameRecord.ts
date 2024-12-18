@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
 import postGameRecord from '../api/postGameRecord';
-import useAuthStatus from './useAuthStatus';
 
-const usePostGameRecord = (gameOption: string | undefined, gameRecord: number, isGameOver: boolean) => {
+const usePostGameRecord = (
+    gameOption: string | undefined,
+    gameRecord: number,
+    isGameOver: boolean,
+    userId: string | null
+) => {
     const [gameRecordPostError, setGameRecordPostError] = useState<string | null>(null);
     const [gameRecordPostLoading, setGameRecordPostLoading] = useState<boolean>(false);
-    const { userId } = useAuthStatus();
-
     useEffect(() => {
         if (userId && gameOption && gameOption != '' && gameRecord !== null && isGameOver) {
             setGameRecordPostLoading(true);

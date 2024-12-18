@@ -46,7 +46,7 @@ export const OptionsProvider: React.FC<OptionsProviderProps> = ({ children }) =>
     const [customText, setCustomText] = useState<string>('');
     const [selectedText, setSelectedText] = useState<string>('');
     const [textId, setTextId] = useState<number | null>(null);
-    const [textType, setTextType] = useState<'custom' | 'poet'>('poet'); // Default to 'poet'
+    const [textType, setTextType] = useState<'custom' | 'poet'>('poet');
     const location = useLocation();
     const [prevPathname, setPrevPathname] = useState(location.pathname);
 

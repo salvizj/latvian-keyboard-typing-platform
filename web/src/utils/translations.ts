@@ -117,6 +117,7 @@ const translations: Translations = {
         enter_custom_text: 'Enter custom text.',
         choose_predefined_text: 'Choose predefined text.',
         hide_words: 'Hide words',
+        hide_letters: 'Hide letters',
         poet_text_not_available: 'Poet texts currently are not available.',
 
         // UI Actions
@@ -195,6 +196,7 @@ const translations: Translations = {
         game_over_you_held_up: 'Game over, you held up.',
         we_have_no_words_left: "We don't have any more words to give you, congratulations.",
         type_word_that_shows_above: 'Type word that shows above.',
+        game_not_found: 'Game not found',
     },
 
     lv: {
@@ -312,6 +314,7 @@ const translations: Translations = {
         custom_text: 'Pielāgots teksts',
         enter_custom_text: 'Ievadiet pielāgotu tekstu',
         hide_words: 'Paslēpt vārdus',
+        hide_letters: 'Paslēpt burtus',
         poet_text_not_available: 'Dzeju teksti pašreiz nav pieejami.',
 
         // UI Actions
@@ -385,11 +388,13 @@ const translations: Translations = {
         invalid_username_lenght_small: 'Kļūda: Nederīgs lietotājvārds. Lietotājvārds nevar būt īsāks par 3 simboliem.',
         invalid_username_lenght_large:
             'Kļūda: Nederīgs lietotājvārds. Lietotājvārds nevar būt garāks par 20 simboliem.',
+
         // Game Status Messages
         not_enough_players_to_start: 'Nav pietiekami daudz spēlētāju, lai sāktu, vajadzīgi vismaz 2 spēlētāji',
         wait_for_owner_to_start_the_race: 'Gaidi, kad istabas līderis sāks sacensības',
         game_over_you_held_up: 'Spēle beigusies! Tu izturēji',
         we_have_no_words_left: 'Mums vairs nav vārdu, ko tev iedot, apsveicu',
+        game_not_found: 'Spele nav atrasta.',
     },
 };
 

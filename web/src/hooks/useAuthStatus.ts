@@ -12,7 +12,7 @@ const useAuthStatus = () => {
             .then(({ data: { session } }) => {
                 if (session) {
                     setIsSignedIn(true);
-                    setUserId(session.user?.id || null);
+                    setUserId(session.user?.id);
                 } else {
                     setIsSignedIn(false);
                     setUserId(null);
@@ -38,7 +38,6 @@ const useAuthStatus = () => {
                 setUserId(null);
             }
         });
-
         return () => subscription.unsubscribe();
     }, []);
 

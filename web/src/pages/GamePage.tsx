@@ -1,79 +1,51 @@
-import TypinginputField from '../components/keyboard/TypingInputField';
 import translate from '../utils/translate';
 import { useLanguage } from '../context/LanguageContext';
-import Countdown from '../components/utils/Countdown';
-import CompletionScreen from '../components/utils/CompletionScreen';
-import { useNavigate, useParams } from 'react-router-dom';
-import useHideWords from '../hooks/useHideWords';
+import { useParams } from 'react-router-dom';
+import { GameOption } from '../types';
+import HideWords from '../components/games/HideWords';
+import HideLetters from '../components/games/HideLetters';
 import useGetLatvianWords from '../hooks/useGetLatvianWords';
-import usePostGameRecord from '../hooks/usePostGameRecord';
+import useAuthStatus from '../hooks/useAuthStatus';
 
 const GamePage = () => {
-    const navigate = useNavigate();
     const { language } = useLanguage();
-    const { latvianWords, latvianWordsError } = useGetLatvianWords();
-    const { gameState, handleKeyPress, completionTitle, currentWord, hasWords, isTypingFinished } =
-        useHideWords(latvianWords);
     const { gameOption } = useParams<{ gameOption: string }>();
-    const { gameRecordPostError, gameRecordPostLoading } = usePostGameRecord(
-        gameOption,
-        gameState.round,
-        gameState.isGameOver
-    );
+    const { latvianWords, latvianWordsError, latvianWordsLoading } = useGetLatvianWords();
+    const { userId } = useAuthStatus();
 
-    // early return if there's an error or no words available
-    if (latvianWordsError || !hasWords) {
-        return (
-            <div className="flex justify-center items-center h-screen">
-                <p className="text-xl text-red-500">{translate('error_game_not_available', language)}</p>
-            </div>
-        );
-    }
-
-    if (!gameRecordPostLoading && gameRecordPostError) {
-        return <p className="text-xl text-red-500">{translate(gameRecordPostError, language)}</p>;
-    }
-
-    // show completion screen if game is over or no more words
-    if (gameState.isGameOver || !currentWord) {
-        return (
-            <CompletionScreen
-                title={completionTitle}
-                showMetrics={false}
-                buttons={[
-                    {
-                        text: 'home',
-                        onClick: () => navigate('/'),
-                    },
-                    {
-                        text: 'restart',
-                        onClick: () => location.reload(),
-                    },
-                ]}
-            />
-        );
-    }
-
-    return (
-        <div className="flex flex-col justify-center items-center h-screen">
-            <div className="text-xl text-center text-color-primary p-4">
-                {translate('round', language)} {gameState.round}
-            </div>
-            <Countdown start={!gameState.isGameOver} />
-            {gameState.showTextTime > 0 && (
-                <div className="flex justify-center items-center flex-wrap bg-color-third border border-primary p-6 min-w-[44rem] max-w-[44rem] gap-1">
-                    <span className="flex flex-row justify-center items-center gap-1">
-                        <span className="text-color-typing text-2xl">{currentWord}</span>
-                    </span>
+    if (gameOption != undefined) {
+        if (![GameOption.HideLetters, GameOption.HideWords].includes(gameOption as GameOption)) {
+            return (
+                <div className="flex justify-center items-center h-screen">
+                    <p className="text-xl text-red-500">{translate('error_unsupported_game_option', language)}</p>
                 </div>
-            )}
-            <TypinginputField
-                onKeyPress={handleKeyPress}
-                isTypingFinished={isTypingFinished}
-                labelText="type_word_that_shows_above"
-            />
-        </div>
-    );
+            );
+        }
+    }
+    if (latvianWordsLoading) {
+        return <p>Loading...</p>;
+    }
+
+    if (latvianWordsError) {
+        return <p>Error loading words.</p>;
+    }
+
+    if (latvianWords.length === 0) {
+        return <p>No words available.</p>;
+    }
+
+    const renderGame = () => {
+        switch (gameOption) {
+            case GameOption.HideWords:
+                return <HideWords key={GameOption.HideWords} latvianWords={latvianWords} userId={userId} />;
+            case GameOption.HideLetters:
+                return <HideLetters key={GameOption.HideLetters} userId={userId} />;
+            default:
+                return <div className="p-4">{translate('game_not_found', language)}</div>;
+        }
+    };
+
+    return <div className="flex flex-col justify-center items-center h-screen">{renderGame()}</div>;
 };
 
 export default GamePage;

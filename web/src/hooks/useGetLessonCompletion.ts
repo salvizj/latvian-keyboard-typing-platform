@@ -13,7 +13,6 @@ const useGetLessonCompletion = (lessonIds: string) => {
             setLessonGetLoading(false);
             setLessonCompletion(null);
         }
-
         if (userId && lessonIds.length > 0) {
             setLessonGetLoading(true);
             setLessonGetError(null);

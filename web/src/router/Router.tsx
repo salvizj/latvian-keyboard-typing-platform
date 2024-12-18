@@ -19,14 +19,7 @@ const Router = () => {
     const router = createBrowserRouter(
         createRoutesFromElements(
             <Route path="/" element={<Layout />}>
-                <Route
-                    index
-                    element={
-                        <TypingProvider>
-                            <IndexPage />
-                        </TypingProvider>
-                    }
-                ></Route>
+                <Route index element={<IndexPage />}></Route>
                 <Route
                     path="/lesson/:lessonId"
                     element={
@@ -49,7 +42,7 @@ const Router = () => {
                     }
                 />
                 <Route
-                    path="/game/:gameName"
+                    path="/game/:gameOption"
                     element={
                         <TypingProvider>
                             <OptionsProvider>
@@ -79,22 +72,8 @@ const Router = () => {
                     }
                 />
 
-                <Route
-                    path="/sign-up"
-                    element={
-                        <TypingProvider>
-                            <SignUpPage />
-                        </TypingProvider>
-                    }
-                />
-                <Route
-                    path="/sign-in"
-                    element={
-                        <TypingProvider>
-                            <SignInPage />
-                        </TypingProvider>
-                    }
-                />
+                <Route path="/sign-up" element={<SignUpPage />} />
+                <Route path="/sign-in" element={<SignInPage />} />
                 {/* Protected routes */}
                 <Route
                     path="/profile"

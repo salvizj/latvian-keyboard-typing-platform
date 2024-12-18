@@ -10,8 +10,8 @@ import (
 func PostGameRecordHandler(c echo.Context) error {
 	var data struct {
 		GameName   string `json:"gameName"`
-		UserId     string `json:"userId"`
 		GameRecord int    `json:"gameRecord"`
+		UserId     string `json:"userId"`
 	}
 
 	if err := c.Bind(&data); err != nil {

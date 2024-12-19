@@ -3,6 +3,8 @@ package queries
 import (
 	"fmt"
 	"latvianKeyboardTypingPlatform/db"
+
+	"github.com/lib/pq"
 )
 
 func PostLessonCompletion(userId string, lessonId int) error {
@@ -21,17 +23,15 @@ func PostLessonCompletion(userId string, lessonId int) error {
 	return nil
 }
 
-func GetLessonCompletion(userId string, lessonIds string) (map[int]bool, error) {
-
+func GetLessonCompletion(userId string, lessonIds []int) (map[int]bool, error) {
 	query := `
-        SELECT lessonId
+        SELECT lessonid
         FROM "LessonCompletion"
-        WHERE userId = $1 AND lessonId IN (` + lessonIds + `);
+        WHERE userid = $1 AND lessonid = any($2);
     `
-
-	rows, err := db.DB.Query(query, userId)
+	rows, err := db.DB.Query(query, userId, pq.Array(lessonIds))
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("query failed: %w", err)
 	}
 	defer rows.Close()
 
@@ -39,9 +39,13 @@ func GetLessonCompletion(userId string, lessonIds string) (map[int]bool, error) 
 	for rows.Next() {
 		var lessonId int
 		if err := rows.Scan(&lessonId); err != nil {
-			return nil, err
+			return nil, fmt.Errorf("failed to scan lessonId: %w", err)
 		}
 		result[lessonId] = true
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("error reading rows: %w", err)
 	}
 
 	return result, nil

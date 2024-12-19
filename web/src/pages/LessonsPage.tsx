@@ -13,7 +13,6 @@ const LessonsPage = () => {
     const [filteredLessons, setFilteredLessons] = useState<Lesson[]>([]);
 
     const lessonIds = filteredLessons.map((lesson) => lesson.lessonId).join(',');
-
     const { lessonGetError, lessonCompletion, lessonGetLoading } = useGetLessonCompletion(lessonIds);
 
     useEffect(() => {

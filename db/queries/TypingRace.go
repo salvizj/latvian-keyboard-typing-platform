@@ -43,35 +43,35 @@ func GetTypingRaces(userId string, page, itemsPerPage int, dateFrom, dateTill *s
 	}
 
 	query := `
-    WITH RaceIds AS (
-        SELECT DISTINCT tr.typingRaceId
-        FROM "TypingRaces" tr
-        JOIN "TypingRacePlayers" trp ON tr.typingRaceId = trp.typingRaceId
-        WHERE trp.userId = $1
-        ORDER BY tr.typingRaceId DESC
-        LIMIT $2 OFFSET $3
-    )
     SELECT
-        trp.typingRacePlayerId,
-        trp.typingRaceId,
-        trp.username,
-        trp.userId,
-        trp.role,
-        trp.place,
-        trp.mistakeCount,
-        trp.wpm,
-        tr.typingRaceSettingsId,
-        TO_CHAR(tr.date, 'YYYY-MM-DD') AS date,
-        trs.textType,
-        trs.textId,
-        trs.customText,
-        trs.maxPlayerCount,
-        trs.time
-    FROM RaceIds ri
-    JOIN "TypingRaces" tr ON ri.typingRaceId = tr.typingRaceId
-    JOIN "TypingRacePlayers" trp ON tr.typingRaceId = trp.typingRaceId
-    JOIN "TypingRaceSettings" trs ON tr.typingRaceSettingsId = trs.typingRaceSettingsId
-    ORDER BY tr.typingRaceId DESC`
+    	trp.typingRacePlayerId,
+    	trp.typingRaceId,
+    	trp.username,
+    	trp.userId,
+    	trp.role,
+    	trp.place,
+    	trp.mistakeCount,
+    	trp.wpm,
+    	tr.typingRaceSettingsId,
+    	TO_CHAR(tr.date, 'YYYY-MM-DD') AS date,
+    	trs.textType,
+    	trs.textId,
+    	trs.customText,
+    	trs.maxPlayerCount,
+    	trs.time
+	FROM "TypingRaces" tr
+	JOIN "TypingRacePlayers" trp ON tr.typingRaceId = trp.typingRaceId
+	JOIN "TypingRaceSettings" trs ON tr.typingRaceSettingsId = trs.				typingRaceSettingsId
+	WHERE tr.typingRaceId IN (
+    	SELECT 
+		DISTINCT tr.typingRaceId
+    	FROM "TypingRaces" tr
+    	JOIN "TypingRacePlayers" trp ON tr.typingRaceId = trp.typingRaceId
+    	WHERE trp.userId = $1
+    	ORDER BY tr.typingRaceId DESC
+    	LIMIT $2 OFFSET $3
+	)
+	ORDER BY tr.typingRaceId DESC`
 
 	rows, err := db.DB.Query(query, userId, itemsPerPage, offset)
 	if err != nil {

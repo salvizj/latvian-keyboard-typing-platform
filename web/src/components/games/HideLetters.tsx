@@ -15,7 +15,7 @@ type HideLettersProps = {
 
 const HideLetters: React.FC<HideLettersProps> = ({ userId }) => {
     const INITIAL_TYPING_TIME = 10;
-    const LATVIAN_ALPHABET = 'aābcčdēģfģhīījķļmņņośšpēqrsšūžzAĀBCČDEĢFGHĪIJĶĻMNŅOŚŠPĒQRSŠŪŽZ';
+    const LATVIAN_ALPHABET = 'aābcčdeēfgģhiījkķlļmnņoprsštuūvzžĀBCČDEĒFGĢHIĪJKĶLĻMNŅOPRSŠTUŪVZŽ';
 
     const { gameOption } = useParams<{ gameOption: string }>();
     const { language } = useLanguage();
@@ -27,7 +27,7 @@ const HideLetters: React.FC<HideLettersProps> = ({ userId }) => {
     const [typingTime, setTypingTime] = useState(INITIAL_TYPING_TIME);
     const [round, setRound] = useState(0);
     const [isGameOver, setIsGameOver] = useState(false);
-    const [resetCountdown, setResetCountdown] = useState(false);
+    const [shouldStartTimer, setShouldStartTimer] = useState(true);
 
     const { gameRecordPostError } = usePostGameRecord(gameOption, round, isGameOver, userId);
 
@@ -37,9 +37,12 @@ const HideLetters: React.FC<HideLettersProps> = ({ userId }) => {
     }
 
     const resetRound = useCallback(() => {
-        setResetCountdown(true);
+        setShouldStartTimer(false);
         setCurrentLetter(generateRandomLetter());
         setTypingTime(INITIAL_TYPING_TIME);
+
+        // add small delay to ensure the timer restarts
+        setTimeout(() => setShouldStartTimer(true), 0);
     }, []);
 
     const handleKeyPress = useCallback(
@@ -67,7 +70,10 @@ const HideLetters: React.FC<HideLettersProps> = ({ userId }) => {
         }
     }, [isTypingFinished]);
 
-    const completionTitle = `${translate('game_over_you_held_up', language)} ${round} ${translate(round === 1 ? 'round' : 'rounds', language)}`;
+    const completionTitle = `${translate('game_over_you_held_up', language)} ${round} ${translate(
+        round === 1 ? 'round' : 'rounds',
+        language
+    )}`;
 
     if (isGameOver) {
         return (
@@ -94,12 +100,7 @@ const HideLetters: React.FC<HideLettersProps> = ({ userId }) => {
             <div className="text-xl text-center text-color-primary p-4">
                 {translate('round', language)} {round}
             </div>
-            <Countdown
-                start={!isGameOver}
-                reset={resetCountdown}
-                setReset={setResetCountdown}
-                key={resetCountdown ? 'reset' : 'start'}
-            />
+            <Countdown start={shouldStartTimer} />
             {currentLetter && (
                 <div className="flex justify-center items-center flex-wrap bg-color-third border border-primary p-6 min-w-[44rem] max-w-[44rem] gap-1">
                     <span className="flex flex-row justify-center items-center gap-1">

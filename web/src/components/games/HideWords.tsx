@@ -23,27 +23,32 @@ const HideWords: React.FC<HideWordsProps> = ({ latvianWords, userId }) => {
     const navigate = useNavigate();
     const { language } = useLanguage();
     const { setTime, timeLeft, time } = useOptions();
-    const { isTypingFinished } = useTyping();
+    const { isTypingFinished, setIsTypingFinished } = useTyping();
 
     const [currentLetterIndex, setCurrentLetterIndex] = useState(0);
     const [typingTime, setTypingTime] = useState(TYPING_TIME);
     const [round, setRound] = useState(0);
     const [showText, setShowText] = useState(true);
-
     const [showTime, setShowTime] = useState(INITIAL_SHOW_TIME);
     const [isGameOver, setIsGameOver] = useState(false);
-    const [resetCountdown, setResetCountdown] = useState(false);
+    const [shouldStartTimer, setShouldStartTimer] = useState(true);
+
     const hasWords = Array.isArray(latvianWords) && latvianWords.length > 0;
-    const [currentWord, setCurrentWord] = useState(hasWords ? latvianWords[round] : '');
+    const [currentWord, setCurrentWord] = useState(hasWords ? latvianWords[0] : '');
 
     const { gameRecordPostError } = usePostGameRecord(gameOption, round, isGameOver, userId);
 
     const resetRound = useCallback(() => {
-        setResetCountdown(true);
+        setIsTypingFinished(false);
+        setShouldStartTimer(false);
         setCurrentWord(hasWords ? latvianWords[round] : '');
+        setCurrentLetterIndex(0);
         setTypingTime(TYPING_TIME);
         setShowTime(Math.max(MIN_SHOW_TIME, Math.floor(showTime - 0.1)));
-    }, [hasWords, latvianWords, round, showTime]);
+
+        // add small delay to ensure the timer restarts
+        setTimeout(() => setShouldStartTimer(true), 0);
+    }, [hasWords, latvianWords, round, showTime, setIsTypingFinished]);
 
     const handleKeyPress = useCallback(
         (lastKeyPress: string) => {
@@ -90,7 +95,17 @@ const HideWords: React.FC<HideWordsProps> = ({ latvianWords, userId }) => {
             }
         }
     }, [showTime, timeLeft]);
-    const completionTitle = `${translate('game_over_you_held_up', language)} ${round} ${translate(round === 1 ? 'round' : 'rounds', language)}`;
+
+    // Initialize the game
+    useEffect(() => {
+        setTime(TYPING_TIME);
+        return () => setIsTypingFinished(false);
+    }, [setTime, setIsTypingFinished]);
+
+    const completionTitle = `${translate('game_over_you_held_up', language)} ${round} ${translate(
+        round === 1 ? 'round' : 'rounds',
+        language
+    )}`;
 
     if (isGameOver) {
         return (
@@ -117,7 +132,7 @@ const HideWords: React.FC<HideWordsProps> = ({ latvianWords, userId }) => {
             <div className="text-xl text-center text-color-primary p-4">
                 {translate('round', language)} {round}
             </div>
-            <Countdown start={!isGameOver} reset={resetCountdown} setReset={setResetCountdown} key={round} />
+            <Countdown start={shouldStartTimer} />
 
             {currentWord && showText && (
                 <div className="flex justify-center items-center flex-wrap bg-color-third border border-primary p-6 min-w-[44rem] max-w-[44rem] gap-1">

@@ -17,14 +17,12 @@ const useAuthStatus = () => {
                     setIsSignedIn(false);
                     setUserId(null);
                 }
+                setLoading(false);
             })
             .catch((error) => {
                 console.error('Error fetching session:', error);
                 setIsSignedIn(false);
                 setUserId(null);
-            })
-            .finally(() => {
-                setLoading(false);
             });
 
         const {

@@ -9,8 +9,8 @@ import (
 
 func PostLessonCompletionHandler(c echo.Context) error {
 	var data struct {
-		UserId         string `json:"UserID"`
-		LessonProgress int    `json:"lessonProgress"`
+		UserId   string `json:"userId"`
+		LessonId int    `json:"lessonId"`
 	}
 
 	if err := c.Bind(&data); err != nil {
@@ -19,7 +19,7 @@ func PostLessonCompletionHandler(c echo.Context) error {
 		})
 	}
 
-	err := queries.PostLessonCompletion(data.UserId, data.LessonProgress)
+	err := queries.PostLessonCompletion(data.UserId, data.LessonId)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{
 			"error": "Unable to save lesson progress. Please try again later.",

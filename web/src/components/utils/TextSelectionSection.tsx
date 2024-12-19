@@ -79,7 +79,7 @@ const TextSelectionSection: React.FC<{
                         value={selectedText}
                         onChange={(e) => {
                             setSelectedText(e.target.value);
-                            const selectedKey = e.target.options[e.target.selectedIndex].getAttribute('key');
+                            const selectedKey = e.target.options[e.target.selectedIndex].getAttribute('data-key');
                             if (selectedKey !== null) {
                                 setTextid(Number(selectedKey));
                             }
@@ -90,7 +90,7 @@ const TextSelectionSection: React.FC<{
                         </option>
                         {Array.isArray(poetTexts) &&
                             poetTexts.map((text: PoetText) => (
-                                <option key={text.poetTextId} value={text.poetTextId}>
+                                <option key={text.poetTextId} value={text.poetTextId} data-key={text.poetTextId}>
                                     {text.poetAuthor} - {text.poetFragmentName}
                                 </option>
                             ))}

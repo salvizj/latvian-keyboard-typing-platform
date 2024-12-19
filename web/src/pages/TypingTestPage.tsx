@@ -17,7 +17,6 @@ const TypingTestPage = () => {
     const { error } = usePostTypingTest();
     const navigate = useNavigate();
 
-    // show completion screen if typing is over
     if (isTypingFinished) {
         return (
             <CompletionScreen

@@ -36,6 +36,7 @@ const TypingDataDisplay: FC<TypingDataDisplayProps> = ({ data, loading, error, u
     if (error) {
         return <p className="text-red-500 mt-1 mb-1 text-sm">{translate(error, language)}</p>;
     }
+
     if (!close && selectedIndex !== null && data) {
         return (
             <div className="w-full border border-secondary-color rounded-md mt-4">

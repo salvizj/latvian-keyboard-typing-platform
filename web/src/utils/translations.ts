@@ -109,6 +109,9 @@ const translations: Translations = {
         race_count_0: 'You haven`t done any typing race.',
         settings_not_found: 'Settings not found. Please try again later.',
         lobby_id: 'Race Id',
+        poet_text: 'Poet text',
+        poet_fragments_name: 'Poets fragment name',
+        poet_author: 'Authors name',
 
         // Text Management
         select_text_option: 'Select text option.',
@@ -307,6 +310,9 @@ const translations: Translations = {
         race_count_0: 'Jums nav veiktas nevienas rakstīšanas sacensības',
         settings_not_found: 'Iestatījumi netika atrasti. Lūdzu mēģiniet vēlāk atkārtoti',
         lobby_id: 'Sacensību Id',
+        poet_text: 'Dzejnieka teksts',
+        poet_fragments_name: 'Teksta fragmenta nosaukums',
+        poet_author: 'Dzjnieka vārds',
 
         // Text Management
         select_text_option: 'Izvēlieties teksta opciju',

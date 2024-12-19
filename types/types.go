@@ -20,7 +20,7 @@ const (
 type PoetText struct {
 	PoetTextId       int    `json:"poetTextId"`
 	PoetAuthor       string `json:"poetAuthor"`
-	PoetFragmentName string `json:"poetFragment"`
+	PoetFragmentName string `json:"poetFragmentName"`
 	PoetTextContent  string `json:"poetText"`
 }
 
@@ -49,13 +49,14 @@ type Lobby struct {
 }
 
 type LobbySettings struct {
-	LobbySettingsId int     `json:"lobbySettingsId,omitempty"`
-	TextType        string  `json:"textType"`
-	TextId          *int    `json:"textId,omitempty"`
-	CustomText      *string `json:"customText,omitempty"`
-	Text            string  `json:"text"`
-	MaxPlayerCount  int     `json:"maxPlayerCount"`
-	Time            int     `json:"time"`
+	LobbySettingsId int       `json:"lobbySettingsId,omitempty"`
+	TextType        string    `json:"textType"`
+	TextId          *int      `json:"textId,omitempty"`
+	PoetText        *PoetText `json:"poetText,omitempty"`
+	CustomText      *string   `json:"customText,omitempty"`
+	Text            string    `json:"text"`
+	MaxPlayerCount  int       `json:"maxPlayerCount"`
+	Time            int       `json:"time"`
 }
 
 type Player struct {
@@ -134,11 +135,12 @@ type ErrorData struct {
 }
 
 type TypingTestSettings struct {
-	TypingTestSettingsId int     `json:"typingTestSettingsId,omitempty"`
-	TextType             string  `json:"textType"`
-	TextId               *int    `json:"textId,omitempty"`
-	CustomText           *string `json:"customText,omitempty"`
-	Time                 int     `json:"time"`
+	TypingTestSettingsId int       `json:"typingTestSettingsId,omitempty"`
+	TextType             string    `json:"textType"`
+	TextId               *int      `json:"textId,omitempty"`
+	PoetText             *PoetText `json:"poetText,omitempty"`
+	CustomText           *string   `json:"customText,omitempty"`
+	Time                 int       `json:"time"`
 }
 
 type TypingTest struct {

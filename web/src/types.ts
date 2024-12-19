@@ -83,6 +83,7 @@ export type LobbySettings = {
     lobbySettingsId?: null | number;
     textType: 'poet' | 'custom';
     textId: number | null;
+    poetText?: PoetText | null;
     customText: string | null;
     text: string;
     maxPlayerCount: number;
@@ -202,6 +203,7 @@ export type TypingTestSettings = {
     typingTestSettingsId: null | number;
     textType: 'poet' | 'custom';
     textId: number | null;
+    poetText?: PoetText | null;
     customText: string | null;
     time: number;
 };

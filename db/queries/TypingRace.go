@@ -108,6 +108,14 @@ func GetTypingRaces(userId string, page, itemsPerPage int, dateFrom, dateTill *s
 			return nil, fmt.Errorf("error scanning player row: %w", err)
 		}
 
+		if lobbySetting.TextId != nil {
+			poetText, err := GetPoetText(*lobbySetting.TextId)
+			if err != nil {
+				return nil, fmt.Errorf("error fetching poet text: %w", err)
+			}
+			lobbySetting.PoetText = &poetText
+		}
+
 		lobby, exists := lobbiesMap[raceId]
 		if !exists {
 			lobby = &types.Lobby{

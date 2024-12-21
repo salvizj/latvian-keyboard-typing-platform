@@ -18,6 +18,8 @@ const LessonLinks = ({ lessons, lessonCompletion }: LessonLinksProps) => {
                             completedAlready ? 'lesson-complete' : ''
                         }`}
                         to={`/lesson/${lesson.lessonId}`}
+                        state={{ lesson }}
+                        replace
                     >
                         {lesson.lessonId}
                     </Link>

@@ -217,7 +217,7 @@ export type TypingTestOrRaceData =
 
 export enum GameOption {
     HideWords = 'hide_words',
-    HideLetters = 'hide_letters',
+    TypeLetters = 'type_letters',
 }
 export type GameLogic = {
     currentWord?: string;

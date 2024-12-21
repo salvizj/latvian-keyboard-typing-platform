@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import getLesson from '../api/getLesson';
 import { Lesson } from '../types';
 
-const useGetLesson = () => {
+const useGetLesson = (fetch: boolean) => {
     const { lessonId } = useParams<{ lessonId: string }>();
     const [lesson, setLesson] = useState<Lesson | null>(null);
     const [lessonGetError, setLessonGetError] = useState<string | null>(null);
@@ -12,6 +12,9 @@ const useGetLesson = () => {
     useEffect(() => {
         if (!lessonId) {
             setLessonGetError('error_lesson_lessonId_not_provided');
+            return;
+        }
+        if (!fetch) {
             return;
         }
 
@@ -37,7 +40,7 @@ const useGetLesson = () => {
             .finally(() => {
                 setLessonGetLoading(false);
             });
-    }, [lessonId]);
+    }, [fetch, lessonId]);
 
     return { lesson, lessonGetError, lessonGetLoading };
 };

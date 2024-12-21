@@ -8,20 +8,21 @@ import CompletionScreen from '../utils/CompletionScreen';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useOptions } from '../../context/OptionsContext';
 import usePostGameRecord from '../../hooks/usePostGameRecord';
+import TypingTextDisplay from '../keyboard/TypingTextDisplay';
 
-type HideLettersProps = {
+type TypeLettersProps = {
     userId: string | null;
 };
 
-const HideLetters: React.FC<HideLettersProps> = ({ userId }) => {
-    const INITIAL_TYPING_TIME = 10;
+const TypeLetters: React.FC<TypeLettersProps> = ({ userId }) => {
+    const INITIAL_TYPING_TIME = 5;
     const LATVIAN_ALPHABET = 'aābcčdeēfgģhiījkķlļmnņoprsštuūvzžĀBCČDEĒFGĢHIĪJKĶLĻMNŅOPRSŠTUŪVZŽ';
 
     const { gameOption } = useParams<{ gameOption: string }>();
     const { language } = useLanguage();
     const navigate = useNavigate();
     const { isTypingFinished } = useTyping();
-    const { setTime, time } = useOptions();
+    const { setTime, time, setText } = useOptions();
 
     const [currentLetter, setCurrentLetter] = useState(() => generateRandomLetter());
     const [typingTime, setTypingTime] = useState(INITIAL_TYPING_TIME);
@@ -31,8 +32,10 @@ const HideLetters: React.FC<HideLettersProps> = ({ userId }) => {
 
     const { gameRecordPostError } = usePostGameRecord(gameOption, round, isGameOver, userId);
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     function generateRandomLetter() {
         const randomIndex = Math.floor(Math.random() * LATVIAN_ALPHABET.length);
+        setText(LATVIAN_ALPHABET[randomIndex]);
         return LATVIAN_ALPHABET[randomIndex];
     }
 
@@ -43,7 +46,7 @@ const HideLetters: React.FC<HideLettersProps> = ({ userId }) => {
 
         // add small delay to ensure the timer restarts
         setTimeout(() => setShouldStartTimer(true), 0);
-    }, []);
+    }, [generateRandomLetter]);
 
     const handleKeyPress = useCallback(
         (key: string) => {
@@ -101,13 +104,9 @@ const HideLetters: React.FC<HideLettersProps> = ({ userId }) => {
                 {translate('round', language)} {round}
             </div>
             <Countdown start={shouldStartTimer} />
-            {currentLetter && (
-                <div className="flex justify-center items-center flex-wrap bg-color-third border border-primary p-6 min-w-[44rem] max-w-[44rem] gap-1">
-                    <span className="flex flex-row justify-center items-center gap-1">
-                        <span className="text-color-typing text-2xl">{currentLetter}</span>
-                    </span>
-                </div>
-            )}
+
+            <TypingTextDisplay currentCorrectTextCharacterIndex={0} />
+
             <TypinginputField
                 onKeyPress={handleKeyPress}
                 isTypingFinished={isGameOver}
@@ -117,4 +116,4 @@ const HideLetters: React.FC<HideLettersProps> = ({ userId }) => {
     );
 };
 
-export default HideLetters;
+export default TypeLetters;

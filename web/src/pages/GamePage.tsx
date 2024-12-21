@@ -3,9 +3,9 @@ import { useLanguage } from '../context/LanguageContext';
 import { useParams } from 'react-router-dom';
 import { GameOption } from '../types';
 import HideWords from '../components/games/HideWords';
-import HideLetters from '../components/games/HideLetters';
 import useGetLatvianWords from '../hooks/useGetLatvianWords';
 import useAuthStatus from '../hooks/useAuthStatus';
+import TypeLetters from '../components/games/TypeLetters';
 
 const GamePage = () => {
     const { language } = useLanguage();
@@ -14,7 +14,7 @@ const GamePage = () => {
     const { userId } = useAuthStatus();
 
     if (gameOption != undefined) {
-        if (![GameOption.HideLetters, GameOption.HideWords].includes(gameOption as GameOption)) {
+        if (![GameOption.TypeLetters, GameOption.HideWords].includes(gameOption as GameOption)) {
             return (
                 <div className="flex justify-center items-center h-screen">
                     <p className="text-xl text-red-500">{translate('error_unsupported_game_option', language)}</p>
@@ -38,8 +38,8 @@ const GamePage = () => {
         switch (gameOption) {
             case GameOption.HideWords:
                 return <HideWords key={GameOption.HideWords} latvianWords={latvianWords} userId={userId} />;
-            case GameOption.HideLetters:
-                return <HideLetters key={GameOption.HideLetters} userId={userId} />;
+            case GameOption.TypeLetters:
+                return <TypeLetters key={GameOption.TypeLetters} userId={userId} />;
             default:
                 return <div className="p-4">{translate('game_not_found', language)}</div>;
         }

@@ -8,6 +8,7 @@ import CompletionScreen from '../utils/CompletionScreen';
 import Countdown from '../utils/Countdown';
 import TypinginputField from '../keyboard/TypingInputField';
 import usePostGameRecord from '../../hooks/usePostGameRecord';
+import TypingTextDisplay from '../keyboard/TypingTextDisplay';
 
 type HideWordsProps = {
     latvianWords: string[];
@@ -22,7 +23,7 @@ const HideWords: React.FC<HideWordsProps> = ({ latvianWords, userId }) => {
     const { gameOption } = useParams<{ gameOption: string }>();
     const navigate = useNavigate();
     const { language } = useLanguage();
-    const { setTime, timeLeft, time } = useOptions();
+    const { setTime, timeLeft, time, setText } = useOptions();
     const { isTypingFinished, setIsTypingFinished } = useTyping();
 
     const [currentLetterIndex, setCurrentLetterIndex] = useState(0);
@@ -45,10 +46,11 @@ const HideWords: React.FC<HideWordsProps> = ({ latvianWords, userId }) => {
         setCurrentLetterIndex(0);
         setTypingTime(TYPING_TIME);
         setShowTime(Math.max(MIN_SHOW_TIME, Math.floor(showTime - 0.1)));
+        setText(currentWord);
 
         // add small delay to ensure the timer restarts
         setTimeout(() => setShouldStartTimer(true), 0);
-    }, [hasWords, latvianWords, round, showTime, setIsTypingFinished]);
+    }, [setIsTypingFinished, hasWords, latvianWords, round, showTime, setText, currentWord]);
 
     const handleKeyPress = useCallback(
         (lastKeyPress: string) => {
@@ -99,8 +101,9 @@ const HideWords: React.FC<HideWordsProps> = ({ latvianWords, userId }) => {
     // Initialize the game
     useEffect(() => {
         setTime(TYPING_TIME);
+        setText(currentWord);
         return () => setIsTypingFinished(false);
-    }, [setTime, setIsTypingFinished]);
+    }, [setTime, setIsTypingFinished, setText, currentWord]);
 
     const completionTitle = `${translate('game_over_you_held_up', language)} ${round} ${translate(
         round === 1 ? 'round' : 'rounds',
@@ -134,13 +137,7 @@ const HideWords: React.FC<HideWordsProps> = ({ latvianWords, userId }) => {
             </div>
             <Countdown start={shouldStartTimer} />
 
-            {currentWord && showText && (
-                <div className="flex justify-center items-center flex-wrap bg-color-third border border-primary p-6 min-w-[44rem] max-w-[44rem] gap-1">
-                    <span className="flex flex-row justify-center items-center gap-1">
-                        <span className="text-color-typing text-2xl">{currentWord}</span>
-                    </span>
-                </div>
-            )}
+            {currentWord && showText && <TypingTextDisplay currentCorrectTextCharacterIndex={currentLetterIndex} />}
 
             <TypinginputField
                 onKeyPress={handleKeyPress}

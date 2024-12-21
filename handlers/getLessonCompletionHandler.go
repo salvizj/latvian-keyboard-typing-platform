@@ -32,8 +32,6 @@ func GetLessonCompletionHandler(c echo.Context) error {
 		lessonIds = append(lessonIds, lessonId)
 	}
 
-	fmt.Println("Parsed lessonIds:", lessonIds)
-
 	lessonCompletion, err := queries.GetLessonCompletion(userId, lessonIds)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{

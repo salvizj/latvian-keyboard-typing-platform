@@ -33,7 +33,7 @@ const Layout = () => {
 
     return (
         <div className="flex h-full w-full">
-            <main className={`transition-all ${isMinimized || isSmallScreen ? 'w-[95%]' : 'w-[85%]'} overflow-hidden`}>
+            <main className={`transition-all ${isMinimized || isSmallScreen ? 'w-[95%]' : 'w-[85%]'} `}>
                 <Outlet />
             </main>
             <aside

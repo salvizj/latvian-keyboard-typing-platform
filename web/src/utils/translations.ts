@@ -120,7 +120,7 @@ const translations: Translations = {
         enter_custom_text: 'Enter custom text.',
         choose_predefined_text: 'Choose predefined text.',
         hide_words: 'Hide words',
-        hide_letters: 'Hide letters',
+        type_letters: 'Type letters',
         poet_text_not_available: 'Poet texts currently are not available.',
 
         // UI Actions
@@ -320,7 +320,7 @@ const translations: Translations = {
         custom_text: 'Pielāgots teksts',
         enter_custom_text: 'Ievadiet pielāgotu tekstu',
         hide_words: 'Paslēpt vārdus',
-        hide_letters: 'Paslēpt burtus',
+        type_letters: 'Rakstīt burtus',
         poet_text_not_available: 'Dzeju teksti pašreiz nav pieejami.',
 
         // UI Actions

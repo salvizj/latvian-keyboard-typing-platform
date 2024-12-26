@@ -41,6 +41,7 @@ const TypingRacePage = () => {
     const [lobbyStatus, setLobbyStatus] = useState<LobbyStatus>(LobbyStatus.Waiting);
     const [playerData, setPlayerData] = useState<Player[] | null>(null);
     const userIdOrNull = userId ? userId : null;
+    const [validLobby, setValidLobby] = useState<null | boolean>(null);
 
     // connects to ws
     const { lastMessage, messages, sendMessage, isSocketOpen } = useWebSocketMenagement({
@@ -67,10 +68,19 @@ const TypingRacePage = () => {
     useEffect(() => {
         if (!lastMessage) return;
 
+        if (lastMessage.type === WebSocketMessageType.Error) {
+            const error = lastMessage.data as { error: string };
+
+            if (error.error === 'lobby with ID ' + lobbyId + ' does not exist') {
+                setValidLobby(false);
+            }
+        }
+
         if (lastMessage.type === WebSocketMessageType.CreateLobby) {
             const data = lastMessage.data as CreateLobbyData;
             setLobbyId(lastMessage.lobbyId);
             setPlayerData(data.players);
+            setValidLobby(true);
             if (data.players[0].playerId) setPlayerId(data.players[0].playerId);
         }
 
@@ -80,6 +90,7 @@ const TypingRacePage = () => {
             setText(data.lobbySettings.text);
             setTime(data.lobbySettings.time);
             setPlayerData(data.players);
+            setValidLobby(true);
             const currentPlayer = data.players.find((player) => player.username === username);
             if (currentPlayer && currentPlayer.playerId) setPlayerId(currentPlayer.playerId);
         }
@@ -116,19 +127,19 @@ const TypingRacePage = () => {
             />
         );
     }
-
-    if (!isOptionsSet && lobbyStatus === LobbyStatus.Waiting) {
+    if ((!isOptionsSet || !validLobby) && lobbyStatus === LobbyStatus.Waiting) {
         return (
             <OptionBox
                 title="typing_race"
                 setIsOptionsSet={setIsOptionsSet}
                 startText="go_to_type_racing_lobby"
                 isRace={isRace}
+                validLobby={validLobby}
             />
         );
     }
 
-    if (lobbyStatus === LobbyStatus.Waiting && isOptionsSet) {
+    if (lobbyStatus === LobbyStatus.Waiting && isOptionsSet && validLobby) {
         return (
             <Lobby
                 playerData={playerData}

@@ -143,6 +143,7 @@ const translations: Translations = {
         latvian_keyboard_typing_Platform: 'Latvian keyboard typing platform.',
 
         // Error Messages
+        error_lobby_doesent_exist: 'Error: This lobby doesn`t exist.',
         error_missing_fields: 'Error: Please fill in all the required fields.',
         error_missing_email: 'Error: Email is required. Please enter a valid email address.',
         error_missing_password: 'Error: Password is required. Please enter a password.',
@@ -341,6 +342,7 @@ const translations: Translations = {
         most_recent_completed_lesson: 'Pēdējā pabeigtā nodarbība:',
 
         // Error Messages
+        error_lobby_doesent_exist: 'Kļūda, šāda istaba nepastāv',
         error_missing_fields: 'Kļūda: Lūdzu, aizpildiet visus obligātos laukus',
         error_missing_email: 'Kļūda: E-pasts ir obligāts. Lūdzu, ievadiet e-pasta adresi',
         error_missing_password: 'Kļūda: Parole ir obligāta. Lūdzu, ievadiet paroli',

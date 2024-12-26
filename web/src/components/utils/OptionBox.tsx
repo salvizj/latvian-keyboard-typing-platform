@@ -14,9 +14,10 @@ type OptionBoxProps = {
     title: string;
     setIsOptionsSet: (isOptionsSet: boolean) => void;
     startText: string;
+    validLobby?: boolean | null;
 };
 
-const OptionBox: React.FC<OptionBoxProps> = ({ title, startText, setIsOptionsSet, isRace }) => {
+const OptionBox: React.FC<OptionBoxProps> = ({ title, startText, setIsOptionsSet, isRace, validLobby }) => {
     const {
         setText,
         time,
@@ -65,7 +66,6 @@ const OptionBox: React.FC<OptionBoxProps> = ({ title, startText, setIsOptionsSet
             setShowErrors(true);
         }
     };
-
     return (
         <DefaultPanel>
             <h1 className="text-3xl font-bold mb-8 text-center">{translate(title, language)}</h1>
@@ -136,6 +136,9 @@ const OptionBox: React.FC<OptionBoxProps> = ({ title, startText, setIsOptionsSet
                         <p className="text-red-500 text-sm mb-4">{validationErrors.selectedText}</p>
                     )}
                 </>
+            )}
+            {!validLobby && validLobby != null && (
+                <p className="text-red-500 text-sm mb-4">{translate('error_lobby_doesent_exist', language)}</p>
             )}
 
             <button

@@ -62,7 +62,7 @@ export const OptionsProvider: React.FC<OptionsProviderProps> = ({ children }) =>
             setIsCustomText(false);
             setCustomText('');
             setSelectedText('');
-            setTextType('poet'); // Reset to default if required
+            setTextType('poet'); // reset to default if required
             setPrevPathname(location.pathname);
         }
     }, [location.pathname, prevPathname]);

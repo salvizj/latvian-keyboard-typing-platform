@@ -31,12 +31,12 @@ const Dashboard = ({ isMinimized }: DashboardProps) => {
             <div
                 className={`flex flex-col justify-center items-center w-full h-full z-10 relative ${isMinimized ? 'pt-20' : ''}`}
             >
-                {!isMinimized && (
-                    <div className="px-4 py-6 border-b border-gray-700 flex flex-row gap-2 justify-center w-full">
-                        <LanguageToggleButton />
-                        <ThemeToggleButton />
-                    </div>
-                )}
+                <div
+                    className={`px-4 py-6 border-b border-gray-700 flex gap-2 justify-center w-full ${isMinimized ? 'flex-col mr-' : 'flex-row'}`}
+                >
+                    <LanguageToggleButton />
+                    <ThemeToggleButton />
+                </div>
                 <div
                     className={`flex flex-1 flex-col mt-4 gap-2 ${isMinimized ? 'w-full items-center' : 'w-1/2 items-start'}`}
                 >

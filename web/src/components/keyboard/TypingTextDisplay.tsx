@@ -12,7 +12,7 @@ const TypingTextDisplay: React.FC<TextDisplayProps> = ({ currentCorrectTextChara
     const displayText = text.slice(startIndex, startIndex + 120).replace(/ /g, '·');
 
     return (
-        <div className="flex justify-center items-center flex-wrap bg-color-third border border-primary p-6 min-w-[46rem] max-w-[46rem] gap-1 overflow-hidden whitespace-normal break-words max-h-[200px]">
+        <div className="flex justify-center items-center flex-wrap bg-color-third border border-primary p-6 w-[46rem] gap-1 overflow-hidden whitespace-normal break-words h-[100px]">
             {displayText.split('').map(
                 (letter, index) =>
                     startIndex + index >= currentChunk * 120 && (

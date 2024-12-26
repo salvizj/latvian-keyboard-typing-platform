@@ -62,7 +62,7 @@ const ProfilePage = () => {
                     </p>
 
                     {editMode && (
-                        <form className="flex flex-col gap-2 my-2" onSubmit={handleEditSubmit}>
+                        <form className="flex flex-col gap-2 my-2" onSubmit={handleEditSubmit} noValidate>
                             <input
                                 type="email"
                                 placeholder={translate('email', language)}

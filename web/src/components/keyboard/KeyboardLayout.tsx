@@ -32,7 +32,7 @@ const KeyboardLayout: React.FC<KeyboardLayoutProps> = ({ expectedCharacterKeyObj
     }
 
     return (
-        <div className=" flex flex-col items-center justify-center gap-2 p-6 bg-color-third rounded-md max-w-[46rem] min-w-[46rem] max-h-full mx-4">
+        <div className=" flex flex-col items-center justify-center gap-2 p-6 bg-color-third rounded-md w-[46rem]">
             {layout.map((keyObjRow, rowIndex) => (
                 <div key={`row-${rowIndex}`} className="flex gap-2 justify-center">
                     {keyObjRow.map((keyObj: KeyObj) => (

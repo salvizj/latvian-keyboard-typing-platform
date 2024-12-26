@@ -12,7 +12,6 @@ func InitialRoutes(e *echo.Echo) error {
 
 	e.POST("/api/post-typing-test", handlers.PostTypingTestHandler)
 	e.POST("/api/post-lesson-completion", handlers.PostLessonCompletionHandler)
-	e.POST("/api/post-user-id", handlers.PostUseridHandler)
 	e.POST("/api/post-game-record", handlers.PostGameRecordHandler)
 
 	e.GET("/api/get-game-record", handlers.GetGameRecordHandler)

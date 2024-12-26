@@ -12,6 +12,16 @@ type Table struct {
 
 var tables = []Table{
 	{
+		name: "Users",
+		query: `
+			CREATE TABLE IF NOT EXISTS "Users" (
+				userId UUID PRIMARY KEY,
+				email TEXT NOT NULL,
+				encriptedPassword TEXT NOT NULL
+			);
+		`,
+	},
+	{
 		name: "PoetTexts",
 		query: `
 			CREATE TABLE IF NOT EXISTS "PoetTexts" (
@@ -19,15 +29,6 @@ var tables = []Table{
 				poetAuthor TEXT NOT NULL,
 				poetFragmentName TEXT NOT NULL,
 				poetTextContent TEXT NOT NULL
-			);
-		`,
-	},
-
-	{
-		name: "Users",
-		query: `
-			CREATE TABLE IF NOT EXISTS "Users" (
-				userId UUID PRIMARY KEY
 			);
 		`,
 	},
@@ -83,7 +84,7 @@ var tables = []Table{
 				mistakeCount INTEGER NOT NULL,
 				date DATE NOT NULL,
 				FOREIGN KEY (typingTestSettingsId) REFERENCES "TypingTestSettings"(typingTestSettingsId),
-				FOREIGN KEY (userId) REFERENCES "Users"(userId)
+				FOREIGN KEY (userId) REFERENCES "Users"(userId) ON DELETE CASCADE
 			);
 		`,
 	},
@@ -126,7 +127,7 @@ var tables = []Table{
 				mistakeCount INTEGER NOT NULL,
 				wpm INTEGER NOT NULL,
 				FOREIGN KEY (typingRaceId) REFERENCES "TypingRaces"(typingRaceId),
-				FOREIGN KEY (userId) REFERENCES "Users"(userId) 
+				FOREIGN KEY (userId) REFERENCES "Users"(userId) ON DELETE CASCADE
 			);
 		`,
 	},
@@ -139,7 +140,7 @@ var tables = []Table{
 				gameName TEXT NOT NULL,
 				gameRecord INTEGER NOT NULL,
 				userId UUID NOT NULL,
-				FOREIGN KEY (userId) REFERENCES "Users"(userId)
+				FOREIGN KEY (userId) REFERENCES "Users"(userId) ON DELETE CASCADE
 			);
 		`,
 	},

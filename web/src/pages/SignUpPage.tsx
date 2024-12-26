@@ -5,7 +5,6 @@ import translate from '../utils/translate';
 import { useLanguage } from '../context/LanguageContext';
 import { useNavigate } from 'react-router-dom';
 import { validateSignnOut } from '../utils/validateSignInnOut';
-import postUserId from '../api/postUserId';
 
 const SignUpPage = () => {
     const { language } = useLanguage();
@@ -24,7 +23,7 @@ const SignUpPage = () => {
             return;
         }
 
-        const { data, error } = await supabase.auth.signUp({ email, password });
+        const { error } = await supabase.auth.signUp({ email, password });
         if (error) {
             // map Supabase error messages to translation keys
             const customErrorKeys: { [key: string]: string } = {
@@ -33,12 +32,8 @@ const SignUpPage = () => {
 
             const errorKey = customErrorKeys[error.message] || 'error_unexpected';
             setError(translate(errorKey, language));
-        } else if (data.user?.id) {
-            postUserId(data.user?.id)
-                .then(() => navigate('/'))
-                .catch(() => {
-                    setError(translate('error_post_user_id', language));
-                });
+        } else {
+            navigate('/');
         }
     };
 

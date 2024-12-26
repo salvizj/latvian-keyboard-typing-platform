@@ -22,23 +22,33 @@ const Keyboard = () => {
 
     return (
         <>
-            <div className="flex justify-center flex-col items-center max-h-screen">
+            <div className="flex flex-col items-center justify-center sm:px-4 lg:px-8">
                 {!isTypingFinished && (
                     <>
                         <TypingTextDisplay currentCorrectTextCharacterIndex={currentCharacterIndex} />
                         <TypingInputField onKeyPress={manageKeyPress} isTypingFinished={isTypingFinished} />
 
-                        <div className="flex items-center justify-between">
-                            {showHands && <LeftHandVisualization handFingerInfo={handFingerInfoObj} />}
-
-                            {showKeyboardLayout && (
-                                <KeyboardLayout
-                                    expectedCharacterKeyObj={expectedCharacterKeyObj}
-                                    expectedCharacter={expectedCharacter}
-                                />
+                        <div className="flex flex-wrap items-center justify-center lg:flex-row">
+                            {showHands && (
+                                <div className="hidden xl:flex justify-center xl:mr-4">
+                                    <LeftHandVisualization handFingerInfo={handFingerInfoObj} />
+                                </div>
                             )}
 
-                            {showHands && <RightHandVisualization handFingerInfo={handFingerInfoObj} />}
+                            {showKeyboardLayout && (
+                                <div className="flex justify-center xl:mx-4">
+                                    <KeyboardLayout
+                                        expectedCharacterKeyObj={expectedCharacterKeyObj}
+                                        expectedCharacter={expectedCharacter}
+                                    />
+                                </div>
+                            )}
+
+                            {showHands && (
+                                <div className="hidden xl:flex justify-center xl:ml-4">
+                                    <RightHandVisualization handFingerInfo={handFingerInfoObj} />
+                                </div>
+                            )}
                         </div>
                     </>
                 )}

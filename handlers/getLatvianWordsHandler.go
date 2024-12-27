@@ -7,6 +7,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// GetLatvinWordsHandler handles getting latvian words
 func GetLatvinWordsHandler(c echo.Context) error {
 	latvinaWords, err := queries.GetLatvianWords()
 	if err != nil {

@@ -9,6 +9,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// StartServer to start server
 func StartServer() {
 	// load environment variables from .env
 	if err := godotenv.Load(".env"); err != nil {

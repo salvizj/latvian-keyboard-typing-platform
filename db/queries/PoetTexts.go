@@ -7,6 +7,7 @@ import (
 	"log"
 )
 
+// GetPoetTexts gets all poet text objects
 func GetPoetTexts() ([]types.PoetText, error) {
 	query := `SELECT poetTextId, poetAuthor, poetfragmentName, poetTextContent FROM "PoetTexts"`
 
@@ -21,7 +22,7 @@ func GetPoetTexts() ([]types.PoetText, error) {
 
 	for rows.Next() {
 		var poetText types.PoetText
-		if err := rows.Scan(&poetText.PoetTextId, &poetText.PoetAuthor, &poetText.PoetFragmentName, &poetText.PoetTextContent); err != nil {
+		if err := rows.Scan(&poetText.PoetTextID, &poetText.PoetAuthor, &poetText.PoetFragmentName, &poetText.PoetTextContent); err != nil {
 			log.Println("Error scanning poet text:", err)
 			return nil, err
 		}
@@ -36,14 +37,15 @@ func GetPoetTexts() ([]types.PoetText, error) {
 	return poetTexts, nil
 }
 
-func GetPoetText(poetTextId int) (types.PoetText, error) {
+// GetPoetText gets a single poet text object based on postTextID
+func GetPoetText(poetTextID int) (types.PoetText, error) {
 	query := `SELECT poetTextId, poetAuthor, poetFragmentName, poetTextContent FROM "PoetTexts" WHERE poetTextId = $1`
 
 	var poetText types.PoetText
 
-	row := db.DB.QueryRow(query, poetTextId)
+	row := db.DB.QueryRow(query, poetTextID)
 
-	if err := row.Scan(&poetText.PoetTextId, &poetText.PoetAuthor, &poetText.PoetFragmentName, &poetText.PoetTextContent); err != nil {
+	if err := row.Scan(&poetText.PoetTextID, &poetText.PoetAuthor, &poetText.PoetFragmentName, &poetText.PoetTextContent); err != nil {
 		if err == sql.ErrNoRows {
 			return types.PoetText{}, nil
 		}

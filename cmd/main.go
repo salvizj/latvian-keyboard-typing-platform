@@ -12,9 +12,9 @@ func main() {
 
 	db.CreateTables()
 
-	seed.SeedLessons()
-	seed.SeedLatvianWords()
-	seed.SeedPoetTexts()
+	seed.Lessons()
+	seed.LatvianWords()
+	seed.PoetTexts()
 
 	server.StartServer()
 }

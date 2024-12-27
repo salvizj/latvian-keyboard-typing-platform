@@ -17,6 +17,7 @@ var upgrader = websocket.Upgrader{
 	},
 }
 
+// WsHandler handles webscoket connections
 func WsHandler(c echo.Context, manager *managers.LobbyManager) error {
 	ws, err := upgrader.Upgrade(c.Response(), c.Request(), nil)
 	if err != nil {
@@ -59,7 +60,7 @@ func WsHandler(c echo.Context, manager *managers.LobbyManager) error {
 			log.Printf("Error handling message: %v", handlerErr)
 			lobbyID := ""
 			if response != nil {
-				lobbyID = response.LobbyId
+				lobbyID = response.LobbyID
 			}
 
 			if err := manager.HandleError(ws, handlerErr, lobbyID); err != nil {

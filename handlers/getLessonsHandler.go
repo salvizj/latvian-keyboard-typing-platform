@@ -8,6 +8,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// GetLessonsHandler handles getting lessons
 func GetLessonsHandler(c echo.Context) error {
 	lessons, err := queries.GetLessons()
 

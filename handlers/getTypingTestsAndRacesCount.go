@@ -8,12 +8,13 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// GetTypingTestsAndRacesCountHandler handles getting tests and races count
 func GetTypingTestsAndRacesCountHandler(c echo.Context) error {
-	userId := c.QueryParam("userId")
+	userID := c.QueryParam("userId")
 	dateFromStr := c.QueryParam("dateFrom")
 	dateTillStr := c.QueryParam("dateTill")
 
-	if userId == "" {
+	if userID == "" {
 		return c.JSON(http.StatusBadRequest, map[string]string{
 			"error": "User ID is required",
 		})
@@ -27,7 +28,7 @@ func GetTypingTestsAndRacesCountHandler(c echo.Context) error {
 		dateTill = &dateTillStr
 	}
 
-	testsCount, err := queries.GetTypingTestsCount(userId, dateFrom, dateTill)
+	testsCount, err := queries.GetTypingTestsCount(userID, dateFrom, dateTill)
 	if err != nil {
 		log.Println("Error getting typing test count:", err)
 		return c.JSON(http.StatusInternalServerError, map[string]string{
@@ -35,7 +36,7 @@ func GetTypingTestsAndRacesCountHandler(c echo.Context) error {
 		})
 	}
 
-	racesCount, err := queries.GetTypingRacesCount(userId, dateFrom, dateTill)
+	racesCount, err := queries.GetTypingRacesCount(userID, dateFrom, dateTill)
 	if err != nil {
 		log.Println("Error getting typing race count:", err)
 		return c.JSON(http.StatusInternalServerError, map[string]string{

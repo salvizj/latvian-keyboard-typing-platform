@@ -7,15 +7,16 @@ import (
 	"latvianKeyboardTypingPlatform/types"
 )
 
-func GetLesson(lessonId int) (*types.Lesson, error) {
+// GetLesson gets lesson object based on lessonID
+func GetLesson(lessonID int) (*types.Lesson, error) {
 	query := `SELECT lessonId, lessonText, lessonDifficulty FROM "Lessons" WHERE lessonId = $1`
 
 	var lesson types.Lesson
 
-	err := db.DB.QueryRow(query, lessonId).Scan(&lesson.LessonId, &lesson.LessonText, &lesson.LessonDifficulty)
+	err := db.DB.QueryRow(query, lessonID).Scan(&lesson.LessonID, &lesson.LessonText, &lesson.LessonDifficulty)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return nil, fmt.Errorf("no lesson found with lessonId %d", lessonId)
+			return nil, fmt.Errorf("no lesson found with lessonId %d", lessonID)
 		}
 		return nil, fmt.Errorf("error fetching lesson: %v", err)
 	}
@@ -23,6 +24,7 @@ func GetLesson(lessonId int) (*types.Lesson, error) {
 	return &lesson, nil
 }
 
+// GetLessons gets all lesson objects
 func GetLessons() ([]types.Lesson, error) {
 	query := `SELECT lessonId, lessonText, lessonDifficulty FROM "Lessons" ORDER BY lessonId ASC`
 
@@ -36,7 +38,7 @@ func GetLessons() ([]types.Lesson, error) {
 
 	for rows.Next() {
 		var lesson types.Lesson
-		if err := rows.Scan(&lesson.LessonId, &lesson.LessonText, &lesson.LessonDifficulty); err != nil {
+		if err := rows.Scan(&lesson.LessonID, &lesson.LessonText, &lesson.LessonDifficulty); err != nil {
 			return nil, fmt.Errorf("error scanning lesson row: %v", err)
 		}
 		lessons = append(lessons, lesson)

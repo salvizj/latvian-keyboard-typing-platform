@@ -5,6 +5,7 @@ import (
 	"os"
 )
 
+// Table struct for making tables
 type Table struct {
 	name  string
 	query string
@@ -178,6 +179,7 @@ func createTable(tableName, tableQuery string) {
 	}
 }
 
+// CreateTables makes tables if they don`t exist
 func CreateTables() {
 	for _, table := range tables {
 		if tableExists(table.name) {

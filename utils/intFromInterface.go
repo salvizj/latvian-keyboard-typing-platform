@@ -4,6 +4,7 @@ import (
 	"strconv"
 )
 
+// IntFromInterface returns an int from interface
 func IntFromInterface(value interface{}) (int, bool) {
 	switch v := value.(type) {
 	case int:

@@ -9,6 +9,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// PostTypingTestHandler handles inserting typing tests
 func PostTypingTestHandler(c echo.Context) error {
 	var data struct {
 		TypingTest         types.TypingTest         `json:"typingTest"`

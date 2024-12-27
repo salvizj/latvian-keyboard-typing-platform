@@ -13,6 +13,7 @@ import (
 	"github.com/gorilla/websocket"
 )
 
+// LobbyManager manages multiple lobbies, handling concurrency and tracking lobby states, connections, and remaining time.
 type LobbyManager struct {
 	globalMu    sync.RWMutex
 	Lobbies     map[string]*types.LobbyWithLock
@@ -20,6 +21,7 @@ type LobbyManager struct {
 	TimeLeft    map[string]int
 }
 
+// NewLobbyManager initialize function to make LobbyManager
 func NewLobbyManager() *LobbyManager {
 	return &LobbyManager{
 		Lobbies:     make(map[string]*types.LobbyWithLock),
@@ -28,10 +30,11 @@ func NewLobbyManager() *LobbyManager {
 	}
 }
 
+// HandleError handles websocket errors
 func (lm *LobbyManager) HandleError(ws *websocket.Conn, err error, lobbyID string) error {
 	errorMsg := types.WebSocketMessage{
 		Type:    types.Error,
-		LobbyId: lobbyID,
+		LobbyID: lobbyID,
 		Data: map[string]interface{}{
 			"error": err.Error(),
 		},
@@ -45,6 +48,7 @@ func (lm *LobbyManager) HandleError(ws *websocket.Conn, err error, lobbyID strin
 	return nil
 }
 
+// HandleConnectionClose closes closed connection and removes lobbies and connections if empty
 func (lm *LobbyManager) HandleConnectionClose(ws *websocket.Conn) {
 	lm.globalMu.Lock()
 	defer lm.globalMu.Unlock()
@@ -66,8 +70,9 @@ func (lm *LobbyManager) HandleConnectionClose(ws *websocket.Conn) {
 	}
 }
 
+// Broadcast brodcasts websocket messages to all players in lobby
 func (lm *LobbyManager) Broadcast(msg *types.WebSocketMessage) error {
-	conns, exists := lm.Connections[msg.LobbyId]
+	conns, exists := lm.Connections[msg.LobbyID]
 	if !exists {
 		return nil
 	}
@@ -81,13 +86,14 @@ func (lm *LobbyManager) Broadcast(msg *types.WebSocketMessage) error {
 	return nil
 }
 
+// HandleCreateLobby function to handle lobby creation
 func (lm *LobbyManager) HandleCreateLobby(message types.WebSocketMessage, conn *websocket.Conn) (*types.WebSocketMessage, error) {
 
-	var lobbyId string
+	var lobbyID string
 	for {
-		lobbyId = uuid.New().String()
+		lobbyID = uuid.New().String()
 		lm.globalMu.RLock()
-		if _, exists := lm.Lobbies[lobbyId]; !exists {
+		if _, exists := lm.Lobbies[lobbyID]; !exists {
 			lm.globalMu.RUnlock()
 			break
 		}
@@ -125,12 +131,12 @@ func (lm *LobbyManager) HandleCreateLobby(message types.WebSocketMessage, conn *
 		customText = nil
 	}
 
-	var textId *int
-	if textIdFloat, ok := lobbySettingsRaw["textid"].(float64); ok {
-		textIdValue := int(textIdFloat)
-		textId = &textIdValue
+	var textID *int
+	if textIDFloat, ok := lobbySettingsRaw["textid"].(float64); ok {
+		textIDValue := int(textIDFloat)
+		textID = &textIDValue
 	} else {
-		textId = nil
+		textID = nil
 	}
 
 	timeFloat, ok := lobbySettingsRaw["time"].(float64)
@@ -159,16 +165,16 @@ func (lm *LobbyManager) HandleCreateLobby(message types.WebSocketMessage, conn *
 	if !ok {
 		return nil, fmt.Errorf("username is required and should be a string")
 	}
-	var userId *string
+	var userID *string
 	if val, ok := playerData["userId"].(string); ok {
-		userId = &val
+		userID = &val
 	} else {
-		userId = nil
+		userID = nil
 	}
 	owner := types.Player{
-		PlayerId:     uuid.NewString(),
+		PlayerID:     uuid.NewString(),
 		Username:     username,
-		UserId:       userId,
+		UserID:       userID,
 		Role:         types.PlayerRoleLeader,
 		Place:        0,
 		MistakeCount: 0,
@@ -176,7 +182,7 @@ func (lm *LobbyManager) HandleCreateLobby(message types.WebSocketMessage, conn *
 	}
 
 	lobby := &types.LobbyWithLock{
-		LobbyId:     lobbyId,
+		LobbyID:     lobbyID,
 		Players:     []types.Player{owner},
 		LobbyStatus: types.LobbyStatusWaiting,
 		LobbySettings: types.LobbySettings{
@@ -185,7 +191,7 @@ func (lm *LobbyManager) HandleCreateLobby(message types.WebSocketMessage, conn *
 			Time:           time,
 			MaxPlayerCount: maxPlayerCount,
 			CustomText:     customText,
-			TextId:         textId,
+			TextID:         textID,
 		},
 	}
 	if lm.Lobbies == nil {
@@ -193,18 +199,18 @@ func (lm *LobbyManager) HandleCreateLobby(message types.WebSocketMessage, conn *
 	}
 
 	lm.globalMu.Lock()
-	lm.Lobbies[lobbyId] = lobby
+	lm.Lobbies[lobbyID] = lobby
 
 	if lm.Connections == nil {
 		lm.Connections = make(map[string][]*websocket.Conn)
 	}
 
-	lm.Connections[lobbyId] = []*websocket.Conn{conn}
+	lm.Connections[lobbyID] = []*websocket.Conn{conn}
 	lm.globalMu.Unlock()
 
 	broadcastMessage := &types.WebSocketMessage{
 		Type:    types.CreateLobby,
-		LobbyId: lobby.LobbyId,
+		LobbyID: lobby.LobbyID,
 		Data: types.CreateLobbyData{
 			LobbySettings: lobby.LobbySettings,
 			Players:       lobby.Players,
@@ -218,26 +224,27 @@ func (lm *LobbyManager) HandleCreateLobby(message types.WebSocketMessage, conn *
 	return broadcastMessage, nil
 }
 
+// HandleJoinLobby handles lobby joining
 func (lm *LobbyManager) HandleJoinLobby(message types.WebSocketMessage, conn *websocket.Conn) (*types.WebSocketMessage, error) {
 
-	if message.LobbyId == "" {
+	if message.LobbyID == "" {
 		return nil, fmt.Errorf("lobby ID is required")
 	}
 
-	lobbyId := message.LobbyId
+	lobbyID := message.LobbyID
 
 	lm.globalMu.RLock()
-	lobby, exists := lm.Lobbies[lobbyId]
+	lobby, exists := lm.Lobbies[lobbyID]
 
 	if !exists {
 
 		lm.globalMu.RUnlock()
-		return nil, fmt.Errorf("lobby with ID %s does not exist", lobbyId)
+		return nil, fmt.Errorf("lobby with ID %s does not exist", lobbyID)
 	}
 	lm.globalMu.RUnlock()
 
 	if len(lobby.Players) >= lobby.LobbySettings.MaxPlayerCount {
-		return nil, fmt.Errorf("lobby %s is full", lobbyId)
+		return nil, fmt.Errorf("lobby %s is full", lobbyID)
 	}
 
 	if message.Data == nil {
@@ -264,17 +271,17 @@ func (lm *LobbyManager) HandleJoinLobby(message types.WebSocketMessage, conn *we
 		return nil, fmt.Errorf("username is required and should be a string")
 	}
 
-	var userId *string
+	var userID *string
 	if val, ok := playerData["userId"].(string); ok {
-		userId = &val
+		userID = &val
 	} else {
-		userId = nil
+		userID = nil
 	}
 
 	player := types.Player{
-		PlayerId:     uuid.NewString(),
+		PlayerID:     uuid.NewString(),
 		Username:     username,
-		UserId:       userId,
+		UserID:       userID,
 		Role:         types.PlayerRolePlayer,
 		Place:        0,
 		MistakeCount: 0,
@@ -283,15 +290,15 @@ func (lm *LobbyManager) HandleJoinLobby(message types.WebSocketMessage, conn *we
 	lm.globalMu.Lock()
 	lobby.Players = append(lobby.Players, player)
 
-	lm.Connections[lobbyId] = append(lm.Connections[lobbyId], conn)
+	lm.Connections[lobbyID] = append(lm.Connections[lobbyID], conn)
 
-	lm.Lobbies[message.LobbyId] = lobby
+	lm.Lobbies[message.LobbyID] = lobby
 	lm.globalMu.Unlock()
 
 	lobby.LobbyMu.RLock()
 	broadcastMessage := &types.WebSocketMessage{
 		Type:    types.JoinLobby,
-		LobbyId: lobbyId,
+		LobbyID: lobbyID,
 		Data: types.CreateLobbyData{
 			LobbySettings: lobby.LobbySettings,
 			Players:       lobby.Players,
@@ -306,26 +313,27 @@ func (lm *LobbyManager) HandleJoinLobby(message types.WebSocketMessage, conn *we
 	return broadcastMessage, nil
 }
 
+// HandleStartRace functon to start race
 func (lm *LobbyManager) HandleStartRace(message types.WebSocketMessage, conn *websocket.Conn) (*types.WebSocketMessage, error) {
 	lm.globalMu.RLock()
-	lobby, exists := lm.Lobbies[message.LobbyId]
+	lobby, exists := lm.Lobbies[message.LobbyID]
 
 	if !exists {
-		return nil, fmt.Errorf("lobby %s not found", message.LobbyId)
+		return nil, fmt.Errorf("lobby %s not found", message.LobbyID)
 	}
 
-	lm.TimeLeft[message.LobbyId] = lobby.LobbySettings.Time
+	lm.TimeLeft[message.LobbyID] = lobby.LobbySettings.Time
 	lm.globalMu.RUnlock()
 
 	// start the countdown in a separate goroutine
-	go lm.startCountdown(message.LobbyId)
+	go lm.startCountdown(message.LobbyID)
 
 	return nil, nil
 }
 
-func (lm *LobbyManager) allPlayersFinishedTyping(lobbyId string) bool {
+func (lm *LobbyManager) allPlayersFinishedTyping(lobbyID string) bool {
 	lm.globalMu.RLock()
-	lobby, exists := lm.Lobbies[lobbyId]
+	lobby, exists := lm.Lobbies[lobbyID]
 
 	if !exists {
 		lm.globalMu.RUnlock()
@@ -345,14 +353,15 @@ func (lm *LobbyManager) allPlayersFinishedTyping(lobbyId string) bool {
 	return true
 }
 
-func (lm *LobbyManager) SaveRaceResults(lobbyId string) error {
+// SaveRaceResults to save race results
+func (lm *LobbyManager) SaveRaceResults(lobbyID string) error {
 
 	lm.globalMu.RLock()
-	lobby, exists := lm.Lobbies[lobbyId]
+	lobby, exists := lm.Lobbies[lobbyID]
 
 	if !exists {
 		lm.globalMu.RUnlock()
-		return fmt.Errorf("lobby with id %s not found", lobbyId)
+		return fmt.Errorf("lobby with id %s not found", lobbyID)
 	}
 
 	lm.globalMu.RUnlock()
@@ -362,25 +371,25 @@ func (lm *LobbyManager) SaveRaceResults(lobbyId string) error {
 
 	lobbySettings := types.LobbySettings{
 		TextType:       lobby.LobbySettings.TextType,
-		TextId:         lobby.LobbySettings.TextId,
+		TextID:         lobby.LobbySettings.TextID,
 		CustomText:     lobby.LobbySettings.CustomText,
 		MaxPlayerCount: lobby.LobbySettings.MaxPlayerCount,
 		Time:           lobby.LobbySettings.Time,
 	}
 
 	lobbyy := types.Lobby{
-		LobbyId:         lobby.LobbyId,
-		LobbySettingsId: lobby.LobbySettingsId,
+		LobbyID:         lobby.LobbyID,
+		LobbySettingsID: lobby.LobbySettingsID,
 		Date:            time.Now().Format(time.RFC3339),
 	}
 
 	var lobbyPlayers []types.Player
 	for _, player := range lobby.Players {
 		lobbyPlayers = append(lobbyPlayers, types.Player{
-			PlayerId:              player.PlayerId,
-			LobbyId:               lobbyy.LobbyId,
+			PlayerID:              player.PlayerID,
+			LobbyID:               lobbyy.LobbyID,
 			Username:              player.Username,
-			UserId:                player.UserId,
+			UserID:                player.UserID,
 			Role:                  player.Role,
 			Place:                 player.Place,
 			MistakeCount:          player.MistakeCount,
@@ -391,92 +400,84 @@ func (lm *LobbyManager) SaveRaceResults(lobbyId string) error {
 
 	err := queries.PostTypingRace(&lobbyy, lobbySettings, lobbyPlayers)
 	if err != nil {
-		return fmt.Errorf("[SaveRaceResults] Failed to save race results for Lobby ID %s: %v", lobbyId, err)
+		return fmt.Errorf("[SaveRaceResults] Failed to save race results for Lobby ID %s: %v", lobbyID, err)
 	}
 
 	return nil
 }
 
-func (lm *LobbyManager) startCountdown(lobbyId string) {
+func (lm *LobbyManager) startCountdown(lobbyID string) {
 	ticker := time.NewTicker(1 * time.Second)
 	defer ticker.Stop()
 
-	for {
-		select {
-		case <-ticker.C:
-			lm.globalMu.Lock()
-			lobby, exists := lm.Lobbies[lobbyId]
+	for range ticker.C {
+		lm.globalMu.Lock()
+		lobby, exists := lm.Lobbies[lobbyID]
 
-			if !exists {
-				lm.globalMu.Unlock()
-				return
-			}
-
-			lm.TimeLeft[lobbyId]--
-			timeLeft := lm.TimeLeft[lobbyId]
+		if !exists {
 			lm.globalMu.Unlock()
+			return
+		}
 
+		lm.TimeLeft[lobbyID]--
+		timeLeft := lm.TimeLeft[lobbyID]
+		lm.globalMu.Unlock()
+
+		lobby.LobbyMu.RLock()
+		allFinished := lm.allPlayersFinishedTyping(lobbyID)
+		lobby.LobbyMu.RUnlock()
+
+		if allFinished || timeLeft <= 0 {
 			lobby.LobbyMu.RLock()
-			allFinished := true
-			for _, player := range lobby.Players {
-				if !player.FinishedTyping {
-					allFinished = false
-					break
-				}
-			}
-			lobby.LobbyMu.RUnlock()
-
-			if allFinished || timeLeft <= 0 {
-				lobby.LobbyMu.RLock()
-				endRaceMessage := &types.WebSocketMessage{
-					Type:    types.EndRace,
-					LobbyId: lobbyId,
-					Data: types.EndRaceData{
-						Players: lobby.Players,
-					},
-				}
-				lobby.LobbyMu.RUnlock()
-				if err := lm.Broadcast(endRaceMessage); err != nil {
-					fmt.Printf("Error broadcasting end race: %v\n", err)
-				}
-
-				go func() {
-					err := lm.SaveRaceResults(lobbyId)
-					if err != nil {
-						fmt.Printf("Error saving race results: %v\n", err)
-					} else {
-						fmt.Printf("Race results saved successfully for Lobby ID: %s\n", lobbyId)
-					}
-				}()
-
-				return
-			}
-
-			timeLeftMessage := &types.WebSocketMessage{
-				Type:    types.TimeLeft,
-				LobbyId: lobbyId,
-				Data: types.TimeLeftData{
-					TimeLeft: timeLeft,
+			endRaceMessage := &types.WebSocketMessage{
+				Type:    types.EndRace,
+				LobbyID: lobbyID,
+				Data: types.EndRaceData{
+					Players: lobby.Players,
 				},
 			}
-
-			if err := lm.Broadcast(timeLeftMessage); err != nil {
-				fmt.Printf("Error broadcasting time left: %v\n", err)
+			lobby.LobbyMu.RUnlock()
+			if err := lm.Broadcast(endRaceMessage); err != nil {
+				fmt.Printf("Error broadcasting end race: %v\n", err)
 			}
+
+			go func() {
+				err := lm.SaveRaceResults(lobbyID)
+				if err != nil {
+					fmt.Printf("Error saving race results: %v\n", err)
+				} else {
+					fmt.Printf("Race results saved successfully for Lobby ID: %s\n", lobbyID)
+				}
+			}()
+
+			return
+		}
+
+		timeLeftMessage := &types.WebSocketMessage{
+			Type:    types.TimeLeft,
+			LobbyID: lobbyID,
+			Data: types.TimeLeftData{
+				TimeLeft: timeLeft,
+			},
+		}
+
+		if err := lm.Broadcast(timeLeftMessage); err != nil {
+			fmt.Printf("Error broadcasting time left: %v\n", err)
 		}
 	}
 }
 
+// HandleProgress handles progress
 func (lm *LobbyManager) HandleProgress(message types.WebSocketMessage, conn *websocket.Conn) (*types.WebSocketMessage, error) {
 
-	if message.LobbyId == "" {
+	if message.LobbyID == "" {
 		return nil, fmt.Errorf("lobby ID is required")
 	}
 
-	lobbyId := message.LobbyId
+	lobbyID := message.LobbyID
 
 	lm.globalMu.RLock()
-	lobby, exists := lm.Lobbies[lobbyId]
+	lobby, exists := lm.Lobbies[lobbyID]
 
 	if !exists {
 		lm.globalMu.RUnlock()
@@ -517,7 +518,7 @@ func (lm *LobbyManager) HandleProgress(message types.WebSocketMessage, conn *web
 	}
 	percentageOfTextTyped := int(percentageOfTextTypedFloat)
 
-	playerId, ok := playerData["playerId"].(string)
+	playerID, ok := playerData["playerId"].(string)
 	if !ok {
 		return nil, fmt.Errorf("playerId is required and should be a string")
 	}
@@ -527,7 +528,7 @@ func (lm *LobbyManager) HandleProgress(message types.WebSocketMessage, conn *web
 
 	// find and update player data
 	for i, player := range lobby.Players {
-		if player.PlayerId == playerId {
+		if player.PlayerID == playerID {
 			lobby.Players[i].Wpm = wpm
 			lobby.Players[i].MistakeCount = mistakeCount
 			lobby.Players[i].PercentageOfTextTyped = percentageOfTextTyped
@@ -549,10 +550,10 @@ func (lm *LobbyManager) HandleProgress(message types.WebSocketMessage, conn *web
 		lobby.Players[i].Place = i + 1
 	}
 
-	lm.Lobbies[message.LobbyId] = lobby
+	lm.Lobbies[message.LobbyID] = lobby
 
 	broadcastMessage := &types.WebSocketMessage{
-		LobbyId: lobbyId,
+		LobbyID: lobbyID,
 		Type:    types.Progess,
 		Data: types.ProgressData{
 			Players: lobby.Players,

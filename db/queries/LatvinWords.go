@@ -5,6 +5,7 @@ import (
 	"log"
 )
 
+// GetLatvianWords gets latvian words
 func GetLatvianWords() ([]string, error) {
 	query := `SELECT latvianWord FROM "LatvianWords"`
 

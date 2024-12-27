@@ -7,6 +7,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// InitialRoutes functions that initialized routes when server starts
 func InitialRoutes(e *echo.Echo) error {
 	lm := managers.NewLobbyManager()
 

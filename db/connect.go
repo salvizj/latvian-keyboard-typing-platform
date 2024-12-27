@@ -6,11 +6,12 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
-	_ "github.com/lib/pq"
 )
 
+// DB pointer to db connection
 var DB *sql.DB
 
+// Initialize makes a db connection
 func Initialize() {
 	if err := godotenv.Load(".env"); err != nil {
 		fmt.Fprintf(os.Stderr, "Warning: Could not load .env file\n")

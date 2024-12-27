@@ -10,15 +10,16 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// GetTypingTestsAndRaces handles getting typing tests and races objects
 func GetTypingTestsAndRaces(c echo.Context) error {
-	userId := c.QueryParam("userId")
+	userID := c.QueryParam("userId")
 	typeStr := c.QueryParam("type")
 	pageStr := c.QueryParam("page")
 	itemsPerPageStr := c.QueryParam("itemsPerPage")
 	dateFromStr := c.QueryParam("dateFrom")
 	dateTillStr := c.QueryParam("dateTill")
 
-	if userId == "" || typeStr == "" || pageStr == "" || itemsPerPageStr == "" {
+	if userID == "" || typeStr == "" || pageStr == "" || itemsPerPageStr == "" {
 		return c.JSON(http.StatusBadRequest, map[string]string{
 			"error": "Missing required parameters",
 		})
@@ -48,7 +49,7 @@ func GetTypingTestsAndRaces(c echo.Context) error {
 
 	switch typeStr {
 	case "typingTest":
-		tests, err := queries.GetTypingTests(userId, page, itemsPerPage, dateFrom, dateTill)
+		tests, err := queries.GetTypingTests(userID, page, itemsPerPage, dateFrom, dateTill)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{
 				"error": fmt.Sprintf("Error fetching typing tests: %v", err),
@@ -63,7 +64,7 @@ func GetTypingTestsAndRaces(c echo.Context) error {
 		})
 
 	case "typingRace":
-		races, err := queries.GetTypingRaces(userId, page, itemsPerPage, dateFrom, dateTill)
+		races, err := queries.GetTypingRaces(userID, page, itemsPerPage, dateFrom, dateTill)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{
 				"error": fmt.Sprintf("Error fetching typing races: %v", err),

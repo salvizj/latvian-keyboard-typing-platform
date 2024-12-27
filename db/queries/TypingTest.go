@@ -7,12 +7,13 @@ import (
 	"strings"
 )
 
+// PostTypingTestSettings inserts typing test settings object
 func PostTypingTestSettings(settings types.TypingTestSettings) (int, error) {
-	var textId interface{}
+	var textID interface{}
 	if settings.TextType == "custom" {
-		textId = nil
+		textID = nil
 	} else {
-		textId = settings.TextId
+		textID = settings.TextID
 	}
 
 	query := `
@@ -20,27 +21,28 @@ func PostTypingTestSettings(settings types.TypingTestSettings) (int, error) {
 		VALUES ($1, $2, $3, $4) RETURNING typingTestSettingsId;
 	`
 
-	var typingTestSettingsId int
-	err := db.DB.QueryRow(query, settings.TextType, textId, settings.CustomText, settings.Time).Scan(&typingTestSettingsId)
+	var typingTestSettingsID int
+	err := db.DB.QueryRow(query, settings.TextType, textID, settings.CustomText, settings.Time).Scan(&typingTestSettingsID)
 	if err != nil {
 		return 0, fmt.Errorf("error inserting TypingTestSettings: %v", err)
 	}
 
-	return typingTestSettingsId, nil
+	return typingTestSettingsID, nil
 }
 
+// PostTypingTest inserts typing test
 func PostTypingTest(typingTest types.TypingTest, typingTestSettings types.TypingTestSettings) error {
 	// create settings first to get the ID for the relationship
-	typingTestSettingsId, err := PostTypingTestSettings(typingTestSettings)
+	typingTestSettingsID, err := PostTypingTestSettings(typingTestSettings)
 	if err != nil {
 		return fmt.Errorf("error creating TypingTestSettings: %v", err)
 	}
 
 	query := `
-		INSERT INTO "TypingTests" (userId, typingTestSettingsId, wpm, mistakeCount, date)
+		INSERT INTO "TypingTests" (userID, typingTestSettingsId, wpm, mistakeCount, date)
 		VALUES ($1, $2, $3, $4, $5);
 	`
-	_, err = db.DB.Exec(query, typingTest.UserId, typingTestSettingsId, typingTest.Wpm, typingTest.MistakeCount, typingTest.Date)
+	_, err = db.DB.Exec(query, typingTest.UserID, typingTestSettingsID, typingTest.Wpm, typingTest.MistakeCount, typingTest.Date)
 	if err != nil {
 		return fmt.Errorf("error inserting TypingTest: %v", err)
 	}
@@ -48,10 +50,11 @@ func PostTypingTest(typingTest types.TypingTest, typingTestSettings types.Typing
 	return nil
 }
 
-func GetTypingTestsCount(userId string, dateFrom, dateTill *string) (int, error) {
+// GetTypingTestsCount gets typing test count based on userID and date
+func GetTypingTestsCount(userID string, dateFrom, dateTill *string) (int, error) {
 	var count int
 	queryParts := []string{`SELECT COUNT(*) FROM "TypingTests" WHERE userid = $1`}
-	queryArgs := []interface{}{userId}
+	queryArgs := []interface{}{userID}
 	paramCount := 1
 
 	// dynamic query building for date range filtering
@@ -77,7 +80,8 @@ func GetTypingTestsCount(userId string, dateFrom, dateTill *string) (int, error)
 	return count, nil
 }
 
-func GetTypingTests(userId string, page, itemsPerPage int, dateFrom, dateTill *string) ([]types.TypingTestWithSettings, error) {
+// GetTypingTests gets typing test objects
+func GetTypingTests(userID string, page, itemsPerPage int, dateFrom, dateTill *string) ([]types.TypingTestWithSettings, error) {
 	// calculate offset for pagination
 	offset := 0
 	if page > 0 {
@@ -87,7 +91,7 @@ func GetTypingTests(userId string, page, itemsPerPage int, dateFrom, dateTill *s
 	query := `
     SELECT
         tt.typingTestId,
-        tt.userId,
+        tt.userID,
         tt.wpm,
         tt.mistakeCount,
         TO_CHAR(tt.date, 'YYYY-MM-DD') AS date,
@@ -98,11 +102,11 @@ func GetTypingTests(userId string, page, itemsPerPage int, dateFrom, dateTill *s
         tts.time
     FROM "TypingTests" tt
     JOIN "TypingTestSettings" tts ON tt.typingTestSettingsId = tts.typingTestSettingsId
-    WHERE tt.userId = $1
+    WHERE tt.userID = $1
 	`
 
 	queryParts := []string{query}
-	queryArgs := []interface{}{userId}
+	queryArgs := []interface{}{userID}
 	paramCount := 1
 
 	if dateFrom != nil && *dateFrom != "" {
@@ -141,14 +145,14 @@ func GetTypingTests(userId string, page, itemsPerPage int, dateFrom, dateTill *s
 		var test types.TypingTestWithSettings
 
 		err := rows.Scan(
-			&test.TypingTestId,
-			&test.UserId,
+			&test.TypingTestID,
+			&test.UserID,
 			&test.Wpm,
 			&test.MistakeCount,
 			&test.Date,
-			&test.TypingTestSettings.TypingTestSettingsId,
+			&test.TypingTestSettings.TypingTestSettingsID,
 			&test.TypingTestSettings.TextType,
-			&test.TypingTestSettings.TextId,
+			&test.TypingTestSettings.TextID,
 			&test.TypingTestSettings.CustomText,
 			&test.TypingTestSettings.Time,
 		)
@@ -156,8 +160,8 @@ func GetTypingTests(userId string, page, itemsPerPage int, dateFrom, dateTill *s
 		if err != nil {
 			return nil, fmt.Errorf("error scanning row: %w", err)
 		}
-		if test.TypingTestSettings.TextId != nil {
-			poetText, err := GetPoetText(*test.TypingTestSettings.TextId)
+		if test.TypingTestSettings.TextID != nil {
+			poetText, err := GetPoetText(*test.TypingTestSettings.TextID)
 			if err != nil {
 				return nil, fmt.Errorf("error fetching poet text: %w", err)
 			}

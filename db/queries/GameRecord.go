@@ -6,12 +6,13 @@ import (
 	"latvianKeyboardTypingPlatform/db"
 )
 
-func GetGameRecord(gameName, userId string) (int, error) {
+// GetGameRecord returns and int based on gameName and userID
+func GetGameRecord(gameName, userID string) (int, error) {
 	query := `
-    SELECT gamerecord FROM "GameRecords" WHERE gameName = $1 AND userId = $2
+    SELECT gamerecord FROM "GameRecords" WHERE gameName = $1 AND userID = $2
     `
 	var record int
-	err := db.DB.QueryRow(query, gameName, userId).Scan(&record)
+	err := db.DB.QueryRow(query, gameName, userID).Scan(&record)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			// return 0 if no records are found
@@ -22,9 +23,10 @@ func GetGameRecord(gameName, userId string) (int, error) {
 	return record, nil
 }
 
-func PostGameRecord(gameName, userId string, gameRecord int) error {
+// PostGameRecord inserts a new record if it is bigger or previous record didin`t exist
+func PostGameRecord(gameName, userID string, gameRecord int) error {
 	// Reuse the GetGameRecord function to get the current game record
-	existingRecord, err := GetGameRecord(gameName, userId)
+	existingRecord, err := GetGameRecord(gameName, userID)
 	if err != nil {
 		return fmt.Errorf("error getting existing game record: %v", err)
 	}
@@ -32,10 +34,10 @@ func PostGameRecord(gameName, userId string, gameRecord int) error {
 	// If no record exists, insert the new record
 	if existingRecord == 0 {
 		query := `
-		INSERT INTO "GameRecords" (gameName, userId, gamerecord)
+		INSERT INTO "GameRecords" (gameName, userID, gamerecord)
 		VALUES ($1, $2, $3)
 		`
-		_, err := db.DB.Exec(query, gameName, userId, gameRecord)
+		_, err := db.DB.Exec(query, gameName, userID, gameRecord)
 		if err != nil {
 			return fmt.Errorf("error inserting new game record: %v", err)
 		}
@@ -47,9 +49,9 @@ func PostGameRecord(gameName, userId string, gameRecord int) error {
 		query := `
 			UPDATE "GameRecords"
 			SET gamerecord = $1
-			WHERE userId = $2 AND gameName = $3
+			WHERE userID = $2 AND gameName = $3
 		`
-		_, err := db.DB.Exec(query, gameRecord, userId, gameName)
+		_, err := db.DB.Exec(query, gameRecord, userID, gameName)
 		if err != nil {
 			return fmt.Errorf("error updating game record: %v", err)
 		}

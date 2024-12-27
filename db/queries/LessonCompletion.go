@@ -7,7 +7,8 @@ import (
 	"github.com/lib/pq"
 )
 
-func PostLessonCompletion(userId string, lessonId int) error {
+// PostLessonCompletion inserts lessonCompletion
+func PostLessonCompletion(userID string, lessonID int) error {
 
 	query := `
 		INSERT INTO "LessonCompletion" (userId, lessonId)
@@ -15,7 +16,7 @@ func PostLessonCompletion(userId string, lessonId int) error {
 		ON CONFLICT (userId, lessonId) DO NOTHING;
 	`
 
-	_, err := db.DB.Exec(query, userId, lessonId)
+	_, err := db.DB.Exec(query, userID, lessonID)
 	if err != nil {
 		return fmt.Errorf("error inserting lesson completion: %v", err)
 	}
@@ -23,13 +24,14 @@ func PostLessonCompletion(userId string, lessonId int) error {
 	return nil
 }
 
-func GetLessonCompletion(userId string, lessonIds []int) (map[int]bool, error) {
+// GetLessonCompletion gets completed lessons map based on given userID and lessonIds
+func GetLessonCompletion(userID string, lessonIds []int) (map[int]bool, error) {
 	query := `
         SELECT lessonid
         FROM "LessonCompletion"
         WHERE userid = $1 AND lessonid = any($2);
     `
-	rows, err := db.DB.Query(query, userId, pq.Array(lessonIds))
+	rows, err := db.DB.Query(query, userID, pq.Array(lessonIds))
 	if err != nil {
 		return nil, fmt.Errorf("query failed: %w", err)
 	}
@@ -37,11 +39,11 @@ func GetLessonCompletion(userId string, lessonIds []int) (map[int]bool, error) {
 
 	result := make(map[int]bool)
 	for rows.Next() {
-		var lessonId int
-		if err := rows.Scan(&lessonId); err != nil {
+		var lessonID int
+		if err := rows.Scan(&lessonID); err != nil {
 			return nil, fmt.Errorf("failed to scan lessonId: %w", err)
 		}
-		result[lessonId] = true
+		result[lessonID] = true
 	}
 
 	if err := rows.Err(); err != nil {

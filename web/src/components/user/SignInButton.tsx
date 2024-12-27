@@ -10,7 +10,6 @@ type SignInBtnProps = {
 export default function SignInBtn({ isMinimized }: SignInBtnProps) {
     const { language } = useLanguage();
     const navigate = useNavigate();
-
     const handleSignIn = () => {
         navigate('/sign-in');
     };

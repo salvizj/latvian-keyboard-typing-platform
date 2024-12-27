@@ -32,7 +32,6 @@ const TypeLetters: React.FC<TypeLettersProps> = ({ userId }) => {
 
     const { gameRecordPostError } = usePostGameRecord(gameOption, round, isGameOver, userId);
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     function generateRandomLetter() {
         const randomIndex = Math.floor(Math.random() * LATVIAN_ALPHABET.length);
         setText(LATVIAN_ALPHABET[randomIndex]);

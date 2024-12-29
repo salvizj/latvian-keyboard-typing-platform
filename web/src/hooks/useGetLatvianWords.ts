@@ -6,6 +6,9 @@ const useGetLatvianWords = () => {
     const [latvianWordsError, setLatvianWordsError] = useState<string | null>(null);
     const [latvianWordsLoading, setLatvianWordsLoading] = useState<boolean>(true);
     useEffect(() => {
+        if (latvianWords.length > 0) {
+            return;
+        }
         getLatvianWords()
             .then((data) => {
                 setLatvianWords(data);

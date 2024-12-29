@@ -9,7 +9,7 @@ const useGetGameRecord = (gameName: string) => {
     const { userId } = useAuthStatus();
 
     useEffect(() => {
-        if (userId && gameName !== '' && gameName) {
+        if (userId && gameName !== '' && gameName && gameRecord !== null) {
             setGameRecordGetLoading(true);
             getGameRecord(gameName, userId)
                 .then((data) => {

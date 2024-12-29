@@ -23,13 +23,14 @@ var tables = []Table{
 		`,
 	},
 	{
-		name: "PoetTexts",
+		name: "WritersTexts",
 		query: `
-			CREATE TABLE IF NOT EXISTS "PoetTexts" (
-				poetTextId SERIAL PRIMARY KEY,
-				poetAuthor TEXT NOT NULL,
-				poetFragmentName TEXT NOT NULL,
-				poetTextContent TEXT NOT NULL
+			CREATE TABLE IF NOT EXISTS "WritersTexts" (
+				writersTextId SERIAL PRIMARY KEY,
+				writersFirstName TEXT NOT NULL,
+				writersLastName TEXT NOT NULL,
+				fragmentName TEXT NOT NULL,
+				fragmentsContent TEXT NOT NULL
 			);
 		`,
 	},
@@ -50,11 +51,11 @@ var tables = []Table{
 		query: `
 			CREATE TABLE IF NOT EXISTS "TypingTestSettings" (
 				typingTestSettingsId SERIAL PRIMARY KEY,
-				textType TEXT NOT NULL CHECK (textType IN ('poet', 'custom')),
+				textType TEXT NOT NULL CHECK (textType IN ('writers', 'custom')),
 				textId INTEGER,
 				customText TEXT,
 				time INTEGER NOT NULL,
-				FOREIGN KEY (textId) REFERENCES "PoetTexts"(poetTextId)
+				FOREIGN KEY (textId) REFERENCES "WritersTexts"(writersTextId)
 			);
 		`,
 	},
@@ -64,12 +65,12 @@ var tables = []Table{
 		query: `
 			CREATE TABLE IF NOT EXISTS "TypingRaceSettings" (
 				typingRaceSettingsId SERIAL PRIMARY KEY,
-				textType TEXT NOT NULL CHECK (textType IN ('poet', 'custom')),
+				textType TEXT NOT NULL CHECK (textType IN ('writers', 'custom')),
 				textId INTEGER,
 				customText TEXT,
 				maxPlayerCount INTEGER NOT NULL,
 				time INTEGER NOT NULL,
-				FOREIGN KEY (textId) REFERENCES "PoetTexts"(poetTextId)
+				FOREIGN KEY (textId) REFERENCES "WritersTexts"(writersTextId)
 			);
 		`,
 	},

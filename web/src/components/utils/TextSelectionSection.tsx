@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
-import { PoetText } from '../../types';
+import { WritersText } from '../../types';
 import translate from '../../utils/translate';
-import useGetPoetTexts from '../../hooks/useGetPoetTexts';
+import useGetWritersTexts from '../../hooks/useGetWritersTexts';
 
 const TextSelectionSection: React.FC<{
     isCustomText: boolean;
@@ -13,7 +13,7 @@ const TextSelectionSection: React.FC<{
     setSelectedText: (text: string) => void;
     setTextid: (textid: number) => void;
     setText: (text: string) => void;
-    setTextType: (textType: 'poet' | 'custom') => void;
+    setTextType: (textType: 'writers' | 'custom') => void;
 }> = ({
     isCustomText,
     setIsCustomText,
@@ -26,7 +26,8 @@ const TextSelectionSection: React.FC<{
     setTextType,
 }) => {
     const { language } = useLanguage();
-    const { poetTexts, poetTextsError } = useGetPoetTexts();
+    const { writersTexts, writersTextsError } = useGetWritersTexts();
+    const [displayValue, setDisplayValue] = useState('');
 
     useEffect(() => {
         if (isCustomText) {
@@ -35,7 +36,7 @@ const TextSelectionSection: React.FC<{
             setTextType('custom');
         } else {
             setText(selectedText);
-            setTextType('poet');
+            setTextType('writers');
         }
     }, [isCustomText, customText, selectedText, setText, setCustomText, setTextType]);
 
@@ -43,7 +44,7 @@ const TextSelectionSection: React.FC<{
         <div className="flex flex-col gap-4 mb-2 ms:gap-4">
             <label className="text-left">{translate('select_text_option', language)}</label>
 
-            {poetTexts && (
+            {writersTexts && (
                 <div className="flex gap-4 flex-col sm:flex-row justify-start">
                     <button
                         className={`py-2 px-6 rounded-md text-center hover:opacity-90 transition-opacity text-base hover:text-color-primary-hover-text border secondary ${!isCustomText ? 'bg-color-primary text-color-third' : 'bg-transparent text-primary'}`}
@@ -60,11 +61,13 @@ const TextSelectionSection: React.FC<{
                 </div>
             )}
 
-            {poetTextsError && <p className="text-red-500 mt-2">{translate('poet_text_not_available', language)}</p>}
-            {!poetTexts && <p className="text-red-500 mt-2">{translate('poet_text_not_available', language)}</p>}
+            {writersTextsError && (
+                <p className="text-red-500 mt-2">{translate('writers_text_not_available', language)}</p>
+            )}
+            {!writersTexts && <p className="text-red-500 mt-2">{translate('writers_text_not_available', language)}</p>}
 
             <div className="mt-2">
-                {isCustomText || !poetTexts ? (
+                {isCustomText || !writersTexts ? (
                     <textarea
                         className="w-full p-4 mb-2 border rounded-md resize-none text-color-third bg-color-primary placeholder-color-third"
                         maxLength={1000}
@@ -76,22 +79,30 @@ const TextSelectionSection: React.FC<{
                 ) : (
                     <select
                         className="w-full p-4 mb-2 border rounded-md text-color-third bg-color-primary"
-                        value={selectedText}
+                        value={displayValue}
                         onChange={(e) => {
-                            setSelectedText(e.target.value);
-                            const selectedKey = e.target.options[e.target.selectedIndex].getAttribute('data-key');
-                            if (selectedKey !== null) {
-                                setTextid(Number(selectedKey));
-                            }
+                            const selectedOption = e.target.options[e.target.selectedIndex];
+                            const content = selectedOption.getAttribute('data-content');
+                            const key = selectedOption.getAttribute('data-key');
+
+                            setDisplayValue(e.target.value);
+                            setSelectedText(content || '');
+                            if (content) setSelectedText(content);
+                            if (key) setTextid(Number(key));
                         }}
                     >
                         <option value="" disabled>
                             {translate('pick_text', language)}
                         </option>
-                        {Array.isArray(poetTexts) &&
-                            poetTexts.map((text: PoetText) => (
-                                <option key={text.poetTextId} value={text.poetTextId} data-key={text.poetTextId}>
-                                    {text.poetAuthor} - {text.poetFragmentName}
+                        {Array.isArray(writersTexts) &&
+                            writersTexts.map((text: WritersText) => (
+                                <option
+                                    key={text.writersTextId}
+                                    data-key={text.writersTextId}
+                                    data-content={text.fragmentsContent}
+                                    value={`${text.writersFirstName} ${text.writersLastName} - ${text.fragmentName}`}
+                                >
+                                    {text.writersFirstName} {text.writersLastName} - {text.fragmentName}
                                 </option>
                             ))}
                     </select>

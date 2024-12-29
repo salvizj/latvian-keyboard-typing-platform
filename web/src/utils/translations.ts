@@ -109,9 +109,10 @@ const translations: Translations = {
         race_count_0: 'You haven`t done any typing race.',
         settings_not_found: 'Settings not found. Please try again later.',
         lobby_id: 'Race Id',
-        poet_text: 'Poet text',
-        poet_fragments_name: 'Poets fragment name',
-        poet_author: 'Authors name',
+        writers_text: 'Writers text',
+        fragments_name: 'Fragment name',
+        writers_first_name: 'Writers first name',
+        writers_last_name: 'Writers last name',
 
         // Text Management
         select_text_option: 'Select text option.',
@@ -121,7 +122,7 @@ const translations: Translations = {
         choose_predefined_text: 'Choose predefined text.',
         hide_words: 'Hide words',
         type_letters: 'Type letters',
-        poet_text_not_available: 'Poet texts currently are not available.',
+        writers_text_not_available: 'Writers texts currently are not available.',
 
         // UI Actions
         create: 'Create',
@@ -172,7 +173,7 @@ const translations: Translations = {
         error_failed_to_fetch_typing_data: 'Error: Failed to fetch typing data',
         error_fetching_lesson_text: 'Error: Failed to load lesson.  Please try again.',
         error_fetching_lessons_completion: 'Error: Failed to fetch lesson completion data.',
-        error_fetching_poet_text: 'Error: Error loading poet text. Please try again.',
+        error_fetching_writers_text: 'Error: Error loading writers text. Please try again.',
         error_lesson_id_not_provide: 'Error: Lesson ID was not provided. Please select a lesson.',
         error_lesson_id_not_a_number: 'Error: The lesson identifier is not a valid number. Please enter a correct ID.',
         error_no_lessons_found_with_this_difficulty: 'Error: No lessons found with this difficulty level.',
@@ -264,7 +265,7 @@ const translations: Translations = {
         time: 'Laiks',
         test_id: 'Testa identifikators',
         custom: 'Pielagots',
-        poet: 'Dzejnieka',
+        writers: 'Dzejnieka',
         time_left: 'Atlikušais laiks',
 
         // Typing Race Features
@@ -311,9 +312,10 @@ const translations: Translations = {
         race_count_0: 'Jums nav veiktas nevienas rakstīšanas sacensības',
         settings_not_found: 'Iestatījumi netika atrasti. Lūdzu mēģiniet vēlāk atkārtoti',
         lobby_id: 'Sacensību Id',
-        poet_text: 'Dzejnieka teksts',
-        poet_fragments_name: 'Teksta fragmenta nosaukums',
-        poet_author: 'Dzjnieka vārds',
+        writers_text: 'Rakstnieka teksts',
+        fragments_name: 'Teksta fragmenta nosaukums',
+        writers_first_name: 'Rakstnieka vārds',
+        writers_last_name: 'Rakstnieka uzvārds',
 
         // Text Management
         select_text_option: 'Izvēlieties teksta opciju',
@@ -322,7 +324,7 @@ const translations: Translations = {
         enter_custom_text: 'Ievadiet pielāgotu tekstu',
         hide_words: 'Paslēpt vārdus',
         type_letters: 'Rakstīt burtus',
-        poet_text_not_available: 'Dzeju teksti pašreiz nav pieejami.',
+        writers_text_not_available: 'Dzeju teksti pašreiz nav pieejami.',
 
         // UI Actions
         create: 'Izveidot',

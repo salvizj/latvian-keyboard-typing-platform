@@ -7,6 +7,9 @@ const useGetLessons = () => {
     const [lessonsError, setLessonError] = useState<string | null>(null);
 
     useEffect(() => {
+        if (lessons !== null) {
+            return;
+        }
         getLessons()
             .then((data) => {
                 setLessons(data);

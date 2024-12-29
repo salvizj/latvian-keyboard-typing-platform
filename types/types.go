@@ -20,12 +20,13 @@ const (
 	Expert       LessonDifficulty = "expert"
 )
 
-// PoetText represents a fragment of a poem with an author and content.
-type PoetText struct {
-	PoetTextID       int    `json:"poetTextId"`
-	PoetAuthor       string `json:"poetAuthor"`
-	PoetFragmentName string `json:"poetFragmentName"`
-	PoetTextContent  string `json:"poetText"`
+// WritersText represents a fragment of a poem with an author and content.
+type WritersText struct {
+	WritersTextID    int    `json:"writersTextId"`
+	WritersFirstName string `json:"writersFirstName"`
+	WritersLastName  string `json:"writersLastName"`
+	FragmentName     string `json:"fragmentName"`
+	FragmentsContent string `json:"fragmentsContent"`
 }
 
 // LatvianWord represents a word in the Latvian language with its ID.
@@ -57,14 +58,14 @@ type Lobby struct {
 
 // LobbySettings represents the configuration of a lobby, including text type and player count.
 type LobbySettings struct {
-	LobbySettingsID int       `json:"lobbySettingsId,omitempty"`
-	TextType        string    `json:"textType"`
-	TextID          *int      `json:"textId,omitempty"`
-	PoetText        *PoetText `json:"poetText,omitempty"`
-	CustomText      *string   `json:"customText,omitempty"`
-	Text            string    `json:"text"`
-	MaxPlayerCount  int       `json:"maxPlayerCount"`
-	Time            int       `json:"time"`
+	LobbySettingsID int          `json:"lobbySettingsId,omitempty"`
+	TextType        string       `json:"textType"`
+	TextID          *int         `json:"textId,omitempty"`
+	WritersText     *WritersText `json:"writersText,omitempty"`
+	CustomText      *string      `json:"customText,omitempty"`
+	Text            string       `json:"text"`
+	MaxPlayerCount  int          `json:"maxPlayerCount"`
+	Time            int          `json:"time"`
 }
 
 // Player represents a player in the game with their score and typing progress.
@@ -159,12 +160,12 @@ type ErrorData struct {
 
 // TypingTestSettings represents the settings for a typing test, including the text type and duration.
 type TypingTestSettings struct {
-	TypingTestSettingsID int       `json:"typingTestSettingsId,omitempty"`
-	TextType             string    `json:"textType"`
-	TextID               *int      `json:"textId,omitempty"`
-	PoetText             *PoetText `json:"poetText,omitempty"`
-	CustomText           *string   `json:"customText,omitempty"`
-	Time                 int       `json:"time"`
+	TypingTestSettingsID int          `json:"typingTestSettingsId,omitempty"`
+	TextType             string       `json:"textType"`
+	TextID               *int         `json:"textId,omitempty"`
+	WritersText          *WritersText `json:"writersText,omitempty"`
+	CustomText           *string      `json:"customText,omitempty"`
+	Time                 int          `json:"time"`
 }
 
 // TypingTest represents a completed typing test with user details and performance metrics.

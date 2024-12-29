@@ -55,6 +55,7 @@ const HideWords: React.FC<HideWordsProps> = ({ latvianWords, userId }) => {
         setText(nextWord);
         setShowText(true);
 
+        // add small delay to ensure the timer restarts
         setTimeout(() => setShouldStartTimer(true), 0);
     }, [setIsTypingFinished, hasWords, latvianWords, round, showTime, setText]);
 
@@ -77,7 +78,6 @@ const HideWords: React.FC<HideWordsProps> = ({ latvianWords, userId }) => {
     );
 
     useEffect(() => {
-        // initialize game
         setTime(TYPING_TIME);
         setText(currentWord);
 

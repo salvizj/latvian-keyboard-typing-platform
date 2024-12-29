@@ -46,17 +46,21 @@ const TestDetails: FC<TestDetailsProps> = ({ test, language, handleClose }) => {
                             {translate('custom_text', language)}: {typingTestSettings.customText}
                         </div>
                     )}
-                    {typingTestSettings.poetText && (
+                    {typingTestSettings.writersText && (
                         <>
                             <div>
-                                {translate('poet_author', language)}: {typingTestSettings.poetText.poetAuthor}
+                                {translate('writers_first_name', language)}:{' '}
+                                {typingTestSettings.writersText.writersFirstName}
                             </div>
                             <div>
-                                {translate('poet_fragments_name', language)}:{' '}
-                                {typingTestSettings.poetText.poetFragmentName}
+                                {translate('writers_last_name', language)}:{' '}
+                                {typingTestSettings.writersText.writersLastName}
                             </div>
                             <div>
-                                {translate('poet_text', language)}: {typingTestSettings.poetText?.poetText}
+                                {translate('fragments_name', language)}: {typingTestSettings.writersText.fragmentName}
+                            </div>
+                            <div>
+                                {translate('writers_text', language)}: {typingTestSettings.writersText?.fragmentName}
                             </div>
                         </>
                     )}

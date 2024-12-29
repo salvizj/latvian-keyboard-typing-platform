@@ -26,7 +26,6 @@ const useGetLesson = (fetch: boolean) => {
         }
 
         setLessonGetLoading(true);
-
         getLesson(lessonIdNumber)
             .then((data) => {
                 setLesson(data);

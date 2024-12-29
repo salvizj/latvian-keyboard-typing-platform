@@ -4,7 +4,7 @@ import postTypingTest from '../api/postTypingTest';
 import { useTyping } from '../context/TypingContext';
 import { useOptions } from '../context/OptionsContext';
 import useAuthStatus from './useAuthStatus';
-import useGetPoetTexts from './useGetPoetTexts';
+import useGetWritersTexts from './useGetWritersTexts';
 
 const usePostTypingTest = () => {
     const { userId } = useAuthStatus();
@@ -12,7 +12,7 @@ const usePostTypingTest = () => {
     const { time, isCustomText, customText, textId } = useOptions();
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<boolean>(false);
-    const { poetTexts } = useGetPoetTexts();
+    const { writersTexts } = useGetWritersTexts();
 
     const hasSubmitted = useRef(false);
 
@@ -23,7 +23,7 @@ const usePostTypingTest = () => {
 
             const typingTestSettings: TypingTestSettings = {
                 typingTestSettingsId: null,
-                textType: isCustomText ? 'custom' : 'poet',
+                textType: isCustomText ? 'custom' : 'writers',
                 customText: isCustomText ? customText : null,
                 textId: textId,
                 time: time,
@@ -51,7 +51,7 @@ const usePostTypingTest = () => {
 
             submitTypingTest();
         }
-    }, [isTypingFinished, userId, isCustomText, customText, poetTexts, time, wpm, mistakeCount, textId]);
+    }, [isTypingFinished, userId, isCustomText, customText, writersTexts, time, wpm, mistakeCount, textId]);
 
     return { success, error };
 };

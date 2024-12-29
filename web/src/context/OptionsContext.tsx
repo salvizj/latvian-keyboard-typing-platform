@@ -24,8 +24,8 @@ type OptionsContextType = {
     setSelectedText: React.Dispatch<React.SetStateAction<string>>;
     textId: number | null;
     setTextId: React.Dispatch<React.SetStateAction<number | null>>;
-    setTextType: React.Dispatch<React.SetStateAction<'custom' | 'poet'>>;
-    textType: 'custom' | 'poet';
+    setTextType: React.Dispatch<React.SetStateAction<'custom' | 'writers'>>;
+    textType: 'custom' | 'writers';
 };
 
 const OptionsContext = createContext<OptionsContextType | undefined>(undefined);
@@ -46,7 +46,7 @@ export const OptionsProvider: React.FC<OptionsProviderProps> = ({ children }) =>
     const [customText, setCustomText] = useState<string>('');
     const [selectedText, setSelectedText] = useState<string>('');
     const [textId, setTextId] = useState<number | null>(null);
-    const [textType, setTextType] = useState<'custom' | 'poet'>('poet');
+    const [textType, setTextType] = useState<'custom' | 'writers'>('writers');
     const location = useLocation();
     const [prevPathname, setPrevPathname] = useState(location.pathname);
 
@@ -62,7 +62,7 @@ export const OptionsProvider: React.FC<OptionsProviderProps> = ({ children }) =>
             setIsCustomText(false);
             setCustomText('');
             setSelectedText('');
-            setTextType('poet'); // reset to default if required
+            setTextType('writers'); // reset to default if required
             setPrevPathname(location.pathname);
         }
     }, [location.pathname, prevPathname]);

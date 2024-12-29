@@ -52,11 +52,12 @@ export type HandFingerInfoObj = {
     isAlt: boolean;
 };
 
-export type PoetText = {
-    poetTextId: number;
-    poetAuthor: string;
-    poetFragmentName: string;
-    poetText: string;
+export type WritersText = {
+    writersTextId: number;
+    writersFirstName: string;
+    writersLastName: string;
+    fragmentName: string;
+    fragmentsContent: string;
 };
 
 export type LatvianWord = {
@@ -81,9 +82,9 @@ export type Lobby = {
 
 export type LobbySettings = {
     lobbySettingsId?: null | number;
-    textType: 'poet' | 'custom';
+    textType: 'writers' | 'custom';
     textId: number | null;
-    poetText?: PoetText | null;
+    writersText?: WritersText | null;
     customText: string | null;
     text: string;
     maxPlayerCount: number;
@@ -201,9 +202,9 @@ export type TypingTestWithSettings = {
 
 export type TypingTestSettings = {
     typingTestSettingsId: null | number;
-    textType: 'poet' | 'custom';
+    textType: 'writers' | 'custom';
     textId: number | null;
-    poetText?: PoetText | null;
+    writersText?: WritersText | null;
     customText: string | null;
     time: number;
 };

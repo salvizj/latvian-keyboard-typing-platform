@@ -18,7 +18,7 @@ func InitialRoutes(e *echo.Echo) error {
 	e.GET("/api/get-game-record", handlers.GetGameRecordHandler)
 	e.GET("/api/get-lesson", handlers.GetLessonHandler)
 	e.GET("/api/get-lessons", handlers.GetLessonsHandler)
-	e.GET("/api/get-poet-texts", handlers.GetPoetTextsHandler)
+	e.GET("/api/get-writers-texts", handlers.GetWritersTextsHandler)
 	e.GET("/api/get-typing-tests-and-races-count", handlers.GetTypingTestsAndRacesCountHandler)
 	e.GET("/api/get-typing-tests-and-races", handlers.GetTypingTestsAndRaces)
 	e.GET("/api/get-latvian-words", handlers.GetLatvinWordsHandler)

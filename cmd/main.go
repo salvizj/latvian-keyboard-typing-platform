@@ -14,7 +14,7 @@ func main() {
 
 	seed.Lessons()
 	seed.LatvianWords()
-	seed.PoetTexts()
+	seed.WritersTexts()
 
 	server.StartServer()
 }

@@ -161,11 +161,11 @@ func GetTypingTests(userID string, page, itemsPerPage int, dateFrom, dateTill *s
 			return nil, fmt.Errorf("error scanning row: %w", err)
 		}
 		if test.TypingTestSettings.TextID != nil {
-			poetText, err := GetPoetText(*test.TypingTestSettings.TextID)
+			writersText, err := GetWritersText(*test.TypingTestSettings.TextID)
 			if err != nil {
-				return nil, fmt.Errorf("error fetching poet text: %w", err)
+				return nil, fmt.Errorf("error fetching writers text: %w", err)
 			}
-			test.TypingTestSettings.PoetText = &poetText
+			test.TypingTestSettings.WritersText = &writersText
 		}
 
 		tests = append(tests, test)

@@ -23,10 +23,11 @@ const useTypingSession = () => {
     const [currentPressedKey, setCurrentPressedKey] = useState<string | null>(null);
     const [handFingerInfoObj, setHandFingerInfoObj] = useState<HandFingerInfoObj | null>(null);
 
-    // gets next character from text with nextIndex and finds keyObj
+    // determines the next character to be typed and updates state
     const processNextCharacter = useCallback(
         (nextIndex: number): number => {
             const newExpectedCharacter = text[nextIndex];
+            // check if the next character is valid; if not, set the session as finished
             if (!newExpectedCharacter) {
                 if (!isTypingFinished) {
                     setIsTypingFinished(true);
@@ -36,13 +37,12 @@ const useTypingSession = () => {
 
             const newExpectedCharacterKeyObj = findKeyObjInLayout(newExpectedCharacter, layout);
 
-            if (!newExpectedCharacter) {
-                setIsTypingFinished(true);
-            }
-
+            // updates Words Per Minute (WPM) based on the typing progress
             updateWpm({ currentCharacterIndex, time, timeLeft, setWpm });
             setExpectedCharacter(newExpectedCharacter);
             setExpectedCharacterKeyObj(newExpectedCharacterKeyObj);
+
+            // updates the hand and finger information for the next character.
             updateHandFingerInfoObj(newExpectedCharacterKeyObj, newExpectedCharacter, setHandFingerInfoObj);
 
             return nextIndex;
@@ -50,7 +50,7 @@ const useTypingSession = () => {
         [text, layout, currentCharacterIndex, time, timeLeft, setWpm, isTypingFinished, setIsTypingFinished]
     );
 
-    // pass this func to input field
+    // handles key press events and checks if the pressed key matches the expected character
     const onKeyPress = useCallback(
         (lastKeyPressed: string) => {
             if (!lastKeyPressed || isTypingFinished) return;
@@ -59,9 +59,7 @@ const useTypingSession = () => {
 
             // check if the typed key is correct
             if (lastKeyPressed === expectedCharacter) {
-                setCurrentCharacterIndex((prevIndex) => {
-                    return prevIndex + 1;
-                });
+                setCurrentCharacterIndex((prevIndex) => prevIndex + 1);
             } else {
                 setMistakeCount((prev) => prev + 1);
             }
@@ -70,6 +68,7 @@ const useTypingSession = () => {
     );
 
     useEffect(() => {
+        // updates typing progress and processes the next character.
         updateTypingProgress(currentCharacterIndex, text.length, setpercentageOfTextTyped);
         processNextCharacter(currentCharacterIndex);
     }, [currentCharacterIndex, processNextCharacter, setpercentageOfTextTyped, text.length]);
@@ -77,13 +76,14 @@ const useTypingSession = () => {
     useEffect(() => {
         if (!text) return;
 
-        // to set starting objects
+        // initializes state for the first character when the session starts
         const initialKeyObj = findKeyObjInLayout(text[0], layout);
         if (!initialKeyObj) return;
 
         setExpectedCharacterKeyObj(initialKeyObj);
         setExpectedCharacter(text[0]);
 
+        // set hand and finger information for the first character
         if (initialKeyObj.hand && initialKeyObj.finger) {
             setHandFingerInfoObj({
                 hand: initialKeyObj.hand,
@@ -94,7 +94,7 @@ const useTypingSession = () => {
         }
     }, [layout, text]);
 
-    // to reset values
+    // reset all states when typing is finished
     useEffect(() => {
         if (isTypingFinished) {
             resetTypingState({
@@ -109,7 +109,6 @@ const useTypingSession = () => {
         }
     }, [isTypingFinished, setMistakeCount, text]);
 
-    // return value
     return {
         onKeyPress,
         expectedCharacter,

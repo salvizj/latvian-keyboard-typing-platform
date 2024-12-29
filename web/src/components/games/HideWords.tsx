@@ -16,9 +16,11 @@ type HideWordsProps = {
 };
 
 const HideWords: React.FC<HideWordsProps> = ({ latvianWords, userId }) => {
+    // game constants
     const TYPING_TIME = 10;
     const INITIAL_SHOW_TIME = 5;
-    const MIN_SHOW_TIME = 1;
+    const MIN_SHOW_TIME = 2;
+    const SHOW_TIME_DECREASE_RATE = 0.5;
 
     const { gameOption } = useParams<{ gameOption: string }>();
     const navigate = useNavigate();
@@ -40,17 +42,21 @@ const HideWords: React.FC<HideWordsProps> = ({ latvianWords, userId }) => {
     const { gameRecordPostError } = usePostGameRecord(gameOption, round, isGameOver, userId);
 
     const resetRound = useCallback(() => {
+        const nextRound = round + 1;
+        const nextWord = hasWords ? latvianWords[nextRound] : '';
+        const nextShowTime = Math.max(MIN_SHOW_TIME, showTime - SHOW_TIME_DECREASE_RATE);
+
         setIsTypingFinished(false);
         setShouldStartTimer(false);
-        setCurrentWord(hasWords ? latvianWords[round] : '');
+        setCurrentWord(nextWord);
         setCurrentLetterIndex(0);
         setTypingTime(TYPING_TIME);
-        setShowTime(Math.max(MIN_SHOW_TIME, Math.floor(showTime - 0.1)));
-        setText(currentWord);
+        setShowTime(nextShowTime);
+        setText(nextWord);
+        setShowText(true);
 
-        // add small delay to ensure the timer restarts
         setTimeout(() => setShouldStartTimer(true), 0);
-    }, [setIsTypingFinished, hasWords, latvianWords, round, showTime, setText, currentWord]);
+    }, [setIsTypingFinished, hasWords, latvianWords, round, showTime, setText]);
 
     const handleKeyPress = useCallback(
         (lastKeyPress: string) => {
@@ -71,39 +77,41 @@ const HideWords: React.FC<HideWordsProps> = ({ latvianWords, userId }) => {
     );
 
     useEffect(() => {
+        // initialize game
+        setTime(TYPING_TIME);
+        setText(currentWord);
+
         if (hasWords && round >= latvianWords.length) {
             setIsGameOver(true);
         }
-    }, [round, hasWords, latvianWords.length]);
 
-    useEffect(() => {
-        if (typingTime !== time) {
-            setTime(typingTime);
-        }
-    }, [typingTime, setTime, time]);
-
-    useEffect(() => {
         if (isTypingFinished) {
             setIsGameOver(true);
         }
-    }, [isTypingFinished]);
 
-    useEffect(() => {
-        if (timeLeft != null) {
-            if (timeLeft > showTime) {
-                setShowText(true);
-            } else {
-                setShowText(false);
-            }
+        if (typingTime !== time) {
+            setTime(typingTime);
         }
-    }, [showTime, timeLeft]);
 
-    // Initialize the game
-    useEffect(() => {
-        setTime(TYPING_TIME);
-        setText(currentWord);
+        if (timeLeft != null) {
+            setShowText(timeLeft > TYPING_TIME - showTime);
+        }
+
         return () => setIsTypingFinished(false);
-    }, [setTime, setIsTypingFinished, setText, currentWord]);
+    }, [
+        setTime,
+        setText,
+        currentWord,
+        hasWords,
+        round,
+        latvianWords.length,
+        isTypingFinished,
+        typingTime,
+        time,
+        timeLeft,
+        showTime,
+        setIsTypingFinished,
+    ]);
 
     const completionTitle = `${translate('game_over_you_held_up', language)} ${round} ${translate(
         round === 1 ? 'round' : 'rounds',

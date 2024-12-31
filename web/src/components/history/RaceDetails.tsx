@@ -58,6 +58,24 @@ const RaceDetails: FC<RaceDetailsProps> = ({ race, language, handleClose }) => {
                             {translate('custom_text', language)}: {lobbySettings.customText}
                         </div>
                     )}
+                    {lobbySettings.writersText && (
+                        <>
+                            <div>
+                                {translate('writers_first_name', language)}:{' '}
+                                {lobbySettings.writersText.writersFirstName}
+                            </div>
+                            <div>
+                                {translate('writers_last_name', language)}: {lobbySettings.writersText.writersLastName}
+                            </div>
+                            <div>
+                                {translate('fragments_name', language)}: {lobbySettings.writersText.fragmentName}
+                            </div>
+                            <div>
+                                {translate('fragments_content', language)}:{' '}
+                                {lobbySettings.writersText?.fragmentsContent}
+                            </div>
+                        </>
+                    )}
                 </div>
             ) : (
                 <p className="text-red-500">{translate('settings_not_found', language)}</p>

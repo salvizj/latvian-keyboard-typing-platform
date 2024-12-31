@@ -39,13 +39,13 @@ func GetWritersTexts() ([]types.WritersText, error) {
 
 // GetWritersText gets a single writers text object based on postTextID
 func GetWritersText(writersTextID int) (types.WritersText, error) {
-	query := `SELECT writersTextId, writersFirstName, writersLastNamer, fragmentName fragmentsContent FROM "WritersTexts" WHERE writersTextId = $1`
+	query := `SELECT writersTextId, writersFirstName, writersLastName, fragmentName, fragmentsContent FROM "WritersTexts" WHERE writersTextId = $1`
 
 	var writersText types.WritersText
 
 	row := db.DB.QueryRow(query, writersTextID)
 
-	if err := row.Scan(&writersText.WritersTextID, &writersText.WritersFirstName, &writersText.FragmentName, &writersText.FragmentsContent); err != nil {
+	if err := row.Scan(&writersText.WritersTextID, &writersText.WritersFirstName, &writersText.WritersLastName, &writersText.FragmentName, &writersText.FragmentsContent); err != nil {
 		if err == sql.ErrNoRows {
 			return types.WritersText{}, nil
 		}

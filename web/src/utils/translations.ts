@@ -6,6 +6,10 @@ type Translations = {
 
 const translations: Translations = {
     en: {
+        index_page_h1: 'Latvian Language Keyboard Typing Skills Development Platform',
+        index_page_p:
+            'Develop your typing skills with our platform to improve your use of the Latvian language keyboard.',
+
         // Core Navigation & Authentication
         login: 'Login',
         logout: 'Logout',
@@ -109,7 +113,7 @@ const translations: Translations = {
         race_count_0: 'You haven`t done any typing race.',
         settings_not_found: 'Settings not found. Please try again later.',
         lobby_id: 'Race Id',
-        writers_text: 'Writers text',
+        fragments_content: 'Fragments content',
         fragments_name: 'Fragment name',
         writers_first_name: 'Writers first name',
         writers_last_name: 'Writers last name',
@@ -205,6 +209,10 @@ const translations: Translations = {
     },
 
     lv: {
+        index_page_h1: 'Latviešu valodas klaviatūras rakstīšanas prasmju attīstības platforma',
+        index_page_p:
+            'Attīsti savas rakstīšanas prasmes ar mūsu platformu, lai uzlabotu latviešu valodas klaviatūras lietošanu.',
+
         // Core Navigation & Authentication
         login: 'Pieslēgties',
         logout: 'Atslēgties',
@@ -265,7 +273,7 @@ const translations: Translations = {
         time: 'Laiks',
         test_id: 'Testa identifikators',
         custom: 'Pielagots',
-        writers: 'Dzejnieka',
+        writers: 'Rakstnieka',
         time_left: 'Atlikušais laiks',
 
         // Typing Race Features
@@ -312,7 +320,7 @@ const translations: Translations = {
         race_count_0: 'Jums nav veiktas nevienas rakstīšanas sacensības',
         settings_not_found: 'Iestatījumi netika atrasti. Lūdzu mēģiniet vēlāk atkārtoti',
         lobby_id: 'Sacensību Id',
-        writers_text: 'Rakstnieka teksts',
+        fragments_content: 'Fragmenta seturs',
         fragments_name: 'Teksta fragmenta nosaukums',
         writers_first_name: 'Rakstnieka vārds',
         writers_last_name: 'Rakstnieka uzvārds',

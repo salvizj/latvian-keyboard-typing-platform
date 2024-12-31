@@ -50,7 +50,7 @@ var lessons = []types.Lesson{
 	{LessonID: 40, LessonText: "d p v D P V", LessonDifficulty: "beginner"},
 	{LessonID: 41, LessonText: "da pa va Da Pa Va DA PA VA dē pē vē Dē Pē Vē DĒ PĒ VĒ", LessonDifficulty: "intermediate"},
 	{LessonID: 42, LessonText: "dēl pēl vēl Dēl Pēl Vēl DĒL PĒL VĒL vērt Vērt VĒRT", LessonDifficulty: "intermediate"},
-	{LessonID: 43, LessonText: "dēls Dēls DĒLS pīle Pīle PĪLE vērt Vērt VĒRT vēlme Vēlme VĒLME dēsts Dēsts DĒSTS", LessonDifficulty: "advanced"},
+	{LessonID: 43, LessonText: "dēls Dēls DĒLS pīle Pīle PĪLE vērt Vērt VĒRT vēlme Vēlme VĒLME dēsts Dēsts eDĒSTS", LessonDifficulty: "advanced"},
 	{LessonID: 44, LessonText: "j z ž J Z Ž", LessonDifficulty: "beginner"},
 	{LessonID: 45, LessonText: "ja za ža Ja Za Ža JA ZA ŽA jē zē že Jē Zē Že JĒ ZĒ ŽE", LessonDifficulty: "intermediate"},
 	{LessonID: 46, LessonText: "jūs zūs žūs Jūs Zūs Žūs JŪS ZŪS ŽŪS žēl Žēl ŽĒL", LessonDifficulty: "intermediate"},

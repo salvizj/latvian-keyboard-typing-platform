@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import getTypingTestsAndRacesCount from '../api/getTypingTestsAndRacesCount';
 import getTypingTestsAndRaces from '../api/getTypingTestsAndRaces';
-import { TypingTestOrRaceData } from '../types';
+import { HistoryTypes, TypingTestOrRaceData } from '../types';
 
 const useGetTypingData = (
     userId: string | null,
@@ -41,7 +41,11 @@ const useGetTypingData = (
                 if (page >= 0 && type && type !== '' && itemsPerPage >= 0) {
                     getTypingTestsAndRaces(userId, page, type, itemsPerPage, dateFrom, dateTill)
                         .then((detailedData) => {
-                            setData(detailedData);
+                            if (
+                                detailedData.type === HistoryTypes.TypingTest ||
+                                detailedData.type === HistoryTypes.TypingRace
+                            )
+                                setData(detailedData);
                         })
                         .catch((err) => {
                             setFetchingTypingDataError('error_failed_to_fetch_typing_data');

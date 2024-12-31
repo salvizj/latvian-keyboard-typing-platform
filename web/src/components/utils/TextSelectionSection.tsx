@@ -31,8 +31,8 @@ const TextSelectionSection: React.FC<{
 
     useEffect(() => {
         if (isCustomText) {
-            setText(customText.trim());
-            setCustomText(customText.trim());
+            setText(customText);
+            setCustomText(customText);
             setTextType('custom');
         } else {
             setText(selectedText);

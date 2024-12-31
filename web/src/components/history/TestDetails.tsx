@@ -60,7 +60,8 @@ const TestDetails: FC<TestDetailsProps> = ({ test, language, handleClose }) => {
                                 {translate('fragments_name', language)}: {typingTestSettings.writersText.fragmentName}
                             </div>
                             <div>
-                                {translate('writers_text', language)}: {typingTestSettings.writersText?.fragmentName}
+                                {translate('fragments_content', language)}:{' '}
+                                {typingTestSettings.writersText?.fragmentsContent}
                             </div>
                         </>
                     )}

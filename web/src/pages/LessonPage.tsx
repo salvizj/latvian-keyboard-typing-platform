@@ -62,7 +62,6 @@ const LessonPage = () => {
             </p>
         );
     }
-
     if (isTypingFinished && lessonId) {
         return (
             <CompletionScreen
@@ -78,7 +77,10 @@ const LessonPage = () => {
                     },
                     {
                         text: 'next_lesson',
-                        onClick: () => navigate(`/lesson/${parseInt(lessonId) + 1}`),
+                        onClick: () => {
+                            const nextLessonId = parseInt(lessonId, 10) + 1;
+                            navigate(`/lesson/${nextLessonId}`);
+                        },
                     },
                 ]}
                 showMetrics={false}

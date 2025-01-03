@@ -149,6 +149,7 @@ export type StartRaceData = object;
 export type EndRaceData = {
     players: Player[];
 };
+
 export type TimeLeftData = {
     timeLeft: number;
 };

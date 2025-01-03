@@ -160,6 +160,7 @@ func GetTypingTests(userID string, page, itemsPerPage int, dateFrom, dateTill *s
 		if err != nil {
 			return nil, fmt.Errorf("error scanning row: %w", err)
 		}
+
 		if test.TypingTestSettings.TextID != nil {
 			writersText, err := GetWritersText(*test.TypingTestSettings.TextID)
 			if err != nil {

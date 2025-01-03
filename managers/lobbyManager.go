@@ -132,7 +132,7 @@ func (lm *LobbyManager) HandleCreateLobby(message types.WebSocketMessage, conn *
 	}
 
 	var textID *int
-	if textIDFloat, ok := lobbySettingsRaw["textid"].(float64); ok {
+	if textIDFloat, ok := lobbySettingsRaw["textId"].(float64); ok {
 		textIDValue := int(textIDFloat)
 		textID = &textIDValue
 	} else {
@@ -194,6 +194,7 @@ func (lm *LobbyManager) HandleCreateLobby(message types.WebSocketMessage, conn *
 			TextID:         textID,
 		},
 	}
+
 	if lm.Lobbies == nil {
 		lm.Lobbies = make(map[string]*types.LobbyWithLock)
 	}
@@ -445,8 +446,6 @@ func (lm *LobbyManager) startCountdown(lobbyID string) {
 				err := lm.SaveRaceResults(lobbyID)
 				if err != nil {
 					fmt.Printf("Error saving race results: %v\n", err)
-				} else {
-					fmt.Printf("Race results saved successfully for Lobby ID: %s\n", lobbyID)
 				}
 			}()
 

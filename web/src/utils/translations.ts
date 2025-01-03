@@ -413,6 +413,7 @@ const translations: Translations = {
         game_over_you_held_up: 'Spēle beigusies! Tu izturēji',
         we_have_no_words_left: 'Mums vairs nav vārdu, ko tev iedot, apsveicu',
         game_not_found: 'Spele nav atrasta.',
+        type_word_that_shows_above: 'Raksti vārdu, kas pārādās augšā',
     },
 };
 

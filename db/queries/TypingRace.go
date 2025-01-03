@@ -106,6 +106,7 @@ func GetTypingRaces(userID string, page, itemsPerPage int, dateFrom, dateTill *s
 			&lobbySetting.MaxPlayerCount,
 			&lobbySetting.Time,
 		)
+
 		if err != nil {
 			return nil, fmt.Errorf("error scanning player row: %w", err)
 		}
@@ -147,7 +148,7 @@ func GetTypingRaces(userID string, page, itemsPerPage int, dateFrom, dateTill *s
 func PostTypingRaceSettings(typingRaceSettings types.LobbySettings) (int, error) {
 	// textID based on the settings
 	var textID interface{}
-	if typingRaceSettings.TextType == "custom" {
+	if typingRaceSettings.TextType != "custom" {
 		textID = nil
 	} else {
 		textID = typingRaceSettings.TextID

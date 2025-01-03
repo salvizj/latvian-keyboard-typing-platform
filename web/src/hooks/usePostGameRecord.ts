@@ -10,7 +10,7 @@ const usePostGameRecord = (
     const [gameRecordPostError, setGameRecordPostError] = useState<string | null>(null);
     const [gameRecordPostLoading, setGameRecordPostLoading] = useState<boolean>(false);
     useEffect(() => {
-        if (userId && gameOption && gameOption != '' && gameRecord !== null && isGameOver) {
+        if (userId && gameOption != '' && gameOption && isGameOver) {
             setGameRecordPostLoading(true);
             postGameRecord(gameOption, userId, gameRecord)
                 .then(() => {

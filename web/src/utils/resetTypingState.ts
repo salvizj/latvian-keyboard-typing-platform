@@ -9,7 +9,6 @@ type ResetTypingStateParams = {
     setExpectedCharacterKeyObj: (value: KeyObj | null) => void;
     text: string;
 };
-
 export const resetTypingState = ({
     setCurrentCharacterIndex,
     setExpectedCharacter,

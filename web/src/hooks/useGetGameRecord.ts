@@ -7,7 +7,6 @@ const useGetGameRecord = (gameName: string) => {
     const [gameRecordGetError, setGameRecordGetError] = useState<string | null>(null);
     const [gameRecordGetLoading, setGameRecordGetLoading] = useState<boolean>(false);
     const { userId } = useAuthStatus();
-
     useEffect(() => {
         if (userId && gameName !== '') {
             setGameRecordGetLoading(true);

@@ -5,7 +5,6 @@ const useAuthStatus = () => {
     const [isSignedIn, setIsSignedIn] = useState(false);
     const [userId, setUserId] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
-
     useEffect(() => {
         supabase.auth
             .getSession()

@@ -13,7 +13,6 @@ type ValidateOptionsParams = {
     maxPlayerCount?: number;
     language: string;
 };
-
 const validateOptions = (props: ValidateOptionsParams): ValidationErrors => {
     const {
         isCustomText,

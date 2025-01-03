@@ -1,26 +1,43 @@
 import globals from 'globals';
-import pluginJs from '@eslint/js';
-import tseslint from 'typescript-eslint';
+import tseslint from '@typescript-eslint/eslint-plugin';
 import pluginReact from 'eslint-plugin-react';
+import parser from '@typescript-eslint/parser';
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
-    { files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'] },
-    { languageOptions: { globals: globals.browser } },
-    pluginJs.configs.recommended,
-    ...tseslint.configs.recommended,
     {
-        plugins: ['react'],
-        ...pluginReact.configs.flat.recommended,
-        settings: {
-            react: {
-                version: '18.0',
-            },
+        files: ['**/*.{js,mjs,cjs,ts,tsx,jsx}'],
+        ignores: ['dist/**/*'],
+        languageOptions: {
+            parser,
+            globals: globals.browser,
+        },
+        plugins: {
+            '@typescript-eslint': tseslint,
+            react: pluginReact,
         },
         rules: {
-            'react/jsx-uses-react': 'off', // JSX doesn't require React import (React 17+)
-            'react/jsx-uses-vars': 'error', // ensures variables declared in JSX are used
-            '@typescript-eslint/no-unused-expressions': ['error', { allowTernary: true }], // allow ternary operators
+            'no-console': ['warn', { allow: ['warn', 'error'] }], // allow console.error and console.warn
+            '@typescript-eslint/no-unused-vars': [
+                'warn',
+                {
+                    argsIgnorePattern: '^(set|value)$', // ignore setter functions like set(value => void)
+                    varsIgnorePattern: '^_', // ignore variables starting with '_'
+                    caughtErrors: 'none', // don't warn about unused caught errors
+                },
+            ],
+
+            'react/react-in-jsx-scope': 'off',
+
+            '@typescript-eslint/no-unused-vars': ['warn'], // warn on unused TypeScript variables
+
+            // allow exported functions to not trigger unused variable warnings
+            '@typescript-eslint/explicit-module-boundary-types': 'off', // Allows functions without explicit return types
+        },
+        settings: {
+            react: {
+                version: 'detect', // automatically detect the React version
+            },
         },
     },
 ];

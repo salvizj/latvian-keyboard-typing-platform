@@ -65,7 +65,10 @@ func (lm *LobbyManager) HandleConnectionClose(ws *websocket.Conn) {
 						Players: lobby.Players,
 					},
 				}
-				lm.Broadcast(leftLobbyMessage)
+
+				if err := lm.Broadcast(leftLobbyMessage); err != nil {
+					fmt.Println("Error broadcasting message:", err)
+				}
 
 				// delete empty lobby
 				if len(lobby.Players) == 0 {

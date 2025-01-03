@@ -11,7 +11,6 @@ const useWebSocketMenagement = ({ wsUrl, isOptionsSet }: UseWebSocketManagementP
     const [messages, setMessages] = useState<WebSocketMessage<WebSocketMessageData>[]>([]);
     const [lastMessage, setLastMessage] = useState<WebSocketMessage<WebSocketMessageData> | null>(null);
     const [isSocketOpen, setIsSocketOpen] = useState(false);
-
     useEffect(() => {
         if (wsUrl && !socket && isOptionsSet) {
             const ws = new WebSocket(wsUrl);
@@ -28,10 +27,6 @@ const useWebSocketMenagement = ({ wsUrl, isOptionsSet }: UseWebSocketManagementP
                 if (parsedMessage !== lastMessage) {
                     setMessages((prevMessages) => [...prevMessages, parsedMessage]);
                 }
-            };
-
-            ws.onclose = () => {
-                console.log('WebSocket closed');
             };
 
             setSocket(ws);

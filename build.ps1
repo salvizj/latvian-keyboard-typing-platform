@@ -90,6 +90,16 @@ function Clean {
         Write-Host "No binaries to clean."
     }
 }
+function Linters {
+ Write-Host "Running Go linter..."
+    golangci-lint run ./...
+    Set-Location web
+    Write-Host "Running ESLint..."
+    npm run lint
+    Set-Location  ..
+    
+}
+
 
 switch ($target) {
     "install" { Install }
@@ -99,5 +109,6 @@ switch ($target) {
     "run-dev" { RunDev }
     "format" { Format }
     "clean" { Clean }
-    default { Write-Host "Usage: ./build.ps1 [install|build|build-dev|run|run-dev|format|clean]" }
+    "linters" { Linters }
+    default { Write-Host "Usage: ./build.ps1 [install|build|build-dev|run|run-dev|format|clean|linters]" }
 }

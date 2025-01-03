@@ -6,6 +6,7 @@ import {
     CreateLobbyData,
     EndRaceData,
     JoinLobbyData,
+    LeftLobbyData,
     LobbyStatus,
     Player,
     ProgressData,
@@ -93,6 +94,11 @@ const TypingRacePage = () => {
             setValidLobby(true);
             const currentPlayer = data.players.find((player) => player.username === username);
             if (currentPlayer && currentPlayer.playerId) setPlayerId(currentPlayer.playerId);
+        }
+
+        if (lastMessage.type === WebSocketMessageType.LeftLobby) {
+            const data = lastMessage.data as LeftLobbyData;
+            setPlayerData(data.players);
         }
 
         if (lastMessage.type === WebSocketMessageType.Progress && lastMessage.data) {

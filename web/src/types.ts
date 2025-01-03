@@ -102,6 +102,7 @@ export type Player = {
     wpm?: number;
     percentageOfTextTyped?: number;
     finishedTyping?: boolean;
+    Connection?: WebSocket;
 };
 
 export enum PlayerRole {
@@ -124,6 +125,7 @@ export type WebSocketMessage<WebSocketMessageData> = {
 export type WebSocketMessageData =
     | CreateLobbyData
     | JoinLobbyData
+    | LeftLobbyData
     | StartRaceData
     | EndRaceData
     | TimeLeftData
@@ -137,6 +139,10 @@ export type CreateLobbyData = {
 
 export type JoinLobbyData = {
     lobbySettings: LobbySettings;
+    players: Player[];
+};
+
+export type LeftLobbyData = {
     players: Player[];
 };
 
@@ -161,6 +167,7 @@ export type ErrorData = {
 export enum WebSocketMessageType {
     CreateLobby = 'createLobby',
     JoinLobby = 'joinLobby',
+    LeftLobby = 'leftLobby',
     Progress = 'progress',
     StartRace = 'startRace',
     EndRace = 'endRace',

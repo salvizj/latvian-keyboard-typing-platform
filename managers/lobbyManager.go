@@ -15,18 +15,16 @@ import (
 
 // LobbyManager manages multiple lobbies, handling concurrency and tracking lobby states, connections, and remaining time.
 type LobbyManager struct {
-	globalMu    sync.RWMutex
-	Lobbies     map[string]*types.LobbyWithLock
-	Connections map[string][]*websocket.Conn
-	TimeLeft    map[string]int
+	globalMu sync.RWMutex
+	Lobbies  map[string]*types.LobbyWithLock
+	TimeLeft map[string]int
 }
 
 // NewLobbyManager initialize function to make LobbyManager
 func NewLobbyManager() *LobbyManager {
 	return &LobbyManager{
-		Lobbies:     make(map[string]*types.LobbyWithLock),
-		Connections: make(map[string][]*websocket.Conn),
-		TimeLeft:    make(map[string]int),
+		Lobbies:  make(map[string]*types.LobbyWithLock),
+		TimeLeft: make(map[string]int),
 	}
 }
 
@@ -53,15 +51,24 @@ func (lm *LobbyManager) HandleConnectionClose(ws *websocket.Conn) {
 	lm.globalMu.Lock()
 	defer lm.globalMu.Unlock()
 
-	for lobbyID, conns := range lm.Connections {
-		for i, conn := range conns {
-			if conn == ws {
-				// remove the connection from the lobby
-				lm.Connections[lobbyID] = append(conns[:i], conns[i+1:]...)
+	for lobbyID, lobby := range lm.Lobbies {
+		for i, player := range lobby.Players {
+			if player.Connection == ws {
 
-				// if lobby is empty, clean it up
-				if len(lm.Connections[lobbyID]) == 0 {
-					delete(lm.Connections, lobbyID)
+				// remove player
+				lobby.Players = append(lobby.Players[:i], lobby.Players[i+1:]...)
+
+				leftLobbyMessage := &types.WebSocketMessage{
+					Type:    types.LeftLobby,
+					LobbyID: lobbyID,
+					Data: types.LeftLobbyData{
+						Players: lobby.Players,
+					},
+				}
+				lm.Broadcast(leftLobbyMessage)
+
+				// delete empty lobby
+				if len(lobby.Players) == 0 {
 					delete(lm.Lobbies, lobbyID)
 				}
 				return
@@ -70,16 +77,27 @@ func (lm *LobbyManager) HandleConnectionClose(ws *websocket.Conn) {
 	}
 }
 
-// Broadcast brodcasts websocket messages to all players in lobby
+// FindPlayer find player based on id
+func (lm *LobbyManager) FindPlayer(lobby *types.Lobby, playerID string) (int, *types.Player) {
+	for i, p := range lobby.Players {
+		if p.PlayerID == playerID {
+			return i, &lobby.Players[i]
+		}
+	}
+	return -1, nil
+}
+
+// Broadcast broadcasts websocket messages to all players in the lobby
 func (lm *LobbyManager) Broadcast(msg *types.WebSocketMessage) error {
-	conns, exists := lm.Connections[msg.LobbyID]
+	lobby, exists := lm.Lobbies[msg.LobbyID]
 	if !exists {
 		return nil
 	}
 
-	for _, conn := range conns {
-		if err := conn.WriteJSON(msg); err != nil {
-			return fmt.Errorf("error broadcasting to connection: %w", err)
+	// iterate through all players in the lobby and send the message to each player's connection
+	for _, player := range lobby.Players {
+		if err := player.Connection.WriteJSON(msg); err != nil {
+			return fmt.Errorf("error broadcasting to player %s in lobby %s: %w", player.PlayerID, msg.LobbyID, err)
 		}
 	}
 
@@ -179,6 +197,7 @@ func (lm *LobbyManager) HandleCreateLobby(message types.WebSocketMessage, conn *
 		Place:        0,
 		MistakeCount: 0,
 		Wpm:          0,
+		Connection:   conn,
 	}
 
 	lobby := &types.LobbyWithLock{
@@ -202,11 +221,6 @@ func (lm *LobbyManager) HandleCreateLobby(message types.WebSocketMessage, conn *
 	lm.globalMu.Lock()
 	lm.Lobbies[lobbyID] = lobby
 
-	if lm.Connections == nil {
-		lm.Connections = make(map[string][]*websocket.Conn)
-	}
-
-	lm.Connections[lobbyID] = []*websocket.Conn{conn}
 	lm.globalMu.Unlock()
 
 	broadcastMessage := &types.WebSocketMessage{
@@ -287,11 +301,10 @@ func (lm *LobbyManager) HandleJoinLobby(message types.WebSocketMessage, conn *we
 		Place:        0,
 		MistakeCount: 0,
 		Wpm:          0,
+		Connection:   conn,
 	}
 	lm.globalMu.Lock()
 	lobby.Players = append(lobby.Players, player)
-
-	lm.Connections[lobbyID] = append(lm.Connections[lobbyID], conn)
 
 	lm.Lobbies[message.LobbyID] = lobby
 	lm.globalMu.Unlock()

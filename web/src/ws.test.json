@@ -1,0 +1,43 @@
+[
+    {
+        "type": "createLobby",
+        "lobbyId": "",
+        "data": {
+            "lobbySettings": {
+                "time": 10,
+                "maxPlayerCount": 2,
+                "text": "Jūra, neskatoties uz to, ka tā vienmēr bija plaša un noslēpumainā, šķita līdzīga mūsu dzīvei – pilna ar krītošiem viļņiem un sapņiem, kas nekad nepārtrūkst.",
+                "textId": 10,
+                "customText": "",
+                "textType": "writers"
+            },
+            "players": [
+                {
+                    "username": "test 1",
+                    "userId": "0a126481-4495-4a92-aac4-6447dc6c6535"
+                }
+            ]
+        }
+    },
+    {
+        "type": "startRace",
+        "lobbyId": "92c7ad74-2116-4a33-9848-cb7a7a697492",
+        "data": {}
+    },
+    {
+        "type": "progress",
+        "lobbyId": "92c7ad74-2116-4a33-9848-cb7a7a697492",
+        "data": {
+            "players": [
+                {
+                    "playerId": "ae1633dd-8c0b-4016-84ea-f777fbd16d41",
+                    "username": "test 1",
+                    "userId": "0a126481-4495-4a92-aac4-6447dc6c6535",
+                    "wpm": 0,
+                    "mistakeCount": 0,
+                    "percentageOfTextTyped": 0
+                }
+            ]
+        }
+    }
+]

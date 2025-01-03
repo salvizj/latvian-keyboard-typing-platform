@@ -1,6 +1,10 @@
 package types
 
-import "sync"
+import (
+	"sync"
+
+	"github.com/gorilla/websocket"
+)
 
 // Lesson represents a typing lesson with difficulty level and text.
 type Lesson struct {
@@ -67,6 +71,7 @@ type LobbySettings struct {
 	MaxPlayerCount  int          `json:"maxPlayerCount"`
 	Time            int          `json:"time"`
 }
+type Connection = *websocket.Conn
 
 // Player represents a player in the game with their score and typing progress.
 type Player struct {
@@ -80,6 +85,7 @@ type Player struct {
 	Wpm                   int        `json:"wpm,omitempty"`
 	PercentageOfTextTyped int        `json:"percentageOfTextTyped,omitempty"`
 	FinishedTyping        bool       `json:"finishedTyping,omitempty"`
+	Connection            Connection `json:"-"`
 }
 
 // PlayerRole represents the role of a player in a lobby (either player or leader).
@@ -108,6 +114,7 @@ type WebSocketMessageTypes string
 const (
 	CreateLobby WebSocketMessageTypes = "createLobby"
 	JoinLobby   WebSocketMessageTypes = "joinLobby"
+	LeftLobby   WebSocketMessageTypes = "leftLobby"
 	Progess     WebSocketMessageTypes = "progress"
 	StartRace   WebSocketMessageTypes = "startRace"
 	TimeLeft    WebSocketMessageTypes = "timeLeft"
@@ -132,6 +139,11 @@ type CreateLobbyData struct {
 type JoinLobbyData struct {
 	LobbySettings LobbySettings `json:"lobbySettings"`
 	Players       []Player      `json:"players"`
+}
+
+// LeftLobbyData represents the data needed for players when someone left the lobby and need new info.
+type LeftLobbyData struct {
+	Players []Player `json:"players"`
 }
 
 // TimeLeftData represents the time remaining in a race or test.

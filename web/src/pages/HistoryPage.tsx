@@ -38,6 +38,8 @@ const HistoryPage = () => {
 
         if (errorMsg) {
             setValidateError(errorMsg);
+        } else {
+            setValidateError('');
         }
     }, [searchParams, setSearchParams]);
 
@@ -71,7 +73,6 @@ const HistoryPage = () => {
         };
 
         setSearchParams(newParams);
-        validateHistoryFilters(newParams.page, newParams.type, newParams.dateFrom, newParams.dateTill);
     };
     // for type changes
     const handleTypeChange = (type: HistoryTypes) => {

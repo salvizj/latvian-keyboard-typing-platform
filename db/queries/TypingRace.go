@@ -10,30 +10,30 @@ import (
 // GetTypingRacesCount gets typing race count by userID and date
 func GetTypingRacesCount(userID string, dateFrom, dateTill *string) (int, error) {
 	var count int
-	queryParts := []string{`SELECT COUNT(*) FROM "TypingRacePlayers" WHERE userid = $1`}
+	queryParts := []string{`
+    SELECT COUNT(*) 
+    	FROM "TypingRacePlayers" tp
+    	JOIN "TypingRaces" tr ON tp.typingRaceId = tr.typingRaceId
+    	WHERE tp.userid = $1`}
 	queryArgs := []interface{}{userID}
 	paramCount := 1
 
-	// dynamic query building for date range filtering
 	if dateFrom != nil && *dateFrom != "" {
 		paramCount++
-		queryParts = append(queryParts, fmt.Sprintf("AND date >= $%d::DATE", paramCount))
+		queryParts = append(queryParts, fmt.Sprintf("AND tr.date >= $%d::DATE", paramCount))
 		queryArgs = append(queryArgs, *dateFrom)
 	}
-
 	if dateTill != nil && *dateTill != "" {
 		paramCount++
-		queryParts = append(queryParts, fmt.Sprintf("AND date <= $%d::DATE", paramCount))
+		queryParts = append(queryParts, fmt.Sprintf("AND tr.date <= $%d::DATE", paramCount))
 		queryArgs = append(queryArgs, *dateTill)
 	}
 
 	query := strings.Join(queryParts, " ")
-
 	err := db.DB.QueryRow(query, queryArgs...).Scan(&count)
 	if err != nil {
 		return 0, fmt.Errorf("error querying TypingRaces count: %w", err)
 	}
-
 	return count, nil
 }
 

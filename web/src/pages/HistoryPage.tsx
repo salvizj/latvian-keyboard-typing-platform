@@ -36,14 +36,36 @@ const HistoryPage = () => {
 
         const errorMsg = validateHistoryFilters(params.page, params.type, params.dateFrom, params.dateTill);
 
-        if (errorMsg) setValidateError(errorMsg);
+        if (errorMsg) {
+            setValidateError(errorMsg);
+        }
     }, [searchParams, setSearchParams]);
 
     // update search params and validate
-    const handleChange = (updates: { type?: string; page?: string; dateFrom?: string; dateTill?: string }) => {
+    const handleParamChange = (
+        updates: {
+            type?: string;
+            page?: string | number;
+            dateFrom?: string;
+            dateTill?: string;
+        },
+        direction?: 'left' | 'right'
+    ) => {
+        const currentPage = parseInt(searchParams.get('page') || '0', 10);
+
+        // handle pagination logic if direction is provided
+        let newPage = updates.page;
+        if (direction) {
+            if (direction === 'right') {
+                newPage = currentPage + 1;
+            } else if (direction === 'left' && currentPage > 0) {
+                newPage = currentPage - 1;
+            }
+        }
+
         const newParams = {
             type: updates.type || searchParams.get('type') || HistoryTypes.TypingTest,
-            page: updates.page || searchParams.get('page') || '0',
+            page: newPage?.toString() || searchParams.get('page') || '0',
             dateFrom: updates.dateFrom || searchParams.get('dateFrom') || '',
             dateTill: updates.dateTill || searchParams.get('dateTill') || '',
         };
@@ -51,14 +73,20 @@ const HistoryPage = () => {
         setSearchParams(newParams);
         validateHistoryFilters(newParams.page, newParams.type, newParams.dateFrom, newParams.dateTill);
     };
-
+    // for type changes
     const handleTypeChange = (type: HistoryTypes) => {
-        handleChange({ type });
+        handleParamChange({ type });
     };
 
+    // for date changes
     const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
-        handleChange({ [name]: value });
+        handleParamChange({ [name]: value });
+    };
+
+    // for page changes
+    const handlePageChange = (direction: 'left' | 'right') => {
+        handleParamChange({}, direction);
     };
 
     const currentType = searchParams.get('type');
@@ -66,23 +94,6 @@ const HistoryPage = () => {
     const dateFrom = searchParams.get('dateFrom') || '';
     const dateTill = searchParams.get('dateTill') || '';
 
-    const handlePageChange = (direction: 'left' | 'right') => {
-        let newPage = currentPage;
-        if (direction === 'right') {
-            newPage = currentPage + 1;
-        } else if (direction === 'left' && currentPage > 0) {
-            newPage = currentPage - 1;
-        }
-
-        setSearchParams((prevParams) => {
-            return {
-                type: prevParams.get('type') || HistoryTypes.TypingTest,
-                page: newPage.toString(),
-                dateFrom: prevParams.get('dateFrom') || '',
-                dateTill: prevParams.get('dateTill') || '',
-            };
-        });
-    };
     const { data, loadingTypingData, fetchingTypingDataError, racesCount, testsCount } = useGetTypingData(
         userId,
         dateFrom,
@@ -141,7 +152,7 @@ const HistoryPage = () => {
                             max="2025-11-10"
                             value={dateFrom}
                             onChange={handleDateChange}
-                            className="p-2 border rounded-lg min-w-[12rem] ml-2 bg-color-primary"
+                            className="p-2 border rounded-lg min-w-[12rem] ml-2 bg-color-primary text-color-third"
                         />
                     </div>
                     <div>
@@ -156,7 +167,7 @@ const HistoryPage = () => {
                             max="2025-11-10"
                             value={dateTill}
                             onChange={handleDateChange}
-                            className="p-2 border rounded-lg min-w-[12rem] ml-2 bg-color-primary"
+                            className="p-2 border rounded-lg min-w-[12rem] ml-2 bg-color-primary text-color-third"
                         />
                     </div>
                 </div>

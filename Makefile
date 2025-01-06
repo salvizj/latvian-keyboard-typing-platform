@@ -30,6 +30,20 @@ run: build
 	@echo "Running in production mode..."
 	./$(BINARY_NAME)
 
+build-and-run: build
+	@echo "Running project in production mode..."
+	./$(BINARY_NAME)
+
+build-and-run-dev: build-dev
+	@echo "Running project in development mode..."
+	./$(BINARY_NAME)
+
+format:
+	@echo "Formatting frontend code..."
+	npx prettier --write "web/**/*.tsx" "web/**/*.ts"
+	@echo "Formatting backend code..."
+	go fmt ./...
+
 clean:
 	@if [ -f $(BINARY_NAME) ]; then \
 		rm -f $(BINARY_NAME); \
@@ -38,4 +52,11 @@ clean:
 		echo "No binaries to clean."; \
 	fi
 
-.PHONY: install build build-dev run clean
+linters:
+	@echo "Running Go linter..."
+	golangci-lint run ./...
+	@echo "Running ESLint on frontend code..."
+	cd web && npm run lint
+	@if [ $$? -ne 0 ]; then echo "ESLint failed"; exit 1; fi
+
+.PHONY: install build build-dev run build-and-run build-and-run-dev format clean linters

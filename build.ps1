@@ -68,12 +68,28 @@ function Run {
     & "./$BINARY_NAME"
 }
 
-function RunDev {
-    BuildDev
-    Write-Host "Running in development mode..."
+
+function BuildAndRun {
+    Write-Host "Building project..."
+    Build
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "Build failed. Exiting."
+        exit 1
+    }
+    Write-Host "Running project..."
     & "./$BINARY_NAME"
 }
 
+function BuildAndRunDev {
+    Write-Host "Building project in development mode..."
+    BuildDev
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "Development build failed. Exiting."
+        exit 1
+    }
+    Write-Host "Running project in development mode..."
+    & "./$BINARY_NAME"
+}
 
 function Format {
     Write-Host "Formatting frontend code..."
@@ -106,9 +122,10 @@ switch ($target) {
     "build" { Build }
     "build-dev" { BuildDev }
     "run" { Run }
-    "run-dev" { RunDev }
+    "build-and-run" { BuildAndRun }
+    "build-and-run-dev" { BuildAndRunDev }
     "format" { Format }
     "clean" { Clean }
     "linters" { Linters }
-    default { Write-Host "Usage: ./build.ps1 [install|build|build-dev|run|run-dev|format|clean|linters]" }
+    default { Write-Host "Usage: ./build.ps1 [install|build|build-dev|run|run-dev|build-and-run|build-and-run-dev|format|clean|linters]" }
 }

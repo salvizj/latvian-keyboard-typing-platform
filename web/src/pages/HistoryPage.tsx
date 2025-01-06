@@ -43,7 +43,7 @@ const HistoryPage = () => {
         }
     }, [searchParams, setSearchParams]);
 
-    // update search params and validate
+    // update search params
     const handleParamChange = (
         updates: {
             type?: string;

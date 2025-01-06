@@ -16,6 +16,7 @@ const LessonPage = () => {
     const location = useLocation();
     const [fetch, setFetch] = useState(false);
     const lessonFromState = location.state?.lesson;
+    const lessonsCount = 100;
 
     useEffect(() => {
         if (!lessonFromState && !fetch) {
@@ -62,7 +63,7 @@ const LessonPage = () => {
             </p>
         );
     }
-    if (isTypingFinished && lessonId) {
+    if (isTypingFinished && lessonId && parseInt(lessonId, 10) + 1 <= lessonsCount) {
         return (
             <CompletionScreen
                 title={'lesson_completed'}
@@ -86,8 +87,24 @@ const LessonPage = () => {
                 showMetrics={false}
             />
         );
+    } else if (isTypingFinished && lessonId) {
+        return (
+            <CompletionScreen
+                title={'lesson_completed'}
+                buttons={[
+                    {
+                        text: 'home',
+                        onClick: () => navigate('/'),
+                    },
+                    {
+                        text: 'restart',
+                        onClick: () => window.location.reload(),
+                    },
+                ]}
+                showMetrics={false}
+            />
+        );
     }
-
     return (
         <>
             {text && !isTypingFinished && (
